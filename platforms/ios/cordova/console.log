@@ -1,0 +1,33 @@
+2014-03-19 20:38:42.004 Bobbytech[4518:70b] Multi-tasking -> Device: YES, App: YES
+2014-03-19 20:38:42.206 Bobbytech[4518:70b] Unlimited access to network resources
+2014-03-19 20:38:42.993 Bobbytech[4518:70b] [CDVTimer][statusbar] 221.921027ms
+2014-03-19 20:38:42.994 Bobbytech[4518:70b] [CDVTimer][TotalPluginStartup] 222.454965ms
+2014-03-19 20:38:43.117 Bobbytech[4518:70b] Resetting plugins due to page load.
+2014-03-19 20:38:44.299 Bobbytech[4518:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/AF835CA5-31C4-4571-B308-6A3193BF11DA/Bobbytech.app/www/index.html#%232
+2014-03-19 20:39:21.106 Bobbytech[4518:70b] Received memory warning.
+2014-03-19 20:51:23.258 Bobbytech[5014:70b] Multi-tasking -> Device: YES, App: YES
+2014-03-19 20:51:23.264 Bobbytech[5014:70b] Unlimited access to network resources
+2014-03-19 20:51:23.288 Bobbytech[5014:70b] [CDVTimer][statusbar] 7.308006ms
+2014-03-19 20:51:23.289 Bobbytech[5014:70b] [CDVTimer][TotalPluginStartup] 7.611036ms
+2014-03-19 20:51:23.445 Bobbytech[5014:70b] Resetting plugins due to page load.
+2014-03-19 20:51:24.178 Bobbytech[5014:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/AF835CA5-31C4-4571-B308-6A3193BF11DA/Bobbytech.app/www/index.html#%232
+2014-03-19 20:53:16.517 Bobbytech[5289:70b] Multi-tasking -> Device: YES, App: YES
+2014-03-19 20:53:16.524 Bobbytech[5289:70b] Unlimited access to network resources
+2014-03-19 20:53:16.547 Bobbytech[5289:70b] [CDVTimer][statusbar] 7.404983ms
+2014-03-19 20:53:16.548 Bobbytech[5289:70b] [CDVTimer][TotalPluginStartup] 7.820010ms
+2014-03-19 20:53:16.646 Bobbytech[5289:70b] Resetting plugins due to page load.
+2014-03-19 20:53:17.150 Bobbytech[5289:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/AF835CA5-31C4-4571-B308-6A3193BF11DA/Bobbytech.app/www/index.html#%232
+2014-03-19 20:53:39.705 Bobbytech[5289:70b] Received memory warning.
+2014-03-19 20:59:49.242 Bobbytech[5479:70b] Multi-tasking -> Device: YES, App: YES
+2014-03-19 20:59:49.249 Bobbytech[5479:70b] Unlimited access to network resources
+2014-03-19 20:59:49.272 Bobbytech[5479:70b] [CDVTimer][statusbar] 6.452978ms
+2014-03-19 20:59:49.273 Bobbytech[5479:70b] [CDVTimer][TotalPluginStartup] 6.892025ms
+2014-03-19 20:59:49.370 Bobbytech[5479:70b] Resetting plugins due to page load.
+2014-03-19 20:59:50.224 Bobbytech[5479:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/AF835CA5-31C4-4571-B308-6A3193BF11DA/Bobbytech.app/www/index.html#%232
+2014-03-19 21:01:32.149 Bobbytech[5749:70b] Multi-tasking -> Device: YES, App: YES
+2014-03-19 21:01:32.156 Bobbytech[5749:70b] Unlimited access to network resources
+2014-03-19 21:01:32.179 Bobbytech[5749:70b] [CDVTimer][statusbar] 6.394029ms
+2014-03-19 21:01:32.179 Bobbytech[5749:70b] [CDVTimer][TotalPluginStartup] 6.816030ms
+2014-03-19 21:01:32.299 Bobbytech[5749:70b] Resetting plugins due to page load.
+2014-03-19 21:01:33.122 Bobbytech[5749:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/A99CED03-564A-4608-BCB2-6B57AF28791B/Bobbytech.app/www/index.html#%232
+2014-03-19 21:01:33.136 Bobbytech[5749:70b] THREAD WARNING: ['StatusBar'] took '13.215088' ms. Plugin should use a background thread.

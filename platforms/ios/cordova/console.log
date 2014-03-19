@@ -31,3 +31,21 @@
 2014-03-19 21:01:32.299 Bobbytech[5749:70b] Resetting plugins due to page load.
 2014-03-19 21:01:33.122 Bobbytech[5749:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/A99CED03-564A-4608-BCB2-6B57AF28791B/Bobbytech.app/www/index.html#%232
 2014-03-19 21:01:33.136 Bobbytech[5749:70b] THREAD WARNING: ['StatusBar'] took '13.215088' ms. Plugin should use a background thread.
+2014-03-19 21:07:28.776 Bobbytech[6002:70b] Multi-tasking -> Device: YES, App: YES
+2014-03-19 21:07:28.783 Bobbytech[6002:70b] Unlimited access to network resources
+2014-03-19 21:07:28.808 Bobbytech[6002:70b] [CDVTimer][statusbar] 6.264985ms
+2014-03-19 21:07:28.808 Bobbytech[6002:70b] [CDVTimer][TotalPluginStartup] 6.568015ms
+2014-03-19 21:07:28.932 Bobbytech[6002:70b] Resetting plugins due to page load.
+2014-03-19 21:07:29.490 Bobbytech[6002:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/399F24A7-088E-4448-A5E5-C0D81BF529A1/Bobbytech.app/www/index.html#%232
+2014-03-19 21:08:14.985 Bobbytech[6169:70b] Multi-tasking -> Device: YES, App: YES
+2014-03-19 21:08:14.991 Bobbytech[6169:70b] Unlimited access to network resources
+2014-03-19 21:08:15.014 Bobbytech[6169:70b] [CDVTimer][statusbar] 6.594002ms
+2014-03-19 21:08:15.014 Bobbytech[6169:70b] [CDVTimer][TotalPluginStartup] 6.884038ms
+2014-03-19 21:08:15.118 Bobbytech[6169:70b] Resetting plugins due to page load.
+2014-03-19 21:08:15.622 Bobbytech[6169:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/1933C9F3-5EBE-4FAA-8A69-3499F306D964/Bobbytech.app/www/index.html#%232
+2014-03-19 21:13:12.449 Bobbytech[6306:70b] Multi-tasking -> Device: YES, App: YES
+2014-03-19 21:13:12.454 Bobbytech[6306:70b] Unlimited access to network resources
+2014-03-19 21:13:12.475 Bobbytech[6306:70b] [CDVTimer][statusbar] 5.877972ms
+2014-03-19 21:13:12.475 Bobbytech[6306:70b] [CDVTimer][TotalPluginStartup] 6.155968ms
+2014-03-19 21:13:12.504 Bobbytech[6306:70b] Resetting plugins due to page load.
+2014-03-19 21:13:13.673 Bobbytech[6306:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/1933C9F3-5EBE-4FAA-8A69-3499F306D964/Bobbytech.app/www/index.html#%232

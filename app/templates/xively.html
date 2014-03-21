@@ -4,7 +4,6 @@
             {{datastreams[activeStream.id].current_value}}{{datastreams[activeStream.id].unit.symbol}}
         </h4>
     </div>
-    <a id="3"></a>
 
     <div ng-show="chartData.length > 0">
         <ion-slide-box show-pager="false" id="readings-scroll">
@@ -28,8 +27,6 @@
             </ion-slide>
         </ion-slide-box>
     </div>
-    <a id="2"></a>
-
     <div class="row" style="margin-top: 0"
          ng-repeat="readings in datastreams|orderObjectBy:'type':'reverse'">
         <div class="col">

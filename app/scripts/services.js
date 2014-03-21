@@ -57,7 +57,7 @@ angular.module('XivelyApp.services', ['ngResource'])
                     'latLng': new google.maps.LatLng(lat, lng)
                 }, function (results, status) {
                     if (status == google.maps.GeocoderStatus.OK) {
-                        console.log('Reverse', results);
+                        //console.log('Reverse', results);
                         if (results.length > 0) {
                             var r = results[0];
                             var a, types;
@@ -77,11 +77,11 @@ angular.module('XivelyApp.services', ['ngResource'])
                                     }
                                 }
                             }
-                            console.log('Reverse', parts);
+                            //console.log('Reverse', parts);
                             q.resolve(parts.join(' '));
                         }
                     } else {
-                        console.log('reverse fail', results, status);
+                        //console.log('reverse fail', results, status);
                         q.reject(results);
                     }
                 })
@@ -123,7 +123,7 @@ angular.module('XivelyApp.services', ['ngResource'])
             search: function (tags, lat, lng) {
                 var q = $q.defer();
 
-                console.log('Searching flickr for tags', tags);
+                //console.log('Searching flickr for tags', tags);
 
                 flickrSearch.get({
                     tags: tags,
@@ -259,10 +259,8 @@ angular.module('XivelyApp.services', ['ngResource'])
 
             xively.setKey(key);
 
-            $rootScope.$apply(function () {
-                $rootScope.datastreams = {};
-                $rootScope.currentDataStream.data = [];
-            });
+            $rootScope.datastreams = {};
+            $rootScope.currentDataStream.data = [];
 
             xively.datastream.list(feed_id, function (controls) {
                 var xivelyControls = [];
@@ -282,10 +280,10 @@ angular.module('XivelyApp.services', ['ngResource'])
         $rootScope.$watch('dataPoints', function (v) {
             angular.forEach($rootScope.dataPoints, function (ds) {
                 xively.datastream.get(feed_id, ds.id, function (data) {
-                    $rootScope.$apply(function () {
-                        _this.prepareData(data);
-                        $rootScope.datastreams[ds.id] = data;
-                    });
+                    //$rootScope.$apply(function () {
+                    _this.prepareData(data);
+                    $rootScope.datastreams[ds.id] = data;
+                    //});
                     xively.datastream.subscribe(feed_id, ds.id, function (event, newData) {
                         _this.prepareData(newData)
 

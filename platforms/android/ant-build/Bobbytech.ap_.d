@@ -4,6 +4,11 @@
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/res/drawable-ldpi/icon.png \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/res/drawable-mdpi/icon.png \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/res/drawable-xhdpi/icon.png \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/res/raw/beep.wav \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/res/raw/flashlight_turn_off_icon.png \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/res/raw/flashlight_turn_on_icon.png \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/res/raw/ic_btn_search.png \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/res/raw/poweredby2x.png \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/res/values/strings.xml \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/res/xml/config.xml \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/res/drawable/icon.png \
@@ -11,6 +16,10 @@
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/res/drawable-ldpi/icon.png \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/res/drawable-mdpi/icon.png \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/res/drawable-xhdpi/icon.png \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/res/raw/flashlight_turn_off_icon.png \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/res/raw/flashlight_turn_on_icon.png \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/res/raw/ic_btn_search.png \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/res/raw/poweredby2x.png \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/assets/_where-is-www.txt \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/assets/www \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/assets/www/cordova.js \

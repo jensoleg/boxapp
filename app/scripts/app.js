@@ -25,7 +25,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
         };
     })
 
-    .controller('WeatherCtrl', function ($scope, $timeout, $location, $ionicScrollDelegate, $rootScope, xively, Weather, Geo, Flickr, $ionicModal) {
+    .controller('WeatherCtrl', function ($window, $scope, $timeout, $ionicScrollDelegate, $rootScope, xively, Weather, Geo, Flickr, $ionicModal) {
         var _this = this;
 
         ionic.Platform.ready(function () {
@@ -112,8 +112,8 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
 
         $scope.toggleView = function () {
             $scope.viewXively = !$scope.viewXively;
-            $location.hash("1");
-            $ionicScrollDelegate.anchorScroll();
+
+            $ionicScrollDelegate.scrollBottom(true);
         };
 
         $scope.showSettings = function () {
@@ -140,10 +140,8 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
                 xively.get(stream);
                 $rootScope.activeStream = $rootScope.datastreams[stream];
             }
-            $location.hash("2");
-            $ionicScrollDelegate.anchorScroll();
-            $scope.$broadcast('scroll.resize');
 
+            $ionicScrollDelegate.scrollBottom(true);
         };
 
         $scope.showValueCtrl = function (stream) {
@@ -173,15 +171,13 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
                 _this.updateGauge($rootScope.activeStream, data[data.length - 1].value);
             }
             else {
-
                 $scope.chartData = [];
                 $scope.chartSettings.dataSource = $scope.chartData;
             }
 
-            $location.hash("2");
-            $ionicScrollDelegate.anchorScroll();
-            $scope.$broadcast('scroll.resize');
             $scope.$broadcast('slideBox.update');
+            $ionicScrollDelegate.scrollBottom(true);
+
         });
 
         this.updateGauge = function (stream, newValue) {
@@ -220,6 +216,9 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
             $scope.gaugeSettings.subvalues = $scope.gaugeSubvalues;
 
         };
+        $scope.$on('orientation.changed', function () {
+            $ionicScrollDelegate.scrollBottom(true);
+        });
 
         this.getBackgroundImage = function (lat, lng, locString) {
             Flickr.search(locString, lat, lng).then(function (resp) {
@@ -228,7 +227,6 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
                     $scope.bgImages = photos.photo;
                     _this.cycleBgImages();
                 }
-                //$rootScope.$broadcast('scroll.refreshComplete');
             }, function (error) {
                 console.error('Unable to get Flickr images', error);
             });
@@ -244,8 +242,6 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
 
             Weather.getHourly(lat, lng).then(function (resp) {
                 $scope.hourly = resp.hourly_forecast;
-                //console.log($scope.hourly);
-                //$rootScope.$broadcast('scroll.refreshComplete');
             }, function (error) {
                 alert('Unable to get forecast. Try again later.');
                 console.error(error);
@@ -267,7 +263,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
                 if ($scope.bgImages) {
                     $scope.activeBgImage = $scope.bgImages[$scope.activeBgImageIndex++ % $scope.bgImages.length];
                 }
-                //$timeout(cycle, 10000);
+                $timeout(cycle, 120000);
             });
         };
 
@@ -287,7 +283,6 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
                 alert('Unable to get current location: ' + error);
             });
 
-            //$scope.$broadcast('scroll.resize');
         };
 
         $scope.refreshData();
@@ -295,6 +290,8 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
 
     .
     controller('SettingsCtrl', function ($scope, Settings) {
+        var _this = this;
+
         $scope.settings = Settings.getSettings();
 
         // Watch deeply for settings changes, and save them
@@ -307,4 +304,26 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
             $scope.modal.hide();
         };
 
+        $scope.$on('$destroy', function () {
+            $scope.modal.remove();
+        });
+
+        this.success = function (resultArray) {
+            $scope.settings.deviceId = resultArray[0];
+            alert("Scanned " + resultArray[0] + " code: " + resultArray[1]);
+        };
+
+        this.failure = function (error) {
+            alert("Failed: " + error);
+        };
+
+        $scope.scan = function (v) {
+
+            // See below for all available options.
+            cordova.exec(_this.success, _this.failure, "ScanditSDK", "scan",
+                ["cFzwjrDwEeOHumeEBBIoRqXMaSSy36Uq4650VHVlShc",
+                    {"beep": true,
+                        "1DScanning": true,
+                        "2DScanning": true}]);
+        };
     });

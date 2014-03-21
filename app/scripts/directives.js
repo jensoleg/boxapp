@@ -176,11 +176,11 @@ angular.module('XivelyApp.directives', [])
             var img = $compile('<background-image></background-image>')(scope);
 
             $animate.enter(img, $element, null, function () {
-                console.log('Inserted');
+                // console.log('Inserted');
             });
             if (child) {
                 $animate.leave(angular.element(child), function () {
-                    console.log('Removed');
+                    // console.log('Removed');
                 });
             }
         };
@@ -192,7 +192,7 @@ angular.module('XivelyApp.directives', [])
                     if (!v) {
                         return;
                     }
-                    console.log('Active bg image changed', v);
+                    // console.log('Active bg image changed', v);
                     var item = v;
                     var url = "http://farm" + item.farm + ".static.flickr.com/" + item.server + "/" + item.id + "_" + item.secret + "_z.jpg";
                     animate($scope, $element, url);
@@ -213,4 +213,90 @@ angular.module('XivelyApp.directives', [])
                 }
             }
         }
-    });
+    })
+    .directive('orientationChange', function ($window, $timeout) {
+        return {
+            restrict: 'A',
+            replace: true,
+            scope: true,
+            compile: function (element, attr) {
+                return function ($scope, $element, $attr) {
+                    $window.addEventListener("orientationchange", function () {
+                        $timeout(function () {
+                            var windowHeight = window.innerHeight;
+                            var paddingTop = parseInt($element[0].style.paddingTop);
+                            var offsetHeight = $element[0].offsetHeight;
+                            $element[0].style.paddingTop = (windowHeight - offsetHeight + paddingTop - 25) + 'px';
+                            $scope.$broadcast('orientation.changed');
+                        }, 10);
+                    }, false);
+                }
+            }
+        };
+    })
+    .directive('qrScanner', ['$timeout', function ($timeout) {
+        return {
+            restrict: 'E',
+            scope: {
+                ngSuccess: '&ngSuccess',
+                ngError: '&ngError',
+                ngVideoError: '&ngVideoError'
+            },
+            link: function (scope, element, attrs) {
+
+                window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
+                navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+                var height = attrs.height || 300;
+                var width = attrs.width || 250;
+                var localMediaStream;
+
+                var video = document.createElement('video');
+                video.setAttribute('width', width);
+                video.setAttribute('height', height);
+                var canvas = document.createElement('canvas');
+                canvas.setAttribute('id', 'qr-canvas');
+                canvas.setAttribute('width', width);
+                canvas.setAttribute('height', height);
+                canvas.setAttribute('style', 'display:none;');
+
+                angular.element(element).append(video);
+                angular.element(element).append(canvas);
+                var context = canvas.getContext('2d');
+
+                var scan = function () {
+                    if (localMediaStream) {
+                        context.drawImage(video, 0, 0, 307, 250);
+                        try {
+                            qrcode.decode();
+                        } catch (e) {
+                            scope.ngError({error: e});
+                        }
+                    }
+                    $timeout(scan, 500);
+                }
+
+                var successCallback = function (stream) {
+                    video.src = (window.URL && window.URL.createObjectURL(stream)) || stream;
+                    localMediaStream = stream;
+
+                    video.play();
+                    $timeout(scan, 1000);
+                }
+
+                // Call the getUserMedia method with our callback functions
+                if (navigator.getUserMedia) {
+                    navigator.getUserMedia({video: true}, successCallback, function (e) {
+                        scope.ngVideoError({error: e});
+                    });
+                } else {
+                    scope.ngVideoError({error: 'Native web camera streaming (getUserMedia) not supported in this browser.'});
+                }
+
+                qrcode.callback = function (data) {
+                    scope.ngSuccess({data: data});
+                };
+            }
+        }
+    }]);
+

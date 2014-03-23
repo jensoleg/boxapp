@@ -1,9 +1,5 @@
 angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.filters', 'XivelyApp.directives'])
 
-    .constant('WUNDERGROUND_API_KEY', 'c83d92d7b5befd29')
-
-    .constant('FLICKR_API_KEY', '504fd7414f6275eb5b657ddbfba80a2c')
-
     .filter('int', function () {
         return function (v) {
             return parseInt(v) || '';
@@ -289,7 +285,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
     })
 
     .
-    controller('SettingsCtrl', function ($scope, Settings) {
+    controller('SettingsCtrl', function ($scope, Settings, scandit) {
         var _this = this;
 
         $scope.settings = Settings.getSettings();
@@ -308,22 +304,15 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
             $scope.modal.remove();
         });
 
-        this.success = function (resultArray) {
+        _this.success = function (resultArray) {
             $scope.settings.deviceId = resultArray[0];
-            alert("Scanned " + resultArray[0] + " code: " + resultArray[1]);
         };
 
-        this.failure = function (error) {
-            alert("Failed: " + error);
+        _this.failure = function (error) {
+            // alert("Failed: " + error);
         };
 
-        $scope.scan = function (v) {
-
-            // See below for all available options.
-            cordova.exec(_this.success, _this.failure, "ScanditSDK", "scan",
-                ["cFzwjrDwEeOHumeEBBIoRqXMaSSy36Uq4650VHVlShc",
-                    {"beep": true,
-                        "1DScanning": true,
-                        "2DScanning": true}]);
+        $scope.scan = function () {
+            scandit.scan(_this.success, _this.failure);
         };
     });

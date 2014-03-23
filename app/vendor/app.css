@@ -3,7 +3,12 @@ body {
     background-color: black;
     cursor: url('http://ionicframework.com/img/finger.png'), auto;
 }
-
+/*
+.scan-icon {
+    font-size: 42px;
+    color : #4F8EF7;
+}
+*/
 #wrapper {
     background-color: black;
 }

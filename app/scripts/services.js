@@ -1,7 +1,16 @@
 angular.module('XivelyApp.services', ['ngResource'])
 
     .constant('DEFAULT_SETTINGS', {
-        'tempUnits': 'c', 'keyXively': '6kg3pKWwG6eyx2jRWNrTwSmpOFp9B6kSArV9kWm8iLkJ4gaR', 'feedXively': '673258092'
+        'tempUnits': 'c',
+        'keyXively': '6kg3pKWwG6eyx2jRWNrTwSmpOFp9B6kSArV9kWm8iLkJ4gaR',
+        'feedXively': '673258092'
+    })
+    .constant('SCANDIT_API_KEY', 'cFzwjrDwEeOHumeEBBIoRqXMaSSy36Uq4650VHVlShc')
+    .constant('WUNDERGROUND_API_KEY', 'c83d92d7b5befd29')
+    .constant('FLICKR_API_KEY', '504fd7414f6275eb5b657ddbfba80a2c')
+
+    .factory('cordova', function () {
+        return window.cordova; // assumes cordova has already been loaded on the page
     })
 
     .factory('Settings', function ($rootScope, DEFAULT_SETTINGS) {
@@ -331,4 +340,23 @@ angular.module('XivelyApp.services', ['ngResource'])
         };
 
         return xively;
+    })
+
+    .factory('scandit', function ($rootScope, Settings, cordova, SCANDIT_API_KEY) {
+
+        var _this = this;
+        _this.init = function () {
+        };
+
+        return {
+            scan: function (success, failure) {
+                // See below for all available options.
+                cordova.exec(success, failure, "ScanditSDK", "scan",
+                    [SCANDIT_API_KEY,
+                        {"beep": true,
+                            "1DScanning": true,
+                            "2DScanning": true}]);
+
+            }
+        };
     });

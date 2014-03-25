@@ -3,7 +3,8 @@ angular.module('XivelyApp.services', ['ngResource'])
     .constant('DEFAULT_SETTINGS', {
         'tempUnits': 'c',
         'keyXively': '6kg3pKWwG6eyx2jRWNrTwSmpOFp9B6kSArV9kWm8iLkJ4gaR',
-        'feedXively': '673258092'
+        'feedXively': '673258092',
+        'timeScale': 3600
     })
     .constant('SCANDIT_API_KEY', 'cFzwjrDwEeOHumeEBBIoRqXMaSSy36Uq4650VHVlShc')
     .constant('WUNDERGROUND_API_KEY', 'c83d92d7b5befd29')
@@ -224,9 +225,7 @@ angular.module('XivelyApp.services', ['ngResource'])
     .factory('xively', function ($rootScope, Settings) {
 
         var _this = this;
-        var service = {};
         var feed_id = Settings.get('feedXively');
-        var feedHistory = Settings.get('feedHistory');
 
         var controlTypes = ['data', 'ctrlValue', 'ctrlSwitch'];
 
@@ -260,17 +259,17 @@ angular.module('XivelyApp.services', ['ngResource'])
         };
 
 
-        _this.init = function () {
+        _this.init = function (init) {
 
             var key = Settings.get('keyXively');
             feed_id = Settings.get('feedXively');
-            feedHistory = Settings.get('feedHistory');
 
             xively.setKey(key);
 
-            $rootScope.datastreams = {};
-            $rootScope.currentDataStream.data = [];
-
+            if (init) {
+                $rootScope.datastreams = {};
+                $rootScope.currentDataStream.data = [];
+            }
             xively.datastream.list(feed_id, function (controls) {
                 var xivelyControls = [];
                 angular.forEach(controls, function (control) {
@@ -314,8 +313,17 @@ angular.module('XivelyApp.services', ['ngResource'])
         });
 
 
-        xively.refresh = function () {
-            _this.init();
+        xively.refresh = function (init) {
+            _this.init(init);
+        };
+
+        xively.setTimeScale = function (time) {
+            Settings.set('timeScale', time);
+            xively.get($rootScope.currentDataStream.id);
+        };
+
+        xively.getTimeScale = function () {
+            return Settings.get('timeScale');
         };
 
         xively.publish = function (datapoint, value) {
@@ -325,13 +333,8 @@ angular.module('XivelyApp.services', ['ngResource'])
         };
 
         xively.get = function (datapoint) {
-            //var date = new Date();
-            if (angular.isUndefined(feedHistory) || feedHistory == 0) {
-                feedHistory = 6;
-            }
-            var duration = feedHistory + 'hours';
-            // date.setHours(date.getHours() - 6);
-            xively.datapoint.history(feed_id, datapoint, {duration: duration, interval: 30, limit: 1000}, function (data) {
+            var duration = Settings.get('timeScale') + 'seconds';
+            xively.datapoint.history(feed_id, datapoint, {duration: duration, interval: 10, limit: 1000}, function (data) {
                 $rootScope.$apply(function () {
                     $rootScope.currentDataStream.id = datapoint;
                     $rootScope.currentDataStream.data = data;

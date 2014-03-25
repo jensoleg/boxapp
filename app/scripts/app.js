@@ -29,6 +29,24 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
             StatusBar.hide();
         });
 
+
+        $scope.timescale = [
+            {value: 300, text: '5 minutes', type: 'Raw datapoints'},
+            {value: 1800, text: '30 minutes', type: 'Raw datapoints'},
+            {value: 3600, text: '1 hours', type: 'Raw datapoints'},
+            {value: 21600, text: '6 hours', type: 'Averaged datapoints'},
+            {value: 86400, text: '1 day', type: 'Averaged datapoints'},
+            {value: 604800, text: '7 days', type: 'Averaged datapoints'},
+            {value: 2592000, text: '1 month', type: 'Averaged datapoints'},
+            {value: 7776000, text: '3 months', type: 'Averaged datapoints'}
+        ];
+
+        /* get graf time scale form settings */
+        var ts = xively.getTimeScale();
+        var entry = _.find($scope.timescale, { 'value': ts });
+        $scope.timeScale = entry;
+
+
         $scope.activeBgImageIndex = 0;
         $rootScope.currentDataStream = {};
 
@@ -108,8 +126,11 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
 
         $scope.toggleView = function () {
             $scope.viewXively = !$scope.viewXively;
-
             $ionicScrollDelegate.scrollBottom(true);
+        };
+
+        $scope.selectAction = function (time) {
+            xively.setTimeScale(time.value);
         };
 
         $scope.showSettings = function () {
@@ -263,9 +284,9 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
             });
         };
 
-        $scope.refreshData = function () {
+        $scope.refreshData = function (init) {
 
-            xively.refresh();
+            xively.refresh(init);
 
             Geo.getLocation().then(function (position) {
                 var lat = position.coords.latitude;
@@ -281,7 +302,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
 
         };
 
-        $scope.refreshData();
+        $scope.refreshData(true);
     })
 
     .

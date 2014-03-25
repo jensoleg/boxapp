@@ -9,6 +9,14 @@
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/classes/com/example/Bobbytech/R.class \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/classes/com/mirasense/scanditsdk/plugin/ScanditSDK.class \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/classes/com/mirasense/scanditsdk/plugin/ScanditSDKActivity.class \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/classes/dk/bobbytechnologies/bobbytech/Bobbytech.class \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/classes/dk/bobbytechnologies/bobbytech/BuildConfig.class \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/classes/dk/bobbytechnologies/bobbytech/R$attr.class \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/classes/dk/bobbytechnologies/bobbytech/R$drawable.class \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/classes/dk/bobbytechnologies/bobbytech/R$raw.class \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/classes/dk/bobbytechnologies/bobbytech/R$string.class \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/classes/dk/bobbytechnologies/bobbytech/R$xml.class \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/classes/dk/bobbytechnologies/bobbytech/R.class \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/classes/org/apache/cordova/device/Device.class \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/classes/org/apache/cordova/geolocation/CordovaLocationListener$LocationTimeoutTask.class \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/classes/org/apache/cordova/geolocation/CordovaLocationListener.class \

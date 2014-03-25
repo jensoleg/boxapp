@@ -39,7 +39,7 @@
     </header>
 
     <ion-content scroll-event-interval="20" overflow-scroll="false" scrollbar-y="false">
-        <ion-refresher on-refresh="refreshData()">
+        <ion-refresher on-refresh="refreshData(false)">
         </ion-refresher>
 
         <div id="main-content">
@@ -61,17 +61,14 @@
                 <div class="list">
                     <label class="item item-input">
                         <span class="input-label">Units</span>
-                        <ion-radio-buttons ng-model="settings.tempUnits" >
-                            <ion-button-radio class="button button-small button-positive ion-button-radio" ng-model="settings.tempUnits"  name="tempUnits"  ng-value="'f'">&deg;F
+                        <ion-radio-buttons ng-model="settings.tempUnits">
+                            <ion-button-radio class="button button-small button-positive ion-button-radio"
+                                              ng-model="settings.tempUnits" name="tempUnits" ng-value="'f'">&deg;F
                             </ion-button-radio>
-                            <ion-button-radio class="button button-small button-positive ion-button-radio" ng-model="settings.tempUnits"  name="tempUnits"  ng-value="'c'">&deg;C
+                            <ion-button-radio class="button button-small button-positive ion-button-radio"
+                                              ng-model="settings.tempUnits" name="tempUnits" ng-value="'c'">&deg;C
                             </ion-button-radio>
                         </ion-radio-buttons>
-                    </label>
-                </div>
-                    <label class="item item-input">
-                        <span class="input-label">Feed Time</span>
-                        <input ng-model="settings.feedHistory" type="number">
                     </label>
                     </label>
                     <label class="item item-input">
@@ -89,10 +86,10 @@
                     </label>
                 </div>
             </div>
-    </div>
-    </ion-content>
+        </ion-content>
     </div>
 </script>
+
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 
 <!-- build:js scripts/vendor.js -->

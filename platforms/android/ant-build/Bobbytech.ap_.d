@@ -55,6 +55,10 @@
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/assets/www/images/bobby.png \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/assets/www/images/bobby@2x.png \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/assets/www/images/ionic.png \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/assets/www/images/openweather.png \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/assets/www/images/openweather@2x.png \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/assets/www/images/OpenWeatherMap.png \
+/Users/jensole/Documents/webstorm/bobbytech/platforms/android/assets/www/images/OpenWeatherMap@2x.png \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/assets/www/images/wunderground.png \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/assets/www/images/wunderground@2x.png \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/assets/www/plugins/org.apache.cordova.device \

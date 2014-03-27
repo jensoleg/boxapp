@@ -160,3 +160,10 @@
 2014-03-25 21:07:54.160 Bobby Xively[13346:70b] Resetting plugins due to page load.
 2014-03-25 21:07:56.410 Bobby Xively[13346:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/C319B3C1-72B2-4FCA-A1EE-2AD7E43915BB/Bobby%20Xively.app/www/index.html
 2014-03-25 21:08:45.884 Bobby Xively[13346:70b] Received memory warning.
+2014-03-26 21:11:59.166 Bobby Xively[1688:70b] Multi-tasking -> Device: YES, App: YES
+2014-03-26 21:11:59.301 Bobby Xively[1688:70b] Unlimited access to network resources
+2014-03-26 21:11:59.955 Bobby Xively[1688:70b] [CDVTimer][statusbar] 113.964021ms
+2014-03-26 21:11:59.956 Bobby Xively[1688:70b] [CDVTimer][TotalPluginStartup] 114.434958ms
+2014-03-26 21:12:00.047 Bobby Xively[1688:70b] Resetting plugins due to page load.
+2014-03-26 21:12:01.283 Bobby Xively[1688:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/C319B3C1-72B2-4FCA-A1EE-2AD7E43915BB/Bobby%20Xively.app/www/index.html
+2014-03-26 21:12:52.202 Bobby Xively[1688:70b] Received memory warning.

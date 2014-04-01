@@ -23,10 +23,11 @@
     </div>
 
     <div ng-show="chartData.length > 0">
+
         <ion-slide-box show-pager="false" id="readings-scroll">
             <ion-slide>
-                <div style="height: 200px" dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource'},
-                                                        argumentAxis: chartSettings.argumentAxis,
+                <div style="height: 200px" dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
+                                                                       argumentAxis: 'chartSettings.argumentAxis'},
                                                         valueAxis: chartSettings.valueAxis,
                                                         legend: chartSettings.legend,
                                                         tooltip: chartSettings.tooltip,
@@ -61,7 +62,8 @@
                ng-click="showValueCtrl(readings.id)">
             </i>
 
-            <div ng-show="readings.isSelecting" class="range range-positive range-select-input">
+            <div ng-show="readings.isSelecting && readings.type=='ctrlValue'"
+                 class="range range-positive range-select-input">
                 <input type="range"
                        class="domain-input"
                        min="{{readings.minDomain}}"
@@ -69,6 +71,11 @@
                        value="readings.newValue"
                        ng-model="readings.newValue">
             </div>
+            <i class="col-icon-font icon ion-ios7-clock"
+               ng-show="readings.type == 'ctrlTimeValue' && !readings.isSelecting"
+               ng-click="showValueCtrl(readings.id)">
+            </i>
+
             <div ng-show="readings.type == 'ctrlSwitch'">
                 <label class="checkbox checkbox-label">
                     <input
@@ -98,14 +105,35 @@
                             {{readings.newValue}}
                         </span>
                 </div>
-                    <span ng-hide="readings.isSelecting"
-                          class="temp-high">
-                        {{readings.newValue}}{{readings.unit.symbol}}
-                    </span></div>
+                <span ng-hide="readings.isSelecting"
+                      class="temp-high">
+                    {{readings.newValue}}{{readings.unit.symbol}}
+                </span>
+            </div>
+            <div ng-show="readings.type == 'ctrlTimeValue'">
+                <div ng-show="readings.isSelecting">
+
+                            <!--span class="checkbox-ctrls">
+                            <i ng-click="closeValueCtrl(readings.id)"
+                               class="icon ion-close-circled checkbox-close">
+                            </i>
+                            <i ng-click="setValueCtrl(readings.id)" class="icon ion-checkmark-circled checkbox-set">
+                            </i>
+                            </span-->
+                        <!--input style="opacity:0; background-color: #000000; color: white"-->
+                            <!--div class="custom-select-container"-->
+                            <input class="custom replaced"
+                                   ng-value="readings.newValue" type="time" focus-on="input-time">
+                            <!--/div-->
+                </div>
+                <span ng-hide="readings.isSelecting"
+                      class="temp-high">
+                    {{readings.current_value}}{{readings.unit.symbol}}
+                </span>
+            </div>
+
         </div>
-
     </div>
-
     <div class="clearfix">
         <a ng-href="http://bobbytechnologies.dk" target="_blank">
             <div class="bobby-logo"></div>

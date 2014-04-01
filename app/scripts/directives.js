@@ -69,23 +69,40 @@ angular.module('XivelyApp.directives', [])
             replace: true,
             templateUrl: 'templates/current-weather.html',
             scope: true,
-            compile: function (element, attr) {
-                return function ($scope, $element, $attr) {
-                    // Delay so we are in the DOM and can calculate sizes
+            /*
+             compile: function (element, attr) {
+             return function ($scope, $element, $attr) {
+             // Delay so we are in the DOM and can calculate sizes
 
+             $timeout(function () {
+             var windowHeight = window.innerHeight;
+             var thisHeight = $element[0].offsetHeight;
+             //var headerHeight = document.querySelector('#header').offsetHeight;
+             //var padding = document.querySelector('#main-content');
+             $element[0].style.paddingTop = (windowHeight - thisHeight - 25) + 'px';
+             angular.element(document.querySelector('.scroll-content')).css('-webkit-overflow-scrolling', 'auto');
+             $timeout(function () {
+             angular.element(document.querySelector('.scroll-content')).css('-webkit-overflow-scrolling', 'touch');
+             }, 100);
+             });
+
+             }
+             }
+             */
+            link: function ($scope, $element, $attr) {
+
+                $scope.$watch('current', function (v) {
+                    var windowHeight = window.innerHeight;
+                    var thisHeight = $element[0].offsetHeight;
+                    //var headerHeight = document.querySelector('#header').offsetHeight;
+                    //var padding = document.querySelector('#main-content');
+                    $element[0].style.paddingTop = (windowHeight - 180 - 25) + 'px';
+                    //$element[0].style.paddingTop = (thisHeight - windowHeight - 25) + 'px';
+                    angular.element(document.querySelector('.scroll-content')).css('-webkit-overflow-scrolling', 'auto');
                     $timeout(function () {
-                        var windowHeight = window.innerHeight;
-                        var thisHeight = $element[0].offsetHeight;
-                        //var headerHeight = document.querySelector('#header').offsetHeight;
-                        //var padding = document.querySelector('#main-content');
-                        $element[0].style.paddingTop = (windowHeight - thisHeight - 25) + 'px';
-                        angular.element(document.querySelector('.scroll-content')).css('-webkit-overflow-scrolling', 'auto');
-                        $timeout(function () {
-                            angular.element(document.querySelector('.scroll-content')).css('-webkit-overflow-scrolling', 'touch');
-                        }, 100);
-                    });
-
-                }
+                        angular.element(document.querySelector('.scroll-content')).css('-webkit-overflow-scrolling', 'touch');
+                    }, 100);
+                });
             }
         }
     })
@@ -189,6 +206,17 @@ angular.module('XivelyApp.directives', [])
                     }, false);
                 }
             }
+        };
+    }).
+    directive('focusOn', function () {
+        return function (scope, elem, attr) {
+            scope.$on('focusOn', function (e, name) {
+                if (name === attr.focusOn) {
+                    elem[0].focus();
+                    elem[0].select();
+
+                }
+            });
         };
     });
 

@@ -4,7 +4,7 @@ angular.module('XivelyApp.services', ['ngResource'])
         'tempUnits': 'c',
         'keyXively': '6kg3pKWwG6eyx2jRWNrTwSmpOFp9B6kSArV9kWm8iLkJ4gaR',
         'feedXively': '673258092',
-        'timeScale': 3600
+        'timeScale': {value: 3600, interval: 0, text: '1 hours', type: 'Raw datapoints'}
     })
     .constant('SCANDIT_API_KEY', 'cFzwjrDwEeOHumeEBBIoRqXMaSSy36Uq4650VHVlShc')
     .constant('FLICKR_API_KEY', '504fd7414f6275eb5b657ddbfba80a2c')
@@ -230,7 +230,7 @@ angular.module('XivelyApp.services', ['ngResource'])
         var _this = this;
         var feed_id = Settings.get('feedXively');
 
-        var controlTypes = ['data', 'ctrlValue', 'ctrlSwitch'];
+        var controlTypes = ['data', 'ctrlValue', 'ctrlSwitch', 'ctrlTimeValue'];
 
         $rootScope.datastreams = {};
 
@@ -320,9 +320,9 @@ angular.module('XivelyApp.services', ['ngResource'])
             _this.init(init);
         };
 
-        xively.setTimeScale = function (time) {
-            Settings.set('timeScale', time);
-            xively.get($rootScope.currentDataStream.id);
+        xively.setTimeScale = function (timeScale) {
+            Settings.set('timeScale', timeScale);
+            xively.get($rootScope.currentDataStream.id, timeScale);
         };
 
         xively.getTimeScale = function () {
@@ -335,9 +335,11 @@ angular.module('XivelyApp.services', ['ngResource'])
             })
         };
 
-        xively.get = function (datapoint) {
-            var duration = Settings.get('timeScale') + 'seconds';
-            xively.datapoint.history(feed_id, datapoint, {duration: duration, interval: 10, limit: 1000}, function (data) {
+        xively.get = function (datapoint, timeScale) {
+            var timeScale = Settings.get('timeScale');
+            var duration = timeScale.value + 'seconds';
+
+            xively.datapoint.history(feed_id, datapoint, {duration: duration, interval: timeScale.interval, limit: 1000}, function (data) {
                 $rootScope.$apply(function () {
                     $rootScope.currentDataStream.id = datapoint;
                     $rootScope.currentDataStream.data = data;
@@ -356,7 +358,6 @@ angular.module('XivelyApp.services', ['ngResource'])
 
         return {
             scan: function (success, failure) {
-                // See below for all available options.
                 cordova.exec(success, failure, "ScanditSDK", "scan",
                     [SCANDIT_API_KEY,
                         {"beep": true,
@@ -365,4 +366,11 @@ angular.module('XivelyApp.services', ['ngResource'])
 
             }
         };
+    })
+    .factory('focus', function ($rootScope, $timeout) {
+        return function (name) {
+            $timeout(function () {
+                $rootScope.$broadcast('focusOn', name);
+            });
+        }
     });

@@ -35,11 +35,11 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
             {value: 300, interval: 0, text: '5 minutes', type: 'Raw datapoints'},
             {value: 1800, interval: 0, text: '30 minutes', type: 'Raw datapoints'},
             {value: 3600, interval: 0, text: '1 hours', type: 'Raw datapoints'},
-            {value: 21600, interval: 0, text: '6 hours', type: 'Averaged datapoints'},
-            {value: 86400, interval: 60, text: '1 day', type: 'Averaged datapoints'},
-            {value: 604800, interval: 900, text: '7 days', type: 'Averaged datapoints'},
-            {value: 2592000, interval: 3600, text: '1 month', type: 'Averaged datapoints'},
-            {value: 7776000, interval: 10800, text: '3 months', type: 'Averaged datapoints'}
+            {value: 21600, interval: 300, text: '6 hours', type: 'Averaged datapoints'},
+            {value: 86400, interval: 300, text: '1 day', type: 'Averaged datapoints'},
+            {value: 604800, interval: 10800, text: '7 days', type: 'Averaged datapoints'},
+            {value: 2592000, interval: 86400, text: '1 month', type: 'Averaged datapoints'},
+            {value: 7776000, interval: 86400, text: '3 months', type: 'Averaged datapoints'}
         ];
 
         /* get graf time scale form settings */

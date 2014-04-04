@@ -4,6 +4,8 @@ angular.module('XivelyApp.services', ['ngResource'])
         'tempUnits': 'c',
         'keyXively': '6kg3pKWwG6eyx2jRWNrTwSmpOFp9B6kSArV9kWm8iLkJ4gaR',
         'feedXively': '673258092',
+        'useFlickr': true,
+        'useDeviceLoc': false,
         'timeScale': {value: 3600, interval: 0, text: '1 hours', type: 'Raw datapoints'}
     })
     .constant('SCANDIT_API_KEY', 'cFzwjrDwEeOHumeEBBIoRqXMaSSy36Uq4650VHVlShc')
@@ -225,12 +227,14 @@ angular.module('XivelyApp.services', ['ngResource'])
         }
     })
 
-    .factory('xively', function ($rootScope, Settings) {
+    .factory('xively', function ($q, $rootScope, Settings) {
 
         var _this = this;
         var feed_id = Settings.get('feedXively');
+        var key;
 
         var controlTypes = ['data', 'ctrlValue', 'ctrlSwitch', 'ctrlTimeValue'];
+        //var device = {id: null, location: null};
 
         $rootScope.datastreams = {};
 
@@ -250,8 +254,8 @@ angular.module('XivelyApp.services', ['ngResource'])
                     data.type = 'undefined';
                 }
                 if (data.type != 'undefined') {
-                    data.minDomain = tags.minValue;
-                    data.maxDomain = tags.maxValue;
+                    data.minDomain = tags.min;
+                    data.maxDomain = tags.max;
                     data.minCritical = tags.minCritical;
                     data.maxCritical = tags.maxCritical;
                     data.name = tags.name;
@@ -261,53 +265,20 @@ angular.module('XivelyApp.services', ['ngResource'])
             return data;
         };
 
-
-        _this.init = function (init) {
-
-            var key = Settings.get('keyXively');
-            feed_id = Settings.get('feedXively');
-
-            xively.setKey(key);
-
-            if (init) {
-                $rootScope.datastreams = {};
-                $rootScope.currentDataStream.data = [];
-            }
-            xively.datastream.list(feed_id, function (controls) {
-                var xivelyControls = [];
-                angular.forEach(controls, function (control) {
-                    _this.prepareData(control);
-                    if (_.contains(controlTypes, control.type)) {
-                        xivelyControls.push(control);
-                    }
-                });
-                $rootScope.$apply(function () {
-                    $rootScope.dataPoints = xivelyControls;
-                });
-            });
-        };
-
-
         $rootScope.$watch('dataPoints', function (v) {
             angular.forEach($rootScope.dataPoints, function (ds) {
                 xively.datastream.get(feed_id, ds.id, function (data) {
-                    //$rootScope.$apply(function () {
                     _this.prepareData(data);
                     $rootScope.datastreams[ds.id] = data;
-                    //});
                     xively.datastream.subscribe(feed_id, ds.id, function (event, newData) {
                         _this.prepareData(newData);
 
-                        $rootScope.$apply(function () {
-                            $rootScope.datastreams[ds.id] = newData;
-                        });
+                        $rootScope.datastreams[ds.id] = newData;
 
                         if (ds.id == $rootScope.currentDataStream.id) {
                             $rootScope.currentDataStream.id = newData.id;
                             $rootScope.currentDataStream.current_value = newData.current_value;
-                            $rootScope.$apply(function () {
-                                $rootScope.currentDataStream.data.push({ value: newData.current_value, at: newData.at });
-                            });
+                            $rootScope.currentDataStream.data.push({ value: newData.current_value, at: newData.at });
                         }
                     });
                 });
@@ -317,7 +288,44 @@ angular.module('XivelyApp.services', ['ngResource'])
 
 
         xively.refresh = function (init) {
-            _this.init(init);
+            var q = $q.defer();
+
+            feed_id = Settings.get('feedXively');
+
+            if (key != Settings.get('keyXively')) {
+
+                angular.forEach($rootScope.datastreams, function (stream) {
+                    xively.datastream.unsubscribe(feed_id, stream.id);
+                });
+
+                $rootScope.datastreams = {};
+                $rootScope.currentDataStream = {};
+
+                key = Settings.get('keyXively');
+            }
+
+            xively.setKey(key);
+
+
+            xively.feed.get(feed_id, function (controls) {
+                var xivelyControls = [];
+                angular.forEach(controls.datastreams, function (control) {
+                    _this.prepareData(control);
+                    if (_.contains(controlTypes, control.type)) {
+                        xivelyControls.push(control);
+                    }
+                });
+                $rootScope.dataPoints = xivelyControls;
+
+                if (Settings.get('useDeviceLoc'))
+                    q.resolve(controls.location);
+                else
+                    q.resolve(null);
+
+            }, function (error) {
+                q.reject(error);
+            });
+            return q.promise;
         };
 
         xively.setTimeScale = function (timeScale) {
@@ -340,17 +348,16 @@ angular.module('XivelyApp.services', ['ngResource'])
             var duration = timeScale.value + 'seconds';
 
             xively.datapoint.history(feed_id, datapoint, {duration: duration, interval: timeScale.interval, limit: 1000}, function (data) {
-                $rootScope.$apply(function () {
-                    $rootScope.currentDataStream.id = datapoint;
-                    $rootScope.currentDataStream.data = data;
-                });
+                $rootScope.currentDataStream.data = data;
+                $rootScope.currentDataStream.id = datapoint;
             })
         };
 
         return xively;
     })
 
-    .factory('scandit', function ($rootScope, Settings, cordova, SCANDIT_API_KEY) {
+    .
+    factory('scandit', function ($rootScope, Settings, cordova, SCANDIT_API_KEY) {
 
         var _this = this;
         _this.init = function () {

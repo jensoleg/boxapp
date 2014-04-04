@@ -36,12 +36,14 @@
                                                        }"></div>
             </ion-slide>
             <ion-slide>
-                <div style="height: 200px" dx-circular-gauge="{ bindingOptions: {subvalues : 'gaugeSettings.subvalues',
-                                                                       scale: 'gaugeSettings.scale',
+                <div style="height: 200px" dx-circular-gauge="{tooltip: gaugeSettings.tooltip,
+                                                               subvalueIndicator: gaugeSettings.subvalueIndicator,
+                                                               bindingOptions: {scale: 'gaugeSettings.scale',
                                                                        value: 'gaugeSettings.value',
-                                                                       rangeContainer: 'gaugeSettings.rangeContainer'},
-                                                                       tooltip: gaugeSettings.tooltip,
-                                                                       subvalueIndicator: gaugeSettings.subvalueIndicator}"></div>
+                                                                       rangeContainer: 'gaugeSettings.rangeContainer',
+                                                                       subvalues : 'gaugeSettings.subvalues'},
+
+                                                                       }"></div>
             </ion-slide>
         </ion-slide-box>
     </div>
@@ -75,6 +77,16 @@
                ng-show="readings.type == 'ctrlTimeValue' && !readings.isSelecting"
                ng-click="showValueCtrl(readings.id)">
             </i>
+
+            <div ng-show="readings.type == 'ctrlTimeValue' && readings.isSelecting">
+                        <span class="checkbox-ctrls">
+                        <i ng-click="closeValueCtrl(readings.id)"
+                           class="icon ion-close-circled checkbox-close">
+                        </i>
+                        <i ng-click="setValueCtrl(readings.id)" class="icon ion-checkmark-circled checkbox-set">
+                        </i>
+                        </span>
+            </div>
 
             <div ng-show="readings.type == 'ctrlSwitch'">
                 <label class="checkbox checkbox-label">
@@ -112,19 +124,8 @@
             </div>
             <div ng-show="readings.type == 'ctrlTimeValue'">
                 <div ng-show="readings.isSelecting">
-
-                            <!--span class="checkbox-ctrls">
-                            <i ng-click="closeValueCtrl(readings.id)"
-                               class="icon ion-close-circled checkbox-close">
-                            </i>
-                            <i ng-click="setValueCtrl(readings.id)" class="icon ion-checkmark-circled checkbox-set">
-                            </i>
-                            </span-->
-                        <!--input style="opacity:0; background-color: #000000; color: white"-->
-                            <!--div class="custom-select-container"-->
-                            <input class="custom replaced"
-                                   ng-value="readings.newValue" type="time" focus-on="input-time">
-                            <!--/div-->
+                    <input class="custom replaced" ng-model="readings.newValue"
+                           ng-value="readings.newValue" type="time" step="60" focus-on="input-time">
                 </div>
                 <span ng-hide="readings.isSelecting"
                       class="temp-high">

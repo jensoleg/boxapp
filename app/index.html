@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+
     <title>"Bobby Xively"</title>
 
     <!-- build:css({.tmp,app}) styles/main.css -->
@@ -83,6 +84,18 @@
                         <span class="input-label">Device</span>
                         <input ng-model="settings.deviceId" type="text">
                         <button class="button button-small button-positive ion-button" ng-click="scan()">Scan</button>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Flickr Background</span>
+                        <label class="checkbox">
+                            <input ng-model="settings.useFlickr" type="checkbox">
+                        </label>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Use Device Location</span>
+                        <label class="checkbox">
+                            <input ng-model="settings.useDeviceLoc" type="checkbox">
+                        </label>
                     </label>
                 </div>
             </div>

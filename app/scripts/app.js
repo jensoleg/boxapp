@@ -21,12 +21,13 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
         };
     })
 
-    .controller('WeatherCtrl', function ($window, $scope, $timeout, $ionicScrollDelegate, $ionicLoading, $rootScope, xively, Weather, Geo, Flickr, $ionicModal, focus) {
+    .controller('WeatherCtrl', function ($window, $scope, $timeout, $ionicPlatform, $ionicScrollDelegate, $ionicLoading, $rootScope, Settings, xively, Weather, Geo, Flickr, $ionicModal, focus) {
         var _this = this;
 
         ionic.Platform.ready(function () {
             // Hide the status bar
-            StatusBar.hide();
+            if (ionic.Platform.isIOS())
+                StatusBar.hide();
         });
 
 
@@ -51,7 +52,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
 
         $scope.gaugeScale = {};
         $scope.gaugeRange = {};
-        $scope.gaugeValue = {};
+        $scope.gaugeValue = null;
         $scope.gaugeSubvalues = [];
         $scope.viewXively = false;
 
@@ -187,17 +188,17 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
 
         $rootScope.$watchCollection('currentDataStream.data', function (data) {
             if (angular.isDefined(data) && data.length > 0 && $rootScope.activeStream != null) {
-                $scope.chartData = data;
-                $scope.chartSettings.dataSource = $scope.chartData;
                 _this.updateGauge($rootScope.activeStream, data[data.length - 1].value);
                 if ($scope.timeScale.value <= 86400)
                     $scope.chartLabel.label = { format: 'H:mm', color: 'white'};
                 else if ($scope.timeScale.value <= 604800)
-                    $scope.chartLabel.label = { format: 'ddd', color: 'white'}
+                    $scope.chartLabel.label = { format: 'ddd', color: 'white'};
                 else if ($scope.timeScale.value <= 2592000)
-                    $scope.chartLabel.label = { format: 'dd-MM', color: 'white'}
+                    $scope.chartLabel.label = { format: 'dd-MM', color: 'white'};
                 else
                     $scope.chartLabel.label = { format: 'MMM', color: 'white'};
+                $scope.chartData = data;
+                $scope.chartSettings.dataSource = $scope.chartData;
             }
             else {
                 $scope.chartData = [];
@@ -238,13 +239,16 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
 
             $scope.gaugeValue = newValue;
 
-            $scope.gaugeSubvalues = [stream.min_value, stream.max_value];
+            if (stream.min_value && stream.max_value) {
+                $scope.gaugeSubvalues = [stream.min_value, stream.max_value];
+                $scope.gaugeSettings.subvalues = $scope.gaugeSubvalues;
+            }
+
             $scope.gaugeSettings.scale = $scope.gaugeScale;
             $scope.gaugeSettings.rangeContainer = $scope.gaugeRange;
             $scope.gaugeSettings.value = $scope.gaugeValue;
-            $scope.gaugeSettings.subvalues = $scope.gaugeSubvalues;
-
         };
+
         $scope.$on('orientation.changed', function () {
             $ionicScrollDelegate.scrollBottom(true);
         });
@@ -279,7 +283,6 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
 
         this.getCurrent = function (lat, lng) {
 
-
             Weather.getAtLocation(lat, lng).then(function (resp) {
                 $scope.current = resp;
                 _this.getForecast(resp.coord.lat, resp.coord.lon);
@@ -293,7 +296,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
 
         this.cycleBgImages = function () {
             $timeout(function cycle() {
-                if ($scope.bgImages) {
+                if ($scope.bgImages && (Settings.get('useFlickr'))) {
                     $scope.activeBgImage = $scope.bgImages[$scope.activeBgImageIndex++ % $scope.bgImages.length];
                 }
                 $timeout(cycle, 120000);
@@ -301,8 +304,6 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
         };
 
         $scope.refreshData = function (init) {
-
-            xively.refresh(init);
 
             if (init) {
                 $scope.loading = $ionicLoading.show({
@@ -312,27 +313,43 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
                 });
             }
 
-            Geo.getLocation().then(function (position) {
-                var lat = position.coords.latitude;
-                var lng = position.coords.longitude;
+            xively.refresh(init).then(function (location) {
+                if (location) {
 
-                _this.getCurrent(lat, lng);
+                    _this.getCurrent(location.lat, location.lon);
+                    Geo.reverseGeocode(location.lat, location.lon).then(function (locString) {
+                        $scope.currentCity = locString;
+                        if (Settings.get('useFlickr'))
+                            _this.getBackgroundImage(location.lat, location.lon, locString);
+                        else
+                            $scope.activeBgImage = null;
 
-                Geo.reverseGeocode(lat, lng).then(function (locString) {
-                    $scope.currentCity = locString;
-                    _this.getBackgroundImage(lat, lng, locString);
-                });
+                    });
+                } else
+                    Geo.getLocation().then(function (position) {
+                        var lat = position.coords.latitude;
+                        var lng = position.coords.longitude;
 
-            }, function (error) {
-                alert('Unable to get current location: ' + error);
+                        _this.getCurrent(lat, lng);
+
+                        Geo.reverseGeocode(lat, lng).then(function (locString) {
+                            $scope.currentCity = locString;
+                            if (Settings.get('useFlickr'))
+                                _this.getBackgroundImage(lat, lng, locString);
+                            else
+                                $scope.activeBgImage = null;
+
+                        });
+
+                    }, function (error) {
+                        alert('Unable to get current location: ' + error);
+                    });
             });
 
         };
 
         $scope.refreshData(true);
-    })
-
-    .
+    }).
     controller('SettingsCtrl', function ($scope, Settings, scandit) {
         var _this = this;
 

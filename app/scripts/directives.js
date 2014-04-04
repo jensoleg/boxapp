@@ -159,17 +159,28 @@ angular.module('XivelyApp.directives', [])
             }
         };
 
+        var remove = function ($scope, $element) {
+            var child = $element.children()[0];
+
+            if (child) {
+                $animate.leave(angular.element(child), function () {
+                    // console.log('Removed');
+                });
+            }
+        };
+
         return {
             restrict: 'E',
             link: function ($scope, $element, $attr) {
                 $scope.$watch('activeBgImage', function (v) {
                     if (!v) {
-                        return;
+                        remove($scope, $element);
+                    } else {
+                        // console.log('Active bg image changed', v);
+                        var item = v;
+                        var url = "http://farm" + item.farm + ".static.flickr.com/" + item.server + "/" + item.id + "_" + item.secret + "_z.jpg";
+                        animate($scope, $element, url);
                     }
-                    // console.log('Active bg image changed', v);
-                    var item = v;
-                    var url = "http://farm" + item.farm + ".static.flickr.com/" + item.server + "/" + item.id + "_" + item.secret + "_z.jpg";
-                    animate($scope, $element, url);
                 });
             }
         }
@@ -213,8 +224,6 @@ angular.module('XivelyApp.directives', [])
             scope.$on('focusOn', function (e, name) {
                 if (name === attr.focusOn) {
                     elem[0].focus();
-                    elem[0].select();
-
                 }
             });
         };

@@ -24,8 +24,16 @@ angular.module('XivelyApp.services', ['ngResource'])
         } catch (e) {
         }
 
+        console.log(_settings);
         // Just in case we have new settings that need to be saved
         _settings = angular.extend({}, DEFAULT_SETTINGS, _settings);
+
+        console.log(_settings);
+
+        /* upgrade hack */
+        var ts = _settings.timeScale;
+        if (typeof ts !== 'object')
+            _settings.timeScale = DEFAULT_SETTINGS.timeScale;
 
         if (!_settings) {
             window.localStorage['settings'] = JSON.stringify(_settings);
@@ -234,7 +242,6 @@ angular.module('XivelyApp.services', ['ngResource'])
         var key;
 
         var controlTypes = ['data', 'ctrlValue', 'ctrlSwitch', 'ctrlTimeValue'];
-        //var device = {id: null, location: null};
 
         $rootScope.datastreams = {};
 
@@ -374,6 +381,7 @@ angular.module('XivelyApp.services', ['ngResource'])
             }
         };
     })
+
     .factory('focus', function ($rootScope, $timeout) {
         return function (name) {
             $timeout(function () {

@@ -24,13 +24,10 @@ angular.module('XivelyApp.services', ['ngResource'])
         } catch (e) {
         }
 
-        console.log(_settings);
         // Just in case we have new settings that need to be saved
         _settings = angular.extend({}, DEFAULT_SETTINGS, _settings);
 
-        console.log(_settings);
-
-        /* upgrade hack */
+        // upgrade silently
         var ts = _settings.timeScale;
         if (typeof ts !== 'object')
             _settings.timeScale = DEFAULT_SETTINGS.timeScale;
@@ -261,8 +258,8 @@ angular.module('XivelyApp.services', ['ngResource'])
                     data.type = 'undefined';
                 }
                 if (data.type != 'undefined') {
-                    data.minDomain = tags.min;
-                    data.maxDomain = tags.max;
+                    data.minDomain = tags.minValue;
+                    data.maxDomain = tags.maxValue;
                     data.minCritical = tags.minCritical;
                     data.maxCritical = tags.maxCritical;
                     data.name = tags.name;

@@ -2,8 +2,8 @@ angular.module('XivelyApp.services', ['ngResource'])
 
     .constant('DEFAULT_SETTINGS', {
         'tempUnits': 'c',
-        'keyXively': '6kg3pKWwG6eyx2jRWNrTwSmpOFp9B6kSArV9kWm8iLkJ4gaR',
-        'feedXively': '673258092',
+        'keyXively': 'BPWvM1ZU0HLKSHs82lG3x1vdzoOSRomAEVpywvNJwGElgciw',
+        'feedXively': '1664985147',
         'useFlickr': true,
         'useDeviceLoc': false,
         'timeScale': {value: 3600, interval: 0, text: '1 hours', type: 'Raw datapoints'}

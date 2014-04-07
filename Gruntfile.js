@@ -257,7 +257,7 @@ module.exports = function (grunt) {
         expand: true,
         cwd: '<%= yeoman.app %>/vendor',
         dest: 'www/vendor/',
-        src: '*'
+        src: '*.css'
       }
     },
     
@@ -332,7 +332,7 @@ module.exports = function (grunt) {
       },
       continuous: {
         browsers: ['PhantomJS'],
-        singleRun: true,
+        singleRun: true
       }
     },
 

@@ -1,5 +1,23 @@
 angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.filters', 'XivelyApp.directives'])
 
+    .config(function ($stateProvider, $urlRouterProvider) {
+
+        $stateProvider
+            .state('intro', {
+                url: '/',
+                templateUrl: 'intro.html',
+                controller: 'IntroCtrl'
+            })
+            .state('main', {
+                url: '/main',
+                templateUrl: 'main.html',
+                controller: 'WeatherCtrl'
+            });
+
+        $urlRouterProvider.otherwise("/");
+
+    })
+
     .filter('int', function () {
         return function (v) {
             return parseInt(v) || '';
@@ -21,7 +39,30 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
         };
     })
 
-    .controller('WeatherCtrl', function ($window, $scope, $timeout, $ionicPlatform, $ionicScrollDelegate, $ionicLoading, $rootScope, Settings, xively, Weather, Geo, Flickr, $ionicModal, focus) {
+    .controller('IntroCtrl', function ($scope, $state, Settings, $ionicSlideBoxDelegate) {
+        // Called to navigate to the main app
+        $scope.startApp = function () {
+            $state.go('main');
+            Settings.set('skipIntro', true);
+        };
+        $scope.next = function () {
+            $ionicSlideBoxDelegate.next();
+        };
+        $scope.previous = function () {
+            $ionicSlideBoxDelegate.previous();
+        };
+
+        // Called each time the slide changes
+        $scope.slideChanged = function (index) {
+            $scope.slideIndex = index;
+        };
+
+        if (Settings.get('skipIntro'))
+            $state.go('main');
+
+    })
+
+    .controller('WeatherCtrl', function ($window, $scope, $timeout, $state, $ionicPlatform, $ionicScrollDelegate, $ionicNavBarDelegate, $ionicLoading, $ionicSlideBoxDelegate, $rootScope, Settings, xively, Weather, Geo, Flickr, $ionicModal, focus) {
         var _this = this;
 
         ionic.Platform.ready(function () {
@@ -29,7 +70,6 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
             if (ionic.Platform.isIOS())
                 StatusBar.hide();
         });
-
 
         $scope.timescale = [
             {value: 300, interval: 0, text: '5 minutes', type: 'Raw datapoints'},
@@ -124,17 +164,23 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
                 },
                 opacity: 0.8
             }
-
+            /*
+             loadingIndicator: {
+             text: "Loading Xively data ...",
+             backgroundColor: ""
+             }
+             */
         };
 
         $scope.toggleView = function () {
             $scope.viewXively = !$scope.viewXively;
-            $ionicScrollDelegate.scrollBottom(true);
+            $ionicScrollDelegate.$getByHandle('details').scrollBottom();
         };
 
         $scope.selectAction = function (time) {
             $scope.timeScale = _.find($scope.timescale, { 'value': time.value });
             xively.setTimeScale($scope.timeScale);
+            $scope.loadXively = true;
         };
 
         $scope.showSettings = function () {
@@ -158,11 +204,13 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
                 $scope.chartData = null;
             }
             else {
+                //$("#chartContainer").dxChart('instance').showLoadingIndicator();
+                $scope.loadXively = true;
                 xively.get(stream);
                 $rootScope.activeStream = $rootScope.datastreams[stream];
             }
 
-            $ionicScrollDelegate.scrollBottom(true);
+            $ionicScrollDelegate.$getByHandle('details').scrollBottom();
         };
 
         $scope.showValueCtrl = function (stream) {
@@ -188,7 +236,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
 
         $rootScope.$watchCollection('currentDataStream.data', function (data) {
             if (angular.isDefined(data) && data.length > 0 && $rootScope.activeStream != null) {
-                _this.updateGauge($rootScope.activeStream, data[data.length - 1].value);
+
                 if ($scope.timeScale.value <= 86400)
                     $scope.chartLabel.label = { format: 'H:mm', color: 'white'};
                 else if ($scope.timeScale.value <= 604800)
@@ -199,15 +247,18 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
                     $scope.chartLabel.label = { format: 'MMM', color: 'white'};
                 $scope.chartData = data;
                 $scope.chartSettings.dataSource = $scope.chartData;
+                _this.updateGauge($rootScope.activeStream, data[data.length - 1].value);
+
             }
             else {
                 $scope.chartData = [];
+                $scope.gaugeValue = null;
                 $scope.chartSettings.dataSource = $scope.chartData;
+                $scope.gaugeSettings.value = $scope.gaugeValue;
             }
-
-            $scope.$broadcast('slideBox.update');
-            $ionicScrollDelegate.scrollBottom(true);
-
+            $scope.loadXively = false;
+            $ionicScrollDelegate.$getByHandle('details').scrollBottom();
+            $ionicSlideBoxDelegate.$getByHandle('charts').update();
         });
 
         this.updateGauge = function (stream, newValue) {
@@ -249,10 +300,11 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
             $scope.gaugeSettings.value = $scope.gaugeValue;
         };
 
-        $scope.$on('orientation.changed', function () {
-            $ionicScrollDelegate.scrollBottom(true);
-        });
-
+        /*
+         $scope.$on('orientation.changed', function () {
+         $ionicScrollDelegate.scrollBottom(true);
+         });
+         */
         this.getBackgroundImage = function (lat, lng, locString) {
             Flickr.search(locString, lat, lng).then(function (resp) {
                 var photos = resp.photos;
@@ -286,7 +338,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
             Weather.getAtLocation(lat, lng).then(function (resp) {
                 $scope.current = resp;
                 _this.getForecast(resp.coord.lat, resp.coord.lon);
-                $scope.loading.hide();
+
 
             }, function (error) {
                 alert('Unable to get current conditions');
@@ -307,7 +359,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
 
             if (init) {
                 $scope.loading = $ionicLoading.show({
-                    content: 'Finding your location... <i class="icon ion-loading-c">',
+                    content: 'Finding  location... <i class="icon ion-loading-c">',
                     showBackdrop: true,
                     animation: 'fade-in'
                 });
@@ -324,6 +376,8 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
                         else
                             $scope.activeBgImage = null;
 
+                        $rootScope.$broadcast('scroll.refreshComplete');
+                        $scope.loading.hide();
                     });
                 } else
                     Geo.getLocation().then(function (position) {
@@ -340,17 +394,22 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
                                 $scope.activeBgImage = null;
 
                         });
+                        $rootScope.$broadcast('scroll.refreshComplete');
+                        $scope.loading.hide();
 
                     }, function (error) {
                         alert('Unable to get current location: ' + error);
+                        $rootScope.$broadcast('scroll.refreshComplete');
+                        $scope.loading.hide();
                     });
             });
 
         };
 
         $scope.refreshData(true);
+
     }).
-    controller('SettingsCtrl', function ($scope, Settings, scandit) {
+    controller('SettingsCtrl', function ($scope, $state, Settings, scandit) {
         var _this = this;
 
         $scope.settings = Settings.getSettings();
@@ -363,6 +422,10 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
 
         $scope.closeSettings = function () {
             $scope.modal.hide();
+        };
+        $scope.intro = function () {
+            Settings.set('skipIntro', false);
+            $state.go('intro');
         };
 
         $scope.$on('$destroy', function () {
@@ -380,4 +443,5 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
         $scope.scan = function () {
             scandit.scan(_this.success, _this.failure);
         };
+
     });

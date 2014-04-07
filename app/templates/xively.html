@@ -23,16 +23,16 @@
     </div>
 
     <div ng-show="chartData.length > 0">
-
-        <ion-slide-box show-pager="false" id="readings-scroll">
+        <ion-slide-box delegate-handle="charts" show-pager="false" id="readings-scroll">
             <ion-slide>
-                <div style="height: 200px" dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
+                <div id="chartContainer" style="height: 200px" dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
                                                                        argumentAxis: 'chartSettings.argumentAxis'},
                                                         valueAxis: chartSettings.valueAxis,
                                                         legend: chartSettings.legend,
                                                         tooltip: chartSettings.tooltip,
                                                         series: chartSettings.series,
-                                                        crosshair: chartSettings.crosshair
+                                                        crosshair: chartSettings.crosshair,
+                                                        loadingIndicator: chartSettings.loadingIndicator
                                                        }"></div>
             </ion-slide>
             <ion-slide>
@@ -41,8 +41,7 @@
                                                                bindingOptions: {scale: 'gaugeSettings.scale',
                                                                        value: 'gaugeSettings.value',
                                                                        rangeContainer: 'gaugeSettings.rangeContainer',
-                                                                       subvalues : 'gaugeSettings.subvalues'},
-
+                                                                       subvalues : 'gaugeSettings.subvalues'}
                                                                        }"></div>
             </ion-slide>
         </ion-slide-box>
@@ -55,9 +54,13 @@
         </div>
         <div class="col-icon col">
             <i class="col-icon-font icon ion-arrow-graph-up-right "
-               ng-show="readings.type == 'data'"
+               ng-show="readings.type == 'data' && (readings.id != activeStream.id || !loadXively)"
                ng-click="showData(readings.id)"
                ng-style="readings.id == activeStream.id && {'color': '#4a87ee'} || {'color': 'white'}">
+            </i>
+            <i class="col-icon-font icon ion-loading-d"
+               ng-show="readings.type == 'data' && loadXively && readings.id == activeStream.id"
+               style="color: #4a87ee">
             </i>
             <i class="col-icon-font icon ion-ios7-gear "
                ng-show="readings.type == 'ctrlValue' && !readings.isSelecting"

@@ -6,7 +6,9 @@ angular.module('XivelyApp.services', ['ngResource'])
         'feedXively': '1664985147',
         'useFlickr': true,
         'useDeviceLoc': false,
-        'timeScale': {value: 3600, interval: 0, text: '1 hours', type: 'Raw datapoints'}
+        'timeScale': {value: 3600, interval: 0, text: '1 hours', type: 'Raw datapoints'},
+        'skipIntro': false
+
     })
     .constant('SCANDIT_API_KEY', 'cFzwjrDwEeOHumeEBBIoRqXMaSSy36Uq4650VHVlShc')
     .constant('FLICKR_API_KEY', '504fd7414f6275eb5b657ddbfba80a2c')
@@ -287,7 +289,6 @@ angular.module('XivelyApp.services', ['ngResource'])
                     });
                 });
             });
-            $rootScope.$broadcast('scroll.refreshComplete');
         });
 
 

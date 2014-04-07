@@ -81,7 +81,4 @@
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/assets/www/templates/forecast.html \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/assets/www/templates/xively.html \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/assets/www/vendor/app.css \
-/Users/jensole/Documents/webstorm/bobbytech/platforms/android/assets/www/vendor/dx.chartjs.js \
-/Users/jensole/Documents/webstorm/bobbytech/platforms/android/assets/www/vendor/README.md \
-/Users/jensole/Documents/webstorm/bobbytech/platforms/android/assets/www/vendor/xivelyjs-1.0.4.js \
 /Users/jensole/Documents/webstorm/bobbytech/platforms/android/ant-build/AndroidManifest.xml \

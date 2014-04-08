@@ -1,4 +1,4 @@
-angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.filters', 'XivelyApp.directives'])
+angular.module('XivelyApp', ['dx', 'ionic', 'ngAnimate', 'XivelyApp.services', 'XivelyApp.filters', 'XivelyApp.directives'])
 
     .config(function ($stateProvider, $urlRouterProvider) {
 
@@ -39,7 +39,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
         };
     })
 
-    .controller('IntroCtrl', function ($scope, $state, Settings, $ionicSlideBoxDelegate) {
+    .controller('IntroCtrl', function ($scope, $state, Settings, $animate, $ionicSlideBoxDelegate) {
         // Called to navigate to the main app
         $scope.startApp = function () {
             $state.go('main');
@@ -89,6 +89,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
 
         $scope.activeBgImageIndex = 0;
         $rootScope.currentDataStream = {};
+        $rootScope.activeStream = null;
 
         $scope.gaugeScale = {};
         $scope.gaugeRange = {};

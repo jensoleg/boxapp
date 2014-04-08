@@ -104,20 +104,21 @@ h1, h2, h3, h4, h5 {
     margin-right: 2px;
 }
 
-
 .ionic-refresher-content {
-    color: rgb(255,255,255);
+    color: rgb(255, 255, 255);
     text-shadow: none;
 }
 
 .scroll-refresher {
     overflow: visible;
 }
+
 .ionic-refresher-content {
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0, 0, 0, 0.4);
     height: 400px;
     bottom: 0;
 }
+
 .ionic-refresher-content i {
     margin-top: 360px;
 }
@@ -416,19 +417,49 @@ optgroup {
     line-height: 0em;
 }
 
+#intro .input-label {
+    color: #fff;
+}
+
+#intro input {
+    color: #f5f5f5;
+}
+
 #intro .slider {
     height: 100%;
 }
+
 #intro .slider-slide {
     padding-top: 80px;
-    color: #000;
-    background-color: #fff;
+    /*
+        color: #000;
+        background-color: #fff;
+    */
     text-align: center;
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-    font-weight: 300;
+    color: #fff;
+    /*
+        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+        font-weight: 300;
+    */
 }
 
-#logo {
+#intro .slider-pager .slider-pager-page.active {
+    -webkit-transition: opacity 0.4s ease-in;
+    -moz-transition: opacity 0.4s ease-in;
+    transition: opacity 0.4s ease-in;
+    opacity: 1;
+}
+
+#intro .slider-pager .slider-pager-page {
+    display: inline-block;
+    margin: 0px 3px;
+    width: 15px;
+    color: white;
+    text-decoration: none;
+    opacity: 0.3;
+}
+
+.logo {
     margin: 30px 0px;
 }
 
@@ -437,12 +468,44 @@ optgroup {
     margin: 30px auto;
     font-size: 20px;
 }
+
 #list ol {
     margin-top: 30px;
 }
+
 #list ol li {
     text-align: left;
     list-style: decimal;
     margin: 10px 0px;
 }
 
+.image-container {
+    position: relative;
+    /* you have to add a height here if your container isn't otherwise set
+       becuse the absolutely positioned image divs won't calculate the height
+       for you */
+    height: 100px;
+}
+
+.image-repeat {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.introcheck {
+    -webkit-transition:0.5s linear all;
+    transition:0.5s linear all;
+    opacity:1;
+}
+
+.introcheck.ng-hide {
+    opacity:0;
+}
+
+.introcheck.ng-hide-add, .introcheck.ng-hide-remove {
+    /* this needs to be here to make it visible during the animation
+       since the .ng-hide class is already on the element rendering
+       it as hidden. */
+    display:block!important;
+}

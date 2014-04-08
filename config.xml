@@ -11,5 +11,6 @@
     <!--preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="1000" /-->
     <preference name="LoadUrlTimeoutValue" value="12000"/>
+    <preference name="OpenAllWhitelistURLsInWebView" value="false" />
     <access origin="*" />
 </widget>

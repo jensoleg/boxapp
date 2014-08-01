@@ -1,6 +1,26 @@
-angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.filters', 'XivelyApp.directives'])
+angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.services', 'XivelyApp.filters', 'XivelyApp.directives'])
 
-    .config(function ($stateProvider, $urlRouterProvider) {
+    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, authProvider) {
+
+        authProvider.init({
+            domain: 'decoplant.auth0.com',
+            clientID: 'riQAyvtyyRBNvO9zhRsQAXMEtaQA02uW',
+            callbackURL: location.href,
+            loginState: 'login',
+            dict: {
+                signin: {
+                    title: 'Decoplant'
+                }
+            }
+        });
+
+        authProvider.on('forbidden', function ($state, auth) {
+            auth.signout();
+            $state.go('login');
+            //console.log("security token expired");
+        });
+
+        $httpProvider.interceptors.push('authInterceptor');
 
         $stateProvider
             .state('intro', {
@@ -11,11 +31,25 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
             .state('main', {
                 url: '/main',
                 templateUrl: 'main.html',
-                controller: 'WeatherCtrl'
+                controller: 'WeatherCtrl',
+                data: {
+                    requiresLogin: true
+                }
+            })
+            .state('login', {
+                url: '/login',
+                controller: 'LoginCtrl',
+                templateUrl: 'templates/login.html',
+                pageTitle: 'Login'
             });
 
-        $urlRouterProvider.otherwise("/");
+        $urlRouterProvider.otherwise("/login");
 
+    })
+
+    .run(function (auth) {
+        // This hooks al auth events to check everything as soon as the app starts
+        auth.hookEvents();
     })
 
     .filter('int', function () {
@@ -37,6 +71,25 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
             if (reverse) filtered.reverse();
             return filtered;
         };
+    })
+
+    .controller('LoginCtrl', function (auth, $state) {
+
+        auth.signin({
+            popup: true,
+            showSignup: false,
+            title: 'Bobby Tech'
+        }).then(function (profile) {
+            $state.go('main');
+        }, function () {
+            console.log("There was an error signin in");
+        });
+
+    })
+
+    .controller('LogoutCtrl', function (auth, $state) {
+        auth.signout();
+        $state.go('login');
     })
 
     .controller('IntroCtrl', function ($scope, $state, Settings, $ionicSlideBoxDelegate) {
@@ -62,7 +115,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
 
     })
 
-    .controller('WeatherCtrl', function ($window, $scope, $timeout, $state, $ionicPlatform, $ionicScrollDelegate, $ionicNavBarDelegate, $ionicLoading, $ionicSlideBoxDelegate, $rootScope, Settings, xively, Weather, Geo, Flickr, $ionicModal, focus) {
+    .controller('WeatherCtrl', function ($window,  auth, $scope, $timeout, $state, $ionicPlatform, $ionicScrollDelegate, $ionicNavBarDelegate, $ionicLoading, $ionicSlideBoxDelegate, $rootScope, Settings, bobby, xively, Weather, Geo, Flickr, $ionicModal, focus) {
         var _this = this;
 
         ionic.Platform.ready(function () {
@@ -89,7 +142,6 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
         /* get graf time scale form settings */
         var ts = xively.getTimeScale();
         $scope.timeScale = _.find($scope.timescale, { 'value': ts.value });
-
 
         $scope.activeBgImageIndex = 0;
         $rootScope.currentDataStream = {};
@@ -143,7 +195,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
             },
             series: [
                 {
-                    argumentField: 'at',
+                    argumentField: 'timestamp',
                     valueField: 'value',
                     type: 'line',
                     point: { visible: false },
@@ -214,7 +266,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
             else {
                 //$("#chartContainer").dxChart('instance').showLoadingIndicator();
                 $scope.loadXively = true;
-                xively.get(stream);
+                bobby.getStream(stream);
                 $rootScope.activeStream = $rootScope.datastreams[stream];
             }
         };
@@ -228,7 +280,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
         $scope.setValueCtrl = function (stream) {
             $rootScope.datastreams[stream].isSelecting = false;
             $rootScope.datastreams[stream].current_value = $rootScope.datastreams[stream].newValue;
-            xively.publish(stream, $rootScope.datastreams[stream].current_value);
+            bobby.publish(stream, $rootScope.datastreams[stream].current_value);
         };
 
         $scope.closeValueCtrl = function (stream) {
@@ -237,7 +289,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
         };
 
         $scope.toggleCtrlSwitch = function (stream) {
-            xively.publish(stream, $rootScope.datastreams[stream].current_value);
+            bobby.publish(stream, $rootScope.datastreams[stream].current_value);
         };
 
         $rootScope.$watchCollection('currentDataStream.data', function (data) {
@@ -372,7 +424,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
                 });
             }
 
-            xively.refresh(init).then(function (location) {
+            bobby.refresh(init).then(function (location) {
                 if (location) {
 
                     _this.getCurrent(location.lat, location.lon);
@@ -416,10 +468,13 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
         $scope.refreshData(true);
 
     }).
-    controller('SettingsCtrl', function ($scope, $state, Settings, scandit) {
+    controller('SettingsCtrl', function ($scope, $state, Settings, scandit, auth, auth0Service) {
         var _this = this;
 
-        $scope.settings = Settings.getSettings();
+//        $scope.settings = Settings.getSettings();
+        auth0Service.getUser(auth.profile.user_id).then(function (profile) {
+            $scope.settings = profile.data.app;
+        });
 
         // Watch deeply for settings changes, and save them
         // if necessary
@@ -428,11 +483,20 @@ angular.module('XivelyApp', ['dx', 'ionic', 'XivelyApp.services', 'XivelyApp.fil
         }, true);
 
         $scope.closeSettings = function () {
-            $scope.modal.hide();
+            auth0Service.updateUser(auth.profile.user_id , { app: $scope.settings}).then(function () {
+                $scope.modal.hide();
+            });
         };
         $scope.intro = function () {
-            Settings.set('skipIntro', false);
+            $scope.settings.skipIntro = false;
+            this.closeSettings();
             $state.go('intro');
+        };
+
+        $scope.signout = function () {
+            $scope.modal.remove();
+            auth.signout();
+            $state.go('login');
         };
 
         $scope.$on('$destroy', function () {

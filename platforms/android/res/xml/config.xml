@@ -4,18 +4,6 @@
     <feature name="App">
         <param name="android-package" value="org.apache.cordova.App" />
     </feature>
-    <feature name="Device">
-        <param name="android-package" value="org.apache.cordova.device.Device" />
-    </feature>
-    <feature name="Geolocation">
-        <param name="android-package" value="org.apache.cordova.geolocation.GeoBroker" />
-    </feature>
-    <feature name="InAppBrowser">
-        <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
-    </feature>
-    <feature name="ScanditSDK">
-        <param name="android-package" value="com.mirasense.scanditsdk.plugin.ScanditSDK" />
-    </feature>
     <name>Bobby Xively</name>
     <description>
         A Bobby Tech hydrophonic system controller and monitor.

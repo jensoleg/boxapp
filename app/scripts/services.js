@@ -13,7 +13,9 @@ angular.module('XivelyApp.services', ['ngResource'])
     .constant('SCANDIT_API_KEY', 'cFzwjrDwEeOHumeEBBIoRqXMaSSy36Uq4650VHVlShc')
     .constant('FLICKR_API_KEY', '504fd7414f6275eb5b657ddbfba80a2c')
     .constant('OPENWEATHER_API_KEY', 'a8c98220ff98a42893423c2f6627e39f')
-
+    //.constant('JWT', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImplbnNvbGVAZ3JhdWx1bmQubmV0IiwibmFtZSI6ImplbnNvbGVAZ3JhdWx1bmQubmV0Iiwibmlja25hbWUiOiJqZW5zb2xlIiwicGljdHVyZSI6Imh0dHBzOi8vc2VjdXJlLmdyYXZhdGFyLmNvbS9hdmF0YXIvZTQwZWM3ZDY3ZTY4ZGFlYzk1ZDNiYzY3MTJhMmYyYzM_cz00ODAmcj1wZyZkPWh0dHBzJTNBJTJGJTJGc3NsLmdzdGF0aWMuY29tJTJGczIlMkZwcm9maWxlcyUyRmltYWdlcyUyRnNpbGhvdWV0dGU4MC5wbmciLCJDdXN0b21lciBJZCI6IjEyMzQiLCJQb2xpY3kiOiIxMjM4OTA3NjU0IiwiZ3JlZXRpbmdzIjoiaGVsbG8iLCJfaWQiOiJkZWI2OGUwMDZkMDAxZDhjNzAxNmM0ZWQxOWQ1MDJmYSIsImNsaWVudElEIjoicmlRQXl2dHl5UkJOdk85emhSc1FBWE1FdGFRQTAydVciLCJjcmVhdGVkX2F0IjoiMjAxNC0wNS0wNlQxMDo0ODo1OC41MDNaIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImlkZW50aXRpZXMiOlt7InVzZXJfaWQiOiI1MzY4YmUxYTk0M2JmNzY3NGMwMDE1OWUiLCJwcm92aWRlciI6ImF1dGgwIiwiY29ubmVjdGlvbiI6IlVzZXJuYW1lLVBhc3N3b3JkLUF1dGhlbnRpY2F0aW9uIiwiaXNTb2NpYWwiOmZhbHNlfV0sInVzZXJfaWQiOiJhdXRoMHw1MzY4YmUxYTk0M2JmNzY3NGMwMDE1OWUiLCJnbG9iYWxfY2xpZW50X2lkIjoiaVhyTWs0NzVlZE5wMnRkbHRZOGQ5RmkyZUR6azBYMVUiLCJpc3MiOiJodHRwczovL2RlY29wbGFudC5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NTM2OGJlMWE5NDNiZjc2NzRjMDAxNTllIiwiYXVkIjoicmlRQXl2dHl5UkJOdk85emhSc1FBWE1FdGFRQTAydVciLCJleHAiOjE0MDY4MDMxMjQsImlhdCI6MTQwNjcxNjcyNH0.pXxQTaUynOVXcQQpa0ULCtsF7ndyRIy5lhbRxLMfLhw')
+    .constant('DOMAIN', 'decoplant')
+    .constant('DEFAULTDEVICE', 'yzzqgpcxhtuo')
 
     .factory('cordova', function () {
         return window.cordova; // assumes cordova has already been loaded on the page
@@ -234,6 +236,120 @@ angular.module('XivelyApp.services', ['ngResource'])
         }
     })
 
+    .factory('bobby', function ($q, $rootScope, $http, auth, DOMAIN, DEFAULTDEVICE, Settings) {
+
+        var //_this = this,
+            bobby = {},
+            client = {},
+            devices = null,
+            controlTypes = ['data', 'ctrlValue', 'ctrlSwitch', 'ctrlTimeValue'],
+            baseUrl = 'http://api.bobbytechnologies.dk',
+            currentDevice = null;
+
+
+        client = mqtt.createClient(8080, 'mqtt.bobbytechnologies.dk', {"username": "JWT/" + DOMAIN, "password": auth.idToken});
+
+        // recieve message on current device subscription
+        client.on('message', function (topic, message) {
+            if (currentDevice) {
+                var topics = topic.split('/'),
+                    stream = topics[3];
+                $rootScope.datastreams[stream].newValue = message;
+                $rootScope.datastreams[stream].current_value = message;
+
+                // update scoped streams
+                if (stream == $rootScope.currentDataStream.id) {
+                    var now = new Date();
+                    $rootScope.currentDataStream.current_value = message;
+                    $rootScope.currentDataStream.data.push({ timestamp: now, value: message });
+                }
+            }
+        });
+
+        bobby.getDevices = function () {
+            $http.get('devices.json').success(function (data) {
+                return devices;
+            });
+        };
+
+        /* set current device */
+        bobby.setDevice = function (newDevice) {
+
+            // remove current subscriptions
+            if (currentDevice) {
+                angular.forEach(currentDevice.datastreams, function (stream) {
+                    client.unSubscribe("/decoplant/" + currentDevice.id + "/" + stream.id);
+                });
+            }
+
+            currentDevice = newDevice;
+
+            // set controls
+            angular.forEach(currentDevice.datastreams, function (stream) {
+                // retrieve last value
+                $http.get(baseUrl + '/' + currentDevice.id + '/' + stream.id, {
+                    headers: {'X-Domain': DOMAIN, 'content-type': 'application/json' },
+                }).success(function (data) {
+                    stream.newValue = data.data.payload;
+                    stream.current_value = data.data.payload;
+                    $rootScope.datastreams[stream.id] = stream;
+
+                    if (stream.id == $rootScope.currentDataStream.id) {
+                        $rootScope.currentDataStream.current_value = stream.newValue;
+                    }
+
+                    client.subscribe("/decoplant/" + currentDevice.id + "/" + stream.id);
+                });
+
+            });
+
+        };
+
+        // Publish value on current device
+        bobby.publish = function (topic, payload) {
+            client.publish("/decoplant/" + currentDevice.id + "/" + topic, payload, {retain: true});
+        };
+
+        // get time series values
+        bobby.getStream = function (stream) {
+
+            $http.get(baseUrl + '/' + currentDevice.id + '/' + stream, {
+                headers: { 'X-Domain': DOMAIN, 'content-type': 'application/json' },
+                params: { limit: 10 }
+            }).success(function (data) {
+                $rootScope.currentDataStream.data = data.data;
+                $rootScope.currentDataStream.id = stream;
+            });
+        };
+
+
+        bobby.refresh = function (init) {
+            var _this = this,
+                q = $q.defer();
+            $http.get('devices.json').success(function (data) {
+                devices = data.devices;
+                if (currentDevice)
+                    _this.setDevice(currentDevice);
+                else
+                    _this.setDevice(devices[0]);
+
+                if (Settings.get('useDeviceLoc'))
+                    q.resolve(null);
+                else
+                    q.resolve(null);
+
+                return q.promise;
+            }, function (error) {
+                q.resolve(null);
+
+
+            });
+
+            return q.promise;
+        };
+        return bobby;
+    })
+
     .factory('xively', function ($q, $rootScope, Settings) {
 
         var _this = this;
@@ -361,8 +477,7 @@ angular.module('XivelyApp.services', ['ngResource'])
         return xively;
     })
 
-    .
-    factory('scandit', function ($rootScope, Settings, cordova, SCANDIT_API_KEY) {
+    .factory('scandit', function ($rootScope, Settings, cordova, SCANDIT_API_KEY) {
 
         var _this = this;
         _this.init = function () {
@@ -386,4 +501,55 @@ angular.module('XivelyApp.services', ['ngResource'])
                 $rootScope.$broadcast('focusOn', name);
             });
         }
+    })
+    .service('Loading', function ($ionicLoading) {
+
+        var currentLoading;
+
+        this.start = function () {
+            if (!currentLoading) {
+                currentLoading = $ionicLoading.show({
+                    content: 'Loading',
+                });
+            }
+        }
+
+        this.stop = function () {
+            if (currentLoading) {
+                currentLoading.hide();
+                currentLoading = null;
+            }
+        }
+
+
+    })
+
+    .factory('auth0Service', function ($q, $resource, $http, auth) {
+
+        var baseUrl = 'https://decoplant.auth0.com/api/users/';
+
+        return {
+            getUser: function (user_id) {
+
+                return $http.get(baseUrl + user_id);
+
+            },
+            updateUser: function (user_id, metadata) {
+
+                return $http.post('https://decoplant.auth0.com/oauth/token',
+                    {client_id: 'riQAyvtyyRBNvO9zhRsQAXMEtaQA02uW',
+                        client_secret: '7INrZwoivJwCP600uV_AbCI6QXVF1nGOSq4VnTHv_pYyvn27xV15JLtiYPa59ajt',
+                        grant_type: 'client_credentials'})
+                    .then(function (data) {
+                        return data.data.access_token;
+                    })
+                    .then(function (access_token) {
+                        $http.put(baseUrl + user_id + '/metadata', metadata,
+                            {headers: {Authorization: 'Bearer ' + access_token}});
+                    });
+
+            }
+        };
     });
+
+

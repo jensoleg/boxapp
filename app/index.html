@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
 
-    <title>"Bobby Xively"</title>
+    <title>Decoplant</title>
 
     <!-- build:css({.tmp,app}) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
@@ -266,19 +266,24 @@
             <h1 class="title">Settings</h1>
 
             <div class="buttons">
-                <button class="button button-clear button-primary" ng-click="modal.hide()">Cancel</button>
+                <button class="button button-clear button-primary" ng-click="closeSettings()">Cancel</button>
             </div>
         </ion-header-bar>
         <ion-content>
             <div class="padding">
                 <div class="list">
-                    <label class="item item-input">
+                    <!--label class="item item-input">
                         <span class="input-label">Xively key</span>
                         <input ng-model="settings.keyXively" type="text">
                     </label>
                     <label class="item item-input">
                         <span class="input-label">Xively feed</span>
                         <input ng-model="settings.feedXively" type="text">
+                    </label-->
+                    <label class="item item-input">
+                        <span class="input-label">
+                        <button class="button button-small button-positive ion-button" ng-click="signout()">Sign out
+                        </button>
                     </label>
                     <label class="item item-input">
                         <span class="input-label">
@@ -329,9 +334,14 @@
 <script src="bower_components/globalize/lib/globalize.js"></script>
 <script src="bower_components/lodash/dist/lodash.compat.js"></script>
 <script src="bower_components/momentjs/moment.js"></script>
+<script src="bower_components/auth0-widget.js/build/auth0-widget.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/auth0.js/build/auth0.js"></script>
+<script src="bower_components/auth0-angular/build/auth0-angular.js"></script>
 <!-- endbower -->
 <script src="vendor/dx.chartjs.js"></script>
 <script src="vendor/xivelyjs-1.0.4.js"></script>
+<script src="vendor/mqtt.js"></script>
 <!-- endbuild -->
 
 <!-- custom vendor folder JS -->

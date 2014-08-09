@@ -79,6 +79,7 @@
 /Users/jensole/Documents/webstorm/bobbyapp/platforms/android/assets/www/images/AppIcon76x76@2x.png \
 /Users/jensole/Documents/webstorm/bobbyapp/platforms/android/assets/www/images/bobby.png \
 /Users/jensole/Documents/webstorm/bobbyapp/platforms/android/assets/www/images/bobby@2x.png \
+/Users/jensole/Documents/webstorm/bobbyapp/platforms/android/assets/www/images/decoplant.png \
 /Users/jensole/Documents/webstorm/bobbyapp/platforms/android/assets/www/images/ionic.png \
 /Users/jensole/Documents/webstorm/bobbyapp/platforms/android/assets/www/images/openweather.png \
 /Users/jensole/Documents/webstorm/bobbyapp/platforms/android/assets/www/images/openweather@2x.png \

@@ -2,22 +2,25 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
 
     .config(function ($stateProvider, $urlRouterProvider, $httpProvider, authProvider) {
 
+        var hostname = location.hostname.split('.'),
+            realm = hostname[0];
+
+        if (realm === '127') {
+            realm = 'decoplant';
+        }
+
         authProvider.init({
-            domain: 'decoplant.auth0.com',
+            domain: realm + '.auth0.com',
             clientID: 'riQAyvtyyRBNvO9zhRsQAXMEtaQA02uW',
             callbackURL: location.href,
             loginState: 'login',
-            dict: {
-                signin: {
-                    title: 'Decoplant'
-                }
-            }
+            dict: {signin: {title: ' ' /*realm.charAt(0).toUpperCase() + realm.slice(1)*/}}
         });
+
 
         authProvider.on('forbidden', function ($state, auth) {
             auth.signout();
             $state.go('login');
-            //console.log("security token expired");
         });
 
         $httpProvider.interceptors.push('authInterceptor');
@@ -47,7 +50,15 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
 
     })
 
-    .run(function (auth) {
+    .run(function (auth, $http, $rootScope) {
+
+        var hostname = location.hostname.split('.'),
+            realm = hostname[0];
+
+        if (realm === '127') {
+            realm = 'decoplant';
+        }
+        $rootScope.realm = realm;
         // This hooks al auth events to check everything as soon as the app starts
         auth.hookEvents();
     })
@@ -73,12 +84,14 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
         };
     })
 
-    .controller('LoginCtrl', function (auth, $state) {
+    .controller('LoginCtrl', function (auth, $state, $rootScope) {
 
+        var logo = '../images/' + $rootScope.realm + '.png'
         auth.signin({
             popup: true,
             showSignup: false,
-            title: 'Bobby Tech'
+            icon: logo,
+            showIcon: true
         }).then(function (profile) {
             $state.go('main');
         }, function () {
@@ -115,7 +128,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
 
     })
 
-    .controller('WeatherCtrl', function ($window,  auth, $scope, $timeout, $state, $ionicPlatform, $ionicScrollDelegate, $ionicNavBarDelegate, $ionicLoading, $ionicSlideBoxDelegate, $rootScope, Settings, bobby, xively, Weather, Geo, Flickr, $ionicModal, focus) {
+    .controller('WeatherCtrl', function ($window, $location, auth, $scope, $timeout, $state, $ionicPlatform, $ionicScrollDelegate, $ionicNavBarDelegate, $ionicLoading, $ionicSlideBoxDelegate, $rootScope, Settings, bobby, Weather, Geo, Flickr, $ionicModal, focus) {
         var _this = this;
 
         ionic.Platform.ready(function () {
@@ -140,7 +153,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
         ];
 
         /* get graf time scale form settings */
-        var ts = xively.getTimeScale();
+        var ts = bobby.getTimeScale();
         $scope.timeScale = _.find($scope.timescale, { 'value': ts.value });
 
         $scope.activeBgImageIndex = 0;
@@ -237,7 +250,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
 
         $scope.selectAction = function (time) {
             $scope.timeScale = _.find($scope.timescale, { 'value': time.value });
-            xively.setTimeScale($scope.timeScale);
+            bobby.setTimeScale($scope.timeScale);
             $scope.loadXively = true;
         };
 
@@ -364,8 +377,9 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
          $ionicScrollDelegate.scrollBottom(true);
          });
          */
+
         this.getBackgroundImage = function (lat, lng, locString) {
-            Flickr.search(locString, lat, lng).then(function (resp) {
+            Flickr.search(locString, lat, lng).then(function (respthen) {
                 var photos = resp.photos;
                 if (photos.photo.length) {
                     $scope.bgImages = photos.photo;
@@ -483,7 +497,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
         }, true);
 
         $scope.closeSettings = function () {
-            auth0Service.updateUser(auth.profile.user_id , { app: $scope.settings}).then(function () {
+            auth0Service.updateUser(auth.profile.user_id, { app: $scope.settings}).then(function () {
                 $scope.modal.hide();
             });
         };

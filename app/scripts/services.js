@@ -13,9 +13,8 @@ angular.module('XivelyApp.services', ['ngResource'])
     .constant('SCANDIT_API_KEY', 'cFzwjrDwEeOHumeEBBIoRqXMaSSy36Uq4650VHVlShc')
     .constant('FLICKR_API_KEY', '504fd7414f6275eb5b657ddbfba80a2c')
     .constant('OPENWEATHER_API_KEY', 'a8c98220ff98a42893423c2f6627e39f')
-    //.constant('JWT', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImplbnNvbGVAZ3JhdWx1bmQubmV0IiwibmFtZSI6ImplbnNvbGVAZ3JhdWx1bmQubmV0Iiwibmlja25hbWUiOiJqZW5zb2xlIiwicGljdHVyZSI6Imh0dHBzOi8vc2VjdXJlLmdyYXZhdGFyLmNvbS9hdmF0YXIvZTQwZWM3ZDY3ZTY4ZGFlYzk1ZDNiYzY3MTJhMmYyYzM_cz00ODAmcj1wZyZkPWh0dHBzJTNBJTJGJTJGc3NsLmdzdGF0aWMuY29tJTJGczIlMkZwcm9maWxlcyUyRmltYWdlcyUyRnNpbGhvdWV0dGU4MC5wbmciLCJDdXN0b21lciBJZCI6IjEyMzQiLCJQb2xpY3kiOiIxMjM4OTA3NjU0IiwiZ3JlZXRpbmdzIjoiaGVsbG8iLCJfaWQiOiJkZWI2OGUwMDZkMDAxZDhjNzAxNmM0ZWQxOWQ1MDJmYSIsImNsaWVudElEIjoicmlRQXl2dHl5UkJOdk85emhSc1FBWE1FdGFRQTAydVciLCJjcmVhdGVkX2F0IjoiMjAxNC0wNS0wNlQxMDo0ODo1OC41MDNaIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImlkZW50aXRpZXMiOlt7InVzZXJfaWQiOiI1MzY4YmUxYTk0M2JmNzY3NGMwMDE1OWUiLCJwcm92aWRlciI6ImF1dGgwIiwiY29ubmVjdGlvbiI6IlVzZXJuYW1lLVBhc3N3b3JkLUF1dGhlbnRpY2F0aW9uIiwiaXNTb2NpYWwiOmZhbHNlfV0sInVzZXJfaWQiOiJhdXRoMHw1MzY4YmUxYTk0M2JmNzY3NGMwMDE1OWUiLCJnbG9iYWxfY2xpZW50X2lkIjoiaVhyTWs0NzVlZE5wMnRkbHRZOGQ5RmkyZUR6azBYMVUiLCJpc3MiOiJodHRwczovL2RlY29wbGFudC5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NTM2OGJlMWE5NDNiZjc2NzRjMDAxNTllIiwiYXVkIjoicmlRQXl2dHl5UkJOdk85emhSc1FBWE1FdGFRQTAydVciLCJleHAiOjE0MDY4MDMxMjQsImlhdCI6MTQwNjcxNjcyNH0.pXxQTaUynOVXcQQpa0ULCtsF7ndyRIy5lhbRxLMfLhw')
-    .constant('DOMAIN', 'decoplant')
-    .constant('DEFAULTDEVICE', 'yzzqgpcxhtuo')
+    .constant('DEFAULTDEVICE', 'K0NppbqG6awI')
+
 
     .factory('cordova', function () {
         return window.cordova; // assumes cordova has already been loaded on the page
@@ -236,18 +235,20 @@ angular.module('XivelyApp.services', ['ngResource'])
         }
     })
 
-    .factory('bobby', function ($q, $rootScope, $http, auth, DOMAIN, DEFAULTDEVICE, Settings) {
+    .factory('bobby', function ($q, $rootScope, $http, auth, $location, DEFAULTDEVICE, Settings) {
 
-        var //_this = this,
+        var _this = this,
             bobby = {},
             client = {},
             devices = null,
             controlTypes = ['data', 'ctrlValue', 'ctrlSwitch', 'ctrlTimeValue'],
-            baseUrl = 'http://api.bobbytechnologies.dk',
+            baseUrl = 'http://' + $rootScope.realm + '.bobbytechnologies.dk/api/',
+        //baseUrl = 'http://' + $location.host() + ':8081/api/',
             currentDevice = null;
+        $rootScope.datastreams = {};
 
 
-        client = mqtt.createClient(8080, 'mqtt.bobbytechnologies.dk', {"username": "JWT/" + DOMAIN, "password": auth.idToken});
+        client = mqtt.createClient(8080, 'mqtt.bobbytechnologies.dk', {"username": "JWT/" + $rootScope.realm, "password": auth.idToken});
 
         // recieve message on current device subscription
         client.on('message', function (topic, message) {
@@ -257,7 +258,34 @@ angular.module('XivelyApp.services', ['ngResource'])
                 $rootScope.datastreams[stream].newValue = message;
                 $rootScope.datastreams[stream].current_value = message;
 
-                // update scoped streams
+                /*  check trigger */
+
+                var trigger,
+                    index,
+                    operators = {
+                        lt: '<',
+                        lte: '<=',
+                        gt: '>',
+                        gte: '>=',
+                        eq: '=='
+                    };
+
+                if (currentDevice.triggers) {
+                    index = _.findIndex(currentDevice.triggers, function (trigger) {
+                        return trigger.stream_id === stream;
+                    });
+                    if (index >= 0) {
+                        trigger = currentDevice.triggers[index];
+                    }
+                }
+
+                if (trigger) {
+                    $rootScope.datastreams[stream].triggered = eval(message + operators[trigger.trigger_type] + trigger.threshold_value);
+                }
+
+                /* check trigger */
+
+                    // update scoped streams
                 if (stream == $rootScope.currentDataStream.id) {
                     var now = new Date();
                     $rootScope.currentDataStream.current_value = message;
@@ -266,40 +294,34 @@ angular.module('XivelyApp.services', ['ngResource'])
             }
         });
 
-        bobby.getDevices = function () {
-            $http.get('devices.json').success(function (data) {
-                return devices;
-            });
-        };
-
         /* set current device */
         bobby.setDevice = function (newDevice) {
 
             // remove current subscriptions
             if (currentDevice) {
-                angular.forEach(currentDevice.datastreams, function (stream) {
-                    client.unSubscribe("/decoplant/" + currentDevice.id + "/" + stream.id);
+                angular.forEach(currentDevice.controls, function (stream) {
+                    client.unSubscribe('/' + $rootScope.realm + '/' + currentDevice.id + "/" + stream.id);
                 });
             }
 
             currentDevice = newDevice;
 
             // set controls
-            angular.forEach(currentDevice.datastreams, function (stream) {
+            angular.forEach(currentDevice.controls, function (stream) {
                 // retrieve last value
-                $http.get(baseUrl + '/' + currentDevice.id + '/' + stream.id, {
-                    headers: {'X-Domain': DOMAIN, 'content-type': 'application/json' },
-                }).success(function (data) {
-                    stream.newValue = data.data.payload;
-                    stream.current_value = data.data.payload;
-                    $rootScope.datastreams[stream.id] = stream;
+                $http.get(baseUrl + 'broker/' + currentDevice.id + '/' + stream.id)
+                    .success(function (data) {
+                        stream.newValue = data.data.payload;
+                        stream.current_value = data.data.payload;
+                        $rootScope.datastreams[stream.id] = stream;
+                        $rootScope.datastreams[stream.id].triggered = false;
 
-                    if (stream.id == $rootScope.currentDataStream.id) {
-                        $rootScope.currentDataStream.current_value = stream.newValue;
-                    }
+                        if (stream.id == $rootScope.currentDataStream.id) {
+                            $rootScope.currentDataStream.current_value = stream.newValue;
+                        }
 
-                    client.subscribe("/decoplant/" + currentDevice.id + "/" + stream.id);
-                });
+                        client.subscribe('/' + $rootScope.realm + '/' + currentDevice.id + '/' + stream.id);
+                    });
 
             });
 
@@ -307,14 +329,13 @@ angular.module('XivelyApp.services', ['ngResource'])
 
         // Publish value on current device
         bobby.publish = function (topic, payload) {
-            client.publish("/decoplant/" + currentDevice.id + "/" + topic, payload, {retain: true});
+            client.publish('/' + $rootScope.realm + '/' + currentDevice.id + "/" + topic, payload, {retain: true});
         };
 
         // get time series values
         bobby.getStream = function (stream) {
 
-            $http.get(baseUrl + '/' + currentDevice.id + '/' + stream, {
-                headers: { 'X-Domain': DOMAIN, 'content-type': 'application/json' },
+            $http.get(baseUrl + 'datastreams/' + currentDevice.id + '/' + stream, {
                 params: { limit: 10 }
             }).success(function (data) {
                 $rootScope.currentDataStream.data = data.data;
@@ -322,12 +343,21 @@ angular.module('XivelyApp.services', ['ngResource'])
             });
         };
 
+        bobby.setTimeScale = function (timeScale) {
+            Settings.set('timeScale', timeScale);
+            xively.get($rootScope.currentDataStream.id, timeScale);
+        };
+
+        bobby.getTimeScale = function () {
+            return Settings.get('timeScale');
+        };
 
         bobby.refresh = function (init) {
             var _this = this,
                 q = $q.defer();
-            $http.get('devices.json').success(function (data) {
-                devices = data.devices;
+            // $http.get('devices.json').success(function (data) {
+            $http.get(baseUrl + 'devices').success(function (data) {
+                devices = data;
                 if (currentDevice)
                     _this.setDevice(currentDevice);
                 else
@@ -347,134 +377,8 @@ angular.module('XivelyApp.services', ['ngResource'])
 
             return q.promise;
         };
+
         return bobby;
-    })
-
-    .factory('xively', function ($q, $rootScope, Settings) {
-
-        var _this = this;
-        var feed_id = Settings.get('feedXively');
-        var key;
-
-        var controlTypes = ['data', 'ctrlValue', 'ctrlSwitch', 'ctrlTimeValue'];
-
-        $rootScope.datastreams = {};
-
-        _this.prepareData = function (data) {
-            data.isSetting = false;
-            data.newValue = data.current_value;
-            /* parse tags */
-            if (angular.isDefined(data.tags)) {
-                var tagString = null;
-                var tags = null;
-                for (var i in data.tags) {
-                    (tagString === null) ? tagString = data.tags[i] : tagString = tagString + ' ,' + data.tags[i];
-                }
-                try {
-                    tags = eval("({" + tagString + '})');
-                } catch (e) {
-                    data.type = 'undefined';
-                }
-                if (data.type != 'undefined') {
-                    data.minDomain = tags.minValue;
-                    data.maxDomain = tags.maxValue;
-                    data.minCritical = tags.minCritical;
-                    data.maxCritical = tags.maxCritical;
-                    data.name = tags.name;
-                    data.type = tags.type;
-                }
-            }
-            return data;
-        };
-
-        $rootScope.$watch('dataPoints', function (v) {
-            angular.forEach($rootScope.dataPoints, function (ds) {
-                xively.datastream.get(feed_id, ds.id, function (data) {
-                    _this.prepareData(data);
-                    $rootScope.datastreams[ds.id] = data;
-                    xively.datastream.subscribe(feed_id, ds.id, function (event, newData) {
-                        _this.prepareData(newData);
-
-                        $rootScope.datastreams[ds.id] = newData;
-
-                        if (ds.id == $rootScope.currentDataStream.id) {
-                            $rootScope.currentDataStream.id = newData.id;
-                            $rootScope.currentDataStream.current_value = newData.current_value;
-                            $rootScope.currentDataStream.data.push({ value: newData.current_value, at: newData.at });
-                        }
-                    });
-                });
-            });
-        });
-
-
-        xively.refresh = function (init) {
-            var q = $q.defer();
-
-            feed_id = Settings.get('feedXively');
-
-            if (key != Settings.get('keyXively')) {
-
-                angular.forEach($rootScope.datastreams, function (stream) {
-                    xively.datastream.unsubscribe(feed_id, stream.id);
-                });
-
-                $rootScope.datastreams = {};
-                $rootScope.currentDataStream = {};
-
-                key = Settings.get('keyXively');
-            }
-
-            xively.setKey(key);
-
-
-            xively.feed.get(feed_id, function (controls) {
-                var xivelyControls = [];
-                angular.forEach(controls.datastreams, function (control) {
-                    _this.prepareData(control);
-                    if (_.contains(controlTypes, control.type)) {
-                        xivelyControls.push(control);
-                    }
-                });
-                $rootScope.dataPoints = xivelyControls;
-
-                if (Settings.get('useDeviceLoc'))
-                    q.resolve(controls.location);
-                else
-                    q.resolve(null);
-
-            }, function (error) {
-                q.reject(error);
-            });
-            return q.promise;
-        };
-
-        xively.setTimeScale = function (timeScale) {
-            Settings.set('timeScale', timeScale);
-            xively.get($rootScope.currentDataStream.id, timeScale);
-        };
-
-        xively.getTimeScale = function () {
-            return Settings.get('timeScale');
-        };
-
-        xively.publish = function (datapoint, value) {
-            var send = {"current_value": value};
-            xively.datastream.update(feed_id, datapoint, send, function (data) {
-            })
-        };
-
-        xively.get = function (datapoint, timeScale) {
-            var timeScale = Settings.get('timeScale');
-            var duration = timeScale.value + 'seconds';
-
-            xively.datapoint.history(feed_id, datapoint, {duration: duration, interval: timeScale.interval, limit: 1000}, function (data) {
-                $rootScope.currentDataStream.data = data;
-                $rootScope.currentDataStream.id = datapoint;
-            })
-        };
-
-        return xively;
     })
 
     .factory('scandit', function ($rootScope, Settings, cordova, SCANDIT_API_KEY) {
@@ -500,7 +404,7 @@ angular.module('XivelyApp.services', ['ngResource'])
             $timeout(function () {
                 $rootScope.$broadcast('focusOn', name);
             });
-        }
+        };
     })
     .service('Loading', function ($ionicLoading) {
 
@@ -509,47 +413,34 @@ angular.module('XivelyApp.services', ['ngResource'])
         this.start = function () {
             if (!currentLoading) {
                 currentLoading = $ionicLoading.show({
-                    content: 'Loading',
+                    content: 'Loading'
                 });
             }
-        }
+        };
 
         this.stop = function () {
             if (currentLoading) {
                 currentLoading.hide();
                 currentLoading = null;
             }
-        }
+        };
 
 
     })
 
-    .factory('auth0Service', function ($q, $resource, $http, auth) {
+    .factory('auth0Service', function ($q, $resource, $http, $rootScope) {
 
-        var baseUrl = 'https://decoplant.auth0.com/api/users/';
+        //var baseUrl = 'https://decoplant.auth0.com/api/users/';
+        var baseUrl = 'http://' + $rootScope.realm + '.bobbytechnologies.dk/api/';
 
         return {
-            getUser: function (user_id) {
-
-                return $http.get(baseUrl + user_id);
-
+            getUser: function (user_id, user) {
+                return $http.get(baseUrl + 'auth/users/' + user_id);
             },
             updateUser: function (user_id, metadata) {
 
-                return $http.post('https://decoplant.auth0.com/oauth/token',
-                    {client_id: 'riQAyvtyyRBNvO9zhRsQAXMEtaQA02uW',
-                        client_secret: '7INrZwoivJwCP600uV_AbCI6QXVF1nGOSq4VnTHv_pYyvn27xV15JLtiYPa59ajt',
-                        grant_type: 'client_credentials'})
-                    .then(function (data) {
-                        return data.data.access_token;
-                    })
-                    .then(function (access_token) {
-                        $http.put(baseUrl + user_id + '/metadata', metadata,
-                            {headers: {Authorization: 'Bearer ' + access_token}});
-                    });
+                return $http.put(baseUrl + 'auth/users/' + user_id + '/metadata', metadata);
 
             }
         };
     });
-
-

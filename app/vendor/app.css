@@ -4,6 +4,10 @@ body {
     /*cursor: url('http://ionicframework.com/img/finger.png'), auto;*/
 }
 
+.critical {
+    color: red;
+}
+
 #wrapper {
     background-color: black;
 }

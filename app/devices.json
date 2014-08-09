@@ -1,0 +1,78 @@
+{
+    "devices": [
+        {
+            "name": "Prototype Box",
+            "id": "K0NppbqG6awI",
+            "location": {"lat" : 23.34343, "lng" : 34.343434},
+            "datastreams": [
+                {
+                    "id": "6",
+                    "name": "Moisture",
+                    "type": "data",
+                    "minValue": 1,
+                    "maxValue": 10,
+                    "minCritical": 4,
+                    "maxCritical": 4
+                },
+                {
+                    "id": "boxlight",
+                    "name": "Light",
+                    "type": "data",
+                    "minValue": 1,
+                    "maxValue": 10,
+                    "minCritical": 4,
+                    "maxCritical": 4
+                },
+                {
+                    "id": "boxtemp",
+                    "name": "Inside temp",
+                    "type": "data",
+                    "minValue": 1,
+                    "maxValue": 10,
+                    "minCritical": 4,
+                    "maxCritical": 4,
+                    "unit" : {
+                        "symbol": "°"
+                    }
+                },
+                {
+                    "id": "4",
+                    "name": "Extern temp",
+                    "type": "data",
+                    "minValue": 1,
+                    "maxValue": 10,
+                    "minCritical": 4,
+                    "maxCritical": 4,
+                    "unit" : {
+                        "symbol": "°"
+                    }
+                },
+                {
+                    "id": "5",
+                    "name": "Float switch",
+                    "type": "data",
+                    "minValue": 1,
+                    "maxValue": 10,
+                    "minCritical": 4,
+                    "maxCritical": 4
+                }
+            ]
+        },
+        {
+            "name": "Prototype Box 1",
+            "id": "xzzqgpcxhtuo",
+            "location": "https://decoplant.auth0.com",
+            "datastreams": [
+                {
+                    "id": "a",
+                    "name": "Temperature",
+                    "type": "data",
+                    "minValue": 1,
+                    "maxValue": 10,
+                    "minCritical": 4,
+                    "maxCritical": 4
+                }
+            ]
+        }
+    ]
+}

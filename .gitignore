@@ -6,3 +6,6 @@ www
 app/bower_components
 coverage
 .idea
+platforms
+plugins
+merges

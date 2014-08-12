@@ -60,10 +60,32 @@ angular.module('XivelyApp.directives', [])
                     $timeout(checkTime, 500);
                 });
             }
-        }
+        };
     })
 
-    .directive('currentWeather', function ($timeout, $rootScope, Settings) {
+    .directive('currentReadings', function ($timeout) {
+        return {
+            restrict: 'E',
+            replace: true,
+            templateUrl: 'templates/current-readings.html',
+            scope: true,
+            link: function ($scope, $element, $attr) {
+
+                $scope.$on('refreshComplete', function (v) {
+                    angular.element(document.querySelector('.scroll-content')).css('-webkit-overflow-scrolling', 'auto');
+                    $timeout(function () {
+                        var windowHeight = window.innerHeight;
+                        var bobbyHeight = angular.element('#reading-content').height();
+                        $element[0].style.paddingTop = (windowHeight - bobbyHeight - 44) + 'px';
+                        console.log('padding readings: ', windowHeight - bobbyHeight - 44);
+                        angular.element(document.querySelector('.scroll-content')).css('-webkit-overflow-scrolling', 'touch');
+                    }, 300);
+                });
+            }
+        };
+    })
+
+    .directive('currentWeather', function ($timeout) {
         return {
             restrict: 'E',
             replace: true,
@@ -71,17 +93,16 @@ angular.module('XivelyApp.directives', [])
             scope: true,
             link: function ($scope, $element, $attr) {
 
-                $scope.$watch('current', function (v) {
-                    var windowHeight = window.innerHeight;
-                    //var thisHeight = $element[0].offsetHeight;
-                    //var headerHeight = document.querySelector('#header').offsetHeight;
-                    //var padding = document.querySelector('#main-content');
-                    $element[0].style.paddingTop = (windowHeight - 180 - 25) + 'px';
-                    //$element[0].style.paddingTop = (thisHeight - windowHeight - 25) + 'px';
+                $scope.$on('refreshComplete', function (v) {
                     angular.element(document.querySelector('.scroll-content')).css('-webkit-overflow-scrolling', 'auto');
                     $timeout(function () {
+                        var windowHeight = window.innerHeight;
+                        var weatherHeight =  angular.element('#weather-content').height();
+                        $element[0].style.paddingTop = (windowHeight - weatherHeight - 44) + 'px';
                         angular.element(document.querySelector('.scroll-content')).css('-webkit-overflow-scrolling', 'touch');
-                    }, 100);
+                        console.log('padding readings: ', windowHeight - weatherHeight - 44);
+                        $scope.$emit('refreshDone');
+                    }, 300);
                 });
             }
         }
@@ -93,6 +114,12 @@ angular.module('XivelyApp.directives', [])
             replace: true,
             templateUrl: 'templates/xively.html',
             link: function ($scope, $element, $attr) {
+
+                $scope.$watch('current', function (v) {
+                    var windowHeight = window.innerHeight;
+                    var thisHeight = $element[0].offsetHeight;
+                    var headerHeight = document.querySelector('#header').offsetHeight;
+                });
             }
         }
     })
@@ -118,7 +145,7 @@ angular.module('XivelyApp.directives', [])
             template: '<div class="weather-box"><h4 class="title">{{title}}</h4><div ng-transclude></div></div>',
             link: function ($scope, $element, $attr) {
             }
-        }
+        };
     })
 
     .directive('backgroundCycler', function ($compile, $animate) {
@@ -163,7 +190,7 @@ angular.module('XivelyApp.directives', [])
                     }
                 });
             }
-        }
+        };
     })
 
     .directive('backgroundImage', function ($compile, $animate) {
@@ -195,7 +222,7 @@ angular.module('XivelyApp.directives', [])
                             $scope.$broadcast('orientation.changed');
                         }, 10);
                     }, false);
-                }
+                };
             }
         };
     }).

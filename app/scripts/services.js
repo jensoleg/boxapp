@@ -5,7 +5,7 @@ angular.module('XivelyApp.services', ['ngResource'])
         'keyXively': 'BPWvM1ZU0HLKSHs82lG3x1vdzoOSRomAEVpywvNJwGElgciw',
         'feedXively': '1664985147',
         'useFlickr': true,
-        'useDeviceLoc': false,
+        'useDeviceLoc': true,
         'timeScale': {value: 86400, interval: 300, text: '1 day', type: 'Averaged datapoints'},
         'skipIntro': false
 
@@ -34,18 +34,19 @@ angular.module('XivelyApp.services', ['ngResource'])
         var ts = _settings.timeScale;
         if (typeof ts !== 'object')
             _settings.timeScale = DEFAULT_SETTINGS.timeScale;
-
-        if (!_settings) {
+/*
+        if (_settings) {
             window.localStorage['settings'] = JSON.stringify(_settings);
         }
-
+*/
         var obj = {
             getSettings: function () {
                 return _settings;
             },
             // Save the settings to localStorage
-            save: function () {
-                window.localStorage['settings'] = JSON.stringify(_settings);
+            save: function (newSetting) {
+                window.localStorage['settings'] = JSON.stringify(newSetting);
+                _settings = newSetting;
                 $rootScope.$broadcast('settings.changed', _settings);
             },
             // Get a settings val
@@ -64,7 +65,7 @@ angular.module('XivelyApp.services', ['ngResource'])
         };
 
         // Save the settings to be safe
-        obj.save();
+        obj.save(_settings);
         return obj;
     })
 
@@ -124,7 +125,7 @@ angular.module('XivelyApp.services', ['ngResource'])
     })
 
     .factory('Flickr', function ($q, $resource, FLICKR_API_KEY) {
-        var baseUrl = 'http://api.flickr.com/services/rest/';
+        var baseUrl = 'https://api.flickr.com/services/rest/';
 
 
         var flickrSearch = $resource(baseUrl, {
@@ -240,11 +241,12 @@ angular.module('XivelyApp.services', ['ngResource'])
         var _this = this,
             bobby = {},
             client = {},
-            devices = null,
             controlTypes = ['data', 'ctrlValue', 'ctrlSwitch', 'ctrlTimeValue'],
             baseUrl = 'http://' + $rootScope.realm + '.bobbytechnologies.dk/api/',
         //baseUrl = 'http://' + $location.host() + ':8081/api/',
             currentDevice = null;
+
+        $rootScope.devices = {};
         $rootScope.datastreams = {};
 
 
@@ -285,7 +287,7 @@ angular.module('XivelyApp.services', ['ngResource'])
 
                 /* check trigger */
 
-                    // update scoped streams
+                // update scoped streams
                 if (stream == $rootScope.currentDataStream.id) {
                     var now = new Date();
                     $rootScope.currentDataStream.current_value = message;
@@ -300,7 +302,7 @@ angular.module('XivelyApp.services', ['ngResource'])
             // remove current subscriptions
             if (currentDevice) {
                 angular.forEach(currentDevice.controls, function (stream) {
-                    client.unSubscribe('/' + $rootScope.realm + '/' + currentDevice.id + "/" + stream.id);
+                    client.unsubscribe('/' + $rootScope.realm + '/' + currentDevice.id + "/" + stream.id);
                 });
             }
 
@@ -357,22 +359,20 @@ angular.module('XivelyApp.services', ['ngResource'])
                 q = $q.defer();
             // $http.get('devices.json').success(function (data) {
             $http.get(baseUrl + 'devices').success(function (data) {
-                devices = data;
+                $rootScope.devices = data;
                 if (currentDevice)
                     _this.setDevice(currentDevice);
                 else
-                    _this.setDevice(devices[0]);
+                    _this.setDevice($rootScope.devices[0]);
 
                 if (Settings.get('useDeviceLoc'))
-                    q.resolve(null);
+                    q.resolve(currentDevice.location);
                 else
                     q.resolve(null);
 
                 return q.promise;
             }, function (error) {
                 q.resolve(null);
-
-
             });
 
             return q.promise;
@@ -420,7 +420,7 @@ angular.module('XivelyApp.services', ['ngResource'])
 
         this.stop = function () {
             if (currentLoading) {
-                currentLoading.hide();
+                $ionicLoading.hide();
                 currentLoading = null;
             }
         };

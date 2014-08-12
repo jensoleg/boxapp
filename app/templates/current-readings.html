@@ -1,0 +1,15 @@
+<div id="weather-box col current-device">
+    <div class="ui-device-select">
+        <div class="custom-select-container">
+            <select class="custom replaced" style="width: 50%;"
+                    ng-options="t.place group by t.location for t in installations"
+                    ng-model="installation"
+                    ng-change="selectDevice(installation)">
+            </select>
+        <span class="device-select" aria-hidden="true">
+            <span>{{installation.location}} {{installation.place}}</span>
+        </span>
+        </div>
+    </div>
+</div>
+

@@ -6,6 +6,18 @@
                     {{datastreams[activeStream.id].name}}
                     {{datastreams[activeStream.id].current_value}}{{datastreams[activeStream.id].unit.symbol}}
                 </div>
+                <!--div class="col ui-select">
+                    <div class="custom-select-container">
+                        <select class="custom replaced"
+                                ng-options="device.name for device in devices"
+                                ng-model="device"
+                                ng-change="selectDevice(device.id)">
+                        </select>
+                        <span class="custom-select" aria-hidden="true">
+                               <span>{{device.name}}</span>
+                        </span>
+                    </div>
+                </div-->
                 <div class="col ui-select">
                     <div class="custom-select-container">
                         <select class="custom replaced"

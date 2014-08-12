@@ -1,15 +1,55 @@
 body {
-    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
-    background-color: black;
-    /*cursor: url('http://ionicframework.com/img/finger.png'), auto;*/
+    /*text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);*/
+    background-color: #444;
+    cursor: url('http://ionicframework.com/img/finger.png'), auto;
 }
+
+/*dark is class added to ion-content, since ion-conte*/
+/*is made up of multiple pieces and is a pain to style each*/
+.dark {
+    background-color: #444 !important;
+    color: #ffffff;
+}
+
+/*Set the background to transparent for ion-item*/
+.dark .item {
+    background-color: transparent;
+    border: none;
+    border-top: 1px solid;
+    border-bottom: 2px solid;
+/*
+border-color: #0000cc;
+    color: #F0F1F1;
+*/
+}
+
+/*Changes the border for the last item*/
+.dark .item:last-child {
+    border-bottom: 1px solid #333333;
+}
+
+/*Ion-item adds item-complex and an inner div, .item-content*/
+/* this needs to be transparent too, but doesnt need borders*/
+.dark .item-complex .item-content, .dark .item-radio .item-content {
+    background-color: transparent;
+}
+
+
+/*Just makes the type white*/
+.dark h2,
+.dark h3,
+.dark p,
+.dark a {
+    color: #F0F1F1;
+}
+
 
 .critical {
     color: red;
 }
 
 #wrapper {
-    background-color: black;
+    background-color: #444;
 }
 
 #scroller {
@@ -71,7 +111,12 @@ h1, h2, h3, h4, h5 {
     font-weight: 300;
 }
 
-#main-content {
+#reading-content {
+    color: #fff;
+    padding: 10px;
+}
+
+#weather-content {
     color: #fff;
     padding: 10px;
 }
@@ -125,6 +170,17 @@ h1, h2, h3, h4, h5 {
 
 .ionic-refresher-content i {
     margin-top: 360px;
+}
+
+
+
+#current-device {
+    height: 40px;
+    box-sizing: content-box;
+}
+
+#current-device > * {
+    color: #fff;
 }
 
 /**
@@ -264,7 +320,7 @@ h1, h2, h3, h4, h5 {
 /**
  * Settings modal
  */
-
+/*
 #settings-modal {
     background-color: rgba(0, 0, 0, 0.8);
 }
@@ -282,7 +338,7 @@ h1, h2, h3, h4, h5 {
 #settings-modal input {
     color: #f5f5f5;
 }
-
+*/
 /**
  * xively
  */
@@ -404,20 +460,49 @@ optgroup {
 }
 
 .ui-select .custom-select > span:before {
-    content: "\f172";
+     content: "\f172";
+     /*display: inline-block;*/
+     position: relative;
+     width: 100%;
+     top: 4px;
+     margin: -4px 7px 0 0;
+     font-family: 'ionicons';
+     speak: none;
+     font-weight: normal;
+     font-variant: normal;
+     text-transform: none;
+     -webkit-font-smoothing: antialiased;
+     font-size: 20px;
+     font-size: 1.5em;
+     line-height: 0em;
+ }
+
+.device-select {
+    vertical-align: baseline;
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 60%;
+    /* height: 20px; */
+}
+
+.ui-device-select .device-select > span:before {
+    content: "\f2ac";
     /*display: inline-block;*/
     position: relative;
     width: 100%;
-    top: 4px;
-    margin: -4px 7px 0 0;
+    top: 10px;
+    margin: -4px 7px 0 7px;
     font-family: 'ionicons';
     speak: none;
     font-weight: normal;
     font-variant: normal;
     text-transform: none;
     -webkit-font-smoothing: antialiased;
-    font-size: 20px;
-    font-size: 1.5em;
+    font-size: 40px;
+    /*font-size: 1.5em;*/
     line-height: 0em;
 }
 

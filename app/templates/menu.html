@@ -6,7 +6,7 @@
         <ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
     </ion-pane>
     <ion-side-menu side="left" class="dark-bg">
-        <header class="bar bar-header bar-dark">
+        <header class="bar bar-header bar-dark" style="border-bottom-width: 0">
             <h1 class="title"></h1>
         </header>
         <ion-content class="has-header dark">
@@ -20,35 +20,10 @@
                 <ion-item nav-clear menu-close ng-click="settings()">
                     Settings
                 </ion-item>
-                <ion-item nav-clear menu-close ng-click="signout()">
+                <ion-item nav-clear menu-close ng-click="signout()" style="border-bottom-width: 0">
                     Sign out
                 </ion-item>
             </ion-list>
         </ion-content>
     </ion-side-menu>
 </ion-side-menus>
-
-<!--ion-side-menus>
-    <ion-side-menu-content>
-        <ion-header-bar class="bar-header" style="background: none; border-bottom-width: 0">
-            <button class="button button-icon" ng-click="toggleSideMenu()">
-                <i class="icon ion-navicon"></i>
-            </button>
-        </ion-header-bar>
-        <ion-nav-view name="menuContent" class="slide-left-right"></ion-nav-view>
-    </ion-side-menu-content>
-    <ion-side-menu side="left" class="dark-bg">
-        <div class="bar bar-header" style="background: none; border-bottom-width: 0">
-            <h1 class="title"></h1>
-        </div>
-        <ion-content has-header="true">
-            <ion-list>
-                <ion-item class= "item-icon-left item-dark" ng-click="home()"><i class="icon ion-home padding-right"></i>Home</ion-item>
-                <ion-item class= "item-icon-left item-dark" ng-click="installations()"><i class="icon ion-social-buffer padding-right"></i>Installations
-                </ion-item>
-                <ion-item class= "item-icon-left item-dark" ng-click="showSettings()"><i class="icon ion-gear-b padding-right"></i>Settings</ion-item>
-                <ion-item class= "item-icon-left item-dark" ng-click="signout()"><i class="icon ion-log-out padding-right"></i>Sign out</ion-item>
-            </ion-list>
-        </ion-content>
-    </ion-side-menu>
-</ion-side-menus-->

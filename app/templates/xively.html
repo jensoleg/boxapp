@@ -1,64 +1,4 @@
 <div id="forecast" class="weather-box">
-    <div ng-show="activeStreamReady">
-        <h4 class="title">
-            <div class="row" style="border-bottom: 0px">
-                <div class="col col-50">
-                    {{datastreams[activeStream.id].name}}
-                    {{datastreams[activeStream.id].current_value}}{{datastreams[activeStream.id].unit.symbol}}
-                </div>
-                <!--div class="col ui-select">
-                    <div class="custom-select-container">
-                        <select class="custom replaced"
-                                ng-options="device.name for device in devices"
-                                ng-model="device"
-                                ng-change="selectDevice(device.id)">
-                        </select>
-                        <span class="custom-select" aria-hidden="true">
-                               <span>{{device.name}}</span>
-                        </span>
-                    </div>
-                </div-->
-                <div class="col ui-select">
-                    <div class="custom-select-container">
-                        <select class="custom replaced"
-                                ng-options="t.text group by t.type for t in timescale"
-                                ng-model="timeScale"
-                                ng-change="selectAction(timeScale)">
-                        </select>
-                        <span class="custom-select" aria-hidden="true">
-                               <span>{{timeScale.text}}</span>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </h4>
-    </div>
-
-    <div ng-show="chartData.length > 0">
-        <ion-slide-box delegate-handle="charts" show-pager="false" id="readings-scroll">
-            <ion-slide>
-                <div id="chartContainer" style="height: 200px" dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
-                                                                       argumentAxis: 'chartSettings.argumentAxis'},
-                                                        valueAxis: chartSettings.valueAxis,
-                                                        legend: chartSettings.legend,
-                                                        tooltip: chartSettings.tooltip,
-                                                        series: chartSettings.series,
-                                                        crosshair: chartSettings.crosshair,
-                                                        loadingIndicator: chartSettings.loadingIndicator
-                                                       }"></div>
-            </ion-slide>
-            <ion-slide>
-                <div style="height: 200px" dx-circular-gauge="{tooltip: gaugeSettings.tooltip,
-                                                               subvalueIndicator: gaugeSettings.subvalueIndicator,
-                                                               bindingOptions: {scale: 'gaugeSettings.scale',
-                                                                       value: 'gaugeSettings.value',
-                                                                       rangeContainer: 'gaugeSettings.rangeContainer',
-                                                                       subvalues : 'gaugeSettings.subvalues'}
-                                                                       }"></div>
-            </ion-slide>
-        </ion-slide-box>
-    </div>
-
     <div class="row" style="margin-top: 0"
          ng-repeat="readings in datastreams|orderObjectBy:'ctrlType':'reverse'">
         <div class="col">
@@ -152,6 +92,55 @@
 
         </div>
     </div>
+
+    <div ng-show="activeStreamReady" style="padding-top: 10px;">
+        <h4 class="title">
+            <div class="row" style="border-bottom: 0px">
+                <div class="col col-50">
+                    {{datastreams[activeStream.id].name}}
+                    {{datastreams[activeStream.id].current_value}}{{datastreams[activeStream.id].unit.symbol}}
+                </div>
+                <div class="col ui-select">
+                    <div class="custom-select-container">
+                        <select class="custom replaced"
+                                ng-options="t.text group by t.type for t in timescale"
+                                ng-model="timeScale"
+                                ng-change="selectAction(timeScale)">
+                        </select>
+                        <span class="custom-select" aria-hidden="true">
+                               <span>{{timeScale.text}}</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </h4>
+    </div>
+
+    <div ng-show="chartData.length > 0">
+        <ion-slide-box delegate-handle="charts" show-pager="false" id="readings-scroll">
+            <ion-slide>
+                <div id="chartContainer" style="height: 200px" dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
+                                                                       argumentAxis: 'chartSettings.argumentAxis'},
+                                                        valueAxis: chartSettings.valueAxis,
+                                                        legend: chartSettings.legend,
+                                                        tooltip: chartSettings.tooltip,
+                                                        series: chartSettings.series,
+                                                        crosshair: chartSettings.crosshair,
+                                                        loadingIndicator: chartSettings.loadingIndicator
+                                                       }"></div>
+            </ion-slide>
+            <ion-slide>
+                <div style="height: 200px" dx-circular-gauge="{tooltip: gaugeSettings.tooltip,
+                                                               subvalueIndicator: gaugeSettings.subvalueIndicator,
+                                                               bindingOptions: {scale: 'gaugeSettings.scale',
+                                                                       value: 'gaugeSettings.value',
+                                                                       rangeContainer: 'gaugeSettings.rangeContainer',
+                                                                       subvalues : 'gaugeSettings.subvalues'}
+                                                                       }"></div>
+            </ion-slide>
+        </ion-slide-box>
+    </div>
+
     <div class="clearfix">
         <a href="http://bobbytechnologies.dk" onClick="javascript:return openExternal(this)">
             <div class="bobby-logo"></div>

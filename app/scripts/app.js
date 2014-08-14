@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.services', 'XivelyApp.filters', 'XivelyApp.directives'])
 
     .config(function ($stateProvider, $urlRouterProvider, $httpProvider, authProvider) {
@@ -7,6 +9,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
 
         if (realm === '127') {
             realm = 'decoplant';
+            $httpProvider.defaults.headers.common['realm'] = realm;
         }
 
         authProvider.init({
@@ -89,21 +92,28 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
                     }
                 },
                 pageTitle: 'Login'
-            })
+            });
 
         $urlRouterProvider.otherwise("app/login");
 
     })
 
-    .run(function (auth, $http, $rootScope) {
+    .run(function (auth, $rootScope, $location) {
 
         var hostname = location.hostname.split('.'),
             realm = hostname[0];
 
         if (realm === '127') {
             realm = 'decoplant';
+            $rootScope.baseUrl = 'http://' + $location.host() + ':8081/api/';
+            $rootScope.hostMQTT = $location.host();
+        } else {
+            $rootScope.baseUrl = 'http://' + $location.host() + '/api/';
+            $rootScope.hostMQTT = 'mqtt.bobbytechnologies.dk';
         }
+
         $rootScope.realm = realm;
+
         // This hooks al auth events to check everything as soon as the app starts
         auth.hookEvents();
     })
@@ -187,7 +197,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
             {deviceId: 'K0NppbqG6awI', place: 'Shop', location: 'Decoplant'}
         ];
 
-        $scope.clearSearch = function() {
+        $scope.clearSearch = function () {
             $scope.data.searchQuery = '';
         };
 
@@ -196,7 +206,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
     .controller('DeviceCtrl', function ($scope, $stateParams) {
     })
 
-    .controller('WeatherCtrl', function ($window, $ionicSideMenuDelegate, $location, auth, $scope, $timeout, $state, $ionicPlatform, $ionicScrollDelegate, $ionicNavBarDelegate, $ionicLoading, $ionicSlideBoxDelegate, $rootScope, Settings, bobby, Weather, Geo, Flickr, $ionicModal, focus) {
+    .controller('WeatherCtrl', function ($window, $ionicSideMenuDelegate, $location, auth, $scope, $timeout, $state, $ionicPlatform, $ionicScrollDelegate, $ionicNavBarDelegate, $ionicLoading, $ionicSlideBoxDelegate, $rootScope, Settings, bobby, $ionicModal, focus) {
         var _this = this;
 
         ionic.Platform.ready(function () {
@@ -219,23 +229,21 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
 
         $scope.installation = $scope.installations[0];
 
-
         $scope.timescale = [
-            {value: 300, interval: 0, text: '5 minutes', type: 'Raw datapoints'},
-            {value: 1800, interval: 0, text: '30 minutes', type: 'Raw datapoints'},
-            {value: 3600, interval: 0, text: '1 hours', type: 'Raw datapoints'},
-            {value: 21600, interval: 300, text: '6 hours', type: 'Averaged datapoints'},
-            {value: 86400, interval: 300, text: '1 day', type: 'Averaged datapoints'},
-            {value: 604800, interval: 10800, text: '7 days', type: 'Averaged datapoints'},
-            {value: 2592000, interval: 86400, text: '1 month', type: 'Averaged datapoints'},
-            {value: 7776000, interval: 86400, text: '3 months', type: 'Averaged datapoints'}
+            {value: 300, interval: 1, text: '5 minutes', type: 'Raw datapoints'},
+            {value: 1800, interval: 1, text: '30 minutes', type: 'Raw datapoints'},
+            {value: 3600, interval: 1, text: '1 hours', type: 'Raw datapoints'},
+            {value: 21600, interval: 60, text: '6 hours', type: 'Averaged datapoints'},
+            {value: 86400, interval: 60, text: '1 day', type: 'Averaged datapoints'},
+            {value: 604800, interval: 3600, text: '7 days', type: 'Averaged datapoints'},
+            {value: 2592000, interval: 3600, text: '1 month', type: 'Averaged datapoints'},
+            {value: 7776000, interval: 3600, text: '3 months', type: 'Averaged datapoints'}
         ];
 
         /* get graf time scale form settings */
         var ts = bobby.getTimeScale();
         $scope.timeScale = _.find($scope.timescale, { 'value': ts.value });
 
-        $scope.activeBgImageIndex = 0;
         $rootScope.currentDataStream = {};
         $rootScope.activeStream = null;
         $scope.activeStreamReady = false;
@@ -314,17 +322,6 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
                 },
                 opacity: 0.8
             }
-            /*
-             loadingIndicator: {
-             text: "Loading Xively data ...",
-             backgroundColor: ""
-             }
-             */
-        };
-
-        $scope.toggleView = function (index) {
-            //$scope.viewXively = !$scope.viewXively;
-            $ionicScrollDelegate.$getByHandle('details').scrollBottom();
         };
 
         $scope.selectDevice = function (device) {
@@ -336,34 +333,18 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
             bobby.setTimeScale($scope.timeScale);
             $scope.loadXively = true;
         };
-        /*
-         $scope.showSettings = function () {
-         if (!$scope.settingsModal) {
-         // Load the modal from the given template URL
-         $ionicModal.fromTemplateUrl('settings.html', function (modal) {
-         $scope.settingsModal = modal;
-         $scope.settingsModal.show();
-         }, {
-         // The animation we want to use for the modal entrance
-         animation: 'slide-in-up'
-         });
-         } else {
-         $scope.settingsModal.show();
-         }
-         };
-         */
+
         $scope.showData = function (stream) {
             if (!(angular.isUndefined($rootScope.activeStream) || $rootScope.activeStream === null) && $rootScope.activeStream.id == $rootScope.datastreams[stream].id) {
                 $rootScope.activeStream = null;
                 $scope.activeStreamReady = false;
                 $scope.chartData = null;
-                $ionicScrollDelegate.$getByHandle('details').scrollBottom();
             }
             else {
-                //$("#chartContainer").dxChart('instance').showLoadingIndicator();
                 $scope.loadXively = true;
                 bobby.getStream(stream);
                 $rootScope.activeStream = $rootScope.datastreams[stream];
+                $rootScope.activeStream.id = $rootScope.datastreams[stream].id;
             }
         };
 
@@ -389,6 +370,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
         };
 
         $rootScope.$watchCollection('currentDataStream.data', function (data) {
+            $scope.loadXively = false;
             if (angular.isDefined(data) && data.length > 0 && $rootScope.activeStream != null) {
 
                 if ($scope.timeScale.value <= 86400)
@@ -410,11 +392,10 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
                 $scope.chartSettings.dataSource = $scope.chartData;
                 $scope.gaugeSettings.value = $scope.gaugeValue;
             }
-            $scope.loadXively = false;
-            $scope.activeStreamReady = $rootScope.activeStream != null;
+
+            $scope.activeStreamReady = $rootScope.activeStream !== null;
             $ionicSlideBoxDelegate.$getByHandle('charts').update();
-            $ionicScrollDelegate.$getByHandle('details').scrollBottom();
-        });
+        }, true);
 
         this.updateGauge = function (stream, newValue) {
             $scope.gaugeScale =
@@ -455,116 +436,10 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
             $scope.gaugeSettings.value = $scope.gaugeValue;
         };
 
-
-        $scope.$on('refreshDone', function () {
-            $timeout(function () {
-                console.log('refresh Done');
-                $rootScope.$broadcast('scroll.refreshComplete');
-                $ionicScrollDelegate.$getByHandle('details').scrollBottom();
-            }, 100);
-        });
-
-
-        this.getBackgroundImage = function (lat, lng, locString) {
-            Flickr.search(locString, lat, lng).then(function (resp) {
-                var photos = resp.photos;
-                if (photos.photo.length) {
-                    $scope.bgImages = photos.photo;
-                    _this.cycleBgImages();
-                }
-            }, function (error) {
-                console.error('Unable to get Flickr images', error);
-            });
-        };
-
-        this.getForecast = function (lat, lng) {
-            Weather.getForecast(lat, lng).then(function (resp) {
-                $scope.forecast = resp.list;
-            }, function (error) {
-                alert('Unable to get forecast. Try again later');
-                console.error(error);
-            });
-
-            Weather.getHourly(lat, lng).then(function (resp) {
-                $scope.hourly = resp.list;
-            }, function (error) {
-                alert('Unable to get forecast. Try again later.');
-                console.error(error);
-            });
-        };
-
-        this.getCurrent = function (lat, lng) {
-
-            Weather.getAtLocation(lat, lng).then(function (resp) {
-                $scope.current = resp;
-                _this.getForecast(resp.coord.lat, resp.coord.lon);
-            }, function (error) {
-                alert('Unable to get current conditions');
-                console.error(error);
-            });
-        };
-
-        this.cycleBgImages = function () {
-            $timeout(function cycle() {
-                if ($scope.bgImages && (Settings.get('useFlickr'))) {
-                    $scope.activeBgImage = $scope.bgImages[$scope.activeBgImageIndex++ % $scope.bgImages.length];
-                }
-                $timeout(cycle, 120000);
-            });
-        };
-
         $scope.refreshData = function (init) {
 
-            if (init) {
-                $scope.loading = $ionicLoading.show({
-                    content: 'Finding  location... <i class="icon ion-loading-c">',
-                    showBackdrop: true,
-                    animation: 'fade-in'
-                });
-            }
-
             bobby.refresh(init).then(function (location) {
-                if (location) {
-
-                    _this.getCurrent(location.lat, location.lng);
-                    Geo.reverseGeocode(location.lat, location.lng).then(function (locString) {
-                        $scope.currentCity = locString;
-                        if (Settings.get('useFlickr'))
-                            _this.getBackgroundImage(location.lat, location.lng, locString);
-                        else
-                            $scope.activeBgImage = null;
-
-                        //$rootScope.$broadcast('scroll.refreshComplete');
-                        $scope.$broadcast('refreshComplete');
-
-                        $scope.loading.hide();
-                    });
-                } else
-                    Geo.getLocation().then(function (position) {
-                        var lat = position.coords.latitude;
-                        var lng = position.coords.longitude;
-
-                        _this.getCurrent(lat, lng);
-
-                        Geo.reverseGeocode(lat, lng).then(function (locString) {
-                            $scope.currentCity = locString;
-                            if (Settings.get('useFlickr'))
-                                _this.getBackgroundImage(lat, lng, locString);
-                            else
-                                $scope.activeBgImage = null;
-
-                        });
-                        //$rootScope.$broadcast('scroll.refreshComplete');
-                        $scope.$broadcast('refreshComplete');
-
-                        $scope.loading.hide();
-
-                    }, function (error) {
-                        alert('Unable to get current location: ' + error);
-                        $rootScope.$broadcast('scroll.refreshComplete');
-                        $scope.$broadcast('refreshComplete');
-                        $scope.loading.hide();
-                    });
+                $scope.$broadcast('refreshComplete');
             });
 
         };
@@ -572,7 +447,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
         $scope.refreshData(true);
 
     }).
-    controller('SettingsCtrl', function ($scope, $state, Settings, scandit, auth, auth0Service) {
+    controller('SettingsCtrl', function ($scope, $state, Settings, auth, auth0Service) {
         var _this = this;
 
         $scope.settings = Settings.getSettings();
@@ -583,7 +458,6 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
         // Watch deeply for settings changes, and save them
         // if necessary
         $scope.$watch('settings', function (event) {
-            //Settings.set
             Settings.save(event);
         }, true);
 
@@ -591,17 +465,4 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
             auth0Service.updateUser(auth.profile.user_id, { app: Settings.getSettings()}).then(function () {
             });
         };
-
-        _this.success = function (resultArray) {
-            $scope.settings.deviceId = resultArray[0];
-        };
-
-        _this.failure = function (error) {
-            // alert("Failed: " + error);
-        };
-
-        $scope.scan = function () {
-            scandit.scan(_this.success, _this.failure);
-        };
-
     });

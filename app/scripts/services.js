@@ -78,9 +78,7 @@ angular.module('XivelyApp.services', ['ngResource'])
                 $rootScope.datastreams[stream].current_value = message;
 
                 /*  check trigger */
-
-                var trigger,
-                    index,
+                var streamTriggers,
                     operators = {
                         lt: '<',
                         lte: '<=',
@@ -90,27 +88,23 @@ angular.module('XivelyApp.services', ['ngResource'])
                     };
 
                 if (currentDevice.triggers) {
-                    index = _.findIndex(currentDevice.triggers, function (trigger) {
-                        return trigger.stream_id === stream;
-                    });
-                    if (index >= 0) {
-                        trigger = currentDevice.triggers[index];
+                    streamTriggers =_.filter(currentDevice.triggers, { 'stream_id': stream });
+                }
+
+                _.forEach(streamTriggers, function(trigger) {
+
+                    if (trigger) {
+                        $rootScope.datastreams[stream].triggered = eval(message + operators[trigger.trigger_type] + trigger.threshold_value);
                     }
-                }
 
-                if (trigger) {
-                    $rootScope.datastreams[stream].triggered = eval(message + operators[trigger.trigger_type] + trigger.threshold_value);
-                }
-
-                /* check trigger */
-
-                // update scoped streams
-                if (stream === $rootScope.currentDataStream.id) {
-                    var now = new Date();
-                    $rootScope.currentDataStream.current_value = message;
-                    $rootScope.currentDataStream.data.push({ timestamp: now, value: message });
-                    $rootScope.$apply();
-                }
+                    // update scoped streams
+                    if (stream === $rootScope.currentDataStream.id) {
+                        var now = new Date();
+                        $rootScope.currentDataStream.current_value = message;
+                        $rootScope.currentDataStream.data.push({ timestamp: now, value: message });
+                        $rootScope.$apply();
+                    }
+                });
             }
         });
 

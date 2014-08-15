@@ -215,6 +215,9 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
                 StatusBar.hide();
         });
 
+        $scope.domainName = $rootScope.realm.charAt(0).toUpperCase() + $rootScope.realm.slice(1);
+
+
         $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
             event.preventDefault();
         });

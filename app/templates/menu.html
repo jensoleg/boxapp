@@ -9,7 +9,7 @@
         <header class="bar bar-header bar-dark" style="border-bottom-width: 0">
             <h1 class="title"></h1>
         </header>
-        <ion-content class="has-header dark">
+        <ion-content class="has-header dark" style="border-bottom-width: 0">
             <ion-list>
                 <ion-item nav-clear menu-close ng-click="home()">
                     Home
@@ -25,5 +25,12 @@
                 </ion-item>
             </ion-list>
         </ion-content>
+        <ion-footer-bar class="bar-dark" style="border-color: transparent">
+            <div class="clearfix">
+                <a href="http://bobbytechnologies.dk" onclick="javascript:return openExternal(this)">
+                    <div class="bobby-logo" style="margin: 10px;"></div>
+                </a>
+            </div>
+        </ion-footer-bar>
     </ion-side-menu>
 </ion-side-menus>

@@ -5,14 +5,14 @@
             <label>{{readings.name}}</label>
         </div>
         <div class="col-icon col">
+            <i class="col-icon-font icon ion-loading-d"
+               ng-hide="readings.ctrlType == 'data' && (readings.id != activeStream.id || !loadXively)"
+               style="color: #4a87ee">
+            </i>
             <i class="col-icon-font icon ion-arrow-graph-up-right "
                ng-show="readings.ctrlType == 'data' && (readings.id != activeStream.id || !loadXively)"
                ng-click="showData(readings.id)"
                ng-style="readings.id == activeStream.id && {'color': '#4a87ee'} || {'color': 'white'}">
-            </i>
-            <i class="col-icon-font icon ion-loading-d"
-               ng-show="readings.ctrlType == 'data' && loadXively && readings.id == activeStream.id"
-               style="color: #4a87ee">
             </i>
             <i class="col-icon-font icon ion-ios7-gear "
                ng-show="readings.ctrlType == 'ctrlValue' && !readings.isSelecting"

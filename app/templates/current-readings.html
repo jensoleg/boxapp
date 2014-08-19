@@ -3,12 +3,12 @@
         <div class="custom-select-container">
             <select class="custom replaced"
                     style="margin-top: 10px"
-                    ng-options="t.place group by t.location for t in installations"
+                    ng-options="t.placement group by t.name for t in $root.installations"
                     ng-model="installation"
                     ng-change="selectDevice(installation)">
             </select>
         <span class="device-select" aria-hidden="true">
-            <span>{{installation.location}} {{installation.place}}</span>
+            <span>{{installation.name}} {{installation.placement}}</span>
         </span>
         </div>
     </div>

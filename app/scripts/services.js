@@ -55,13 +55,13 @@ angular.module('XivelyApp.services', ['ngResource'])
         return obj;
     })
 
-    .factory('bobby', function ($q, $rootScope, $http, auth, $location, Settings) {
+    .factory('bobby', function ($q, $rootScope, $http, auth, $location, Settings, $log) {
 
         var _this = this,
             bobby = {},
             client = {},
             controlTypes = ['data', 'ctrlValue', 'ctrlSwitch', 'ctrlTimeValue'],
-            currentDevice = null;
+            currentInstallation = null;
 
         $rootScope.devices = {};
         $rootScope.datastreams = {};
@@ -71,14 +71,15 @@ angular.module('XivelyApp.services', ['ngResource'])
 
         // recieve message on current device subscription
         client.on('message', function (topic, message) {
-            if (currentDevice) {
+            if (currentInstallation) {
                 var topics = topic.split('/'),
+                    device = topics[2],
                     stream = topics[3];
-                $rootScope.datastreams[stream].newValue = message;
-                $rootScope.datastreams[stream].current_value = message;
+                //$rootScope.datastreams[device + stream].newValue = message;
+                $rootScope.datastreams[device + stream].current_value = message;
 
                 /*  check trigger */
-                var streamTriggers,
+                var streamTriggers = [],
                     operators = {
                         lt: '<',
                         lte: '<=',
@@ -87,84 +88,99 @@ angular.module('XivelyApp.services', ['ngResource'])
                         eq: '=='
                     };
 
-                if (currentDevice.triggers) {
-                    streamTriggers =_.filter(currentDevice.triggers, { 'stream_id': stream });
-                }
+                angular.forEach(currentInstallation.devices, function (d) {
 
-                _.forEach(streamTriggers, function(trigger) {
-
-                    if (trigger) {
-                        $rootScope.datastreams[stream].triggered = eval(message + operators[trigger.trigger_type] + trigger.threshold_value);
+                    if (d.triggers.length > 0 && d.id === device) {
+                        streamTriggers.push(_.filter(d.triggers, { 'stream_id': stream }));
                     }
+                });
 
-                    // update scoped streams
-                    if (stream === $rootScope.currentDataStream.id) {
-                        var now = new Date();
-                        $rootScope.currentDataStream.current_value = message;
-                        $rootScope.currentDataStream.data.push({ timestamp: now, value: message });
-                        $rootScope.$apply();
-                    }
+                angular.forEach(streamTriggers, function (triggers) {
+                    angular.forEach(triggers, function (trigger) {
+
+                        if (trigger) {
+                            $rootScope.datastreams[device + stream].triggered = eval(message + operators[trigger.trigger_type] + trigger.threshold_value);
+                        }
+
+                        // update scoped streams
+                        if ($rootScope.datastreams[device + stream].triggered) {
+                            var now = new Date();
+                            $rootScope.currentDataStream.current_value = message;
+                            $rootScope.currentDataStream.data.push({ timestamp: now, value: message });
+                            $rootScope.$apply();
+                        }
+                    });
                 });
             }
         });
 
         /* set current device */
-        bobby.setDevice = function (newDevice) {
+        bobby.setInstallation = function (newInstallation) {
 
             // remove current subscriptions
-            if (currentDevice) {
-                angular.forEach(currentDevice.controls, function (stream) {
-                    client.unsubscribe('/' + $rootScope.realm + '/' + currentDevice.id + "/" + stream.id);
+            if (currentInstallation) {
+                angular.forEach(currentInstallation.devices, function (device) {
+                    angular.forEach(device.controls, function (stream) {
+                        client.unsubscribe('/' + $rootScope.realm + '/' + device.id + "/" + stream.id);
+                    });
                 });
+
             }
 
-            currentDevice = newDevice;
+            currentInstallation = newInstallation;
 
             // set controls
-            angular.forEach(currentDevice.controls, function (stream) {
-                // retrieve last value
-                $http.get($rootScope.baseUrl + 'broker/' + currentDevice.id + '/' + stream.id)
-                    .success(function (data) {
-                        stream.newValue = data.data.payload;
-                        stream.current_value = data.data.payload;
-                        $rootScope.datastreams[stream.id] = stream;
-                        $rootScope.datastreams[stream.id].triggered = false;
+            angular.forEach(currentInstallation.devices, function (device) {
+                angular.forEach(device.controls, function (stream) {
+                    // retrieve last value
+                    $http.get($rootScope.baseUrl + 'broker/' + device.id + '/' + stream.id)
+                        .success(function (data) {
+                            stream.newValue = data.data.payload;
+                            stream.current_value = data.data.payload;
+                            $rootScope.datastreams[device.id + stream.id] = stream;
+                            $rootScope.datastreams[device.id + stream.id].id = stream.id;
+                            $rootScope.datastreams[device.id + stream.id].deviceid = device.id;
+                            $rootScope.datastreams[device.id + stream.id].triggered = false;
 
-                        if (stream.id === $rootScope.currentDataStream.id) {
-                            $rootScope.currentDataStream.current_value = stream.current_value;
-                        }
+                            if (stream.id === $rootScope.currentDataStream.id &&
+                                device.id === $rootScope.currentDataStream.deviceid) {
+                                $rootScope.currentDataStream.current_value = stream.current_value;
+                            }
 
-                        client.subscribe('/' + $rootScope.realm + '/' + currentDevice.id + '/' + stream.id);
-                    });
+                            client.subscribe('/' + $rootScope.realm + '/' + device.id + '/' + stream.id);
+                        });
+                });
             });
         };
 
         // Publish value on current device
-        bobby.publish = function (topic, payload) {
-            client.publish('/' + $rootScope.realm + '/' + currentDevice.id + "/" + topic, payload, {retain: true});
-        };
-
+        /*
+         bobby.publish = function (topic, payload) {
+         client.publish('/' + $rootScope.realm + '/' + currentDevice.id + "/" + topic, payload, {retain: true});
+         };
+         */
         // get time series values
-        bobby.getStream = function (stream, options) {
+        bobby.getStream = function (device, stream, options) {
 
             var timeScale = Settings.get('timeScale');
-                options = {limit: 100,
-                from: moment().subtract('s', timeScale.value).toJSON(),
-                to: moment().toJSON(),
+            options = {limit: 1000,
+                from: moment(moment()).utc().subtract(timeScale.value, 's').toJSON(),
+                to: moment(moment()).utc().toJSON(),
                 interval: timeScale.interval
             };
 
-            $http.get($rootScope.baseUrl + 'datastreams/' + currentDevice.id + '/' + stream, {
+            $http.get($rootScope.baseUrl + 'datastreams/' + device + '/' + stream, {
                 params: options
             }).success(function (data) {
                 $rootScope.currentDataStream.data = data.data;
                 $rootScope.currentDataStream.id = stream;
+                $rootScope.currentDataStream.deviceid = device;
             });
         };
 
         bobby.setTimeScale = function (timeScale) {
             Settings.set('timeScale', timeScale);
-            this.getStream($rootScope.currentDataStream.id);
+            this.getStream($rootScope.currentDataStream.deviceid, $rootScope.currentDataStream.id);
         };
 
         bobby.getTimeScale = function () {
@@ -175,14 +191,14 @@ angular.module('XivelyApp.services', ['ngResource'])
             var _this = this,
                 q = $q.defer();
             // $http.get('devices.json').success(function (data) {
-            $http.get($rootScope.baseUrl + 'devices').success(function (data) {
-                $rootScope.devices = data;
-                if (currentDevice)
-                    _this.setDevice(currentDevice);
+            $http.get($rootScope.baseUrl + 'installations').success(function (data) {
+                $rootScope.installations = data;
+                if (currentInstallation)
+                    _this.setInstallation(currentInstallation);
                 else
-                    _this.setDevice($rootScope.devices[0]);
+                    _this.setInstallation($rootScope.installations[0]);
 
-                return q.promise;
+                q.resolve(data);
             }, function (error) {
                 q.resolve(null);
             });

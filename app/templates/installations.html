@@ -11,10 +11,10 @@
                     <i class="clear-search icon ion-ios7-close-empty" ng-click="clearSearch()"></i>
                 </div>
             </div>
-            <ion-item ng-repeat="device in installationer  | filter: data.searchQuery"
-                      href="#/device/{{device.device.Id}}">
-                <h3 style="color:black;">{{device.location}}</h3>
-                <p>{{device.place}}</p>
+            <ion-item ng-repeat="i in $root.installations | filter: data.searchQuery"
+                      href="#/device/{{i.id}}">
+                <h3 style="color:black;">{{i.name}}</h3>
+                <p>{{i.placement}}</p>
             </ion-item>
         </ion-list>
     </ion-content>

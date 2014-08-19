@@ -5,18 +5,18 @@
             <label>{{readings.name}}</label>
         </div>
         <div class="col-icon col">
-            <i class="col-icon-font icon ion-loading-d"
-               ng-hide="readings.ctrlType == 'data' && (readings.id != activeStream.id || !loadXively)"
+            <i class="col-icon-font icon ion-ios7-gear"
+               ng-hide="readings.ctrlType == 'data' && (readings.id != activeStream.id || readings.deviceid != activeStream.deviceid || !loadXively)"
                style="color: #4a87ee">
             </i>
-            <i class="col-icon-font icon ion-arrow-graph-up-right "
-               ng-show="readings.ctrlType == 'data' && (readings.id != activeStream.id || !loadXively)"
-               ng-click="showData(readings.id)"
-               ng-style="readings.id == activeStream.id && {'color': '#4a87ee'} || {'color': 'white'}">
+            <i class="col-icon-font icon ion-arrow-graph-up-right"
+               ng-show="readings.ctrlType == 'data' && (readings.id != activeStream.id || readings.deviceid != activeStream.deviceid || !loadXively)"
+               ng-click="showData(readings.deviceid, readings.id)"
+               ng-style="readings.id == activeStream.id && readings.deviceid == activeStream.deviceid && {'color': '#4a87ee'} || {'color': 'white'}">
             </i>
             <i class="col-icon-font icon ion-ios7-gear "
                ng-show="readings.ctrlType == 'ctrlValue' && !readings.isSelecting"
-               ng-click="showValueCtrl(readings.id)">
+               ng-click="showValueCtrl(readings.deviceid, readings.id)">
             </i>
 
             <div ng-show="readings.isSelecting && readings.ctrlType=='ctrlValue'"
@@ -30,15 +30,15 @@
             </div>
             <i class="col-icon-font icon ion-ios7-clock"
                ng-show="readings.ctrlType == 'ctrlTimeValue' && !readings.isSelecting"
-               ng-click="showValueCtrl(readings.id)">
+               ng-click="showValueCtrl(readings.deviceid, readings.id)">
             </i>
 
             <div ng-show="readings.ctrlType == 'ctrlTimeValue' && readings.isSelecting">
                         <span class="checkbox-ctrls">
-                        <i ng-click="closeValueCtrl(readings.id)"
+                        <i ng-click="closeValueCtrl(readings.deviceid, readings.id)"
                            class="icon ion-close-circled checkbox-close">
                         </i>
-                        <i ng-click="setValueCtrl(readings.id)" class="icon ion-checkmark-circled checkbox-set">
+                        <i ng-click="setValueCtrl(readings.deviceid, readings.id)" class="icon ion-checkmark-circled checkbox-set">
                         </i>
                         </span>
             </div>
@@ -51,23 +51,23 @@
                             ng-model="readings.current_value"
                             ng-true-value="1"
                             ng-false-value="0"
-                            ng-change="toggleCtrlSwitch(readings.id)">
+                            ng-change="toggleCtrlSwitch(readings.deviceid, readings.id)">
                 </label>
             </div>
         </div>
         <div class="col">
             <div ng-show="readings.ctrlType == 'data'">
                 <div ng-class="{ critical: readings.triggered}">
-                <span class="temp-high">{{readings.current_value}}{{readings.unit.symbol}}</span>
+                    <span class="temp-high">{{readings.current_value}}{{readings.unit.symbol}}</span>
                 </div>
             </div>
             <div ng-show="readings.ctrlType == 'ctrlValue'">
                 <div ng-show="readings.isSelecting">
                         <span class="checkbox-ctrls">
-                        <i ng-click="closeValueCtrl(readings.id)"
+                        <i ng-click="closeValueCtrl(readings.device.id, readings.id)"
                            class="icon ion-close-circled checkbox-close">
                         </i>
-                        <i ng-click="setValueCtrl(readings.id)" class="icon ion-checkmark-circled checkbox-set">
+                        <i ng-click="setValueCtrl(readings.device.id, readings.id)" class="icon ion-checkmark-circled checkbox-set">
                         </i>
                         </span>
                         <span class="temp-high value-display">
@@ -97,8 +97,8 @@
         <h4 class="title">
             <div class="row" style="border-bottom: 0px">
                 <div class="col col-50">
-                    {{datastreams[activeStream.id].name}}
-                    {{datastreams[activeStream.id].current_value}}{{datastreams[activeStream.id].unit.symbol}}
+                    {{datastreams[activeStream.deviceid + activeStream.id].name}}
+                    {{datastreams[activeStream.deviceid + activeStream.id].current_value}}{{datastreams[activeStream.deviceid + activeStream.id].unit.symbol}}
                 </div>
                 <div class="col ui-select">
                     <div class="custom-select-container">
@@ -117,9 +117,9 @@
     </div>
 
     <div ng-show="chartData.length > 0">
-        <ion-slide-box delegate-handle="charts" show-pager="false" id="readings-scroll">
-            <ion-slide>
-                <div id="chartContainer" style="height: 200px" dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
+        <!--ion-slide-box delegate-handle="charts" show-pager="false" id="readings-scroll">
+            <ion-slide-->
+        <div id="chartContainer" style="height: 200px" dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
                                                                        argumentAxis: 'chartSettings.argumentAxis'},
                                                         valueAxis: chartSettings.valueAxis,
                                                         legend: chartSettings.legend,
@@ -127,18 +127,20 @@
                                                         series: chartSettings.series,
                                                         crosshair: chartSettings.crosshair,
                                                         loadingIndicator: chartSettings.loadingIndicator
-                                                       }"></div>
-            </ion-slide>
-            <ion-slide>
-                <div style="height: 200px" dx-circular-gauge="{tooltip: gaugeSettings.tooltip,
-                                                               subvalueIndicator: gaugeSettings.subvalueIndicator,
-                                                               bindingOptions: {scale: 'gaugeSettings.scale',
-                                                                       value: 'gaugeSettings.value',
-                                                                       rangeContainer: 'gaugeSettings.rangeContainer',
-                                                                       subvalues : 'gaugeSettings.subvalues'}
-                                                                       }"></div>
-            </ion-slide>
-        </ion-slide-box>
+                                                       }">
+
+        </div>
+        <!--/ion-slide>
+        <ion-slide>
+            <div style="height: 200px" dx-circular-gauge="{tooltip: gaugeSettings.tooltip,
+                                                           subvalueIndicator: gaugeSettings.subvalueIndicator,
+                                                           bindingOptions: {scale: 'gaugeSettings.scale',
+                                                                   value: 'gaugeSettings.value',
+                                                                   rangeContainer: 'gaugeSettings.rangeContainer',
+                                                                   subvalues : 'gaugeSettings.subvalues'}
+                                                                   }"></div>
+        </ion-slide>
+    </ion-slide-box-->
     </div>
 
     <div class="clearfix">

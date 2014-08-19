@@ -23,7 +23,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
 
         authProvider.on('forbidden', function ($state, auth) {
             auth.signout();
-            $state.go('login');
+            $state.go('app.login');
         });
 
         $httpProvider.interceptors.push('authInterceptor');
@@ -167,14 +167,16 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
     .controller('LoginCtrl', function (auth, $state, $rootScope) {
 
         var logo = '../images/' + $rootScope.realm + '.png'
+
         auth.signin({
             popup: true,
-            showSignup: false,
+            showSignup: true,
             icon: logo,
             showIcon: true
-        }).then(function (profile) {
+        }, function (profile) {
+            // All good
             $state.go('app.main');
-        }, function () {
+        }, function (error) {
             console.log("There was an error signin in");
         });
 
@@ -189,13 +191,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
 
         $scope.data = {};
 
-        $scope.installationer = [
-            {deviceId: 'K0NppbqG6awI', place: 'Reception', location: 'Comwell Aarhus'},
-            {deviceId: 'K0NppbqG6awI', place: 'Lounge', location: 'Comwell Aarhus'},
-            {deviceId: 'K0NppbqG6awI', place: 'Restaurant', location: 'Comwell Aarhus'},
-            {deviceId: 'K0NppbqG6awI', place: 'Reception', location: 'Bella Sky Comwell'},
-            {deviceId: 'K0NppbqG6awI', place: 'Shop', location: 'Decoplant'}
-        ];
+        console.log($rootScope.installations);
 
         $scope.clearSearch = function () {
             $scope.data.searchQuery = '';
@@ -206,7 +202,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
     .controller('DeviceCtrl', function ($scope, $stateParams) {
     })
 
-    .controller('WeatherCtrl', function ($window, $ionicSideMenuDelegate, $location, auth, $scope, $timeout, $state, $ionicPlatform, $ionicScrollDelegate, $ionicNavBarDelegate, $ionicLoading, $ionicSlideBoxDelegate, $rootScope, Settings, bobby, $ionicModal, focus) {
+    .controller('WeatherCtrl', function ($location, $scope, $rootScope, Settings, bobby, focus) {
         var _this = this;
 
         ionic.Platform.ready(function () {
@@ -222,15 +218,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
             event.preventDefault();
         });
 
-        $scope.installations = [
-            {deviceId: 'K0NppbqG6awI', place: 'Reception', location: 'Comwell Aarhus'},
-            {deviceId: 'K0NppbqG6awI', place: 'Lounge', location: 'Comwell Aarhus'},
-            {deviceId: 'K0NppbqG6awI', place: 'Restaurant', location: 'Comwell Aarhus'},
-            {deviceId: 'K0NppbqG6awI', place: 'Reception', location: 'Bella Sky Comwell'},
-            {deviceId: 'K0NppbqG6awI', place: 'Shop', location: 'Decoplant'}
-        ];
-
-        $scope.installation = $scope.installations[0];
+        $rootScope.installations = [];
 
         $scope.timescale = [
             {value: 300, interval: 1, text: '5 minutes', type: 'Raw datapoints'},
@@ -251,11 +239,14 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
         $rootScope.activeStream = null;
         $scope.activeStreamReady = false;
 
+        $scope.viewXively = false;
+
+/*
         $scope.gaugeScale = {};
         $scope.gaugeRange = {};
         $scope.gaugeValue = null;
         $scope.gaugeSubvalues = [];
-        $scope.viewXively = false;
+
 
         $scope.gaugeSettings =
         {
@@ -267,7 +258,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
             subvalueIndicator: {
                 offset: -10 }
         };
-
+*/
         $scope.chartLabel =
         {
             argumentType: 'datetime',
@@ -334,42 +325,43 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
         $scope.selectAction = function (time) {
             $scope.timeScale = _.find($scope.timescale, { 'value': time.value });
             bobby.setTimeScale($scope.timeScale);
-            $scope.loadXively = true;
+//            $scope.loadXively = true;
         };
 
-        $scope.showData = function (stream) {
-            if (!(angular.isUndefined($rootScope.activeStream) || $rootScope.activeStream === null) && $rootScope.activeStream.id == $rootScope.datastreams[stream].id) {
+        $scope.showData = function (device, stream) {
+            if (!(angular.isUndefined($rootScope.activeStream) || $rootScope.activeStream === null) && $rootScope.activeStream.id == $rootScope.datastreams[device + stream].id) {
                 $rootScope.activeStream = null;
                 $scope.activeStreamReady = false;
                 $scope.chartData = null;
             }
             else {
                 $scope.loadXively = true;
-                bobby.getStream(stream);
-                $rootScope.activeStream = $rootScope.datastreams[stream];
-                $rootScope.activeStream.id = $rootScope.datastreams[stream].id;
+                bobby.getStream(device, stream);
+                $rootScope.activeStream = $rootScope.datastreams[device + stream];
+                $rootScope.activeStream.id = $rootScope.datastreams[device + stream].id;
+                $rootScope.activeStream.deviceid = $rootScope.datastreams[device + stream].deviceid;
             }
         };
 
-        $scope.showValueCtrl = function (stream) {
-            $rootScope.datastreams[stream].isSelecting = true;
-            $rootScope.datastreams[stream].newValue = $rootScope.datastreams[stream].current_value;
+        $scope.showValueCtrl = function (device, stream) {
+            $rootScope.datastreams[device + stream].isSelecting = true;
+            $rootScope.datastreams[device + stream].newValue = $rootScope.datastreams[device + stream].current_value;
             focus('input-time');
         };
 
-        $scope.setValueCtrl = function (stream) {
-            $rootScope.datastreams[stream].isSelecting = false;
-            $rootScope.datastreams[stream].current_value = $rootScope.datastreams[stream].newValue;
-            bobby.publish(stream, $rootScope.datastreams[stream].current_value);
+        $scope.setValueCtrl = function (device, stream) {
+            $rootScope.datastreams[device + stream].isSelecting = false;
+            $rootScope.datastreams[device + stream].current_value = $rootScope.datastreams[device + stream].newValue;
+            bobby.publish(stream, $rootScope.datastreams[device + stream].current_value);
         };
 
-        $scope.closeValueCtrl = function (stream) {
-            $rootScope.datastreams[stream].isSelecting = false;
-            $rootScope.datastreams[stream].newValue = $rootScope.datastreams[stream].current_value;
+        $scope.closeValueCtrl = function (device, stream) {
+            $rootScope.datastreams[device + stream].isSelecting = false;
+            $rootScope.datastreams[device + stream].newValue = $rootScope.datastreams[device + stream].current_value;
         };
 
-        $scope.toggleCtrlSwitch = function (stream) {
-            bobby.publish(stream, $rootScope.datastreams[stream].current_value);
+        $scope.toggleCtrlSwitch = function (device, stream) {
+            bobby.publish(stream, $rootScope.datastreams[device + stream].current_value);
         };
 
         $rootScope.$watchCollection('currentDataStream.data', function (data) {
@@ -386,20 +378,22 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
                     $scope.chartLabel.label = { format: 'MMM', color: 'white'};
                 $scope.chartData = data;
                 $scope.chartSettings.dataSource = $scope.chartData;
+/*
                 _this.updateGauge($rootScope.activeStream, data[data.length - 1].value);
-
+*/
             }
             else {
                 $scope.chartData = [];
-                $scope.gaugeValue = null;
                 $scope.chartSettings.dataSource = $scope.chartData;
+/*
+                $scope.gaugeValue = null;
                 $scope.gaugeSettings.value = $scope.gaugeValue;
+*/
             }
 
             $scope.activeStreamReady = $rootScope.activeStream !== null;
-            $ionicSlideBoxDelegate.$getByHandle('charts').update();
         }, true);
-
+/*
         this.updateGauge = function (stream, newValue) {
             $scope.gaugeScale =
             {
@@ -438,10 +432,11 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
             $scope.gaugeSettings.rangeContainer = $scope.gaugeRange;
             $scope.gaugeSettings.value = $scope.gaugeValue;
         };
-
+*/
         $scope.refreshData = function (init) {
 
             bobby.refresh(init).then(function (location) {
+                $scope.installation = $rootScope.installations[0];
                 $scope.$broadcast('refreshComplete');
             });
 
@@ -450,7 +445,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
         $scope.refreshData(true);
 
     }).
-    controller('SettingsCtrl', function ($scope, $state, Settings, auth, auth0Service) {
+    controller('SettingsCtrl', function ($scope, Settings, auth, auth0Service) {
         var _this = this;
 
         $scope.settings = Settings.getSettings();

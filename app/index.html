@@ -6,36 +6,28 @@
 
     <title>Decoplant</title>
 
-    <!-- build:css({.tmp,app}) styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css">
-    <!-- endbuild -->
-
-    <!-- custom vendor CSS -->
-    <!-- <link rel="stylesheet" href="styles/some.contrib.css"> -->
-    <!-- end custom vendor CSS -->
-
-    <!-- cordova script (this will be a 404 during development) -->
-    <script src="cordova.js"></script>
-
-
     <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/ionic/release/css/ionic.css" />
     <!-- endbower -->
     <!-- endbuild -->
-    <link rel="stylesheet" href="vendor/app.css">
+
+    <!-- build:css({.tmp,app}) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
 </head>
 
 <script>
     var _roost = _roost || [];
-    _roost.push(['appkey','1e18829f56764e62afa043e977de020f']);
+    _roost.push(['appkey', '1e18829f56764e62afa043e977de020f']);
 
-    !function(d,s,id){
+    !function (d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
-        if(!d.getElementById(id)){
-            js=d.createElement(s); js.id=id;
-            js.src='//cdn.goroost.com/js/roost.js';
-            fjs.parentNode.insertBefore(js,fjs);
+        if (!d.getElementById(id)) {
+            js = d.createElement(s);
+            js.id = id;
+            js.src = '//cdn.goroost.com/js/roost.js';
+            fjs.parentNode.insertBefore(js, fjs);
         }
     }(document, 'script', 'roost-js');
 </script>
@@ -50,8 +42,6 @@
 <body ng-app="XivelyApp" animation="slide-left-right-ios7">
 
 <ion-nav-view></ion-nav-view>
-
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 
 <!-- build:js scripts/vendor.js -->
 <!-- bower:js -->
@@ -72,13 +62,12 @@
 <script src="bower_components/auth0-angular/build/auth0-angular.js"></script>
 <!-- endbower -->
 <script src="vendor/mqtt.js"></script>
+<script src="vendor/dx.chartjs.js"></script>
 <!-- endbuild -->
 
-<!-- custom vendor folder JS -->
+<script src="cordova.js"></script>
 
-<!-- end custom vendor JS -->
-<script src="libs/dx.chartjs.js"></script>
-<!-- build:js({.tmp,app}) scripts/scripts.js -->
+<!-- build:js scripts/scripts.js -->
 <script src="scripts/app.js"></script>
 <script src="scripts/services.js"></script>
 <script src="scripts/directives.js"></script>

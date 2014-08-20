@@ -1,104 +1,125 @@
 <div id="forecast" class="weather-box">
-    <div class="row" style="margin-top: 0"
-         ng-repeat="readings in datastreams|orderObjectBy:'ctrlType':'reverse'">
-        <div class="col">
-            <label>{{readings.name}}</label>
-        </div>
-        <div class="col-icon col">
-            <i class="col-icon-font icon ion-ios7-gear"
-               ng-hide="readings.ctrlType == 'data' && (readings.id != activeStream.id || readings.deviceid != activeStream.deviceid || !loadXively)"
-               style="color: #4a87ee">
-            </i>
-            <i class="col-icon-font icon ion-arrow-graph-up-right"
-               ng-show="readings.ctrlType == 'data' && (readings.id != activeStream.id || readings.deviceid != activeStream.deviceid || !loadXively)"
-               ng-click="showData(readings.deviceid, readings.id)"
-               ng-style="readings.id == activeStream.id && readings.deviceid == activeStream.deviceid && {'color': '#4a87ee'} || {'color': 'white'}">
-            </i>
-            <i class="col-icon-font icon ion-ios7-gear "
-               ng-show="readings.ctrlType == 'ctrlValue' && !readings.isSelecting"
-               ng-click="showValueCtrl(readings.deviceid, readings.id)">
-            </i>
-
-            <div ng-show="readings.isSelecting && readings.ctrlType=='ctrlValue'"
-                 class="range range-positive range-select-input">
-                <input type="range"
-                       class="domain-input"
-                       min="{{readings.minDomain}}"
-                       max="{{readings.maxDomain}}"
-                       value="readings.newValue"
-                       ng-model="readings.newValue">
+    <ion-list>
+        <div ng-repeat="device in installation.devices">
+            <div class="row">
+                <div class="col">
+                    <label>{{device.name}}</label>
+                </div>
+                <div class="col-icon col">
+                    <i class="col-icon-font icon ion-cube"
+                       ng-click="toggleDevice(device.id)"
+                       ng-style="device.id == activeStream.deviceid && {'color': '#4a87ee'} || {'color': 'white'}">
+                    </i>
+                </div>
+                <div class="col">
+                </div>
             </div>
-            <i class="col-icon-font icon ion-ios7-clock"
-               ng-show="readings.ctrlType == 'ctrlTimeValue' && !readings.isSelecting"
-               ng-click="showValueCtrl(readings.deviceid, readings.id)">
-            </i>
+            <div class="row item-accordion" style="margin-top: 0"
+                 ng-repeat="readings in datastreams | datastreamFilter:device.id | orderObjectBy:'name':'reverse'"
+                 ng-show="isDeviceShown(device.id)">
+                <div class="col">
+                    <label>{{readings.name}}</label>
+                </div>
+                <div class="col-icon col">
+                    <i class="col-icon-font icon ion-ios7-gear"
+                       ng-hide="readings.ctrlType == 'data' && (readings.id != activeStream.id || readings.deviceid != activeStream.deviceid || !loadXively)"
+                       style="color: #4a87ee">
+                    </i>
+                    <i class="col-icon-font icon ion-arrow-graph-up-right"
+                       ng-show="readings.ctrlType == 'data' && (readings.id != activeStream.id || readings.deviceid != activeStream.deviceid || !loadXively)"
+                       ng-click="showData(readings.deviceid, readings.id)"
+                       ng-style="readings.id == activeStream.id && readings.id == activeStream.id && readings.deviceid == activeStream.deviceid && {'color': '#4a87ee'} || {'color': 'white'}">
+                    </i>
+                    <i class="col-icon-font icon ion-ios7-gear "
+                       ng-show="readings.ctrlType == 'ctrlValue' && !readings.isSelecting"
+                       ng-click="showValueCtrl(readings.deviceid, readings.id)">
+                    </i>
 
-            <div ng-show="readings.ctrlType == 'ctrlTimeValue' && readings.isSelecting">
+                    <div ng-show="readings.isSelecting && readings.ctrlType=='ctrlValue'"
+                         class="range range-positive range-select-input">
+                        <input type="range"
+                               class="domain-input"
+                               min="{{readings.minDomain}}"
+                               max="{{readings.maxDomain}}"
+                               value="readings.newValue"
+                               ng-model="readings.newValue">
+                    </div>
+                    <i class="col-icon-font icon ion-ios7-clock"
+                       ng-show="readings.ctrlType == 'ctrlTimeValue' && !readings.isSelecting"
+                       ng-click="showValueCtrl(readings.deviceid, readings.id)">
+                    </i>
+
+                    <div ng-show="readings.ctrlType == 'ctrlTimeValue' && readings.isSelecting">
                         <span class="checkbox-ctrls">
                         <i ng-click="closeValueCtrl(readings.deviceid, readings.id)"
                            class="icon ion-close-circled checkbox-close">
                         </i>
-                        <i ng-click="setValueCtrl(readings.deviceid, readings.id)" class="icon ion-checkmark-circled checkbox-set">
+                        <i ng-click="setValueCtrl(readings.deviceid, readings.id)"
+                           class="icon ion-checkmark-circled checkbox-set">
                         </i>
                         </span>
-            </div>
+                    </div>
 
-            <div ng-show="readings.ctrlType == 'ctrlSwitch'">
-                <label class="checkbox checkbox-label">
-                    <input
-                            type="checkbox"
-                            class="checkbox-size"
-                            ng-model="readings.current_value"
-                            ng-true-value="1"
-                            ng-false-value="0"
-                            ng-change="toggleCtrlSwitch(readings.deviceid, readings.id)">
-                </label>
-            </div>
-        </div>
-        <div class="col">
-            <div ng-show="readings.ctrlType == 'data'">
-                <div ng-class="{ critical: readings.triggered}">
-                    <span class="temp-high">{{readings.current_value}}{{readings.unit.symbol}}</span>
+                    <div ng-show="readings.ctrlType == 'ctrlSwitch'">
+                        <label class="checkbox checkbox-label">
+                            <input
+                                    type="checkbox"
+                                    class="checkbox-size"
+                                    ng-model="readings.current_value"
+                                    ng-true-value="1"
+                                    ng-false-value="0"
+                                    ng-change="toggleCtrlSwitch(readings.deviceid, readings.id)">
+                        </label>
+                    </div>
                 </div>
-            </div>
-            <div ng-show="readings.ctrlType == 'ctrlValue'">
-                <div ng-show="readings.isSelecting">
+
+                <div class="col">
+                    <div ng-show="readings.ctrlType == 'data'">
+                        <div ng-class="{ critical: readings.triggered}">
+                            <span class="temp-high">{{readings.current_value}}{{readings.unit.symbol}}</span>
+                        </div>
+                    </div>
+                    <div ng-show="readings.ctrlType == 'ctrlValue'">
+                        <div ng-show="readings.isSelecting">
                         <span class="checkbox-ctrls">
                         <i ng-click="closeValueCtrl(readings.device.id, readings.id)"
                            class="icon ion-close-circled checkbox-close">
                         </i>
-                        <i ng-click="setValueCtrl(readings.device.id, readings.id)" class="icon ion-checkmark-circled checkbox-set">
+                        <i ng-click="setValueCtrl(readings.device.id, readings.id)"
+                           class="icon ion-checkmark-circled checkbox-set">
                         </i>
                         </span>
                         <span class="temp-high value-display">
                             {{readings.newValue}}
                         </span>
-                </div>
+                        </div>
                 <span ng-hide="readings.isSelecting"
                       class="temp-high">
                     {{readings.newValue}}{{readings.unit.symbol}}
                 </span>
-            </div>
-            <div ng-show="readings.ctrlType == 'ctrlTimeValue'">
-                <div ng-show="readings.isSelecting">
-                    <input class="custom replaced" ng-model="readings.newValue"
-                           ng-value="readings.newValue" type="time" step="60" focus-on="input-time">
-                </div>
+                    </div>
+                    <div ng-show="readings.ctrlType == 'ctrlTimeValue'">
+                        <div ng-show="readings.isSelecting">
+                            <input class="custom replaced" ng-model="readings.newValue"
+                                   ng-value="readings.newValue" type="time" step="60" focus-on="input-time">
+                        </div>
                 <span ng-hide="readings.isSelecting"
                       class="temp-high">
                     {{readings.current_value}}{{readings.unit.symbol}}
                 </span>
+                    </div>
+                </div>
             </div>
-
         </div>
-    </div>
+    </ion-list>
 
     <div ng-show="activeStreamReady" style="padding-top: 10px;">
         <h4 class="title">
             <div class="row" style="border-bottom: 0px">
                 <div class="col col-50">
                     {{datastreams[activeStream.deviceid + activeStream.id].name}}
-                    {{datastreams[activeStream.deviceid + activeStream.id].current_value}}{{datastreams[activeStream.deviceid + activeStream.id].unit.symbol}}
+                    {{datastreams[activeStream.deviceid +
+                    activeStream.id].current_value}}{{datastreams[activeStream.deviceid + activeStream.id].unit.symbol}}
                 </div>
                 <div class="col ui-select">
                     <div class="custom-select-container">

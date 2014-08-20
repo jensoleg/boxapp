@@ -2,7 +2,6 @@
     <div class="ui-device-select">
         <div class="custom-select-container">
             <select class="custom replaced"
-                    style="margin-top: 10px"
                     ng-options="t.placement group by t.name for t in $root.installations"
                     ng-model="installation"
                     ng-change="selectDevice(installation)">

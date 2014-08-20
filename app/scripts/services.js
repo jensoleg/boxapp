@@ -63,7 +63,6 @@ angular.module('XivelyApp.services', ['ngResource'])
             controlTypes = ['data', 'ctrlValue', 'ctrlSwitch', 'ctrlTimeValue'],
             currentInstallation = null;
 
-        $rootScope.devices = {};
         $rootScope.datastreams = {};
 
 
@@ -103,7 +102,7 @@ angular.module('XivelyApp.services', ['ngResource'])
                         }
 
                         // update scoped streams
-                        if ($rootScope.datastreams[device + stream].triggered) {
+                        if ($rootScope.datastreams[device + stream].triggered && stream === $rootScope.currentDataStream.id) {
                             var now = new Date();
                             $rootScope.currentDataStream.current_value = message;
                             $rootScope.currentDataStream.data.push({ timestamp: now, value: message });
@@ -190,7 +189,6 @@ angular.module('XivelyApp.services', ['ngResource'])
         bobby.refresh = function (init) {
             var _this = this,
                 q = $q.defer();
-            // $http.get('devices.json').success(function (data) {
             $http.get($rootScope.baseUrl + 'installations').success(function (data) {
                 $rootScope.installations = data;
                 if (currentInstallation)

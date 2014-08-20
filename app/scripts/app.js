@@ -124,6 +124,23 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
         };
     })
 
+    .filter('datastreamFilter', function () {
+        return function (items, device) {
+            var filtered = [];
+            if (!device) {
+                return items;
+            }
+
+            angular.forEach(items, function (item) {
+                if (item.deviceid === device) {
+                    filtered.push(item);
+                }
+            });
+
+            return filtered;
+        };
+    })
+
     .filter('orderObjectBy', function () {
         return function (items, field, reverse) {
             var filtered = [];
@@ -166,7 +183,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
 
     .controller('LoginCtrl', function (auth, $state, $rootScope) {
 
-        var logo = '../images/' + $rootScope.realm + '.png'
+        var logo = '../images/' + $rootScope.realm + '.png';
 
         auth.signin({
             popup: true,
@@ -240,25 +257,26 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
         $scope.activeStreamReady = false;
 
         $scope.viewXively = false;
+        $scope.shownDevice = [];
 
-/*
-        $scope.gaugeScale = {};
-        $scope.gaugeRange = {};
-        $scope.gaugeValue = null;
-        $scope.gaugeSubvalues = [];
+        /*
+         $scope.gaugeScale = {};
+         $scope.gaugeRange = {};
+         $scope.gaugeValue = null;
+         $scope.gaugeSubvalues = [];
 
 
-        $scope.gaugeSettings =
-        {
-            subvalues: $scope.gaugeSubvalues,
-            scale: $scope.gaugeScale,
-            rangeContainer: $scope.gaugeRange,
-            tooltip: { enabled: true },
-            value: $scope.gaugeValue,
-            subvalueIndicator: {
-                offset: -10 }
-        };
-*/
+         $scope.gaugeSettings =
+         {
+         subvalues: $scope.gaugeSubvalues,
+         scale: $scope.gaugeScale,
+         rangeContainer: $scope.gaugeRange,
+         tooltip: { enabled: true },
+         value: $scope.gaugeValue,
+         subvalueIndicator: {
+         offset: -10 }
+         };
+         */
         $scope.chartLabel =
         {
             argumentType: 'datetime',
@@ -316,6 +334,18 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
                 },
                 opacity: 0.8
             }
+        };
+
+        $scope.toggleDevice = function (device) {
+            if ($scope.isDeviceShown(device)) {
+                $scope.shownDevice[device] = false;
+            } else {
+                $scope.shownDevice[device] = true;
+            }
+        };
+
+        $scope.isDeviceShown = function (device) {
+            return $scope.shownDevice[device];
         };
 
         $scope.selectDevice = function (device) {
@@ -378,61 +408,61 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
                     $scope.chartLabel.label = { format: 'MMM', color: 'white'};
                 $scope.chartData = data;
                 $scope.chartSettings.dataSource = $scope.chartData;
-/*
-                _this.updateGauge($rootScope.activeStream, data[data.length - 1].value);
-*/
+                /*
+                 _this.updateGauge($rootScope.activeStream, data[data.length - 1].value);
+                 */
             }
             else {
                 $scope.chartData = [];
                 $scope.chartSettings.dataSource = $scope.chartData;
-/*
-                $scope.gaugeValue = null;
-                $scope.gaugeSettings.value = $scope.gaugeValue;
-*/
+                /*
+                 $scope.gaugeValue = null;
+                 $scope.gaugeSettings.value = $scope.gaugeValue;
+                 */
             }
 
             $scope.activeStreamReady = $rootScope.activeStream !== null;
         }, true);
-/*
-        this.updateGauge = function (stream, newValue) {
-            $scope.gaugeScale =
-            {
-                startValue: stream.minDomain, endValue: stream.maxDomain,
-                majorTick: { tickInterval: 5 },
-                minorTick: {
-                    visible: true,
-                    tickInterval: 1
-                },
-                label: {
-                    customizeText: function (arg) {
-                        return arg.valueText;
-                    }
-                },
-                valueType: "numeric"
-            };
+        /*
+         this.updateGauge = function (stream, newValue) {
+         $scope.gaugeScale =
+         {
+         startValue: stream.minDomain, endValue: stream.maxDomain,
+         majorTick: { tickInterval: 5 },
+         minorTick: {
+         visible: true,
+         tickInterval: 1
+         },
+         label: {
+         customizeText: function (arg) {
+         return arg.valueText;
+         }
+         },
+         valueType: "numeric"
+         };
 
-            $scope.gaugeRange =
-            {
-                ranges: [
-                    { startValue: stream.minDomain, endValue: stream.minCritical, color: '#0077BE'},
-                    { startValue: stream.minCritical, endValue: stream.maxCritical, color: '#E6E200'},
-                    { startValue: stream.maxCritical, endValue: stream.maxDomain, color: '#77DD77'}
-                ],
-                offset: 5
-            };
+         $scope.gaugeRange =
+         {
+         ranges: [
+         { startValue: stream.minDomain, endValue: stream.minCritical, color: '#0077BE'},
+         { startValue: stream.minCritical, endValue: stream.maxCritical, color: '#E6E200'},
+         { startValue: stream.maxCritical, endValue: stream.maxDomain, color: '#77DD77'}
+         ],
+         offset: 5
+         };
 
-            $scope.gaugeValue = newValue;
+         $scope.gaugeValue = newValue;
 
-            if (stream.min_value && stream.max_value) {
-                $scope.gaugeSubvalues = [stream.min_value, stream.max_value];
-                $scope.gaugeSettings.subvalues = $scope.gaugeSubvalues;
-            }
+         if (stream.min_value && stream.max_value) {
+         $scope.gaugeSubvalues = [stream.min_value, stream.max_value];
+         $scope.gaugeSettings.subvalues = $scope.gaugeSubvalues;
+         }
 
-            $scope.gaugeSettings.scale = $scope.gaugeScale;
-            $scope.gaugeSettings.rangeContainer = $scope.gaugeRange;
-            $scope.gaugeSettings.value = $scope.gaugeValue;
-        };
-*/
+         $scope.gaugeSettings.scale = $scope.gaugeScale;
+         $scope.gaugeSettings.rangeContainer = $scope.gaugeRange;
+         $scope.gaugeSettings.value = $scope.gaugeValue;
+         };
+         */
         $scope.refreshData = function (init) {
 
             bobby.refresh(init).then(function (location) {

@@ -352,7 +352,7 @@ h1, h2, h3, h4, h5 {
 }
 
 #forecast .col-icon-font {
-    font-size: 30px
+    font-size: 24px
 }
 
 #forecast .domain-input {
@@ -417,7 +417,7 @@ select.custom.replaced {
     text-align: left;
     vertical-align: baseline;
     align: right;
-    height: 40px;
+    height: 30px;
     margin: 0;
     border: 0;
     filter: alpha(opacity=0);
@@ -501,7 +501,7 @@ optgroup {
     font-variant: normal;
     text-transform: none;
     -webkit-font-smoothing: antialiased;
-    font-size: 40px;
+    font-size: 35px;
     /*font-size: 1.5em;*/
     line-height: 0em;
 }
@@ -573,7 +573,7 @@ optgroup {
     height: 500px;
 }
 
-*
+
 .my-switch-animation.ng-enter,
 .my-switch-animation.ng-leave {
     -webkit-transition: 0.5s linear all;
@@ -597,4 +597,19 @@ optgroup {
 
 .my-switch-animation.ng-leave.ng-leave-active {
     left: -100%;
+}
+
+.list .row.item-accordion {
+
+    height: 34px;
+    padding-top: 0;
+    padding-bottom: 0;
+    transition: 0.3s all linear;
+}
+.list .row.item-accordion.ng-hide {
+    height: 0px;
+}
+.list .row.item-accordion.ng-hide-add,
+.list .row.item-accordion.ng-hide-remove {
+    display: block !important;
 }

@@ -74,8 +74,12 @@ angular.module('XivelyApp.services', ['ngResource'])
                 var topics = topic.split('/'),
                     device = topics[2],
                     stream = topics[3];
-                //$rootScope.datastreams[device + stream].newValue = message;
-                $rootScope.datastreams[device + stream].current_value = message;
+
+                /* check state stream on device.streamid  and set scope variable installation.device.state.value.
+                    UI will listen to state: installation.device.state.value and calculated
+                    installation.state.value: 0,1,2
+                */
+
 
                 /*  check trigger */
                 var streamTriggers = [],
@@ -87,6 +91,7 @@ angular.module('XivelyApp.services', ['ngResource'])
                         eq: '=='
                     };
 
+                /* streamTriggers should be set when installation is changed !!!!!!!!! */
                 angular.forEach(currentInstallation.devices, function (d) {
 
                     if (d.triggers.length > 0 && d.id === device) {
@@ -102,14 +107,18 @@ angular.module('XivelyApp.services', ['ngResource'])
                         }
 
                         // update scoped streams
-                        if ($rootScope.datastreams[device + stream].triggered && stream === $rootScope.currentDataStream.id) {
-                            var now = new Date();
-                            $rootScope.currentDataStream.current_value = message;
-                            $rootScope.currentDataStream.data.push({ timestamp: now, value: message });
-                            $rootScope.$apply();
-                        }
                     });
                 });
+
+//                $rootScope.datastreams[device + stream].newValue = message;
+                $rootScope.datastreams[device + stream].current_value = message;
+
+                if ($rootScope.currentDataStream.deviceid === device && $rootScope.currentDataStream.id === stream) {
+                    var now = new Date();
+                    $rootScope.currentDataStream.current_value = message;
+                    $rootScope.currentDataStream.data.push({ timestamp: now, value: message });
+                    $rootScope.$apply();
+                }
             }
         });
 
@@ -134,18 +143,25 @@ angular.module('XivelyApp.services', ['ngResource'])
                     // retrieve last value
                     $http.get($rootScope.baseUrl + 'broker/' + device.id + '/' + stream.id)
                         .success(function (data) {
-                            stream.newValue = data.data.payload;
-                            stream.current_value = data.data.payload;
-                            $rootScope.datastreams[device.id + stream.id] = stream;
-                            $rootScope.datastreams[device.id + stream.id].id = stream.id;
-                            $rootScope.datastreams[device.id + stream.id].deviceid = device.id;
-                            $rootScope.datastreams[device.id + stream.id].triggered = false;
+                            if (_.contains(controlTypes, stream.ctrlType)) {
+                                stream.newValue = data.data.payload;
+                                stream.current_value = data.data.payload;
+                                $rootScope.datastreams[device.id + stream.id] = stream;
+                                $rootScope.datastreams[device.id + stream.id].id = stream.id;
+                                $rootScope.datastreams[device.id + stream.id].deviceid = device.id;
+                                $rootScope.datastreams[device.id + stream.id].triggered = false;
 
-                            if (stream.id === $rootScope.currentDataStream.id &&
-                                device.id === $rootScope.currentDataStream.deviceid) {
-                                $rootScope.currentDataStream.current_value = stream.current_value;
+                                if (stream.id === $rootScope.currentDataStream.id &&
+                                    device.id === $rootScope.currentDataStream.deviceid) {
+                                    $rootScope.currentDataStream.current_value = stream.current_value;
+                                }
                             }
 
+                            /*
+                            if (stream.ctrlType === status) {
+
+                            }
+                            */
                             client.subscribe('/' + $rootScope.realm + '/' + device.id + '/' + stream.id);
                         });
                 });

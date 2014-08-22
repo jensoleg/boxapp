@@ -248,3 +248,25 @@
   ]
 ]
 2014-07-30 20:00:00.941 Bobby Xively[8034:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/9DA27B9C-4E6D-4DB2-98B1-DEFAE0687E56/Bobby%20Xively.app/www/index.html#/
+2014-08-21 11:38:04.070 Bobby Xively[12461:70b] Multi-tasking -> Device: YES, App: YES
+2014-08-21 11:38:04.289 Bobby Xively[12461:70b] Unlimited access to network resources
+2014-08-21 11:38:05.089 Bobby Xively[12461:70b] Resetting plugins due to page load.
+2014-08-21 11:38:05.778 Bobby Xively[12461:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/9DA27B9C-4E6D-4DB2-98B1-DEFAE0687E56/Bobby%20Xively.app/www/index.html
+2014-08-21 11:38:05.793 Bobby Xively[12461:70b] ERROR: Plugin 'StatusBar' not found, or is not a CDVPlugin. Check your plugin mapping in config.xml.
+2014-08-21 11:38:05.793 Bobby Xively[12461:70b] -[CDVCommandQueue executePending] [Line 158] FAILED pluginJSON = [
+  "INVALID",
+  "StatusBar",
+  "_ready",
+  [
+
+  ]
+]
+2014-08-21 11:38:05.794 Bobby Xively[12461:70b] ERROR: Plugin 'Device' not found, or is not a CDVPlugin. Check your plugin mapping in config.xml.
+2014-08-21 11:38:05.794 Bobby Xively[12461:70b] -[CDVCommandQueue executePending] [Line 158] FAILED pluginJSON = [
+  "Device145550416",
+  "Device",
+  "getDeviceInfo",
+  [
+
+  ]
+]

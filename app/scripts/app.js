@@ -242,7 +242,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
             {value: 1800, interval: 1, text: '30 minutes', type: 'Raw datapoints'},
             {value: 3600, interval: 1, text: '1 hours', type: 'Raw datapoints'},
             {value: 21600, interval: 1, text: '6 hours', type: 'Raw datapoints'},
-            {value: 86400, interval: 60, text: '1 day', type: 'Averaged datapoints'},
+            {value: 86400, interval: 1, text: '1 day', type: 'Averaged datapoints'},
             {value: 604800, interval: 3600, text: '7 days', type: 'Averaged datapoints'},
             {value: 2592000, interval: 3600, text: '1 month', type: 'Averaged datapoints'},
             {value: 7776000, interval: 3600, text: '3 months', type: 'Averaged datapoints'}
@@ -287,6 +287,18 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
             }
         };
 
+        $scope.series = [
+            {
+                argumentField: 'timestamp',
+                valueField: 'value',
+                type: 'line',
+                point: { visible: false },
+                style: { opacity: 0.70 },
+                color: 'rgba(255,255,255,0.9)',
+                hoverStyle: { color: 'rgb(74, 135, 238)' }
+            }
+        ];
+
         $scope.chartData = [];
 
         $scope.chartSettings =
@@ -305,17 +317,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
                 //min: 0,
                 label: {visible: true, color: 'white'}
             },
-            series: [
-                {
-                    argumentField: 'timestamp',
-                    valueField: 'value',
-                    type: 'line',
-                    point: { visible: false },
-                    style: { opacity: 0.70 },
-                    color: 'rgba(255,255,255,0.9)',
-                    hoverStyle: { color: 'rgb(74, 135, 238)' }
-                }
-            ],
+            series: $scope.series,
             legend: {
                 visible: false
             },
@@ -410,10 +412,11 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
                     $scope.chartLabel.label = { format: 'MMM', color: 'white'};
 
                 if ($rootScope.activeStream.id === 'online') {
-                    $scope.chartSettings.series[0].type  = 'stepLine';
+                    $scope.series[0].type = 'stepLine';
                 } else {
-                    $scope.chartSettings.series[0].type = 'line';
+                    $scope.series[0].type = 'line';
                 }
+                $scope.chartSettings.series = $scope.series;
 
                 $scope.chartData = data;
                 $scope.chartSettings.dataSource = $scope.chartData;

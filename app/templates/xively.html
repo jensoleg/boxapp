@@ -147,14 +147,15 @@
             <ion-slide-->
         <div id="chartContainer" style="height: 200px"
              dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
-                                                                       argumentAxis: 'chartSettings.argumentAxis'},
-                                                        valueAxis: chartSettings.valueAxis,
-                                                        legend: chartSettings.legend,
-                                                        tooltip: chartSettings.tooltip,
-                                                        series: chartSettings.series,
-                                                        crosshair: chartSettings.crosshair,
-                                                        loadingIndicator: chartSettings.loadingIndicator
-                                                       }"
+                                         argumentAxis: 'chartSettings.argumentAxis',
+                                         series: 'chartSettings.series'
+                                        },
+                                         valueAxis: chartSettings.valueAxis,
+                                         legend: chartSettings.legend,
+                                         tooltip: chartSettings.tooltip,
+                                         crosshair: chartSettings.crosshair,
+                                         loadingIndicator: chartSettings.loadingIndicator
+                        }"
              ng-show="chartData.length">
 
         </div>

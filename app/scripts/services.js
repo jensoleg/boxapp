@@ -61,7 +61,15 @@ angular.module('XivelyApp.services', ['ngResource'])
             bobby = {},
             client = {},
             controlTypes = ['data', 'ctrlValue', 'ctrlSwitch', 'ctrlTimeValue'],
-            currentInstallation = null;
+            currentInstallation = null,
+            streamTriggers = [],
+            operators = {
+                lt: '<',
+                lte: '<=',
+                gt: '>',
+                gte: '>=',
+                eq: '=='
+            };
 
         $rootScope.datastreams = {};
 
@@ -76,9 +84,9 @@ angular.module('XivelyApp.services', ['ngResource'])
                     stream = topics[3];
 
                 /* check state stream on device.streamid  and set scope variable installation.device.state.value.
-                    UI will listen to state: installation.device.state.value and calculated
-                    installation.state.value: 0,1,2
-                */
+                 UI will listen to state: installation.device.state.value and calculated
+                 installation.state.value: 0,1,2
+                 */
 
 
                 /*  check trigger */
@@ -93,7 +101,6 @@ angular.module('XivelyApp.services', ['ngResource'])
 
                 /* streamTriggers should be set when installation is changed !!!!!!!!! */
                 angular.forEach(currentInstallation.devices, function (d) {
-
                     if (d.triggers.length > 0 && d.id === device) {
                         streamTriggers.push(_.filter(d.triggers, { 'stream_id': stream }));
                     }
@@ -101,12 +108,9 @@ angular.module('XivelyApp.services', ['ngResource'])
 
                 angular.forEach(streamTriggers, function (triggers) {
                     angular.forEach(triggers, function (trigger) {
-
                         if (trigger) {
                             $rootScope.datastreams[device + stream].triggered = eval(message + operators[trigger.trigger_type] + trigger.threshold_value);
                         }
-
-                        // update scoped streams
                     });
                 });
 
@@ -149,6 +153,7 @@ angular.module('XivelyApp.services', ['ngResource'])
                                 $rootScope.datastreams[device.id + stream.id] = stream;
                                 $rootScope.datastreams[device.id + stream.id].id = stream.id;
                                 $rootScope.datastreams[device.id + stream.id].deviceid = device.id;
+                                /* maybe trigger should be evaluated initially */
                                 $rootScope.datastreams[device.id + stream.id].triggered = false;
 
                                 if (stream.id === $rootScope.currentDataStream.id &&
@@ -158,10 +163,10 @@ angular.module('XivelyApp.services', ['ngResource'])
                             }
 
                             /*
-                            if (stream.ctrlType === status) {
+                             if (stream.ctrlType === status) {
 
-                            }
-                            */
+                             }
+                             */
                             client.subscribe('/' + $rootScope.realm + '/' + device.id + '/' + stream.id);
                         });
                 });

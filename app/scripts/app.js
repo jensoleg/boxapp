@@ -241,7 +241,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
             {value: 300, interval: 1, text: '5 minutes', type: 'Raw datapoints'},
             {value: 1800, interval: 1, text: '30 minutes', type: 'Raw datapoints'},
             {value: 3600, interval: 1, text: '1 hours', type: 'Raw datapoints'},
-            {value: 21600, interval: 60, text: '6 hours', type: 'Averaged datapoints'},
+            {value: 21600, interval: 1, text: '6 hours', type: 'Raw datapoints'},
             {value: 86400, interval: 60, text: '1 day', type: 'Averaged datapoints'},
             {value: 604800, interval: 3600, text: '7 days', type: 'Averaged datapoints'},
             {value: 2592000, interval: 3600, text: '1 month', type: 'Averaged datapoints'},
@@ -355,11 +355,13 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
         $scope.selectAction = function (time) {
             $scope.timeScale = _.find($scope.timescale, { 'value': time.value });
             bobby.setTimeScale($scope.timeScale);
-//            $scope.loadXively = true;
+            $scope.loadXively = true;
         };
 
         $scope.showData = function (device, stream) {
-            if (!(angular.isUndefined($rootScope.activeStream) || $rootScope.activeStream === null) && $rootScope.activeStream.id == $rootScope.datastreams[device + stream].id) {
+            if (!(angular.isUndefined($rootScope.activeStream) || $rootScope.activeStream === null) &&
+                $rootScope.activeStream.id === $rootScope.datastreams[device + stream].id &&
+                $rootScope.activeStream.deviceid === $rootScope.datastreams[device + stream].deviceid) {
                 $rootScope.activeStream = null;
                 $scope.activeStreamReady = false;
                 $scope.chartData = null;
@@ -396,7 +398,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
 
         $rootScope.$watchCollection('currentDataStream.data', function (data) {
             $scope.loadXively = false;
-            if (angular.isDefined(data) && data.length > 0 && $rootScope.activeStream != null) {
+            if (angular.isDefined(data) && data.length > 0 && $rootScope.activeStream !== null) {
 
                 if ($scope.timeScale.value <= 86400)
                     $scope.chartLabel.label = { format: 'H:mm', color: 'white'};
@@ -406,8 +408,16 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
                     $scope.chartLabel.label = { format: 'dd-MM', color: 'white'};
                 else
                     $scope.chartLabel.label = { format: 'MMM', color: 'white'};
+
+                if ($rootScope.activeStream.id === 'online') {
+                    $scope.chartSettings.series[0].type  = 'stepLine';
+                } else {
+                    $scope.chartSettings.series[0].type = 'line';
+                }
+
                 $scope.chartData = data;
                 $scope.chartSettings.dataSource = $scope.chartData;
+
                 /*
                  _this.updateGauge($rootScope.activeStream, data[data.length - 1].value);
                  */

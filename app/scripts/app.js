@@ -295,13 +295,12 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
                 valueField: 'value',
                 type: 'area',
                 point: { visible: false },
-                style: { opacity: 0.70 },
+                opacity: 1.00 ,
                 tick: {
                     visible: true,
                     color: 'white'
                 },
                 color: 'rgb(74, 135, 238)',
-                //color: 'rgba(255,255,255,0.9)',
                 hoverStyle: { color: 'rgb(74, 135, 238)' }
             }
         ];
@@ -321,9 +320,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
                 showZero: false,
                 type: 'continuous',
                 valueType: 'numeric',
-                //tickInterval: 0.5,
                 grid: {visible: false},
-                //min: 0,
                 label: { font: { color: 'white'}}
             },
             series: $scope.series,

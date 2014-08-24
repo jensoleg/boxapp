@@ -242,7 +242,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
             {value: 1800, interval: 1, text: '30 minutes', type: 'Raw datapoints'},
             {value: 3600, interval: 1, text: '1 hours', type: 'Raw datapoints'},
             {value: 21600, interval: 1, text: '6 hours', type: 'Raw datapoints'},
-            {value: 86400, interval: 1, text: '1 day', type: 'Averaged datapoints'},
+            {value: 86400, interval: 60, text: '1 day', type: 'Averaged datapoints'},
             {value: 604800, interval: 3600, text: '7 days', type: 'Averaged datapoints'},
             {value: 2592000, interval: 3600, text: '1 month', type: 'Averaged datapoints'},
             {value: 7776000, interval: 3600, text: '3 months', type: 'Averaged datapoints'}
@@ -280,7 +280,9 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
         $scope.chartLabel =
         {
             argumentType: 'datetime',
-            label: { format: 'H:mm', color: 'white'},
+            label: { format: 'H:mm',
+                font: { color: 'white'}
+            },
             valueMarginsEnabled: false,
             tick: {
                 visible: true
@@ -291,10 +293,15 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
             {
                 argumentField: 'timestamp',
                 valueField: 'value',
-                type: 'line',
+                type: 'area',
                 point: { visible: false },
                 style: { opacity: 0.70 },
-                color: 'rgba(255,255,255,0.9)',
+                tick: {
+                    visible: true,
+                    color: 'white'
+                },
+                color: 'rgb(74, 135, 238)',
+                //color: 'rgba(255,255,255,0.9)',
                 hoverStyle: { color: 'rgb(74, 135, 238)' }
             }
         ];
@@ -308,14 +315,16 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
             valueAxis: {
                 valueMarginsEnabled: false,
                 tick: {
-                    visible: true
+                    visible: true,
+                    color: 'white'
                 },
+                showZero: false,
                 type: 'continuous',
                 valueType: 'numeric',
-                tickInterval: 0.5,
+                //tickInterval: 0.5,
                 grid: {visible: false},
                 //min: 0,
-                label: {visible: true, color: 'white'}
+                label: { font: { color: 'white'}}
             },
             series: $scope.series,
             legend: {
@@ -403,18 +412,18 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
             if (angular.isDefined(data) && data.length > 0 && $rootScope.activeStream !== null) {
 
                 if ($scope.timeScale.value <= 86400)
-                    $scope.chartLabel.label = { format: 'H:mm', color: 'white'};
+                    $scope.chartLabel.label = { format: 'H:mm', font: { color: 'white'}};
                 else if ($scope.timeScale.value <= 604800)
-                    $scope.chartLabel.label = { format: 'ddd', color: 'white'};
+                    $scope.chartLabel.label = { format: 'ddd', font: { color: 'white'}};
                 else if ($scope.timeScale.value <= 2592000)
-                    $scope.chartLabel.label = { format: 'dd-MM', color: 'white'};
+                    $scope.chartLabel.label = { format: 'dd-MM', font: { color: 'white'}};
                 else
-                    $scope.chartLabel.label = { format: 'MMM', color: 'white'};
+                    $scope.chartLabel.label = { format: 'MMM', font: { color: 'white'}};
 
                 if ($rootScope.activeStream.id === 'online') {
                     $scope.series[0].type = 'stepLine';
                 } else {
-                    $scope.series[0].type = 'line';
+                    $scope.series[0].type = 'area';
                 }
                 $scope.chartSettings.series = $scope.series;
 

@@ -183,7 +183,7 @@ angular.module('XivelyApp.services', ['ngResource'])
         bobby.getStream = function (device, stream, options) {
 
             var timeScale = Settings.get('timeScale');
-            options = {limit: 1000,
+            options = {limit: 1500,
                 from: moment(moment()).utc().subtract(timeScale.value, 's').toJSON(),
                 to: moment(moment()).utc().toJSON(),
                 interval: timeScale.interval

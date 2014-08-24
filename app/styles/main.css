@@ -493,7 +493,7 @@ optgroup {
     /*display: inline-block;*/
     position: relative;
     width: 100%;
-    top: 10px;
+    top: 7px;
     margin: -4px 7px 0 7px;
     font-family: 'ionicons';
     speak: none;
@@ -501,7 +501,7 @@ optgroup {
     font-variant: normal;
     text-transform: none;
     -webkit-font-smoothing: antialiased;
-    font-size: 35px;
+    font-size: 30px;
     /*font-size: 1.5em;*/
     line-height: 0em;
 }

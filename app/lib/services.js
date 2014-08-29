@@ -1,6 +1,6 @@
-'use strict';
 
-angular.module('XivelyApp.services', ['ngResource'])
+
+angular.module('BobbyApp.services', ['ngResource'])
 
     .constant('DEFAULT_SETTINGS', {
         'tempUnits': 'c',
@@ -11,7 +11,7 @@ angular.module('XivelyApp.services', ['ngResource'])
         return window.cordova; // assumes cordova has already been loaded on the page
     })
 
-    .factory('Settings', function ($rootScope, DEFAULT_SETTINGS) {
+    .factory('Settings', ['$rootScope', 'DEFAULT_SETTINGS', function ($rootScope, DEFAULT_SETTINGS) {
         var _settings = {};
         try {
             _settings = JSON.parse(window.localStorage['settings']);
@@ -53,9 +53,9 @@ angular.module('XivelyApp.services', ['ngResource'])
         // Save the settings to be safe
         obj.save(_settings);
         return obj;
-    })
+    }])
 
-    .factory('bobby', function ($q, $rootScope, $http, auth, $location, Settings, $log) {
+    .factory('bobby', [ '$q', '$rootScope', '$http', 'auth', '$location', 'Settings', '$log', function ($q, $rootScope, $http, auth, $location, Settings, $log) {
 
         var _this = this,
             bobby = {},
@@ -74,7 +74,8 @@ angular.module('XivelyApp.services', ['ngResource'])
         $rootScope.datastreams = {};
 
 
-        client = mqtt.createClient(8080, $rootScope.hostMQTT, {"username": "JWT/" + $rootScope.realm, "password": auth.idToken});
+//        client = mqtt.createClient(8080, $rootScope.hostMQTT, {"username": "JWT/" + $rootScope.realm, "password": auth.idToken});
+        client = mqtt.createClient(8080, $rootScope.hostMQTT, {"username": "JWT/decoplant", "password": auth.idToken});
 
         // recieve message on current device subscription
         client.on('message', function (topic, message) {
@@ -226,16 +227,17 @@ angular.module('XivelyApp.services', ['ngResource'])
         };
 
         return bobby;
-    })
+    }])
 
-    .factory('focus', function ($rootScope, $timeout) {
+    .factory('focus', ['$rootScope', '$timeout', function ($rootScope, $timeout) {
         return function (name) {
             $timeout(function () {
                 $rootScope.$broadcast('focusOn', name);
             });
         };
-    })
-    .service('Loading', function ($ionicLoading) {
+    }])
+
+    .service('Loading', ['$ionicLoading', function ($ionicLoading) {
 
         var currentLoading;
 
@@ -254,9 +256,9 @@ angular.module('XivelyApp.services', ['ngResource'])
             }
         };
 
-    })
+    }])
 
-    .factory('auth0Service', function ($q, $resource, $http, $rootScope) {
+    .factory('auth0Service', ['$q', '$resource', '$http', '$rootScope', function ($q, $resource, $http, $rootScope) {
 
         return {
             getUser: function (user_id, user) {
@@ -266,4 +268,4 @@ angular.module('XivelyApp.services', ['ngResource'])
                 return $http.put($rootScope.baseUrl + 'auth/users/' + user_id + '/metadata', metadata);
             }
         };
-    });
+    }]);

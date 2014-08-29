@@ -1,24 +1,22 @@
 {
   "name": "Bobbytech",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "dependencies": {
-    "angular": "1.2.12",
-    "ionic": "1.0.0-beta.1",
-    "angular-resource": "~1.2.14",
-    "globalize": "0.1.1",
     "jquery": "~2.1.1",
     "lodash": "~2.4.0",
     "momentjs": "~2.8.1",
-    "auth0-widget.js": "~5.2.5",
+    "globalize": "0.1.1",
+    "angular": "~1.2.23",
+    "angular-animate": "~1.2.23",
+    "angular-sanitize": "~1.2.23",
+    "angular-ui-router": "~0.2.10",
     "angular-cookies": "~1.2.22",
-    "auth0-angular": "~2.2.1",
-    "auth0.js": "~4.2.4"
+    "angular-resource": "~1.2.14",
+    "collide": "~0.0.4",
+    "ionic": "1.0.0-beta.11"
   },
   "devDependencies": {
-    "angular-mocks": "1.2.12",
-    "angular-scenario": "1.2.12"
-  },
-  "resolutions": {
-    "auth0-widget.js": "~5.0.13"
+    "angular-mocks": "~1.2.12",
+    "angular-scenario": "~1.2.12"
   }
 }

@@ -1,16 +1,16 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="dk.bobbytechnologies.bobbytech" version="2.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Bobby Xively</name>
+    <name>Decoplant</name>
     <description>
-        A Bobby Tech hydrophonic system controller and monitor.
+        A Bobby Tech plant system controller and monitor.
     </description>
     <author email="contact@bobbytechonlogies.dk" href="http://bobbytechnologies.dk/">
         Bobby tech core app Team
     </author>
-    <content src="index.html" />
-    <!--preference name="SplashScreen" value="screen" />
-    <preference name="SplashScreenDelay" value="1000" /-->
-    <preference name="LoadUrlTimeoutValue" value="12000"/>
-    <!--preference name="OpenAllWhitelistURLsInWebView" value="false" /-->
-    <access origin="*" />
+    <content src="index.html"/>
+    <access origin="*"/>
+    <preference name="webviewbounce" value="false"/>
+    <preference name="UIWebViewBounce" value="false"/>
+    <preference name="DisallowOverscroll" value="true"/>
+    <preference name="BackupWebStorage" value="none"/>
 </widget>

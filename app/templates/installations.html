@@ -1,9 +1,13 @@
 <ion-view title="Installations" hide-back-button="true">
+
     <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
-    <ion-content class="has-header">
+
+    <ion-content>
+
         <ion-list>
+
             <div id="search-box" class="bar bar-header item-input-inset">
                 <div class="item-input-wrapper">
                     <i class="icon ion-ios7-search placeholder-icon"></i>
@@ -11,11 +15,16 @@
                     <i class="clear-search icon ion-ios7-close-empty" ng-click="clearSearch()"></i>
                 </div>
             </div>
+
             <ion-item ng-repeat="i in $root.installations | filter: data.searchQuery"
                       href="#/device/{{i.id}}">
                 <h3 style="color:black;">{{i.name}}</h3>
+
                 <p>{{i.placement}}</p>
             </ion-item>
+
         </ion-list>
+
     </ion-content>
+
 </ion-view>

@@ -1,4 +1,4 @@
-// Generated on 2014-08-16 using generator-ionic 0.4.1
+// Generated on 2014-08-28 using generator-ionic 0.5.3
 'use strict';
 
 var _ = require('lodash');
@@ -27,8 +27,9 @@ module.exports = function (grunt) {
         },
 
         // Environment Variables for Angular App
-        // This creates an Angular Module that can be injected using via ENV
+        // This creates an Angular Module that can be injected via ENV
         // Add any desired constants to the ENV objects below.
+        // https://github.com/diegonetto/generator-ionic#environment-specific-configuration
         ngconstant: {
             options: {
                 space: '  ',
@@ -56,6 +57,10 @@ module.exports = function (grunt) {
 
         // Watches files for changes and runs tasks based on the changed files
         watch: {
+            bower: {
+                files: ['bower.json'],
+                tasks: ['wiredep']
+            },
             js: {
                 files: ['<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js'],
                 tasks: ['newer:jshint:all'],
@@ -136,14 +141,16 @@ module.exports = function (grunt) {
         // Empties folders to start fresh
         clean: {
             dist: {
-                files: [{
-                    dot: true,
-                    src: [
-                        '.tmp',
-                        'www/*',
-                        '!www/.git*'
-                    ]
-                }]
+                files: [
+                    {
+                        dot: true,
+                        src: [
+                            '.tmp',
+                            'www/*',
+                            '!www/.git*'
+                        ]
+                    }
+                ]
             },
             server: '.tmp'
         },
@@ -153,23 +160,27 @@ module.exports = function (grunt) {
                 browsers: ['last 1 version']
             },
             dist: {
-                files: [{
-                    expand: true,
-                    cwd: '.tmp/<%= yeoman.styles %>/',
-                    src: '{,*/}*.css',
-                    dest: '.tmp/<%= yeoman.styles %>/'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: '.tmp/<%= yeoman.styles %>/',
+                        src: '{,*/}*.css',
+                        dest: '.tmp/<%= yeoman.styles %>/'
+                    }
+                ]
             }
         },
 
         // Automatically inject Bower components into the app
-        'bower-install': {
+        wiredep: {
+            options: {
+                cwd: '<%= yeoman.app %>'
+            },
             app: {
-                html: '<%= yeoman.app %>/index.html',
-                ignorePath: '<%= yeoman.app %>/'
+                src: ['<%= yeoman.app %>/index.html'],
+                ignorePath: /\.\.\//
             }
         },
-
 
 
         // Reads HTML for usemin blocks to enable smart builds that automatically
@@ -215,36 +226,41 @@ module.exports = function (grunt) {
                     removeCommentsFromCDATA: true,
                     removeOptionalTags: true
                 },
-                files: [{
-                    expand: true,
-                    cwd: 'www',
-                    src: ['*.html', 'templates/**/*.html'],
-                    dest: 'www'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'www',
+                        src: ['*.html', 'templates/**/*.html'],
+                        dest: 'www'
+                    }
+                ]
             }
         },
 
         // Copies remaining files to places other tasks can use
         copy: {
             dist: {
-                files: [{
-                    expand: true,
-                    dot: true,
-                    cwd: '<%= yeoman.app %>',
-                    dest: 'www',
-                    src: [
-                        'images/**/*.{png,jpg,jpeg,gif,webp,svg}',
-                        '*.html',
-                        'templates/**/*.html',
-                        'fonts/*',
-                        'res/**'
-                    ]
-                }, {
-                    expand: true,
-                    cwd: '.tmp/<%= yeoman.images %>',
-                    dest: 'www/<%= yeoman.images %>',
-                    src: ['generated/*']
-                }]
+                files: [
+                    {
+                        expand: true,
+                        dot: true,
+                        cwd: '<%= yeoman.app %>',
+                        dest: 'www',
+                        src: [
+                            'images/**/*.{png,jpg,jpeg,gif,webp,svg}',
+                            '*.html',
+                            'templates/**/*.html',
+                            'fonts/*',
+                            'lib/**'
+                        ]
+                    },
+                    {
+                        expand: true,
+                        cwd: '.tmp/<%= yeoman.images %>',
+                        dest: 'www/<%= yeoman.images %>',
+                        src: ['generated/*']
+                    }
+                ]
             },
             styles: {
                 expand: true,
@@ -365,12 +381,14 @@ module.exports = function (grunt) {
         // using the Angular long form for dependency injection.
         ngAnnotate: {
             dist: {
-                files: [{
-                    expand: true,
-                    cwd: '.tmp/concat/<%= yeoman.scripts %>',
-                    src: '*.js',
-                    dest: '.tmp/concat/<%= yeoman.scripts %>'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: '.tmp/concat/<%= yeoman.scripts %>',
+                        src: '*.js',
+                        dest: '.tmp/concat/<%= yeoman.scripts %>'
+                    }
+                ]
             }
         }
 
@@ -408,7 +426,7 @@ module.exports = function (grunt) {
     // over to www/. Last step is running cordova prepare so we can refresh the ripple
     // browser tab to see the changes. Technically ripple runs `cordova prepare` on browser
     // refreshes, but at this time you would need to re-run the emulator to see changes.
-    grunt.registerTask('ripple', ['bower-install', 'copy:all', 'ripple-emulator']);
+    grunt.registerTask('ripple', ['wiredep', 'copy:all', 'ripple-emulator']);
     grunt.registerTask('ripple-emulator', function () {
         grunt.config.set('watch', {
             all: {
@@ -452,7 +470,7 @@ module.exports = function (grunt) {
         grunt.task.run([
             'clean:server',
             'ngconstant:development',
-            'bower-install',
+            'wiredep',
             'concurrent:server',
             'autoprefixer',
             'connect:livereload',
@@ -471,7 +489,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [
         'clean:dist',
         'ngconstant:production',
-        'bower-install',
+        'wiredep',
         'useminPrepare',
         'concurrent:dist',
         'autoprefixer',

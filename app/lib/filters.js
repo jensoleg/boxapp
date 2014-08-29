@@ -1,6 +1,6 @@
-angular.module('XivelyApp.filters', ['XivelyApp.services'])
+angular.module('BobbyApp.filters', ['BobbyApp.services'])
 
-    .filter('temp', function (Settings) {
+    .filter('temp', ['Settings', function (Settings) {
         return function (input) {
             if (angular.isUndefined(input)) return;
             if (Settings.getTempUnits() == 'f') {
@@ -8,7 +8,7 @@ angular.module('XivelyApp.filters', ['XivelyApp.services'])
             }
             return Math.round(input - 273);
         };
-    })
+    }])
 
     .filter('hourFormat', function () {
         return function (input) {

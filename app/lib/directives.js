@@ -1,8 +1,8 @@
-'use strict';
 
-angular.module('XivelyApp.directives', [])
 
-    .directive('currentTime', function ($timeout, $filter) {
+angular.module('BobbyApp.directives', [])
+
+    .directive('currentTime', ['$timeout', '$filter', function ($timeout, $filter) {
         return {
             restrict: 'E',
             replace: true,
@@ -14,9 +14,9 @@ angular.module('XivelyApp.directives', [])
                 });
             }
         };
-    })
+    }])
 
-    .directive('currentReadings', function ($timeout) {
+    .directive('currentReadings', ['$timeout', function ($timeout) {
         return {
             restrict: 'E',
             replace: true,
@@ -38,17 +38,17 @@ angular.module('XivelyApp.directives', [])
                 });
             }
         };
-    })
+    }])
 
-    .directive('xively', function ($timeout) {
+    .directive('box', ['$timeout', function ($timeout) {
         return {
             restrict: 'E',
             replace: true,
-            templateUrl: 'templates/xively.html',
+            templateUrl: 'templates/bobbybox.html',
             link: function ($scope, $element, $attr) {
             }
         };
-    })
+    }])
 /*
     .directive('orientationChange', function ($window, $timeout) {
         return {

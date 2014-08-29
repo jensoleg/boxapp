@@ -1,50 +1,38 @@
-'use strict';
+angular.module('BobbyApp', ['dx', 'ionic', 'auth0', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives'])
 
-angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.services', 'XivelyApp.filters', 'XivelyApp.directives'])
-
-    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, authProvider) {
+    .config([ '$stateProvider', '$urlRouterProvider', '$httpProvider', 'authProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, authProvider) {
 
         var hostname = location.hostname.split('.'),
             realm = hostname[0];
 
-        if (realm === '127') {
-            realm = 'decoplant';
-            $httpProvider.defaults.headers.common['realm'] = realm;
-        }
+        //if (realm === 'localhost' || angular.isUndefined(realm)) {
+        realm = 'decoplant';
+        $httpProvider.defaults.headers.common['realm'] = realm;
+        //}
 
-        authProvider.init({
-            domain: realm + '.auth0.com',
-            clientID: 'riQAyvtyyRBNvO9zhRsQAXMEtaQA02uW',
-            callbackURL: location.href,
-            loginState: 'login',
-            dict: {signin: {title: ' ' /*realm.charAt(0).toUpperCase() + realm.slice(1)*/}}
-        });
-
-
-        authProvider.on('forbidden', function ($state, auth) {
-            auth.signout();
-            $state.go('app.login');
-        });
-
-        $httpProvider.interceptors.push('authInterceptor');
 
         $stateProvider
+            .state('login', {
+                url: '/login',
+                templateUrl: 'templates/login.html',
+                controller: 'LoginCtrl'
+            })
             .state('app', {
                 url: "/app",
                 abstract: true,
                 templateUrl: "templates/menu.html",
-                controller: 'AppCtrl'
+                controller: 'AppCtrl',
+                data: {
+                    requiresLogin: true
+                }
             })
             .state('app.main', {
                 url: '/main',
                 views: {
                     'menuContent': {
                         templateUrl: 'templates/main.html',
-                        controller: 'WeatherCtrl'
+                        controller: 'BoxCtrl'
                     }
-                },
-                data: {
-                    requiresLogin: true
                 }
             })
             .state('app.installations', {
@@ -54,21 +42,6 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
                         templateUrl: "templates/installations.html",
                         controller: 'InstallationsCtrl'
                     }
-                },
-                data: {
-                    requiresLogin: true
-                }
-            })
-            .state('app.device', {
-                url: "/device/:deviceid",
-                views: {
-                    'menuContent': {
-                        templateUrl: "templates/device.html",
-                        controller: 'DeviceCtrl'
-                    }
-                },
-                data: {
-                    requiresLogin: true
                 }
             })
             .state('app.settings', {
@@ -78,47 +51,76 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
                         templateUrl: 'templates/settings.html',
                         controller: 'SettingsCtrl'
                     }
-                },
-                data: {
-                    requiresLogin: true
                 }
-            })
-            .state('app.login', {
-                url: '/login',
-                views: {
-                    'menuContent': {
-                        controller: 'LoginCtrl',
-                        templateUrl: 'templates/login.html'
-                    }
-                },
-                pageTitle: 'Login'
             });
 
-        $urlRouterProvider.otherwise("app/login");
+        authProvider.init({
+            domain: 'decoplant.auth0.com',
+            clientID: 'riQAyvtyyRBNvO9zhRsQAXMEtaQA02uW',
+            callbackURL: 'dummy',
+            loginState: 'login',
+            dict: {signin: {title: ' '}}
+        });
 
-    })
+        authProvider.on('forbidden', function ($state, auth) {
+            auth.signout();
+            $location.path('/login');
+        });
 
-    .run(function (auth, $rootScope, $location) {
+        authProvider.on('loginSuccess', function ($location) {
+            $location.path('/app/main');
+        });
+
+        authProvider.on('loginFailure', function ($location, error) {
+            $location.path('/login');
+        });
+
+        $httpProvider.interceptors.push('authInterceptor');
+        $urlRouterProvider.otherwise("/login");
+
+    }])
+
+    .run(['auth', '$rootScope', '$location', '$ionicPlatform', function (auth, $rootScope, $location, $ionicPlatform) {
+
+        $ionicPlatform.ready(function () {
+            // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+            // for form inputs)
+
+            if (window.cordova && window.cordova.plugins.Keyboard) {
+                cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+            }
+
+            if (window.StatusBar) {
+                // org.apache.cordova.statusbar required
+                StatusBar.styleDefault();
+            }
+
+        });
 
         var hostname = location.hostname.split('.'),
             realm = hostname[0];
+        /*
 
-        if (realm === '127') {
-            realm = 'decoplant';
-            $rootScope.baseUrl = 'http://' + $location.host() + ':8081/api/';
-            $rootScope.hostMQTT = $location.host();
-        } else {
-            $rootScope.baseUrl = 'http://' + $location.host() + '/api/';
-            $rootScope.hostMQTT = 'mqtt.bobbytechnologies.dk';
-        }
+         if (realm === 'localhost' || angular.isUndefined(realm)) {
+         realm = 'decoplant';
+         $rootScope.baseUrl = 'http://' + $location.host() + ':8081/api/';
+         $rootScope.hostMQTT = $location.host();
+         } else {
+         $rootScope.baseUrl = 'http://' + $location.host() + '/api/';
+         $rootScope.hostMQTT = 'mqtt.bobbytechnologies.dk';
+         }
+         */
+        $rootScope.baseUrl = 'http://decoplant.bobbytechnologies.dk/api/';
+        $rootScope.hostMQTT = 'mqtt.bobbytechnologies.dk';
 
-        $rootScope.realm = realm;
+        $rootScope.realm = 'decoplant';
 
-        // This hooks al auth events to check everything as soon as the app starts
+// This hooks al auth events to check everything as soon as the app starts
         auth.hookEvents();
-    })
+    }])
 
-    .filter('int', function () {
+    .
+    filter('int', function () {
         return function (v) {
             return parseInt(v) || '';
         };
@@ -156,55 +158,35 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
         };
     })
 
-    .controller('AppCtrl', function ($scope, auth, $state, $ionicModal, $ionicSideMenuDelegate) {
+    .controller('AppCtrl', ['$scope', 'auth', '$state', '$ionicModal', '$ionicSideMenuDelegate', function ($scope, auth, $state, $ionicModal, $ionicSideMenuDelegate) {
 
         $scope.signout = function () {
             $ionicSideMenuDelegate.toggleLeft();
             auth.signout();
-            $state.go('app.login');
+            $state.go('login');
         };
 
-        $scope.settings = function () {
-            $ionicSideMenuDelegate.toggleLeft();
-            $state.go('app.settings');
-        };
+    }])
 
-        $scope.installations = function () {
-            $ionicSideMenuDelegate.toggleLeft();
-            $state.go('app.installations');
-        };
+    .controller('LoginCtrl', ['auth', '$state', '$rootScope', function (auth, $state, $rootScope) {
 
-        $scope.home = function () {
-            $ionicSideMenuDelegate.toggleLeft();
-            $state.go('app.main');
-        };
-
-    })
-
-    .controller('LoginCtrl', function (auth, $state, $rootScope) {
-
-        var logo = '../images/' + $rootScope.realm + '.png';
+//        var logo = '../images/' + $rootScope.realm + '.png';
+        var logo = './images/decoplant.png';
 
         auth.signin({
-            popup: true,
-            showSignup: true,
-            icon: logo,
-            showIcon: true
-        }, function (profile) {
-            // All good
-            $state.go('app.main');
-        }, function (error) {
-            console.log("There was an error signin in");
-        });
+                popup: true,
+                showSignup: true,
+                standalone: true,
+                offline_mode: true,
+                device: 'Phone',
+                icon: logo,
+                showIcon: true
+            }
+        );
 
-    })
+    }])
 
-    .controller('LogoutCtrl', function (auth, $state) {
-        auth.signout();
-        $state.go('app.login');
-    })
-
-    .controller('InstallationsCtrl', function ($scope, $rootScope) {
+    .controller('InstallationsCtrl', ['$scope', '$rootScope', function ($scope, $rootScope) {
 
         $scope.data = {};
 
@@ -214,26 +196,12 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
             $scope.data.searchQuery = '';
         };
 
-    })
+    }])
 
-    .controller('DeviceCtrl', function ($scope, $stateParams) {
-    })
-
-    .controller('WeatherCtrl', function ($location, $scope, $rootScope, Settings, bobby, focus) {
+    .controller('BoxCtrl', ['$location', '$scope', '$rootScope', 'Settings', 'bobby', 'focus', function ($location, $scope, $rootScope, Settings, bobby, focus) {
         var _this = this;
 
-        ionic.Platform.ready(function () {
-            // Hide the status bar
-            if (ionic.Platform.isIOS())
-                StatusBar.hide();
-        });
-
         $scope.domainName = $rootScope.realm.charAt(0).toUpperCase() + $rootScope.realm.slice(1);
-
-
-        $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
-            event.preventDefault();
-        });
 
         $rootScope.installations = [];
 
@@ -259,24 +227,6 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
         $scope.viewXively = false;
         $scope.shownDevice = [];
 
-        /*
-         $scope.gaugeScale = {};
-         $scope.gaugeRange = {};
-         $scope.gaugeValue = null;
-         $scope.gaugeSubvalues = [];
-
-
-         $scope.gaugeSettings =
-         {
-         subvalues: $scope.gaugeSubvalues,
-         scale: $scope.gaugeScale,
-         rangeContainer: $scope.gaugeRange,
-         tooltip: { enabled: true },
-         value: $scope.gaugeValue,
-         subvalueIndicator: {
-         offset: -10 }
-         };
-         */
         $scope.chartLabel =
         {
             argumentType: 'datetime',
@@ -295,7 +245,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
                 valueField: 'value',
                 type: 'area',
                 point: { visible: false },
-                opacity: 1.00 ,
+                opacity: 1.00,
                 tick: {
                     visible: true,
                     color: 'white'
@@ -442,46 +392,7 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
 
             $scope.activeStreamReady = $rootScope.activeStream !== null;
         }, true);
-        /*
-         this.updateGauge = function (stream, newValue) {
-         $scope.gaugeScale =
-         {
-         startValue: stream.minDomain, endValue: stream.maxDomain,
-         majorTick: { tickInterval: 5 },
-         minorTick: {
-         visible: true,
-         tickInterval: 1
-         },
-         label: {
-         customizeText: function (arg) {
-         return arg.valueText;
-         }
-         },
-         valueType: "numeric"
-         };
 
-         $scope.gaugeRange =
-         {
-         ranges: [
-         { startValue: stream.minDomain, endValue: stream.minCritical, color: '#0077BE'},
-         { startValue: stream.minCritical, endValue: stream.maxCritical, color: '#E6E200'},
-         { startValue: stream.maxCritical, endValue: stream.maxDomain, color: '#77DD77'}
-         ],
-         offset: 5
-         };
-
-         $scope.gaugeValue = newValue;
-
-         if (stream.min_value && stream.max_value) {
-         $scope.gaugeSubvalues = [stream.min_value, stream.max_value];
-         $scope.gaugeSettings.subvalues = $scope.gaugeSubvalues;
-         }
-
-         $scope.gaugeSettings.scale = $scope.gaugeScale;
-         $scope.gaugeSettings.rangeContainer = $scope.gaugeRange;
-         $scope.gaugeSettings.value = $scope.gaugeValue;
-         };
-         */
         $scope.refreshData = function (init) {
 
             bobby.refresh(init).then(function (location) {
@@ -493,8 +404,9 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
 
         $scope.refreshData(true);
 
-    }).
-    controller('SettingsCtrl', function ($scope, Settings, auth, auth0Service) {
+    }]).
+
+    controller('SettingsCtrl', ['$scope', 'Settings', 'auth', 'auth0Service', function ($scope, Settings, auth, auth0Service) {
         var _this = this;
 
         $scope.settings = Settings.getSettings();
@@ -512,4 +424,4 @@ angular.module('XivelyApp', ['dx', 'ionic', 'auth0', 'ngCookies', 'XivelyApp.ser
             auth0Service.updateUser(auth.profile.user_id, { app: Settings.getSettings()}).then(function () {
             });
         };
-    });
+    }]);

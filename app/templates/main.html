@@ -1,21 +1,5 @@
 <ion-view title="" hide-nav-bar="true">
 
-    <!--div class="wrapper bar bar-header" style="border-bottom-width: 0;background-size: 100% 0;">
-
-        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
-        <label>
-            <div class="item item-input item-select"
-                 style="left: 35px;margin-left: 4px; color: rgba(255, 255, 255, 0.9); background-color: transparent;border-width: 0; width: 100%; z-index: 1; position: absolute;">
-                {{installation.name + ' ' + installation.placement}}
-            </div>
-            <select style="font-size: 20px;opacity: 0;z-index: 10; width: 100%;position:relative;left: 10px;"
-                    ng-options="t.placement group by t.name for t in $root.installations"
-                    ng-model="installation"
-                    ng-change="selectDevice(installation)">
-            </select>
-        </label>
-    </div-->
-
     <div class="wrapper bar bar-header" style="border-bottom-width: 0;background-size: 100% 0;">
 
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
@@ -24,7 +8,7 @@
                  style="right: 10px;color: rgba(255, 255, 255, 0.9);background-color: transparent;border-width: 0;width: 100%;display: inline-block;text-align: center;padding-left: 0;">
                 {{installation.name + ' ' + installation.placement}}
             </div>
-            <select style="font-size: 20px;opacity: 0;width: 50%;position: absolute;right: 40px;top: 10px;"
+            <select style="font-size: 20px;opacity: 0;width: 50%;position: absolute;right: 100px;top: 10px;"
                     ng-options="t.placement group by t.name for t in $root.installations"
                     ng-model="installation"
                     ng-change="selectDevice(installation)">
@@ -32,7 +16,7 @@
         </label>
     </div>
 
-    <ion-content class="wrapper has-header padding" style="padding:0;margin-top: 0;" delegate-handle="details">
+    <ion-content class="wrapper has-header padding" style="padding:0;margin-top: 0;">
         <div id="reading-content">
             <box></box>
         </div>

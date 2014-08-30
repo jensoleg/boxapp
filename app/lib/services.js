@@ -237,27 +237,6 @@ angular.module('BobbyApp.services', ['ngResource'])
         };
     }])
 
-    .service('Loading', ['$ionicLoading', function ($ionicLoading) {
-
-        var currentLoading;
-
-        this.start = function () {
-            if (!currentLoading) {
-                currentLoading = $ionicLoading.show({
-                    content: 'Loading'
-                });
-            }
-        };
-
-        this.stop = function () {
-            if (currentLoading) {
-                $ionicLoading.hide();
-                currentLoading = null;
-            }
-        };
-
-    }])
-
     .factory('auth0Service', ['$q', '$resource', '$http', '$rootScope', function ($q, $resource, $http, $rootScope) {
 
         return {

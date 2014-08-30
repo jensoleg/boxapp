@@ -190,8 +190,6 @@ angular.module('BobbyApp', ['dx', 'ionic', 'auth0', 'BobbyApp.services', 'BobbyA
 
         $scope.data = {};
 
-        console.log($rootScope.installations);
-
         $scope.clearSearch = function () {
             $scope.data.searchQuery = '';
         };

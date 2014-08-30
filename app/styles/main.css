@@ -613,3 +613,12 @@ optgroup {
 .list .row.item-accordion.ng-hide-remove {
     display: block !important;
 }
+
+.fade-bar {
+    height: 20px;
+    width: 100%;
+    position: fixed;
+    z-index: 9999;
+    opacity: 0;
+    background-color: #000;
+}

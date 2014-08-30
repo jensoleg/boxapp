@@ -142,11 +142,8 @@
         </h4>
     </div>
 
-    <!--div ng-show="chartData.length > 0"-->
-        <!--ion-slide-box delegate-handle="charts" show-pager="false" id="readings-scroll">
-            <ion-slide-->
-        <div id="chartContainer" style="height: 200px"
-             dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
+    <div id="chartContainer" style="height: 200px"
+         dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
                                          argumentAxis: 'chartSettings.argumentAxis',
                                          series: 'chartSettings.series'
                                         },
@@ -156,21 +153,9 @@
                                          crosshair: chartSettings.crosshair,
                                          loadingIndicator: chartSettings.loadingIndicator
                         }"
-             ng-show="chartData.length">
+         ng-show="chartData.length">
 
-        </div>
-        <!--/ion-slide>
-        <ion-slide>
-            <div style="height: 200px" dx-circular-gauge="{tooltip: gaugeSettings.tooltip,
-                                                           subvalueIndicator: gaugeSettings.subvalueIndicator,
-                                                           bindingOptions: {scale: 'gaugeSettings.scale',
-                                                                   value: 'gaugeSettings.value',
-                                                                   rangeContainer: 'gaugeSettings.rangeContainer',
-                                                                   subvalues : 'gaugeSettings.subvalues'}
-                                                                   }"></div>
-        </ion-slide>
-    </ion-slide-box-->
-    <!--/div-->
+    </div>
 
     <div class="clearfix">
         <a href="http://bobbytechnologies.dk" onClick="javascript:return openExternal(this)">

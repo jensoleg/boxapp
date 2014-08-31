@@ -1,20 +1,9 @@
 (function () {
     'use strict';
 
-    angular.module('BobbyApp', ['dx', 'ionic', 'auth0', 'BobbyApp.controllers', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives'])
+    angular.module('BobbyApp', ['dx', 'ionic', 'auth0', 'config', 'BobbyApp.controllers', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives'])
 
-        .config([ '$stateProvider', '$urlRouterProvider', '$httpProvider', 'authProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, authProvider) {
-
-            var //hostname = location.hostname.split('.'),
-                realm = 'decoplant';
-
-            //realm = hostname[0];
-
-            //if (realm === 'localhost' || angular.isUndefined(realm)) {
-
-            $httpProvider.defaults.headers.common.realm = realm;
-            //}
-
+        .config([ '$stateProvider', '$urlRouterProvider', '$httpProvider', 'authProvider', 'ENV', function ($stateProvider, $urlRouterProvider, $httpProvider, authProvider, ENV) {
 
             $stateProvider
                 .state('login', {
@@ -60,10 +49,11 @@
                 });
 
             authProvider.init({
-                domain: 'decoplant.auth0.com',
-                clientID: 'riQAyvtyyRBNvO9zhRsQAXMEtaQA02uW',
-                callbackURL: 'dummy',
+                domain: ENV.auth.domain,
+                clientID: ENV.auth.clientID,
+                callbackURL: location.href,
                 loginState: 'login',
+                minutesToRenewToken: 60,
                 dict: {signin: {title: ' '}}
             });
 
@@ -81,46 +71,32 @@
             });
 
             $httpProvider.interceptors.push('authInterceptor');
-            $urlRouterProvider.otherwise("/login");
+
+            $urlRouterProvider.otherwise('/login');
 
         }])
 
-        .run(['auth', '$rootScope', '$ionicPlatform', function (auth, $rootScope, $ionicPlatform) {
+        .run(['auth', '$rootScope', '$ionicPlatform', 'ENV', function (auth, $rootScope, $ionicPlatform, ENV) {
 
             $ionicPlatform.ready(function () {
+
                 // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
                 // for form inputs)
-
                 if (window.cordova && window.cordova.plugins.Keyboard) {
                     cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
                 }
-
                 if (window.StatusBar) {
                     // org.apache.cordova.statusbar required
                     StatusBar.styleDefault();
                 }
 
             });
-            /*
-             var hostname = location.hostname.split('.');
-             realm = hostname[0];
 
-             if (realm === 'localhost' || angular.isUndefined(realm)) {
-             realm = 'decoplant';
-             $rootScope.baseUrl = 'http://' + $location.host() + ':8081/api/';
-             $rootScope.hostMQTT = $location.host();
-             } else {
-             $rootScope.baseUrl = 'http://' + $location.host() + '/api/';
-             $rootScope.hostMQTT = 'mqtt.bobbytechnologies.dk';
-             }
-             */
-            $rootScope.baseUrl = 'http://decoplant.bobbytechnologies.dk/api/';
-            $rootScope.hostMQTT = 'mqtt.bobbytechnologies.dk';
+            $rootScope.domain = ENV.auth.domain.split('.')[0];
 
-            $rootScope.realm = 'decoplant';
-
-// This hooks al auth events to check everything as soon as the app starts
+            // This hooks al auth events to check everything as soon as the app starts
             auth.hookEvents();
+
         }])
 
         .controller('AppCtrl', ['$scope', 'auth', '$state', '$ionicSideMenuDelegate', function ($scope, auth, $state, $ionicSideMenuDelegate) {
@@ -133,10 +109,9 @@
 
         }])
 
-        .controller('LoginCtrl', ['auth', '$state', function (auth) {
+        .controller('LoginCtrl', ['auth', '$rootScope', function (auth, $rootScope) {
 
-//        var logo = '../images/' + $rootScope.realm + '.png';
-            var logo = './images/decoplant.png';
+            var logo = './images/' + $rootScope.domain + '.png';
 
             auth.signin({
                 popup: true,
@@ -153,12 +128,12 @@
         .controller('SettingsCtrl', ['$scope', 'Settings', 'auth', 'auth0Service', function ($scope, Settings, auth, auth0Service) {
 
             $scope.settings = Settings.getSettings();
+
             auth0Service.getUser(auth.profile.user_id).then(function (profile) {
                 $scope.settings = profile.data.app;
             });
 
-            // Watch deeply for settings changes, and save them
-            // if necessary
+            // Watch deeply for settings changes, and save them if necessary
             $scope.$watch('settings', function (event) {
                 Settings.save(event);
             }, true);

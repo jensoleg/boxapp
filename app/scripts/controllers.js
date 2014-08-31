@@ -53,11 +53,11 @@
 
         }])
 
-        .controller('BoxCtrl', ['$scope', '$rootScope', 'bobby', 'focus', function ($scope, $rootScope, bobby, focus) {
+        .controller('BoxCtrl', ['$scope', '$rootScope', 'bobby', function ($scope, $rootScope, bobby) {
 
             var ts = bobby.getTimeScale();
 
-            $scope.domainName = $rootScope.realm.charAt(0).toUpperCase() + $rootScope.realm.slice(1);
+            $scope.domainName = $rootScope.domain.charAt(0).toUpperCase() + $rootScope.domain.slice(1);
 
             $rootScope.installations = [];
 
@@ -185,7 +185,6 @@
             $scope.showValueCtrl = function (device, stream) {
                 $rootScope.datastreams[device + stream].isSelecting = true;
                 $rootScope.datastreams[device + stream].newValue = $rootScope.datastreams[device + stream].current_value;
-                focus('input-time');
             };
 
             $scope.setValueCtrl = function (device, stream) {

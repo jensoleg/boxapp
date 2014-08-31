@@ -3,8 +3,13 @@
  angular.module("config", [])
 
 .constant("ENV", {
-  "name": "development",
-  "apiEndpoint": "http://dev.yoursite.com:10000/"
+  "name": "production",
+  "auth": {
+    "domain": "decoplant.auth0.com",
+    "clientID": "riQAyvtyyRBNvO9zhRsQAXMEtaQA02uW"
+  },
+  "apiEndpoint": ".bobbytechnologies.dk/api/",
+  "MQTTServer": "mqtt.bobbytechnologies.dk"
 })
 
 ;

@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('BobbyApp.services', ['ngResource'])
+    angular.module('BobbyApp.services', ['config'])
 
         .constant('DEFAULT_SETTINGS', {
             'tempUnits': 'c',
@@ -58,28 +58,17 @@
             return obj;
         }])
 
-        .factory('bobby', [ '$q', '$rootScope', '$http', 'auth', 'Settings', function ($q, $rootScope, $http, auth, Settings) {
+        .factory('bobby', [ '$q', '$rootScope', '$http', 'auth', 'Settings', 'ENV', function ($q, $rootScope, $http, auth, Settings, ENV) {
 
             var bobby = {},
                 client = {},
                 controlTypes = ['data', 'ctrlValue', 'ctrlSwitch', 'ctrlTimeValue'],
-                currentInstallation = null;
-            /*
-             streamTriggers = [],
-             operators = {
-             lt: '<',
-             lte: '<=',
-             gt: '>',
-             gte: '>=',
-             eq: '=='
-             };
-             */
+                currentInstallation = null,
+                apiEndpoint = 'http://' + $rootScope.domain + ENV.apiEndpoint;
 
             $rootScope.datastreams = {};
 
-
-//        client = mqtt.createClient(8080, $rootScope.hostMQTT, {"username": "JWT/" + $rootScope.realm, "password": auth.idToken});
-            client = mqtt.createClient(8080, $rootScope.hostMQTT, {"username": "JWT/decoplant", "password": auth.idToken});
+            client = mqtt.createClient(8080, ENV.MQTTServer, {username: 'JWT/' + $rootScope.domain, "password": auth.idToken});
 
             // recieve message on current device subscription
             client.on('message', function (topic, message) {
@@ -151,7 +140,7 @@
                 angular.forEach(currentInstallation.devices, function (device) {
                     angular.forEach(device.controls, function (stream) {
                         // retrieve last value
-                        $http.get($rootScope.baseUrl + 'broker/' + device.id + '/' + stream.id)
+                        $http.get(apiEndpoint + 'broker/' + device.id + '/' + stream.id)
                             .success(function (data) {
                                 if (_.contains(controlTypes, stream.ctrlType)) {
                                     stream.newValue = data.data.payload;
@@ -172,7 +161,7 @@
 
                                  }
                                  */
-                                client.subscribe('/' + $rootScope.realm + '/' + device.id + '/' + stream.id);
+                                client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
                             });
                     });
                 });
@@ -195,7 +184,7 @@
                     interval: timeScale.interval
                 };
 
-                $http.get($rootScope.baseUrl + 'datastreams/' + device + '/' + stream, {
+                $http.get(apiEndpoint + 'datastreams/' + device + '/' + stream, {
                     params: options
                 }).success(function (data) {
                     $rootScope.currentDataStream.data = data.data;
@@ -216,7 +205,7 @@
             bobby.refresh = function () {
                 var _this = this,
                     q = $q.defer();
-                $http.get($rootScope.baseUrl + 'installations').success(function (data) {
+                $http.get(apiEndpoint + 'installations').success(function (data) {
                     $rootScope.installations = data;
                     if (currentInstallation) {
                         _this.setInstallation(currentInstallation);
@@ -234,22 +223,15 @@
             return bobby;
         }])
 
-        .factory('focus', ['$rootScope', '$timeout', function ($rootScope, $timeout) {
-            return function (name) {
-                $timeout(function () {
-                    $rootScope.$broadcast('focusOn', name);
-                });
-            };
-        }])
+        .factory('auth0Service', ['$http', '$rootScope', 'ENV', function ($http, $rootScope, ENV) {
 
-        .factory('auth0Service', ['$http', '$rootScope', function ($http, $rootScope) {
-
+            var apiEndpoint = 'http://' + $rootScope.domain + ENV.apiEndpoint;
             return {
                 getUser: function (user_id) {
-                    return $http.get($rootScope.baseUrl + 'auth/users/' + user_id);
+                    return $http.get(apiEndpoint + 'auth/users/' + user_id);
                 },
                 updateUser: function (user_id, metadata) {
-                    return $http.put($rootScope.baseUrl + 'auth/users/' + user_id + '/metadata', metadata);
+                    return $http.put(apiEndpoint + 'auth/users/' + user_id + '/metadata', metadata);
                 }
             };
         }]);

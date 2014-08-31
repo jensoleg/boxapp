@@ -10,15 +10,6 @@
             };
         }])
 
-        .directive('focusOn', function () {
-            return function (scope, elem, attr) {
-                scope.$on('focusOn', function (name) {
-                    if (name === attr.focusOn) {
-                        elem[0].focus();
-                    }
-                });
-            };
-        })
         .directive('fadeBar', function ($timeout, $ionicSideMenuDelegate) {
             return {
                 restrict: 'E',

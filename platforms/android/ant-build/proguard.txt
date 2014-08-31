@@ -1,6 +1,0 @@
-# view AndroidManifest.xml #generated:12
--keep class com.mirasense.scanditsdk.plugin.ScanditSDKActivity { <init>(...); }
-
-# view AndroidManifest.xml #generated:6
--keep class dk.bobbytechnologies.bobbytech.Bobbytech { <init>(...); }
-

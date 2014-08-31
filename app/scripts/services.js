@@ -12,6 +12,10 @@
             return window.cordova; // assumes cordova has already been loaded on the page
         })
 
+        .factory('statusbar', function () {
+            return window.StatusBar; // assumes cordova has already been loaded on the page
+        })
+
         .factory('Settings', ['$rootScope', 'DEFAULT_SETTINGS', function ($rootScope, DEFAULT_SETTINGS) {
             var ts,
                 _settings = {},
@@ -77,14 +81,6 @@
                         topics = topic.split('/'),
                         device = topics[2],
                         stream = topics[3],
-
-                    /* check state stream on device.streamid  and set scope variable installation.device.state.value.
-                     UI will listen to state: installation.device.state.value and calculated
-                     installation.state.value: 0,1,2
-                     */
-
-
-                    /*  check trigger */
                         streamTriggers = [],
                         operators = {
                             lt: '<',
@@ -93,6 +89,11 @@
                             gte: '>=',
                             eq: '=='
                         };
+
+                    /* check state stream on device.streamid  and set scope variable installation.device.state.value.
+                     UI will listen to state: installation.device.state.value and calculated
+                     installation.state.value: 0,1,2
+                     */
 
                     /* streamTriggers should be set when installation is changed !!!!!!!!! */
                     angular.forEach(currentInstallation.devices, function (d) {
@@ -109,7 +110,6 @@
                         });
                     });
 
-//                $rootScope.datastreams[device + stream].newValue = message;
                     $rootScope.datastreams[device + stream].current_value = message;
 
                     if ($rootScope.currentDataStream.deviceid === device && $rootScope.currentDataStream.id === stream) {
@@ -143,8 +143,6 @@
                         $http.get(apiEndpoint + 'broker/' + device.id + '/' + stream.id)
                             .success(function (data) {
                                 if (_.contains(controlTypes, stream.ctrlType)) {
-                                    stream.newValue = data.data.payload;
-                                    stream.current_value = data.data.payload;
                                     $rootScope.datastreams[device.id + stream.id] = stream;
                                     $rootScope.datastreams[device.id + stream.id].id = stream.id;
                                     $rootScope.datastreams[device.id + stream.id].deviceid = device.id;
@@ -152,7 +150,7 @@
                                     $rootScope.datastreams[device.id + stream.id].triggered = false;
 
                                     if (stream.id === $rootScope.currentDataStream.id && device.id === $rootScope.currentDataStream.deviceid) {
-                                        $rootScope.currentDataStream.current_value = stream.current_value;
+                                        $rootScope.currentDataStream.current_value = data.data.payload;
                                     }
                                 }
 
@@ -167,22 +165,16 @@
                 });
             };
 
-            // Publish value on current device
-            /*
-             bobby.publish = function (topic, payload) {
-             client.publish('/' + $rootScope.realm + '/' + currentDevice.id + "/" + topic, payload, {retain: true});
-             };
-             */
             // get time series values
-            bobby.getStream = function (device, stream, options) {
+            bobby.getStream = function (device, stream) {
 
-                var timeScale = Settings.get('timeScale');
-                options = {
-                    limit: 1500,
-                    from: moment(moment()).utc().subtract(timeScale.value, 's').toJSON(),
-                    to: moment(moment()).utc().toJSON(),
-                    interval: timeScale.interval
-                };
+                var timeScale = Settings.get('timeScale'),
+                    options = {
+                        limit: 1500,
+                        from: moment(moment()).utc().subtract(timeScale.value, 's').toJSON(),
+                        to: moment(moment()).utc().toJSON(),
+                        interval: timeScale.interval
+                    };
 
                 $http.get(apiEndpoint + 'datastreams/' + device + '/' + stream, {
                     params: options

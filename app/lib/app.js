@@ -76,18 +76,18 @@
 
         }])
 
-        .run(['auth', '$rootScope', '$ionicPlatform', 'ENV', function (auth, $rootScope, $ionicPlatform, ENV) {
+        .run(['auth', '$rootScope', '$ionicPlatform', 'cordova', 'statusbar', 'ENV', function (auth, $rootScope, $ionicPlatform, cordova, statusbar, ENV) {
 
             $ionicPlatform.ready(function () {
 
                 // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
                 // for form inputs)
-                if (window.cordova && window.cordova.plugins.Keyboard) {
+                if (cordova && cordova.plugins.Keyboard) {
                     cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
                 }
-                if (window.StatusBar) {
+                if (statusbar) {
                     // org.apache.cordova.statusbar required
-                    StatusBar.styleDefault();
+                    statusbar.styleDefault();
                 }
 
             });

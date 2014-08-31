@@ -52,47 +52,6 @@ border-color: #0000cc;
     background-color: rgba(23, 23, 247, 0.57);
 }
 
-#scroller {
-}
-
-.bg-image {
-    position: fixed;
-    width: 120%;
-    height: 120%;
-    background-size: cover;
-}
-
-.bg-fade > .ng-enter {
-    opacity: 0;
-    -webkit-transition: opacity 2s ease-in-out;
-}
-
-.bg-fade > .ng-enter-active {
-    opacity: 1;
-}
-
-.bg-fade > .ng-leave {
-    opacity: 1;
-    -webkit-transition: opacity 2s ease-in-out;
-}
-
-.bg-fade > .ng-leave-active {
-    opacity: 0;
-}
-
-.wunderground-logo {
-    width: 100px;
-    height: 14px;
-    background: url('../images/openweather.png') no-repeat transparent;
-}
-
-@media only screen and (-webkit-min-device-pixel-ratio: 2) {
-    .wunderground-logo {
-        background: url('../images/openweather@2x.png') no-repeat transparent;
-        background-size: 100px 14px;
-    }
-}
-
 .bobby-logo {
     width: 100px;
     height: 14px;
@@ -121,11 +80,6 @@ h1, h2, h3, h4, h5 {
     padding: 10px;
 }
 
-/*
-.ion-ios7-sunny-outline {
-    color: yellow;
-}
-*/
 /**
  * Header
  */
@@ -143,36 +97,6 @@ h1, h2, h3, h4, h5 {
     line-height: 20px;
     margin-top: 4px;
 }
-
-#header .title .city {
-    font-size: 16px;
-}
-
-#city-nav-icon {
-    font-size: 11px;
-    margin-right: 2px;
-}
-
-.ionic-refresher-content {
-    color: rgb(255, 255, 255);
-    text-shadow: none;
-}
-
-.scroll-refresher {
-    overflow: visible;
-}
-
-.ionic-refresher-content {
-    background-color: rgba(0, 0, 0, 0.4);
-    height: 400px;
-    bottom: 0;
-}
-
-.ionic-refresher-content i {
-    margin-top: 360px;
-}
-
-
 
 #current-device {
     height: 40px;
@@ -316,32 +240,6 @@ h1, h2, h3, h4, h5 {
     margin-top: 4px;
     margin-right: 4px;
 }
-
-/**
- * Settings modal
- */
-/*
-#settings-modal {
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
-#settings-modal .item {
-    background-color: rgba(0, 0, 0, 0.9);
-    border: none;
-    color: #fff;
-}
-
-#settings-modal .input-label {
-    color: #fff;
-}
-
-#settings-modal input {
-    color: #f5f5f5;
-}
-*/
-/**
- * xively
- */
 
 #forecast .col-icon {
     padding: 5px;
@@ -506,48 +404,6 @@ optgroup {
     line-height: 0em;
 }
 
-#intro .input-label {
-    color: #fff;
-}
-
-#intro input {
-    color: #f5f5f5;
-}
-
-#intro .slider {
-    height: 100%;
-}
-
-#intro .slider-slide {
-    padding-top: 80px;
-    /*
-        color: #000;
-        background-color: #fff;
-    */
-    text-align: center;
-    color: #fff;
-    /*
-        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-        font-weight: 300;
-    */
-}
-
-#intro .slider-pager .slider-pager-page.active {
-    -webkit-transition: opacity 0.4s ease-in;
-    -moz-transition: opacity 0.4s ease-in;
-    transition: opacity 0.4s ease-in;
-    opacity: 1;
-}
-
-#intro .slider-pager .slider-pager-page {
-    display: inline-block;
-    margin: 0px 3px;
-    width: 15px;
-    color: white;
-    text-decoration: none;
-    opacity: 0.3;
-}
-
 .logo {
     margin: 30px 0px;
 }
@@ -568,39 +424,7 @@ optgroup {
     margin: 10px 0px;
 }
 
-.my-switch-container {
-    position: relative;
-    height: 500px;
-}
-
-
-.my-switch-animation.ng-enter,
-.my-switch-animation.ng-leave {
-    -webkit-transition: 0.5s linear all;
-    transition: 0.5s linear all;
-    height: 500px;
-
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-}
-
-.my-switch-animation.ng-enter {
-    left: 100%;
-}
-
-.my-switch-animation.ng-leave,
-.my-switch-animation.ng-enter.ng-enter-active {
-    left: 0;
-}
-
-.my-switch-animation.ng-leave.ng-leave-active {
-    left: -100%;
-}
-
 .list .row.item-accordion {
-
     height: 34px;
     padding-top: 0;
     padding-bottom: 0;

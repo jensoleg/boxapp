@@ -59,7 +59,7 @@
                         <select class="custom replaced"
                                 ng-options="t.text group by t.type for t in timescale"
                                 ng-model="timeScale"
-                                ng-change="selectAction(timeScale)">
+                                ng-change="selectAction(timeScale, activeStream.deviceid, activeStream.id)">
                         </select>
                         <span class="custom-select" aria-hidden="true">
                                <span>{{timeScale.text}}</span>

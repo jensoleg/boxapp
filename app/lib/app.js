@@ -25,7 +25,12 @@
                     views: {
                         'menuContent': {
                             templateUrl: 'templates/main.html',
-                            controller: 'BoxCtrl'
+                            controller: 'BoxCtrl',
+                            resolve: {
+                                installations: function (installation) {
+                                    return installation.getInstallations();
+                                }
+                            }
                         }
                     }
                 })
@@ -34,7 +39,12 @@
                     views: {
                         'menuContent': {
                             templateUrl: "templates/installations.html",
-                            controller: 'InstallationsCtrl'
+                            controller: 'InstallationsCtrl',
+                            resolve: {
+                                installations: function (installation) {
+                                    return installation.getInstallations();
+                                }
+                            }
                         }
                     }
                 })
@@ -51,9 +61,9 @@
             authProvider.init({
                 domain: ENV.auth.domain,
                 clientID: ENV.auth.clientID,
-                callbackURL: location.href,
+                callbackURL: 'dummy',
                 loginState: 'login',
-                minutesToRenewToken: 60,
+                minutesToRenewToken: 120,
                 dict: {signin: {title: ' '}}
             });
 

@@ -62,12 +62,16 @@
             return obj;
         }])
 
-        .factory('bobby', [ '$q', '$rootScope', '$http', 'auth', 'Settings', 'ENV', function ($q, $rootScope, $http, auth, Settings, ENV) {
+        .factory('bobby', ['$rootScope', '$http', 'auth', 'Settings', 'ENV', function ($rootScope, $http, auth, Settings, ENV) {
 
             var bobby = {},
                 client = {},
                 controlTypes = ['data', 'ctrlValue', 'ctrlSwitch', 'ctrlTimeValue'],
                 currentInstallation = null,
+                currentStream = {
+                    device: null,
+                    stream: null
+                },
                 apiEndpoint = 'http://' + $rootScope.domain + ENV.apiEndpoint;
 
             $rootScope.datastreams = {};
@@ -111,27 +115,24 @@
                     });
 
                     $rootScope.datastreams[device + stream].current_value = message;
+                    $rootScope.$apply();
 
-                    if ($rootScope.currentDataStream.deviceid === device && $rootScope.currentDataStream.id === stream) {
+                    if (currentStream.device === device && currentStream.stream === stream) {
                         now = new Date();
-                        $rootScope.currentDataStream.current_value = message;
-                        $rootScope.currentDataStream.data.push({ timestamp: now, value: message });
-                        $rootScope.$apply();
+                        $rootScope.$broadcast('message:new-reading', { timestamp: now, value: message });
                     }
                 }
             });
 
-            /* set current device */
+            /* set current installation */
             bobby.setInstallation = function (newInstallation) {
-
                 // remove current subscriptions
                 if (currentInstallation) {
                     angular.forEach(currentInstallation.devices, function (device) {
                         angular.forEach(device.controls, function (stream) {
-                            client.unsubscribe('/' + $rootScope.realm + '/' + device.id + "/" + stream.id);
+                            client.unsubscribe('/' + $rootScope.domain + '/' + device.id + "/" + stream.id);
                         });
                     });
-
                 }
 
                 currentInstallation = newInstallation;
@@ -139,28 +140,17 @@
                 // set controls
                 angular.forEach(currentInstallation.devices, function (device) {
                     angular.forEach(device.controls, function (stream) {
-                        // retrieve last value
-                        $http.get(apiEndpoint + 'broker/' + device.id + '/' + stream.id)
-                            .success(function (data) {
-                                if (_.contains(controlTypes, stream.ctrlType)) {
-                                    $rootScope.datastreams[device.id + stream.id] = stream;
-                                    $rootScope.datastreams[device.id + stream.id].id = stream.id;
-                                    $rootScope.datastreams[device.id + stream.id].deviceid = device.id;
-                                    /* maybe trigger should be evaluated initially */
-                                    $rootScope.datastreams[device.id + stream.id].triggered = false;
+                        if (_.contains(controlTypes, stream.ctrlType)) {
+                            $rootScope.datastreams[device.id + stream.id] = stream;
+                            $rootScope.datastreams[device.id + stream.id].id = stream.id;
+                            $rootScope.datastreams[device.id + stream.id].deviceid = device.id;
+                            /* maybe trigger should be evaluated initially */
+                            $rootScope.datastreams[device.id + stream.id].triggered = false;
+                        }
 
-                                    if (stream.id === $rootScope.currentDataStream.id && device.id === $rootScope.currentDataStream.deviceid) {
-                                        $rootScope.currentDataStream.current_value = data.data.payload;
-                                    }
-                                }
+                        // if (stream.ctrlType === status) {}
 
-                                /*
-                                 if (stream.ctrlType === status) {
-
-                                 }
-                                 */
-                                client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
-                            });
+                        client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
                     });
                 });
             };
@@ -179,40 +169,41 @@
                 $http.get(apiEndpoint + 'datastreams/' + device + '/' + stream, {
                     params: options
                 }).success(function (data) {
-                    $rootScope.currentDataStream.data = data.data;
-                    $rootScope.currentDataStream.id = stream;
-                    $rootScope.currentDataStream.deviceid = device;
+                    currentStream.device = device;
+                    currentStream.stream = stream;
+                    $rootScope.$broadcast('message:data', data.data);
+
                 });
             };
 
-            bobby.setTimeScale = function (timeScale) {
+            bobby.setTimeScale = function (timeScale, deviceid, id) {
                 Settings.set('timeScale', timeScale);
-                this.getStream($rootScope.currentDataStream.deviceid, $rootScope.currentDataStream.id);
+                this.getStream(deviceid, id);
             };
 
             bobby.getTimeScale = function () {
                 return Settings.get('timeScale');
             };
 
-            bobby.refresh = function () {
-                var _this = this,
-                    q = $q.defer();
-                $http.get(apiEndpoint + 'installations').success(function (data) {
-                    $rootScope.installations = data;
-                    if (currentInstallation) {
-                        _this.setInstallation(currentInstallation);
-                    } else {
-                        _this.setInstallation($rootScope.installations[0]);
-                    }
-                    q.resolve(data);
-                }, function () {
-                    q.resolve(null);
-                });
-
-                return q.promise;
-            };
-
             return bobby;
+        }])
+
+        .factory('installation', ['$http', '$q', '$rootScope', 'ENV', function ($http, $q, $rootScope, ENV) {
+
+            var apiEndpoint = 'http://' + $rootScope.domain + ENV.apiEndpoint;
+
+            return {
+                getInstallations: function () {
+                    var q = $q.defer();
+
+                    $http.get(apiEndpoint + 'installations').success(function (data) {
+                        q.resolve(data);
+                    }, function () {
+                        q.resolve(null);
+                    });
+                    return q.promise;
+                }
+            };
         }])
 
         .factory('auth0Service', ['$http', '$rootScope', 'ENV', function ($http, $rootScope, ENV) {

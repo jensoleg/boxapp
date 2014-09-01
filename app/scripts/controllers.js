@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('BobbyApp.controllers', ['dx', 'ionic', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives', 'chart'])
+    angular.module('BobbyApp.controllers', ['dx', 'ionic', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives', 'chart', 'box'])
 
         .filter('int', function () {
             return function (v) {
@@ -43,7 +43,9 @@
             };
         })
 
-        .controller('InstallationsCtrl', ['$scope', '$rootScope', function ($scope) {
+        .controller('InstallationsCtrl', ['installations', '$scope', function (installations, $scope) {
+
+            $scope.installations = installations;
 
             $scope.data = {};
 
@@ -53,24 +55,28 @@
 
         }])
 
-        .controller('BoxCtrl', ['$scope', '$rootScope', 'bobby', 'chart', function ($scope, $rootScope, bobby, chart) {
+        .controller('BoxCtrl', ['installations', '$scope', '$rootScope', 'bobby', 'chart', 'box', function (installations, $scope, $rootScope, bobby, chart, box) {
 
             var ts = bobby.getTimeScale();
 
             $scope.domainName = $rootScope.domain.charAt(0).toUpperCase() + $rootScope.domain.slice(1);
 
-            $rootScope.installations = [];
+            $scope.installations = installations;
+
+            if (box.installation === null) {
+                $scope.installation = box.installation = $scope.installations[0];
+            } else {
+                $scope.installation = box.installation;
+            }
 
             $scope.timescale = chart.timescale;
-
             /* get graf time scale form settings */
             $scope.timeScale = _.find($scope.timescale, { 'value': ts.value });
 
-            $rootScope.currentDataStream = {};
-            $rootScope.activeStream = null;
+            $scope.activeStream = box.activeStream;
 
-            $scope.showChart = false;
-            $scope.shownDevice = [];
+            $scope.showChart = box.showChart;
+            $scope.shownDevice = box.shownDevice;
 
             $scope.chartLabel = chart.chartLabel;
             $scope.series = chart.series;
@@ -84,32 +90,36 @@
                 return $scope.shownDevice[device];
             };
 
-            $scope.selectDevice = function () {
-                $scope.refreshData();
+            $scope.selectDevice = function (installation) {
+                $scope.setInstallation(installation);
             };
 
-            $scope.selectAction = function (time) {
+            $scope.selectAction = function (time, deviceid, id) {
                 $scope.timeScale = _.find($scope.timescale, { 'value': time.value });
-                bobby.setTimeScale($scope.timeScale);
+                bobby.setTimeScale($scope.timeScale, deviceid, id);
                 $scope.showChart = true;
             };
 
             $scope.showData = function (device, stream) {
-                if (!(angular.isUndefined($rootScope.activeStream) || $rootScope.activeStream === null) && $rootScope.activeStream.id === $rootScope.datastreams[device + stream].id && $rootScope.activeStream.deviceid === $rootScope.datastreams[device + stream].deviceid) {
-                    $rootScope.activeStream = null;
+                if (!(angular.isUndefined($scope.activeStream) || $scope.activeStream === null) && $scope.activeStream.id === stream && $scope.activeStream.deviceid === device) {
+                    $scope.activeStream = box.activeStream = null;
                     $scope.chartSettings.dataSource = null;
                 } else {
                     $scope.showChart = true;
                     bobby.getStream(device, stream);
-                    $rootScope.activeStream = $rootScope.datastreams[device + stream];
-                    $rootScope.activeStream.id = $rootScope.datastreams[device + stream].id;
-                    $rootScope.activeStream.deviceid = $rootScope.datastreams[device + stream].deviceid;
+                    $scope.activeStream = box.activeStream = $rootScope.datastreams[device + stream];
                 }
             };
 
-            $rootScope.$watchCollection('currentDataStream.data', function (data) {
+            $rootScope.$on('message:new-reading', function (evt, data) {
+                if ($scope.activeStream !== null) {
+                    $scope.chartSettings.dataSource.push(data);
+                }
+            });
+
+            $rootScope.$on('message:data', function (evt, data) {
                 $scope.showChart = false;
-                if (angular.isDefined(data) && data.length > 0 && $rootScope.activeStream !== null) {
+                if (angular.isDefined(data) && data.length > 0 && $scope.activeStream !== null) {
 
                     if ($scope.timeScale.value <= 86400) {
                         $scope.chartLabel.label = { format: 'H:mm', font: { color: 'white'}};
@@ -120,7 +130,7 @@
                     } else {
                         $scope.chartLabel.label = { format: 'MMM', font: { color: 'white'}};
                     }
-                    if ($rootScope.activeStream.id === 'online') {
+                    if ($scope.activeStream.id === 'online') {
                         $scope.series[0].type = 'stepLine';
                     } else {
                         $scope.series[0].type = 'area';
@@ -133,15 +143,7 @@
                 }
             }, true);
 
-            $scope.refreshData = function () {
-
-                bobby.refresh().then(function () {
-                    $scope.installation = $rootScope.installations[0];
-                });
-
-            };
-
-            $scope.refreshData(true);
+            bobby.setInstallation($scope.installation);
 
         }]);
 

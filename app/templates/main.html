@@ -9,7 +9,7 @@
                 {{installation.name + ' ' + installation.placement}}
             </div>
             <select style="font-size: 20px;opacity: 0;width: 50%;position: absolute;right: 100px;top: 10px;"
-                    ng-options="t.placement group by t.name for t in $root.installations"
+                    ng-options="t.placement group by t.name for t in installations"
                     ng-model="installation"
                     ng-change="selectDevice(installation)">
             </select>

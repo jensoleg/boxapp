@@ -16,7 +16,7 @@
             return window.StatusBar; // assumes cordova has already been loaded on the page
         })
 
-        .factory('Settings', ['$rootScope', 'DEFAULT_SETTINGS', function ($rootScope, DEFAULT_SETTINGS) {
+        .factory('Settings', ['DEFAULT_SETTINGS', function (DEFAULT_SETTINGS) {
             var ts,
                 _settings = {},
                 obj = {
@@ -26,7 +26,6 @@
                     // Save the settings to localStorage
                     save: function () {
                         window.localStorage.settings = JSON.stringify(_settings);
-                        $rootScope.$broadcast('settings.changed', _settings);
                     },
                     // Get a settings val
                     get: function (k) {
@@ -100,6 +99,7 @@
                      */
 
                     /* streamTriggers should be set when installation is changed !!!!!!!!! */
+
                     angular.forEach(currentInstallation.devices, function (d) {
                         if (d.triggers.length > 0 && d.id === device) {
                             streamTriggers.push(_.filter(d.triggers, { 'stream_id': stream }));
@@ -114,18 +114,23 @@
                         });
                     });
 
-                    $rootScope.datastreams[device + stream].current_value = message;
-                    $rootScope.$apply();
-
                     if (currentStream.device === device && currentStream.stream === stream) {
                         now = new Date();
                         $rootScope.$broadcast('message:new-reading', { timestamp: now, value: message });
                     }
+
+                    $rootScope.datastreams[device + stream].current_value = message;
+                    $rootScope.$apply();
                 }
             });
 
             /* set current installation */
             bobby.setInstallation = function (newInstallation) {
+
+                if (newInstallation && currentInstallation && currentInstallation._id === newInstallation._id) {
+                    return;
+                }
+
                 // remove current subscriptions
                 if (currentInstallation) {
                     angular.forEach(currentInstallation.devices, function (device) {
@@ -133,26 +138,28 @@
                             client.unsubscribe('/' + $rootScope.domain + '/' + device.id + "/" + stream.id);
                         });
                     });
+
+                    currentInstallation = null;
                 }
 
-                currentInstallation = newInstallation;
+                if (newInstallation) {
 
-                // set controls
-                angular.forEach(currentInstallation.devices, function (device) {
-                    angular.forEach(device.controls, function (stream) {
-                        if (_.contains(controlTypes, stream.ctrlType)) {
-                            $rootScope.datastreams[device.id + stream.id] = stream;
-                            $rootScope.datastreams[device.id + stream.id].id = stream.id;
-                            $rootScope.datastreams[device.id + stream.id].deviceid = device.id;
-                            /* maybe trigger should be evaluated initially */
-                            $rootScope.datastreams[device.id + stream.id].triggered = false;
-                        }
+                    currentInstallation = newInstallation;
 
-                        // if (stream.ctrlType === status) {}
-
-                        client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
+                    // set controls
+                    angular.forEach(currentInstallation.devices, function (device) {
+                        angular.forEach(device.controls, function (stream) {
+                            if (_.contains(controlTypes, stream.ctrlType)) {
+                                $rootScope.datastreams[device.id + stream.id] = stream;
+                                $rootScope.datastreams[device.id + stream.id].id = stream.id;
+                                $rootScope.datastreams[device.id + stream.id].deviceid = device.id;
+                                /* maybe trigger should be evaluated initially */
+                                $rootScope.datastreams[device.id + stream.id].triggered = false;
+                            }
+                            client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
+                        });
                     });
-                });
+                }
             };
 
             // get time series values

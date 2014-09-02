@@ -21,10 +21,10 @@
             <div class="row item-accordion" style="margin-top: 0"
                  ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }| orderObjectBy:'name':'reverse'"
                  ng-show="isDeviceShown(device.id)">
-                <div class="col">
+                <div class="col" ng-show="isDeviceShown(device.id)">
                     <label>{{readings.name}}</label>
                 </div>
-                <div class="col-icon col">
+                <div class="col-icon col" ng-show="isDeviceShown(device.id)">
                     <i class="col-icon-font icon ion-ios7-gear"
                        ng-hide="readings.ctrlType == 'data' && (readings.id != activeStream.id || readings.deviceid != activeStream.deviceid || !showChart)"
                        style="color: #4a87ee">
@@ -35,8 +35,8 @@
                        ng-style="readings.id == activeStream.id && readings.deviceid == activeStream.deviceid && {'color': '#4a87ee'} || {'color': 'white'}">
                     </i>
                 </div>
-                <div class="col">
-                    <div ng-show="readings.ctrlType == 'data' && isDeviceShown(device.id)">
+                <div class="col" ng-show="isDeviceShown(device.id)">
+                    <div ng-show="readings.ctrlType == 'data'">
                         <div ng-class="{ critical: readings.triggered}">
                             <span class="temp-high">{{readings.current_value}}{{readings.unit.symbol}}</span>
                         </div>

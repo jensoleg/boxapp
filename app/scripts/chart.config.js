@@ -2,7 +2,6 @@
     'use strict';
 
     angular.module("chart", [])
-
         .constant("chart", {
             chartLabel: {
                 argumentType: 'datetime',
@@ -17,7 +16,6 @@
                     visible: true
                 }
             },
-
             series: [
                 {
                     argumentField: 'timestamp',
@@ -33,8 +31,8 @@
                     hoverStyle: { color: 'rgb(74, 135, 238)' }
                 }
             ],
-
             chartSettings: {
+                dataSource: [],
                 valueAxis: {
                     valueMarginsEnabled: false,
                     tick: {
@@ -66,7 +64,6 @@
                     opacity: 0.8
                 }
             },
-
             timescale: [
                 {value: 300, interval: 1, text: '5 minutes', type: 'Raw datapoints'},
                 {value: 1800, interval: 1, text: '30 minutes', type: 'Raw datapoints'},
@@ -78,4 +75,5 @@
                 {value: 7776000, interval: 3600, text: '3 months', type: 'Averaged datapoints'}
             ]
         });
+
 }());

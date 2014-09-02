@@ -96,7 +96,6 @@
                     cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
                 }
                 if (statusbar) {
-                    // org.apache.cordova.statusbar required
                     statusbar.styleDefault();
                 }
 
@@ -109,9 +108,10 @@
 
         }])
 
-        .controller('AppCtrl', ['$scope', 'auth', '$state', '$ionicSideMenuDelegate', function ($scope, auth, $state, $ionicSideMenuDelegate) {
+        .controller('AppCtrl', ['bobby', '$scope', 'auth', '$state', '$ionicSideMenuDelegate', function (bobby, $scope, auth, $state, $ionicSideMenuDelegate) {
 
             $scope.signout = function () {
+                bobby.setInstallation(null);
                 $ionicSideMenuDelegate.toggleLeft();
                 auth.signout();
                 $state.go('login');
@@ -119,7 +119,8 @@
 
         }])
 
-        .controller('LoginCtrl', ['auth', '$rootScope', function (auth, $rootScope) {
+
+        .controller('LoginCtrl', ['auth', '$rootScope', 'statusbar', function (auth, $rootScope, statusbar) {
 
             var logo = './images/' + $rootScope.domain + '.png';
 
@@ -129,12 +130,12 @@
                 standalone: true,
                 offline_mode: true,
                 device: 'Phone',
+                enableReturnUserExperience: false,
                 icon: logo,
                 showIcon: true
             });
 
         }])
-
         .controller('SettingsCtrl', ['$scope', 'Settings', 'auth', 'auth0Service', function ($scope, Settings, auth, auth0Service) {
 
             $scope.settings = Settings.getSettings();

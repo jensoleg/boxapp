@@ -2,16 +2,19 @@
 
     <div class="wrapper bar bar-header" style="border-bottom-width: 0;background-size: 100% 0;">
 
-        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+        <div class="buttons left-buttons"> <span class="">
+            <button menu-toggle="left" class="button button-icon button-clear ion-navicon"></button>
+        </span></div>
+
         <label style="width:100%">
             <div class="item item-input"
-                 style="right: 10px;color: rgba(255, 255, 255, 0.9);background-color: transparent;border-width: 0;width: 100%;display: inline-block;text-align: center;padding-left: 0;">
+                 style="color: rgba(255, 255, 255, 0.9);background-color: transparent;border-width: 0;width: 100%;display: inline-block;text-align: center;padding-left: 0;">
                 {{installation.name + ' ' + installation.placement}}
             </div>
             <select style="font-size: 20px;opacity: 0;width: 50%;position: absolute;right: 100px;top: 10px;"
                     ng-options="t.placement group by t.name for t in installations"
                     ng-model="installation"
-                    ng-change="selectDevice(installation)">
+                    ng-change="selectInstallation(installation)">
             </select>
         </label>
     </div>

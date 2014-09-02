@@ -61,13 +61,13 @@
 
             $scope.domainName = $rootScope.domain.charAt(0).toUpperCase() + $rootScope.domain.slice(1);
 
-            $scope.installations = installations;
-
             if (box.installation === null) {
-                $scope.installation = box.installation = $scope.installations[0];
+                $scope.installation = box.installation = installations[0];
             } else {
-                $scope.installation = box.installation;
+                $scope.installation = _.find(installations, { '_id': box.installation._id });
             }
+
+            $scope.installations = installations;
 
             $scope.timescale = chart.timescale;
             /* get graf time scale form settings */
@@ -90,8 +90,9 @@
                 return $scope.shownDevice[device];
             };
 
-            $scope.selectDevice = function (installation) {
-                $scope.setInstallation(installation);
+            $scope.selectInstallation = function (installation) {
+                $scope.installation = box.installation = installation;
+                bobby.setInstallation(installation);
             };
 
             $scope.selectAction = function (time, deviceid, id) {
@@ -120,7 +121,6 @@
             $rootScope.$on('message:data', function (evt, data) {
                 $scope.showChart = false;
                 if (angular.isDefined(data) && data.length > 0 && $scope.activeStream !== null) {
-
                     if ($scope.timeScale.value <= 86400) {
                         $scope.chartLabel.label = { format: 'H:mm', font: { color: 'white'}};
                     } else if ($scope.timeScale.value <= 604800) {

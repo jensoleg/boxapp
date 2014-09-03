@@ -195,27 +195,50 @@
             return bobby;
         }])
 
-        .factory('installation', ['$http', '$q', '$rootScope', 'ENV', function ($http, $q, $rootScope, ENV) {
+        .factory('installations', ['$http', '$q', '$rootScope', 'ENV', function ($http, $q, $rootScope, ENV) {
 
-            var apiEndpoint = 'http://' + $rootScope.domain + ENV.apiEndpoint;
+            var apiEndpoint = 'http://' + $rootScope.domain + ENV.apiEndpoint,
+                installations;
 
             return {
-                getInstallations: function () {
+                all: function () {
                     var q = $q.defer();
 
                     $http.get(apiEndpoint + 'installations').success(function (data) {
+                        installations = data;
                         q.resolve(data);
                     }, function () {
                         q.resolve(null);
                     });
                     return q.promise;
+                },
+                get: function (id) {
+                    return _.find(installations, { _id: id });
+                },
+                getDevice: function (id, deviceid) {
+                    var installation = _.find(installations, { _id: id});
+                    return _.find(installation.devices, {_id: deviceid});
+                },
+                getControl: function (id, deviceid, controlid) {
+                    var installation = _.find(installations, { _id: id}),
+                        device = _.find(installation.devices, {_id: deviceid});
+                    return _.find(device.controls, {_id: controlid});
+
+                },
+                getTrigger: function (id, deviceid, triggerid) {
+                    var installation = _.find(installations, { _id: id}),
+                        device = _.find(installation.devices, {_id: deviceid});
+                    return _.find(device.triggers, {_id: triggerid});
+
                 }
             };
         }])
 
-        .factory('auth0Service', ['$http', '$rootScope', 'ENV', function ($http, $rootScope, ENV) {
+        .
+        factory('auth0Service', ['$http', '$rootScope', 'ENV', function ($http, $rootScope, ENV) {
 
             var apiEndpoint = 'http://' + $rootScope.domain + ENV.apiEndpoint;
+
             return {
                 getUser: function (user_id) {
                     return $http.get(apiEndpoint + 'auth/users/' + user_id);

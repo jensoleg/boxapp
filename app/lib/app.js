@@ -27,22 +27,8 @@
                             templateUrl: 'templates/main.html',
                             controller: 'BoxCtrl',
                             resolve: {
-                                installations: function (installation) {
-                                    return installation.getInstallations();
-                                }
-                            }
-                        }
-                    }
-                })
-                .state('app.installations', {
-                    url: "/installations",
-                    views: {
-                        'menuContent': {
-                            templateUrl: "templates/installations.html",
-                            controller: 'InstallationsCtrl',
-                            resolve: {
-                                installations: function (installation) {
-                                    return installation.getInstallations();
+                                installations: function (installations) {
+                                    return installations.all();
                                 }
                             }
                         }
@@ -54,6 +40,76 @@
                         'menuContent': {
                             templateUrl: 'templates/settings.html',
                             controller: 'SettingsCtrl'
+                        }
+                    }
+                })
+                .state('app.installations', {
+                    url: '/installations',
+                    views: {
+                        'menuContent': {
+                            templateUrl: "templates/installations.list.html",
+                            controller: 'InstallationsCtrl',
+                            resolve: {
+                                installations: function (installations) {
+                                    return installations.all();
+                                }
+                            }
+                        }
+                    }
+                })
+                .state('app.detail', {
+                    url: '/installations/:id',
+                    views: {
+                        'menuContent': {
+                            templateUrl: 'templates/installations.detail.html',
+                            controller: 'InstallationCtrl',
+                            resolve: {
+                                installation: function ($stateParams, installations) {
+                                    return installations.get($stateParams.id);
+                                }
+                            }
+                        }
+                    }
+                })
+                .state('app.device', {
+                    url: '/installations/:id/device/:deviceid',
+                    views: {
+                        'menuContent': {
+                            templateUrl: 'templates/device.html',
+                            controller: 'DeviceCtrl',
+                            resolve: {
+                                device: function ($stateParams, installations) {
+                                    return installations.getDevice($stateParams.id, $stateParams.deviceid);
+                                }
+                            }
+                        }
+                    }
+                })
+                .state('app.control', {
+                    url: '/installations/:id/device/:deviceid/control/:controlid',
+                    views: {
+                        'menuContent': {
+                            templateUrl: 'templates/control.html',
+                            controller: 'ControlCtrl',
+                            resolve: {
+                                control: function ($stateParams, installations) {
+                                    return installations.getControl($stateParams.id, $stateParams.deviceid, $stateParams.controlid);
+                                }
+                            }
+                        }
+                    }
+                })
+                .state('app.trigger', {
+                    url: '/installations/:id/device/:deviceid/trigger/:triggerid',
+                    views: {
+                        'menuContent': {
+                            templateUrl: 'templates/trigger.html',
+                            controller: 'TriggerCtrl',
+                            resolve: {
+                                trigger: function ($stateParams, installations) {
+                                    return installations.getTrigger($stateParams.id, $stateParams.deviceid, $stateParams.triggerid);
+                                }
+                            }
                         }
                     }
                 });
@@ -86,7 +142,8 @@
 
         }])
 
-        .run(['auth', '$rootScope', '$ionicPlatform', 'cordova', 'statusbar', 'ENV', function (auth, $rootScope, $ionicPlatform, cordova, statusbar, ENV) {
+        .
+        run(['auth', '$rootScope', '$ionicPlatform', 'cordova', 'statusbar', 'ENV', function (auth, $rootScope, $ionicPlatform, cordova, statusbar, ENV) {
 
             $ionicPlatform.ready(function () {
 
@@ -119,8 +176,7 @@
 
         }])
 
-
-        .controller('LoginCtrl', ['auth', '$rootScope', 'statusbar', function (auth, $rootScope, statusbar) {
+        .controller('LoginCtrl', ['auth', '$rootScope', function (auth, $rootScope) {
 
             var logo = './images/' + $rootScope.domain + '.png';
 
@@ -136,6 +192,7 @@
             });
 
         }])
+
         .controller('SettingsCtrl', ['$scope', 'Settings', 'auth', 'auth0Service', function ($scope, Settings, auth, auth0Service) {
 
             $scope.settings = Settings.getSettings();
@@ -153,4 +210,7 @@
                 auth0Service.updateUser(auth.profile.user_id, { app: Settings.getSettings()});
             };
         }]);
-}());
+}
+()
+    )
+;

@@ -1,0 +1,32 @@
+<ion-view title="{{device.name}}">
+    <ion-content class="has-header">
+        <ion-list>
+
+            <div class="item  item-icon-right item-divider ">
+            Sensors and Controls
+            <i class="icon ion-ios7-plus-empty"></i>
+
+            </div>
+
+            <ion-item ng-repeat="control in device.controls" ui-sref="app.control({ id: installationId , deviceid: device._id, controlid: control._id })">
+                <h3 style="color:black;">{{control.name}}</h3>
+                <ion-option-button class="button-positive">Edit</ion-option-button>
+                <ion-option-button class="button-assertive">Delete</ion-option-button>
+            </ion-item>
+
+            <div class="item item-icon-right item-divider">
+            Alarms and Triggers
+            <i class="icon ion-ios7-plus-empty"></i>
+            </div>
+
+            <ion-item ng-repeat="trigger in device.triggers" ui-sref="app.trigger({ id: installationId, deviceid: device._id, triggerid: trigger._id })">
+                <h3 style="color:black;">{{trigger.stream_id}}</h3>
+                <ion-option-button class="button-positive">Edit</ion-option-button>
+                <ion-option-button class="button-assertive">Delete</ion-option-button>
+
+            </ion-item>
+
+        </ion-list>
+
+    </ion-content>
+</ion-view>

@@ -43,15 +43,54 @@
             };
         })
 
-        .controller('InstallationsCtrl', ['installations', '$scope', function (installations, $scope) {
+        .controller('InstallationsCtrl', ['$scope', 'installations', '$ionicScrollDelegate', '$timeout', function ($scope, installations, $ionicScrollDelegate, $timeout) {
+
+            var adjustScroll = function () {
+                var scrollView = $ionicScrollDelegate.getScrollView();
+
+                if (scrollView.__contentHeight < scrollView.__clientHeight) {
+                    $scope.showSearch = false;
+                } else {
+                    $scope.showSearch = true;
+                    $ionicScrollDelegate.scrollTo(0, 44, false);
+                }
+
+            };
+
+            $timeout(function () {
+                adjustScroll();
+            }, 300);
 
             $scope.installations = installations;
-
+            $scope.showSearch = false;
             $scope.data = {};
-
             $scope.clearSearch = function () {
                 $scope.data.searchQuery = '';
             };
+
+        }])
+        .controller('InstallationCtrl', ['$scope', 'installation', function ($scope, installation) {
+
+            $scope.installation = installation;
+
+        }])
+
+        .controller('DeviceCtrl', ['$stateParams', '$scope', 'device', function ($stateParams, $scope, device) {
+
+            $scope.installationId = $stateParams.id;
+            $scope.device = device;
+
+        }])
+
+        .controller('ControlCtrl', ['$scope', 'control', function ($scope, control) {
+
+            $scope.control = control;
+
+        }])
+
+        .controller('TriggerCtrl', ['$scope', 'trigger', function ($scope, trigger) {
+
+            $scope.trigger = trigger;
 
         }])
 

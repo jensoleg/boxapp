@@ -1,14 +1,14 @@
 <ion-view title="{{installation.name}} {{installation.placement}}">
     <ion-nav-buttons side="right">
-        <a class="button icon-left ion-ios7-plus-empty button-clear button-dark"></a>
+        <button ng-click="newDevice()" class="button icon-left ion-ios7-plus-empty button-clear button-dark"></button>
     </ion-nav-buttons>
     <ion-content class="has-header">
         <ion-list>
             <ion-item ng-repeat="device in installation.devices"
                       ui-sref="app.device({ id: installation._id, deviceid: device._id })">
                 <h3 style="color:black;">{{device.name}}</h3>
-                <ion-option-button class="button-positive">Edit</ion-option-button>
-                <ion-option-button class="button-assertive">Delete</ion-option-button>
+                <ion-option-button class="button-positive" ng-click="edit(device)">Edit</ion-option-button>
+                <ion-option-button class="button-assertive" ng-click="remove(device)">Delete</ion-option-button>
             </ion-item>
         </ion-list>
     </ion-content>

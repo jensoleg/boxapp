@@ -68,10 +68,39 @@
                 $scope.data.searchQuery = '';
             };
 
+
+            $scope.blinkUp = function (installation) {
+                window.alert('Blink Up   ' + installation.name);
+            };
+
+            $scope.edit = function (installation) {
+                window.alert('Edit ' + installation.name);
+            };
+
+            $scope.remove = function (installation) {
+                window.alert('remove ' + installation.name);
+            };
+
+            $scope.newInstallation = function () {
+                window.alert('new installation');
+            };
+
         }])
         .controller('InstallationCtrl', ['$scope', 'installation', function ($scope, installation) {
 
             $scope.installation = installation;
+
+            $scope.edit = function (device) {
+                window.alert('Edit ' + device.name);
+            };
+
+            $scope.remove = function (device) {
+                window.alert('remove ' + device.name);
+            };
+
+            $scope.newDevice = function () {
+                window.alert('new device');
+            };
 
         }])
 
@@ -79,6 +108,31 @@
 
             $scope.installationId = $stateParams.id;
             $scope.device = device;
+
+
+            $scope.editControl = function (control) {
+                window.alert('Edit control' + control.name);
+            };
+
+            $scope.removeControl = function (control) {
+                window.alert('remove control' + control.name);
+            };
+
+            $scope.newControl = function () {
+                window.alert('new control');
+            };
+
+            $scope.editTrigger = function (trigger) {
+                window.alert('Edit trigger' + trigger.stream_id);
+            };
+
+            $scope.removeTrigger = function (trigger) {
+                window.alert('remove trigger' + trigger.stream_id);
+            };
+
+            $scope.newTrigger = function () {
+                window.alert('new trigger');
+            };
 
         }])
 

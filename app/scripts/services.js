@@ -212,25 +212,54 @@
                     });
                     return q.promise;
                 },
+
                 get: function (id) {
                     return _.find(installations, { _id: id });
                 },
+                newInstallation: function (installation) {
+                },
+                removeInstallation: function (installation) {
+                },
+                updateInstallation: function (installation) {
+                },
+
                 getDevice: function (id, deviceid) {
                     var installation = _.find(installations, { _id: id});
                     return _.find(installation.devices, {_id: deviceid});
                 },
+                newDevice: function (installation, device) {
+                },
+                removeDevice: function (installation, device) {
+                },
+                updateDevice: function (installation, device) {
+                },
+
                 getControl: function (id, deviceid, controlid) {
                     var installation = _.find(installations, { _id: id}),
                         device = _.find(installation.devices, {_id: deviceid});
                     return _.find(device.controls, {_id: controlid});
 
                 },
+                newControl: function (installation, device, control) {
+                },
+                removeControl: function (installation, device, control) {
+                },
+                updateControl: function (installation, device, control) {
+                },
+
                 getTrigger: function (id, deviceid, triggerid) {
                     var installation = _.find(installations, { _id: id}),
                         device = _.find(installation.devices, {_id: deviceid});
                     return _.find(device.triggers, {_id: triggerid});
 
+                },
+                newtrigger: function (installation, device, trigger) {
+                },
+                removeTrigger: function (installation, device, trigger) {
+                },
+                updateTrigger: function (installation, device, trigger) {
                 }
+
             };
         }])
 

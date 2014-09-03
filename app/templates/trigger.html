@@ -1,5 +1,40 @@
 <ion-view title="Trigger">
     <ion-content class="has-header">
-        <h3 style="color:black;">{{trigger.stream_id}}</h3>
+        <a class="item">
+            Name
+                <span class="item-note">
+                   {{trigger.name}}
+                </span>
+        </a>
+        <a class="item">
+            Stream
+                <span class="item-note">
+                   {{trigger.stream_id}}
+                </span>
+        </a>
+        <a class="item">
+            Type
+                <span class="item-note">
+                   {{trigger.trigger_type}}
+                </span>
+        </a>
+        <a class="item">
+            Threshold value
+                <span class="item-note">
+                   {{trigger.threshold_value}}
+                </span>
+        </a>
+        <a class="item">
+            Resolution
+                <span class="item-note">
+                   {{trigger.resolution}}
+                </span>
+        </a>
+        <a class="item">
+            Request
+                <span class="item-note">
+                   {{trigger.request}}
+                </span>
+        </a>
     </ion-content>
 </ion-view>

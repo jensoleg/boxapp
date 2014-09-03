@@ -1,5 +1,78 @@
 <ion-view title="{{control.name}}">
     <ion-content class="has-header">
-        <!--h3 style="color:black;">{{control.name}}</h3-->
+        <div class="list">
+            <a class="item">
+                Id
+                <span class="item-note">
+                   {{control.id}}
+                </span>
+            </a>
+            <a class="item">
+                Name
+                <span class="item-note">
+                   {{control.name}}
+                </span>
+            </a>
+            <a class="item">
+                Type
+                <span class="item-note">
+                   {{control.ctrlType}}
+                </span>
+            </a>
+            <a class="item">
+                Min value
+                <span class="item-note">
+                   {{control.minValue}}
+                </span>
+            </a>
+            <a class="item">
+                Max value
+                <span class="item-note">
+                   {{control.maxValue}}
+                </span>
+            </a>
+            <a class="item">
+                Min critical
+                <span class="item-note">
+                   {{control.minCritical}}
+                </span>
+            </a>
+            <a class="item">
+                Max critical
+                <span class="item-note">
+                   {{control.maxCritical}}
+                </span>
+            </a>
+
+            <div class="item item-divider">
+                Unit
+            </div>
+
+            <a class="item">
+                Symbol
+                <span class="item-note">
+                    {{control.unit.symbol}}
+                </span>
+            </a>
+            <a class="item">
+                Units
+                <span class="item-note">
+                    {{control.unit.units}}
+                </span>
+            </a>
+            <a class="item">
+                Precision
+                <span class="item-note">
+                    {{control.unit.precision}}
+                </span>
+            </a>
+            <a class="item">
+                Conversion expression
+                <span class="item-note">
+                    {{control.unit.conversion_exp}}
+                </span>
+            </a>
+
+        </div>
     </ion-content>
 </ion-view>

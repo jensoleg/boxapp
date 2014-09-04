@@ -43,7 +43,7 @@
             };
         })
 
-        .controller('InstallationsCtrl', ['$scope', 'installations', '$ionicScrollDelegate', '$timeout', function ($scope, installations, $ionicScrollDelegate, $timeout) {
+        .controller('InstallationsCtrl', ['$scope', 'installations', '$ionicScrollDelegate', '$ionicListDelegate', '$timeout', '$ionicModal', '$ionicPopup', function ($scope, installations, $ionicScrollDelegate, $ionicListDelegate, $timeout, $ionicModal, $ionicPopup) {
 
             var adjustScroll = function () {
                 var scrollView = $ionicScrollDelegate.getScrollView();
@@ -61,6 +61,7 @@
                 adjustScroll();
             }, 300);
 
+
             $scope.installations = installations;
             $scope.showSearch = false;
             $scope.data = {};
@@ -68,22 +69,98 @@
                 $scope.data.searchQuery = '';
             };
 
+            /* Edit installation */
+            $ionicModal.fromTemplateUrl('/templates/installation.edit.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            }).then(function (modal) {
+                $scope.edit = modal;
+            });
 
-            $scope.blinkUp = function (installation) {
-                window.alert('Blink Up   ' + installation.name);
+            $scope.closeEdit = function () {
+                $scope.edit.hide();
+                $ionicListDelegate.closeOptionButtons();
             };
 
-            $scope.edit = function (installation) {
-                window.alert('Edit ' + installation.name);
+            $scope.doneEdit = function () {
+                $scope.edit.hide();
+                $ionicListDelegate.closeOptionButtons();
+                $scope.update();
             };
 
+            $scope.$on('$destroy', function () {
+                $scope.edit.remove();
+            });
+
+            $scope.editInstallation = function (i) {
+                // update installation database ....
+                $scope.installation = i;
+                $scope.edit.show();
+            };
+
+            $scope.update = function () {
+                console.log($scope.installation);
+            };
+
+            /* Remove installation */
             $scope.remove = function (installation) {
-                window.alert('remove ' + installation.name);
+                var confirmPopup = $ionicPopup.confirm({
+                    title: '',
+                    template: 'Are you sure you want to remove ' + installation.name + ' ' + installation.placement + '?',
+                    cancelType: 'button-clear button-dark',
+                    okType: 'button-clear button-positive'
+                });
+                confirmPopup.then(function (res) {
+                    if (res) {
+// delete installation - remove from array and update database ....
+                        console.log('You are sure');
+                    }
+                    $ionicListDelegate.closeOptionButtons();
+                });
+
+                $scope.installation = null;
+
             };
+
+            /* Add new installation */
+
+            $ionicModal.fromTemplateUrl('/templates/installation.new.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            }).then(function (modal) {
+                $scope.new = modal;
+            });
+
+            $scope.closeNew = function () {
+                $scope.new.hide();
+                $ionicListDelegate.closeOptionButtons();
+            };
+
+            $scope.doneNew = function () {
+                $scope.new.hide();
+                $ionicListDelegate.closeOptionButtons();
+                $scope.saveNew();
+            };
+
+            $scope.$on('$destroy', function () {
+                $scope.new.remove();
+            });
 
             $scope.newInstallation = function () {
-                window.alert('new installation');
+                $scope.newInstallation = {"name": "", "placement": ""};
+                $scope.new.show();
             };
+
+            $scope.saveNew = function () {
+                console.log($scope.newInstallation);
+            };
+
+            /* Copy an installation */
+            $scope.copyInstallation = function (i) {
+                console.log(i);
+                $ionicListDelegate.closeOptionButtons();
+            };
+
 
         }])
         .controller('InstallationCtrl', ['$scope', 'installation', function ($scope, installation) {
@@ -102,6 +179,9 @@
                 window.alert('new device');
             };
 
+            $scope.update = function (device) {
+                window.alert('update ' + device);
+            };
         }])
 
         .controller('DeviceCtrl', ['$stateParams', '$scope', 'device', function ($stateParams, $scope, device) {

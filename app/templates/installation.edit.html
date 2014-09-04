@@ -1,0 +1,19 @@
+<div class="modal">
+    <ion-header-bar class="bar bar-header bar-positive">
+        <button class="button button-clear button-clear" ng-click="closeEdit()">Cancel</button>
+        <h1 class="title">Edit installation</h1>
+        <button class="button button-clear button-clear" ng-click="doneEdit(installation)">Save</button>
+    </ion-header-bar>
+    <ion-content>
+        <div class="list">
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Name</span>
+                <input type="text" placeholder="Name" ng-model="installation.name">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Placement</span>
+                <input type="text" placeholder="Placement" ng-model="installation.placement">
+            </label>
+        </div>
+    </ion-content>
+</div>

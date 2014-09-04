@@ -30,10 +30,15 @@
                    {{trigger.resolution}}
                 </span>
         </a>
-        <a class="item">
+        <div class="item item-icon-right item-divider">
+            Requests
+            <i class="icon ion-ios7-plus-empty" ng-click="newRequest()"></i>
+        </div>
+
+        <a class="item" ng-repeat="request in trigger.request">
             Request
-                <span class="item-note">
-                   {{trigger.request}}
+                <span class="item-note" >
+                   {{request.request_options | json }}
                 </span>
         </a>
     </ion-content>

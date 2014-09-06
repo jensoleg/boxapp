@@ -392,7 +392,7 @@
                 });
             };
 
-            /* new device */
+            /* new control */
             $ionicModal.fromTemplateUrl('/templates/installation.control.new.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
@@ -450,7 +450,7 @@
                 }
             };
 
-            /* Copy a device */
+            /* Copy a control */
             $scope.copy = function (i) {
                 var copy = _.cloneDeep(i);
                 objectIdDel(copy);
@@ -466,47 +466,144 @@
 
         }])
 
-        .controller('TriggerCtrl', ['$stateParams', '$scope', 'device', function ($stateParams, $scope, device) {
+        .controller('TriggerCtrl', ['$scope', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function ($scope, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
 
-            $scope.installationId = $stateParams.id;
-            $scope.device = device;
+            /* Edit Trigger */
 
+            $ionicModal.fromTemplateUrl('/templates/installation.trigger.edit.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            }).then(function (modal) {
+                $scope.editTriggerModal = modal;
+            });
 
-            $scope.editControl = function (control) {
-                window.alert('Edit control' + control.name);
+            $scope.closeEdit = function () {
+                $scope.editTriggerModal.hide();
+                $ionicListDelegate.closeOptionButtons();
             };
 
-            $scope.removeControl = function (control) {
-                window.alert('remove control' + control.name);
+            $scope.doneEdit = function () {
+                $scope.editTriggerModal.hide();
+                $ionicListDelegate.closeOptionButtons();
+                $scope.update();
             };
 
-            $scope.newControl = function () {
-                window.alert('new control');
+            $scope.$on('$destroy', function () {
+                $scope.editTriggerModal.remove();
+            });
+
+            $scope.edit = function (t) {
+                $scope.trigger = t;
+                $scope.editTriggerModal.show();
             };
 
-            $scope.editTrigger = function (trigger) {
-                window.alert('Edit trigger' + trigger.stream_id);
+            $scope.update = function () {
+                installationService.updateTrigger($scope.trigger);
             };
 
-            $scope.removeTrigger = function (trigger) {
-                window.alert('remove trigger' + trigger.stream_id);
+            /* Remove Trigger */
+
+            $scope.remove = function (trigger) {
+                var confirmPopup = $ionicPopup.confirm({
+                    title: '',
+                    template: 'Are you sure you want to remove ' + trigger.name + '?',
+                    cancelType: 'button-clear button-dark',
+                    okType: 'button-clear button-positive'
+                });
+                confirmPopup.then(function (res) {
+                    if (res) {
+                        installationService.removeTrigger(trigger._id).then(function (response) {
+                            _.pull($scope.$parent.device.triggers, trigger);
+                        }, function (response) {
+                            console.log('error', response);
+                        });
+                    }
+                    $ionicListDelegate.closeOptionButtons();
+                });
             };
 
-            $scope.newTrigger = function () {
-                window.alert('new trigger');
+            /* new trigger */
+            $ionicModal.fromTemplateUrl('/templates/installation.trigger.new.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            }).then(function (modal) {
+                $scope.newTriggerModal = modal;
+            });
+
+            $scope.closeNew = function () {
+                $scope.newTriggerModal.hide();
+            };
+
+            $scope.doneNew = function () {
+                $scope.newTriggerModal.hide();
+                $scope.saveNew();
+            };
+
+            $scope.$on('$destroy', function () {
+                $scope.newTriggerModal.remove();
+            });
+
+            $scope.addTrigger = function () {
+                $scope.newTrigger = {"name": '', "stream_id": ''};
+                $scope.newTriggerModal.show();
+            };
+
+            $scope.saveNew = function () {
+                installationService.newTrigger($scope.device._id, $scope.newTrigger).then(function (response) {
+                    $scope.$parent.installation = response;
+
+                    $scope.$parent.device = _.find(response.devices, function (d) {
+                        return d._id == $scope.$parent.device._id;
+                    });
+
+                }, function (response) {
+                    console.log('error', response);
+                });
+            };
+
+
+            var objectIdDel = function (copiedObjectWithId) {
+                if (copiedObjectWithId !== null && typeof copiedObjectWithId !== 'string' &&
+                    typeof copiedObjectWithId !== 'number' && typeof copiedObjectWithId !== 'boolean') {
+                    //for array length is defined however for objects length is undefined
+                    if (typeof copiedObjectWithId.length === 'undefined') {
+                        delete copiedObjectWithId._id;
+                        for (var key in copiedObjectWithId) {
+                            objectIdDel(copiedObjectWithId[key]); //recursive del calls on object elements
+                        }
+                    }
+                    else {
+                        for (var i = 0; i < copiedObjectWithId.length; i++) {
+                            objectIdDel(copiedObjectWithId[i]);  //recursive del calls on array elements
+                        }
+                    }
+                }
+            };
+
+            /* Copy a trigger */
+            $scope.copy = function (i) {
+                var copy = _.cloneDeep(i);
+                objectIdDel(copy);
+                delete copy.$$hashKey;
+                copy.name = 'Copy of ' + i.name;
+
+                $scope.newTrigger = copy;
+                $scope.saveNew();
+
+                $ionicListDelegate.closeOptionButtons();
             };
 
         }])
 
-        .controller('ControlCtrl', ['$scope', 'control', function ($scope, control) {
+        .controller('ControlDetailCtrl', ['$scope', 'control', function ($scope, control) {
 
             $scope.control = control;
 
         }])
 
-        .controller('TriggerCtrl', ['$scope', function ($scope) {
+        .controller('TriggerDetailCtrl', ['$scope', 'trigger', function ($scope, trigger) {
 
-           // $scope.trigger = trigger;
+            $scope.trigger = trigger;
 
         }])
 

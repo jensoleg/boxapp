@@ -90,7 +90,7 @@
                     views: {
                         'menuContent': {
                             templateUrl: 'templates/control.html',
-                            controller: 'ControlCtrl',
+                            controller: 'ControlDetailCtrl',
                             resolve: {
                                 control: function ($stateParams, installationService) {
                                     return installationService.getControl($stateParams.controlid);
@@ -105,13 +105,11 @@
                         'menuContent': {
                             templateUrl: 'templates/trigger.html',
                             controller: 'TriggerCtrl',
-                            /*
                             resolve: {
                                 trigger: function ($stateParams, installationService) {
                                     return installationService.getTrigger($stateParams.triggerid);
                                 }
                             }
-                            */
                         }
                     }
                 });

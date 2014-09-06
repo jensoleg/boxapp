@@ -7,6 +7,7 @@
             <ion-item ng-repeat="device in installation.devices"
                       ui-sref="app.device({ id: installation._id, deviceid: device._id })">
                 <h3 style="color:black;">{{device.name}}</h3>
+                <p>{{device.id}}</p>
                 <ion-option-button class="button-calm" ng-click="update(device)">Update</ion-option-button>
                 <ion-option-button class="button-balanced" ng-click="copy(device)">Copy</ion-option-button>
                 <ion-option-button class="button-positive" ng-click="edit(device)">Edit</ion-option-button>

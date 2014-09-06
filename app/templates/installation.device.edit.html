@@ -5,11 +5,7 @@
         <button class="button button-clear button-clear" ng-click="doneEdit(device)">Save</button>
     </ion-header-bar>
     <ion-content>
-        <label class="item item-input item-floating-label">
-            <span class="input-label">Id</span>
-            <input type="text" placeholder="Id" ng-model="device.id">
-        </label>
-        <div class="list">
+         <div class="list">
             <label class="item item-input item-floating-label">
                 <span class="input-label">Name</span>
                 <input type="text" placeholder="Name" ng-model="device.name">
@@ -18,6 +14,10 @@
                 <span class="input-label">Placement</span>
                 <input type="text" placeholder="Placement" ng-model="device.placement">
             </label>
+             <label class="item item-input item-floating-label">
+                 <span class="input-label">Id</span>
+                 <input type="text" placeholder="Id" ng-model="device.id">
+             </label>
         </div>
     </ion-content>
 </div>

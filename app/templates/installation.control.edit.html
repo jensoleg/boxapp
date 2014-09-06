@@ -10,6 +10,47 @@
                 <span class="input-label">Name</span>
                 <input type="text" placeholder="Name" ng-model="control.name">
             </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Name</span>
+                <input type="text" placeholder="Name" ng-model="control.name">
+            </label>
+            <label class="item item-input item-select">
+                <div class="input-label">
+                  Type
+                </div>
+                <select ng-model="Newcontrol.ctrlType">
+                  <option selected>data</option>
+                  <option selected>internal</option>
+                </select>
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Min Value</span>
+                <input type="number" placeholder="Min Value" ng-model="control.minValue">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Max Value</span>
+                <input type="number" placeholder="Max value" ng-model="control.maxValue">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Min critical</span>
+                <input type="number" placeholder="Min critical" ng-model="control.minCritical">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Max Critical</span>
+                <input type="number" placeholder="Max critical" ng-model="control.maxCrtical">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Unit symbol</span>
+                <input type="text" placeholder="Unit symbol" ng-model="control.unit.symbol">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Units</span>
+                <input type="text" placeholder="Units" ng-model="control.unit.units">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Precision</span>
+                <input type="number" placeholder="Precision" ng-model="control.precision">
+            </label>
         </div>
     </ion-content>
 </div>

@@ -27,9 +27,9 @@
                             templateUrl: 'templates/main.html',
                             controller: 'BoxCtrl',
                             resolve: {
-                                installations: function (installationService) {
+                                installations: ['installationService', function (installationService) {
                                     return installationService.all();
-                                }
+                                }]
                             }
                         }
                     }
@@ -50,9 +50,9 @@
                             templateUrl: "templates/installations.list.html",
                             controller: 'InstallationsCtrl',
                             resolve: {
-                                installations: function (installationService) {
+                                installations: ['installationService', function (installationService) {
                                     return installationService.all();
-                                }
+                                }]
                             }
                         }
                     }
@@ -64,9 +64,9 @@
                             templateUrl: 'templates/installations.devices.html',
                             controller: 'InstallationCtrl',
                             resolve: {
-                                installation: function ($stateParams, installationService) {
+                                installation: ['$stateParams', 'installationService', function ($stateParams, installationService) {
                                     return installationService.get($stateParams.id);
-                                }
+                                }]
                             }
                         }
                     }
@@ -78,9 +78,9 @@
                             templateUrl: 'templates/device.html',
                             controller: 'DeviceCtrl',
                             resolve: {
-                                device: function ($stateParams, installationService) {
+                                device: ['$stateParams', 'installationService',  function ($stateParams, installationService) {
                                     return installationService.getDevice($stateParams.deviceid);
-                                }
+                                }]
                             }
                         }
                     }
@@ -92,9 +92,9 @@
                             templateUrl: 'templates/control.html',
                             controller: 'ControlDetailCtrl',
                             resolve: {
-                                control: function ($stateParams, installationService) {
+                                control: ['$stateParams', 'installationService', function ($stateParams, installationService) {
                                     return installationService.getControl($stateParams.controlid);
-                                }
+                                }]
                             }
                         }
                     }
@@ -106,9 +106,9 @@
                             templateUrl: 'templates/trigger.html',
                             controller: 'TriggerCtrl',
                             resolve: {
-                                trigger: function ($stateParams, installationService) {
+                                trigger:['$stateParams', 'installationService',  function ($stateParams, installationService) {
                                     return installationService.getTrigger($stateParams.triggerid);
-                                }
+                                }]
                             }
                         }
                     }

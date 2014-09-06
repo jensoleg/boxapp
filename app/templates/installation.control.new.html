@@ -8,7 +8,48 @@
         <div class="list">
             <label class="item item-input item-floating-label">
                 <span class="input-label">Name</span>
-                <input type="text" placeholder="Name" ng-model="newControl.name">
+                <input type="text" placeholder="Name" ng-model="Newcontrol.name">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Id</span>
+                <input type="text" placeholder="Name" ng-model="Newcontrol.id">
+            </label>
+            <label class="item item-input item-select">
+                <div class="input-label">
+                  Type
+                </div>
+                <select ng-model="Newcontrol.ctrlType">
+                  <option selected>data</option>
+                  <option selected>internal</option>
+                </select>
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Min Value</span>
+                <input type="number" placeholder="Min Value" ng-model="Newcontrol.minValue">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Max Value</span>
+                <input type="number" placeholder="Max value" ng-model="Newcontrol.maxValue">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Min critical</span>
+                <input type="number" placeholder="Min critical" ng-model="Newcontrol.minCritical">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Max Critical</span>
+                <input type="number" placeholder="Max critical" ng-model="Newcontrol.maxCrtical">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Unit symbol</span>
+                <input type="text" placeholder="Unit symbol" ng-model="Newcontrol.unit.symbol">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Units</span>
+                <input type="text" placeholder="Units" ng-model="Newcontrol.unit.units">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Precision</span>
+                <input type="number" placeholder="Precision" ng-model="Newcontrol.precision">
             </label>
         </div>
     </ion-content>

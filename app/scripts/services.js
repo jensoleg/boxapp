@@ -198,15 +198,13 @@
         .factory('installationService', ['$http', '$q', '$rootScope', 'ENV', function ($http, $q, $rootScope, ENV) {
 
 //            var apiEndpoint = 'http://localhost:8081' + $rootScope.domain + ENV.apiEndpoint,
-            var apiEndpoint = 'http://localhost:8081' + ENV.apiEndpoint,
-                installations;
+            var apiEndpoint = 'http://localhost:8081' + ENV.apiEndpoint;
 
             return {
                 all: function () {
                     var q = $q.defer();
 
                     $http.get(apiEndpoint + 'installations', { headers: {'realm': 'decoplant'}}).success(function (data) {
-                        installations = data;
                         q.resolve(data);
                     }, function () {
                         q.resolve(null);
@@ -215,24 +213,32 @@
                 },
 
                 get: function (id) {
-                    return _.find(installations, { _id: id });
+
+                    var q = $q.defer();
+
+                    $http.get(apiEndpoint + 'installations/'  + id,  { headers: {'realm': 'decoplant'}}).success(function (response) {
+                        q.resolve(response);
+                    }, function () {
+                        q.resolve(null);
+                    });
+                    return q.promise;
                 },
+
                 newInstallation: function (installation) {
                     var q = $q.defer();
 
                     $http.post(apiEndpoint + 'installations', installation,  { headers: {'realm': 'decoplant'}}).success(function (response) {
-                        //installations = data;
                         q.resolve(response);
                     }, function () {
                         q.resolve(null);
                     });
                     return q.promise;
                 },
+
                 removeInstallation: function (installation) {
                     var q = $q.defer();
 
                     $http.delete(apiEndpoint + 'installations/' + installation._id,  { headers: {'realm': 'decoplant'}}).success(function (response) {
-                        //installations = data;
                         q.resolve(response);
                     }, function () {
                         q.resolve(null);
@@ -240,11 +246,11 @@
                     return q.promise;
 
                 },
+
                 updateInstallation: function (installation) {
                     var q = $q.defer();
 
                     $http.put(apiEndpoint + 'installations/'  + installation._id, installation,  { headers: {'realm': 'decoplant'}}).success(function (response) {
-                        //installations = data;
                         q.resolve(response);
                     }, function () {
                         q.resolve(null);
@@ -252,33 +258,41 @@
                     return q.promise;
                 },
 
-                getDevice: function (id, deviceid) {
-                    var installation = _.find(installations, { _id: id});
-                    return _.find(installation.devices, {_id: deviceid});
+                getDevice: function (deviceid) {
+
+                    var q = $q.defer();
+
+                    $http.get(apiEndpoint + 'installations/device/'  + deviceid,  { headers: {'realm': 'decoplant'}}).success(function (response) {
+                        q.resolve(response);
+                    }, function () {
+                        q.resolve(null);
+                    });
+                    return q.promise;
                 },
+
                 newDevice: function (installationId, device) {
 
                     var q = $q.defer();
 
                     $http.post(apiEndpoint + 'installations/' + installationId + '/device/', device,  { headers: {'realm': 'decoplant'}}).success(function (response) {
-                        //installations = data;
                         q.resolve(response);
                     }, function () {
                         q.resolve(null);
                     });
                     return q.promise;
                 },
+
                 removeDevice: function (id) {
                     var q = $q.defer();
 
                     $http.delete(apiEndpoint + 'installations/device/' + id,  { headers: {'realm': 'decoplant'}}).success(function (response) {
-                        //installations = data;
                         q.resolve(response);
                     }, function () {
                         q.resolve(null);
                     });
                     return q.promise;
                 },
+
                 updateDevice: function (device) {
                     var q = $q.defer();
 
@@ -291,24 +305,52 @@
                     return q.promise;
                 },
 
-                getControl: function (id, deviceid, controlid) {
-                    var installation = _.find(installations, { _id: id}),
-                        device = _.find(installation.devices, {_id: deviceid});
-                    return _.find(device.controls, {_id: controlid});
+                getControl: function (controlid) {
+                    var q = $q.defer();
 
+                    $http.get(apiEndpoint + 'installations/control/'  + controlid,  { headers: {'realm': 'decoplant'}}).success(function (response) {
+                        q.resolve(response);
+                    }, function () {
+                        q.resolve(null);
+                    });
+                    return q.promise;
                 },
-                newControl: function (installation, device, control) {
+
+                newControl: function (deviceid, control) {
+                    var q = $q.defer();
+
+                    $http.post(apiEndpoint + 'installations/device/' + deviceid + '/control', control,  { headers: {'realm': 'decoplant'}}).success(function (response) {
+                        q.resolve(response);
+                    }, function () {
+                        q.resolve(null);
+                    });
+                    return q.promise;
                 },
-                removeControl: function (installation, device, control) {
+
+                removeControl: function (id) {
+                    var q = $q.defer();
+
+                    $http.delete(apiEndpoint + 'installations/control/' + id,  { headers: {'realm': 'decoplant'}}).success(function (response) {
+                        //installations = data;
+                        q.resolve(response);
+                    }, function () {
+                        q.resolve(null);
+                    });
+                    return q.promise;
                 },
-                updateControl: function (installation, device, control) {
+
+                updateControl: function (control) {
+                    var q = $q.defer();
+
+                    $http.put(apiEndpoint + 'installations/control/' + control._id, control,  { headers: {'realm': 'decoplant'}}).success(function (response) {
+                        q.resolve(response);
+                    }, function () {
+                        q.resolve(null);
+                    });
+                    return q.promise;
                 },
 
                 getTrigger: function (id, deviceid, triggerid) {
-                    var installation = _.find(installations, { _id: id}),
-                        device = _.find(installation.devices, {_id: deviceid});
-                    return _.find(device.triggers, {_id: triggerid});
-
                 },
                 newtrigger: function (installation, device, trigger) {
                 },

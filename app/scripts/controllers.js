@@ -295,9 +295,178 @@
                 });
             };
 
+            var objectIdDel = function (copiedObjectWithId) {
+                if (copiedObjectWithId !== null && typeof copiedObjectWithId !== 'string' &&
+                    typeof copiedObjectWithId !== 'number' && typeof copiedObjectWithId !== 'boolean') {
+                    //for array length is defined however for objects length is undefined
+                    if (typeof copiedObjectWithId.length === 'undefined') {
+                        delete copiedObjectWithId._id;
+                        for (var key in copiedObjectWithId) {
+                            objectIdDel(copiedObjectWithId[key]); //recursive del calls on object elements
+                        }
+                    }
+                    else {
+                        for (var i = 0; i < copiedObjectWithId.length; i++) {
+                            objectIdDel(copiedObjectWithId[i]);  //recursive del calls on array elements
+                        }
+                    }
+                }
+            };
+
+            /* Copy a device */
+            $scope.copy = function (i) {
+                var copy = _.cloneDeep(i);
+                objectIdDel(copy);
+                delete copy.__v;
+                delete copy.$$hashKey;
+                copy.name = 'Copy of ' + i.name;
+
+                $scope.newDevice = copy;
+                $scope.saveNew();
+
+                $ionicListDelegate.closeOptionButtons();
+            };
+
         }])
 
         .controller('DeviceCtrl', ['$stateParams', '$scope', 'device', function ($stateParams, $scope, device) {
+
+            $scope.installationId = $stateParams.id;
+            $scope.device = device;
+
+        }])
+
+        .controller('SensorCtrl', ['$scope', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function ($scope, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
+
+            /* Edit Control */
+
+            $ionicModal.fromTemplateUrl('/templates/installation.control.edit.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            }).then(function (modal) {
+                $scope.editSensorModal = modal;
+            });
+
+            $scope.closeEdit = function () {
+                $scope.editSensorModal.hide();
+                $ionicListDelegate.closeOptionButtons();
+            };
+
+            $scope.doneEdit = function () {
+                $scope.editSensorModal.hide();
+                $ionicListDelegate.closeOptionButtons();
+                $scope.update();
+            };
+
+            $scope.$on('$destroy', function () {
+                $scope.editSensorModal.remove();
+            });
+
+            $scope.edit = function (c) {
+                $scope.control = c;
+                $scope.editSensorModal.show();
+            };
+
+            $scope.update = function () {
+                installationService.updateControl($scope.control);
+            };
+
+            /* Remove control */
+
+            $scope.remove = function (control) {
+                var confirmPopup = $ionicPopup.confirm({
+                    title: '',
+                    template: 'Are you sure you want to remove ' + control.name + '?',
+                    cancelType: 'button-clear button-dark',
+                    okType: 'button-clear button-positive'
+                });
+                confirmPopup.then(function (res) {
+                    if (res) {
+                        installationService.removeControl(control._id).then(function (response) {
+                            _.pull($scope.$parent.device.controls, control);
+                        }, function (response) {
+                            console.log('error', response);
+                        });
+                    }
+                    $ionicListDelegate.closeOptionButtons();
+                });
+            };
+
+            /* new device */
+            $ionicModal.fromTemplateUrl('/templates/installation.control.new.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            }).then(function (modal) {
+                $scope.newSensorModal = modal;
+            });
+
+            $scope.closeNew = function () {
+                $scope.newSensorModal.hide();
+            };
+
+            $scope.doneNew = function () {
+                $scope.newSensorModal.hide();
+                $scope.saveNew();
+            };
+
+            $scope.$on('$destroy', function () {
+                $scope.newSensorModal.remove();
+            });
+
+            $scope.addControl = function () {
+                $scope.newControl = {"name": ""};
+                $scope.newSensorModal.show();
+            };
+
+            $scope.saveNew = function () {
+                installationService.newControl($scope.device._id, $scope.newControl).then(function (response) {
+                    $scope.$parent.installation = response;
+
+                    $scope.$parent.device = _.find(response.devices, function (d) {
+                        return d._id == $scope.$parent.device._id;
+                    });
+
+                }, function (response) {
+                    console.log('error', response);
+                });
+            };
+
+
+            var objectIdDel = function (copiedObjectWithId) {
+                if (copiedObjectWithId !== null && typeof copiedObjectWithId !== 'string' &&
+                    typeof copiedObjectWithId !== 'number' && typeof copiedObjectWithId !== 'boolean') {
+                    //for array length is defined however for objects length is undefined
+                    if (typeof copiedObjectWithId.length === 'undefined') {
+                        delete copiedObjectWithId._id;
+                        for (var key in copiedObjectWithId) {
+                            objectIdDel(copiedObjectWithId[key]); //recursive del calls on object elements
+                        }
+                    }
+                    else {
+                        for (var i = 0; i < copiedObjectWithId.length; i++) {
+                            objectIdDel(copiedObjectWithId[i]);  //recursive del calls on array elements
+                        }
+                    }
+                }
+            };
+
+            /* Copy a device */
+            $scope.copy = function (i) {
+                var copy = _.cloneDeep(i);
+                objectIdDel(copy);
+                delete copy.__v;
+                delete copy.$$hashKey;
+                copy.name = 'Copy of ' + i.name;
+
+                $scope.newControl = copy;
+                $scope.saveNew();
+
+                $ionicListDelegate.closeOptionButtons();
+            };
+
+        }])
+
+        .controller('TriggerCtrl', ['$stateParams', '$scope', 'device', function ($stateParams, $scope, device) {
 
             $scope.installationId = $stateParams.id;
             $scope.device = device;
@@ -335,9 +504,9 @@
 
         }])
 
-        .controller('TriggerCtrl', ['$scope', 'trigger', function ($scope, trigger) {
+        .controller('TriggerCtrl', ['$scope', function ($scope) {
 
-            $scope.trigger = trigger;
+           // $scope.trigger = trigger;
 
         }])
 

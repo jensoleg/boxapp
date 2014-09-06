@@ -1,0 +1,15 @@
+<div class="modal">
+    <ion-header-bar class="bar bar-header bar-positive">
+        <button class="button button-clear button-clear" ng-click="closeNew()">Cancel</button>
+        <h1 class="title">New control</h1>
+        <button class="button button-clear button-clear" ng-click="doneNew(newControl)">Save</button>
+    </ion-header-bar>
+    <ion-content>
+        <div class="list">
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Name</span>
+                <input type="text" placeholder="Name" ng-model="newControl.name">
+            </label>
+        </div>
+    </ion-content>
+</div>

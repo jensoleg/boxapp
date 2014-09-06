@@ -61,7 +61,7 @@
                     url: '/installations/:id',
                     views: {
                         'menuContent': {
-                            templateUrl: 'templates/installations.detail.html',
+                            templateUrl: 'templates/installations.devices.html',
                             controller: 'InstallationCtrl',
                             resolve: {
                                 installation: function ($stateParams, installationService) {
@@ -79,7 +79,7 @@
                             controller: 'DeviceCtrl',
                             resolve: {
                                 device: function ($stateParams, installationService) {
-                                    return installationService.getDevice($stateParams.id, $stateParams.deviceid);
+                                    return installationService.getDevice($stateParams.deviceid);
                                 }
                             }
                         }
@@ -93,7 +93,7 @@
                             controller: 'ControlCtrl',
                             resolve: {
                                 control: function ($stateParams, installationService) {
-                                    return installationService.getControl($stateParams.id, $stateParams.deviceid, $stateParams.controlid);
+                                    return installationService.getControl($stateParams.controlid);
                                 }
                             }
                         }
@@ -105,11 +105,13 @@
                         'menuContent': {
                             templateUrl: 'templates/trigger.html',
                             controller: 'TriggerCtrl',
+                            /*
                             resolve: {
                                 trigger: function ($stateParams, installationService) {
-                                    return installationService.getTrigger($stateParams.id, $stateParams.deviceid, $stateParams.triggerid);
+                                    return installationService.getTrigger($stateParams.triggerid);
                                 }
                             }
+                            */
                         }
                     }
                 });

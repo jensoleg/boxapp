@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('BobbyApp.controllers', ['dx', 'ionic', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives', 'chart', 'box'])
+    angular.module('BobbyApp.controllers', ['dx', 'ionic', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives', 'chart', 'box', 'wu.staticGmap'])
 
         .filter('int', function () {
             return function (v) {
@@ -43,35 +43,15 @@
             };
         })
 
-        .controller('InstallationsCtrl', ['$scope', 'installations', 'installationService', '$ionicScrollDelegate', '$ionicListDelegate', '$timeout', '$ionicModal', '$ionicPopup', function ($scope, installations, installationService, $ionicScrollDelegate, $ionicListDelegate, $timeout, $ionicModal, $ionicPopup) {
-
-            var adjustScroll = function () {
-                var scrollView = $ionicScrollDelegate.getScrollView();
-
-                if (scrollView.__contentHeight < scrollView.__clientHeight) {
-                    $scope.showSearch = false;
-                } else {
-                    $scope.showSearch = true;
-                    $ionicScrollDelegate.scrollTo(0, 44, false);
-                }
-
-            };
-
-            $timeout(function () {
-                adjustScroll();
-            }, 300);
-
+        .controller('InstallationsCtrl', ['$scope', 'installations', 'installationService', '$ionicListDelegate', '$timeout', '$ionicModal', '$ionicPopup', function ($scope, installations, installationService, $ionicListDelegate, $timeout, $ionicModal, $ionicPopup) {
 
             $scope.installations = installations;
-            $scope.showSearch = false;
-            $scope.data = {};
-            $scope.clearSearch = function () {
-                $scope.data.searchQuery = '';
-            };
+            var defaultInstallation = {"name": "a", "placement": "b"};
+            $scope.location = {'lat': null, 'lng': null};
 
             /* Edit installation */
 
-            $ionicModal.fromTemplateUrl('/templates/installation.edit.html', {
+            $ionicModal.fromTemplateUrl('templates/installation.edit.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
             }).then(function (modal) {
@@ -91,6 +71,7 @@
 
             $scope.$on('$destroy', function () {
                 $scope.editModal.remove();
+                $scope.newModal.remove();
             });
 
             $scope.editInstallation = function (i) {
@@ -99,6 +80,7 @@
             };
 
             $scope.update = function () {
+                $scope.installation.location = $scope.location;
                 installationService.updateInstallation($scope.installation);
             };
 
@@ -113,11 +95,8 @@
                 });
                 confirmPopup.then(function (res) {
                     if (res) {
-
                         installationService.removeInstallation(installation);
                         _.pull(installations, installation);
-
-                        console.log('You are sure');
                     }
                     $ionicListDelegate.closeOptionButtons();
                 });
@@ -128,7 +107,7 @@
 
             /* Add new installation */
 
-            $ionicModal.fromTemplateUrl('/templates/installation.new.html', {
+            $ionicModal.fromTemplateUrl('templates/installation.new.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
             }).then(function (modal) {
@@ -144,17 +123,13 @@
                 $scope.saveNew();
             };
 
-            $scope.$on('$destroy', function () {
-                $scope.newModal.remove();
-            });
-
             $scope.newInstallation = function () {
-                $scope.newInstallation = {"name": "", "placement": ""};
+                $scope.newInstallation = defaultInstallation;
                 $scope.newModal.show();
             };
 
             $scope.saveNew = function () {
-
+                $scope.newInstallation.location = $scope.location;
                 /* save in database */
                 installationService.newInstallation($scope.newInstallation).then(function (response) {
                     $scope.installations.push(response);
@@ -202,13 +177,13 @@
         ])
 
         .
-        controller('InstallationCtrl', ['$scope', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', function ($scope, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
+        controller('InstallationCtrl', ['$scope', '$window', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', function ($scope, $window, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
 
             $scope.installation = installation;
 
             /* Edit device */
 
-            $ionicModal.fromTemplateUrl('/templates/installation.device.edit.html', {
+            $ionicModal.fromTemplateUrl('templates/installation.device.edit.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
             }).then(function (modal) {
@@ -225,10 +200,6 @@
                 $ionicListDelegate.closeOptionButtons();
                 $scope.update();
             };
-
-            $scope.$on('$destroy', function () {
-                $scope.editModal.remove();
-            });
 
             $scope.edit = function (d) {
                 $scope.device = d;
@@ -262,7 +233,7 @@
             };
 
             /* new device */
-            $ionicModal.fromTemplateUrl('/templates/installation.device.new.html', {
+            $ionicModal.fromTemplateUrl('templates/installation.device.new.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
             }).then(function (modal) {
@@ -277,10 +248,6 @@
                 $scope.newModal.hide();
                 $scope.saveNew();
             };
-
-            $scope.$on('$destroy', function () {
-                $scope.newModal.remove();
-            });
 
             $scope.addDevice = function () {
                 $scope.newDevice = {"id": "", "name": "", "placement": ""};
@@ -327,6 +294,26 @@
                 $ionicListDelegate.closeOptionButtons();
             };
 
+            $scope.$on('$destroy', function () {
+                $scope.editModal.remove();
+                $scope.newModal.remove();
+
+            });
+
+
+            $scope.phoneTo = function(tel) {
+                $window.location.href = 'tel:'+ tel;
+            };
+
+            $scope.emailTo = function(email) {
+                $window.location.href = 'mailto:'+ email;
+            };
+
+            $scope.navigateTo = function(lat,lng) {
+                $window.location.href = 'maps://maps.apple.com/?q=' + lat + ',' + lng;
+            };
+
+
         }])
 
         .controller('DeviceCtrl', ['$stateParams', '$scope', 'device', function ($stateParams, $scope, device) {
@@ -340,7 +327,7 @@
 
             /* Edit Control */
 
-            $ionicModal.fromTemplateUrl('/templates/installation.control.edit.html', {
+            $ionicModal.fromTemplateUrl('templates/installation.control.edit.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
             }).then(function (modal) {
@@ -357,10 +344,6 @@
                 $ionicListDelegate.closeOptionButtons();
                 $scope.update();
             };
-
-            $scope.$on('$destroy', function () {
-                $scope.editSensorModal.remove();
-            });
 
             $scope.edit = function (c) {
                 $scope.control = c;
@@ -393,7 +376,7 @@
             };
 
             /* new control */
-            $ionicModal.fromTemplateUrl('/templates/installation.control.new.html', {
+            $ionicModal.fromTemplateUrl('templates/installation.control.new.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
             }).then(function (modal) {
@@ -408,10 +391,6 @@
                 $scope.newSensorModal.hide();
                 $scope.saveNew();
             };
-
-            $scope.$on('$destroy', function () {
-                $scope.newSensorModal.remove();
-            });
 
             $scope.addControl = function () {
                 $scope.newControl = {"name": ""};
@@ -464,13 +443,19 @@
                 $ionicListDelegate.closeOptionButtons();
             };
 
+            $scope.$on('$destroy', function () {
+                $scope.editSensorModal.remove();
+                $scope.newSensorModal.remove();
+            });
+
+
         }])
 
         .controller('TriggerCtrl', ['$scope', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function ($scope, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
 
             /* Edit Trigger */
 
-            $ionicModal.fromTemplateUrl('/templates/installation.trigger.edit.html', {
+            $ionicModal.fromTemplateUrl('templates/installation.trigger.edit.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
             }).then(function (modal) {
@@ -487,10 +472,6 @@
                 $ionicListDelegate.closeOptionButtons();
                 $scope.update();
             };
-
-            $scope.$on('$destroy', function () {
-                $scope.editTriggerModal.remove();
-            });
 
             $scope.edit = function (t) {
                 $scope.trigger = t;
@@ -523,7 +504,7 @@
             };
 
             /* new trigger */
-            $ionicModal.fromTemplateUrl('/templates/installation.trigger.new.html', {
+            $ionicModal.fromTemplateUrl('templates/installation.trigger.new.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
             }).then(function (modal) {
@@ -538,10 +519,6 @@
                 $scope.newTriggerModal.hide();
                 $scope.saveNew();
             };
-
-            $scope.$on('$destroy', function () {
-                $scope.newTriggerModal.remove();
-            });
 
             $scope.addTrigger = function () {
                 $scope.newTrigger = {"name": '', "stream_id": ''};
@@ -592,6 +569,11 @@
 
                 $ionicListDelegate.closeOptionButtons();
             };
+
+            $scope.$on('$destroy', function () {
+                $scope.newTriggerModal.remove();
+                $scope.editTriggerModal.remove();
+            });
 
         }])
 

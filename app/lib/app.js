@@ -149,9 +149,11 @@
 
                 // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
                 // for form inputs)
+                /*
                 if (cordova && cordova.plugins.Keyboard) {
                     cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
                 }
+                */
                 if (statusbar) {
                     statusbar.styleDefault();
                 }

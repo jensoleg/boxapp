@@ -14,6 +14,26 @@
                 <span class="input-label">Placement</span>
                 <input type="text" placeholder="Placement" ng-model="newInstallation.placement">
             </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Address</span>
+                <google-places location=location></google-places>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Location</span>
+                <input type="text" placeholder="{{location.lat}} {{location.lng}}" readonly style="background-color: transparent;">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Contact name</span>
+                <input type="text" placeholder="Contact Name" ng-model="newInstallation.contact.name">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Contact email</span>
+                <input type="text" placeholder="Contact email" ng-model="newInstallation.contact.email">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Contact phone</span>
+                <input type="text" placeholder="Contact phone" ng-model="newInstallation.contact.phone">
+            </label>
         </div>
     </ion-content>
 </div>

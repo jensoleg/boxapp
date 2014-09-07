@@ -53,6 +53,17 @@ module.exports = function (grunt) {
             production: {
                 constants: {
                     ENV: {
+                        name: 'development',
+                        auth: {
+                            domain: 'decoplant.auth0.com',
+                            clientID: 'riQAyvtyyRBNvO9zhRsQAXMEtaQA02uW'
+                        },
+                        apiEndpoint: '/api/',
+                        MQTTServer: 'mqtt.bobbytechnologies.dk'
+                    }
+
+/*
+                    ENV: {
                         name: 'production',
                         auth: {
                             domain: 'decoplant.auth0.com',
@@ -61,6 +72,7 @@ module.exports = function (grunt) {
                         apiEndpoint: '.bobbytechnologies.dk/api/',
                         MQTTServer: 'mqtt.bobbytechnologies.dk'
                     }
+*/
                 }
             }
         },

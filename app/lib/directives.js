@@ -6,7 +6,7 @@
             return {
                 restrict: 'E',
                 replace: true,
-                templateUrl: 'templates/bobbybox.html'
+                templateUrl: '../templates/bobbybox.html'
             };
         }])
 
@@ -27,6 +27,25 @@
                             });
                         });
                     }
+                }
+            };
+        }).
+
+        directive('googlePlaces', function () {
+            return {
+                restrict: 'E',
+                replace: true,
+                //transclude: true,
+                scope: {location: '='},
+                template: '<input id="google_places_ac" name="google_places_ac" type="text" placeholder="Address" ng-model="newInstallation.address"/>',
+                link: function ($scope, elm, attrs) {
+                    var autocomplete = new google.maps.places.Autocomplete(elm[0], {});
+                    google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                        var place = autocomplete.getPlace();
+                        $scope.location.lat = place.geometry.location.lat();
+                        $scope.location.lng = place.geometry.location.lng();
+                        $scope.$apply();
+                    });
                 }
             };
         });

@@ -1,11 +1,9 @@
-<ion-view title="Installations" hide-back-button="true">
-
+<ion-view title="Installations">
     <ion-nav-buttons side="right">
         <button ng-click="newInstallation()" class="button icon-left ion-ios7-plus-empty button-clear button-dark"></button>
     </ion-nav-buttons>
-
-    <ion-content >
-        <div id="search-box" start-y="55" padding="false" class="item-input-inset" ng-show="showSearch">
+    <ion-content>
+        <div id="search-box"  start-y="55" padding="false" class="item-input-inset">
             <div class="item-input-wrapper">
                 <i class="icon ion-ios7-search placeholder-icon"></i>
                 <input type="search" placeholder="Search" ng-model="data.searchQuery">
@@ -13,7 +11,7 @@
             </div>
         </div>
         <ion-list>
-            <ion-item class="item-icon-left" ng-repeat="i in installations | filter: data.searchQuery" ui-sref="app.detail({ id: i._id })">
+            <ion-item ng-repeat="i in installations | filter: data.searchQuery" ui-sref="app.detail({ id: i._id })">
                 <h3 style="color:black;">{{i.name}}</h3>
                 <p>{{i.placement}}</p>
                 <span class="badge badge-balanced">0</span>

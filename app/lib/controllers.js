@@ -43,10 +43,14 @@
             };
         })
 
-        .controller('InstallationsCtrl', ['$scope', 'installations', 'installationService', '$ionicListDelegate', '$timeout', '$ionicModal', '$ionicPopup', function ($scope, installations, installationService, $ionicListDelegate, $timeout, $ionicModal, $ionicPopup) {
+        .controller('InstallationsCtrl', ['$scope',  '$state', 'installations', 'installationService', '$ionicListDelegate', '$timeout', '$ionicModal', '$ionicPopup', function ($scope, $state, installations, installationService, $ionicListDelegate, $timeout, $ionicModal, $ionicPopup) {
 
             $scope.installations = installations;
             $scope.newInst = {location: {'lat': null, 'lng': null}};
+
+            $scope.clearSearch = function () {
+                this.data.searchQuery = '';
+            };
 
             /* Edit installation */
 
@@ -172,7 +176,7 @@
         ])
 
         .
-        controller('InstallationCtrl', ['$scope', '$window', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', function ($scope, $window, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
+        controller('InstallationCtrl', ['$scope', '$state', '$window', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', function ($scope, $state, $window, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
 
             $scope.installation = installation;
             $scope.newDevice = {};
@@ -315,7 +319,7 @@
 
         }])
 
-        .controller('SensorCtrl', ['$scope', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function ($scope, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
+        .controller('SensorCtrl', ['$scope',  '$state', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function ($scope, $state, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
 
             $scope.newControl = {};
 
@@ -441,7 +445,7 @@
 
         }])
 
-        .controller('TriggerCtrl', ['$scope', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function ($scope, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
+        .controller('TriggerCtrl', ['$scope', '$state', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function ($scope, $state, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
 
             $scope.newTrigger = {};
 
@@ -572,7 +576,7 @@
 
         }])
 
-        .controller('TriggerDetailCtrl', ['$scope', 'trigger', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function ($scope, trigger, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
+        .controller('TriggerDetailCtrl', ['$scope', '$state', 'trigger', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function ($scope, $state, trigger, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
 
             $scope.trigger = trigger;
             $scope.newRequest = {};
@@ -697,7 +701,7 @@
 
             $scope.$on('$destroy', function () {
                 $scope.newRequestModal.remove();
-                $scope.editRequestrModal.remove();
+                $scope.editRequestModal.remove();
             });
 
 

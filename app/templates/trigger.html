@@ -13,12 +13,6 @@
                 </span>
         </a>
         <a class="item">
-            Type
-                <span class="item-note">
-                   {{trigger.trigger_type}}
-                </span>
-        </a>
-        <a class="item">
             Threshold value
                 <span class="item-note">
                    {{trigger.threshold_value}}
@@ -32,13 +26,13 @@
         </a>
         <div class="item item-icon-right item-divider">
             Requests
-            <i class="icon ion-ios7-plus-empty" ng-click="newRequest()"></i>
+            <i class="icon ion-ios7-plus-empty" ng-click="addRequest()"></i>
         </div>
 
         <a class="item" ng-repeat="request in trigger.request">
             Request
                 <span class="item-note" >
-                   {{request.request_options | json }}
+                   {{request.name}}
                 </span>
         </a>
     </ion-content>

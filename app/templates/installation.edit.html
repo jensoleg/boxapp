@@ -16,11 +16,23 @@
             </label>
             <label class="item item-input item-floating-label">
                 <span class="input-label">Address</span>
-                <google-places data-tap-disabled="true" location=location></google-places>
+                <google-places location="installation.location" address="installation.address"></google-places>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Location</span>
+                <input type="text" placeholder="{{installation.location.lat}} {{installation.location.lng}}" readonly style="background-color: transparent;">
             </label>
             <label class="item item-input item-floating-label">
-                <span class="input-label">Location</span>
-                {{location.lat}} {{location.lng}}
+                <span class="input-label">Contact name</span>
+                <input type="text" placeholder="Contact Name" ng-model="installation.contact.name">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Contact email</span>
+                <input type="text" placeholder="Contact email" ng-model="installation.contact.email">
+            </label>
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Contact phone</span>
+                <input type="text" placeholder="Contact phone" ng-model="installation.contact.phone">
             </label>
         </div>
     </ion-content>

@@ -1,0 +1,18 @@
+<div class="modal">
+    <ion-header-bar class="bar bar-header bar-positive">
+        <button class="button button-clear button-clear" ng-click="closeNew()">Cancel</button>
+        <h1 class="title">New trigger request</h1>
+        <button class="button button-clear button-clear" ng-click="doneNew(newRequest)">Save</button>
+    </ion-header-bar>
+    <ion-content>
+        <div class="list">
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Request</span>
+                <!--textarea placeholder="Enter request. Please see https://github.com/mikeal/request#requestoptions-callback" rows="8" cols="10"-->
+                <textarea rows="30" ng-model="newRequest.request_options">
+                </textarea>
+            </label>
+        </div>
+        <p class="padding">Please see https://github.com/mikeal/request#requestoptions-callback</p>
+    </ion-content>
+</div>

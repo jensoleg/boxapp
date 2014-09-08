@@ -46,8 +46,7 @@
         .controller('InstallationsCtrl', ['$scope', 'installations', 'installationService', '$ionicListDelegate', '$timeout', '$ionicModal', '$ionicPopup', function ($scope, installations, installationService, $ionicListDelegate, $timeout, $ionicModal, $ionicPopup) {
 
             $scope.installations = installations;
-            var defaultInstallation = {"name": "a", "placement": "b"};
-            $scope.location = {'lat': null, 'lng': null};
+            $scope.newInst = {location: {'lat': null, 'lng': null}};
 
             /* Edit installation */
 
@@ -80,7 +79,6 @@
             };
 
             $scope.update = function () {
-                $scope.installation.location = $scope.location;
                 installationService.updateInstallation($scope.installation);
             };
 
@@ -124,14 +122,11 @@
             };
 
             $scope.newInstallation = function () {
-                $scope.newInstallation = defaultInstallation;
                 $scope.newModal.show();
             };
 
             $scope.saveNew = function () {
-                $scope.newInstallation.location = $scope.location;
-                /* save in database */
-                installationService.newInstallation($scope.newInstallation).then(function (response) {
+                installationService.newInstallation($scope.newInst).then(function (response) {
                     $scope.installations.push(response);
                 }, function (response) {
                     console.log('error', response);
@@ -163,9 +158,9 @@
                 delete copy.__v;
                 delete copy.$$hashKey;
                 copy.name = 'Copy of ' + i.name;
-
+                $scope.newInst = copy;
                 /* save in database */
-                installationService.newInstallation(copy).then(function (response) {
+                installationService.newInstallation($scope.newInst).then(function (response) {
                     $scope.installations.push(response);
                 }, function (response) {
                     console.log('error', response);
@@ -180,6 +175,7 @@
         controller('InstallationCtrl', ['$scope', '$window', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', function ($scope, $window, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
 
             $scope.installation = installation;
+            $scope.newDevice = {};
 
             /* Edit device */
 
@@ -250,7 +246,6 @@
             };
 
             $scope.addDevice = function () {
-                $scope.newDevice = {"id": "", "name": "", "placement": ""};
                 $scope.newModal.show();
             };
 
@@ -300,20 +295,17 @@
 
             });
 
-
-            $scope.phoneTo = function(tel) {
-                $window.location.href = 'tel:'+ tel;
+            $scope.phoneTo = function (tel) {
+                $window.location.href = 'tel:' + tel;
             };
 
-            $scope.emailTo = function(email) {
-                $window.location.href = 'mailto:'+ email;
+            $scope.emailTo = function (email) {
+                $window.location.href = 'mailto:' + email;
             };
 
-            $scope.navigateTo = function(lat,lng) {
+            $scope.navigateTo = function (lat, lng) {
                 $window.location.href = 'maps://maps.apple.com/?q=' + lat + ',' + lng;
             };
-
-
         }])
 
         .controller('DeviceCtrl', ['$stateParams', '$scope', 'device', function ($stateParams, $scope, device) {
@@ -324,6 +316,8 @@
         }])
 
         .controller('SensorCtrl', ['$scope', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function ($scope, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
+
+            $scope.newControl = {};
 
             /* Edit Control */
 
@@ -393,14 +387,12 @@
             };
 
             $scope.addControl = function () {
-                $scope.newControl = {"name": ""};
                 $scope.newSensorModal.show();
             };
 
             $scope.saveNew = function () {
                 installationService.newControl($scope.device._id, $scope.newControl).then(function (response) {
                     $scope.$parent.installation = response;
-
                     $scope.$parent.device = _.find(response.devices, function (d) {
                         return d._id == $scope.$parent.device._id;
                     });
@@ -409,7 +401,6 @@
                     console.log('error', response);
                 });
             };
-
 
             var objectIdDel = function (copiedObjectWithId) {
                 if (copiedObjectWithId !== null && typeof copiedObjectWithId !== 'string' &&
@@ -448,10 +439,11 @@
                 $scope.newSensorModal.remove();
             });
 
-
         }])
 
         .controller('TriggerCtrl', ['$scope', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function ($scope, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
+
+            $scope.newTrigger = {};
 
             /* Edit Trigger */
 
@@ -521,12 +513,11 @@
             };
 
             $scope.addTrigger = function () {
-                $scope.newTrigger = {"name": '', "stream_id": ''};
                 $scope.newTriggerModal.show();
             };
 
             $scope.saveNew = function () {
-                installationService.newTrigger($scope.device._id, $scope.newTrigger).then(function (response) {
+                installationService.newTrigger($scope.device._id,  $scope.newTrigger).then(function (response) {
                     $scope.$parent.installation = response;
 
                     $scope.$parent.device = _.find(response.devices, function (d) {
@@ -537,7 +528,6 @@
                     console.log('error', response);
                 });
             };
-
 
             var objectIdDel = function (copiedObjectWithId) {
                 if (copiedObjectWithId !== null && typeof copiedObjectWithId !== 'string' &&
@@ -564,8 +554,7 @@
                 delete copy.$$hashKey;
                 copy.name = 'Copy of ' + i.name;
 
-                $scope.newTrigger = copy;
-                $scope.saveNew();
+                $scope.saveNew(copy);
 
                 $ionicListDelegate.closeOptionButtons();
             };
@@ -583,9 +572,134 @@
 
         }])
 
-        .controller('TriggerDetailCtrl', ['$scope', 'trigger', function ($scope, trigger) {
+        .controller('TriggerDetailCtrl', ['$scope', 'trigger', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function ($scope, trigger, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
 
             $scope.trigger = trigger;
+            $scope.newRequest = {};
+
+            /* Edit Request */
+
+            $ionicModal.fromTemplateUrl('templates/trigger.request.edit.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            }).then(function (modal) {
+                $scope.editRequestModal = modal;
+            });
+
+            $scope.closeEdit = function () {
+                $scope.editRequestModal.hide();
+                $ionicListDelegate.closeOptionButtons();
+            };
+
+            $scope.doneEdit = function () {
+                $scope.editRequestModal.hide();
+                $ionicListDelegate.closeOptionButtons();
+                $scope.update();
+            };
+
+            $scope.edit = function (t) {
+                $scope.request = t;
+                $scope.editRequestModal.show();
+            };
+
+            $scope.update = function () {
+//                installationService.updateRequest($scope.request);
+            };
+
+            /* Remove Request */
+
+            $scope.remove = function (request) {
+                var confirmPopup = $ionicPopup.confirm({
+                    title: '',
+                    template: 'Are you sure you want to remove ' + request.name + '?',
+                    cancelType: 'button-clear button-dark',
+                    okType: 'button-clear button-positive'
+                });
+                confirmPopup.then(function (res) {
+  /*
+                    if (res) {
+                        installationService.removeRequest(request._id).then(function (response) {
+                            _.pull($scope.$parent.triggers.requests, request);
+                        }, function (response) {
+                            console.log('error', response);
+                        });
+                    }
+  */
+                    $ionicListDelegate.closeOptionButtons();
+                });
+            };
+
+            /* new request */
+            $ionicModal.fromTemplateUrl('templates/trigger.request.new.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            }).then(function (modal) {
+                $scope.newRequestModal = modal;
+            });
+
+            $scope.closeNew = function () {
+                $scope.newRequestModal.hide();
+            };
+
+            $scope.doneNew = function () {
+                $scope.newRequestModal.hide();
+                $scope.saveNew();
+            };
+
+            $scope.addRequest = function () {
+                $scope.newRequestModal.show();
+            };
+
+            $scope.saveNew = function () {
+/*
+                installationService.newrequest($scope.device._id,  $scope.newRequest).then(function (response) {
+                    $scope.$parent.installation = response;
+
+                    $scope.$parent.device = _.find(response.devices, function (d) {
+                        return d._id == $scope.$parent.device._id;
+                    });
+
+                }, function (response) {
+                    console.log('error', response);
+                });
+*/
+            };
+
+            var objectIdDel = function (copiedObjectWithId) {
+                if (copiedObjectWithId !== null && typeof copiedObjectWithId !== 'string' &&
+                    typeof copiedObjectWithId !== 'number' && typeof copiedObjectWithId !== 'boolean') {
+                    //for array length is defined however for objects length is undefined
+                    if (typeof copiedObjectWithId.length === 'undefined') {
+                        delete copiedObjectWithId._id;
+                        for (var key in copiedObjectWithId) {
+                            objectIdDel(copiedObjectWithId[key]); //recursive del calls on object elements
+                        }
+                    }
+                    else {
+                        for (var i = 0; i < copiedObjectWithId.length; i++) {
+                            objectIdDel(copiedObjectWithId[i]);  //recursive del calls on array elements
+                        }
+                    }
+                }
+            };
+
+            /* Copy a Request */
+            $scope.copy = function (i) {
+                var copy = _.cloneDeep(i);
+                objectIdDel(copy);
+                delete copy.$$hashKey;
+                copy.name = 'Copy of ' + i.name;
+
+                $scope.saveNew(copy);
+
+                $ionicListDelegate.closeOptionButtons();
+            };
+
+            $scope.$on('$destroy', function () {
+                $scope.newRequestModal.remove();
+                $scope.editRequestrModal.remove();
+            });
+
 
         }])
 

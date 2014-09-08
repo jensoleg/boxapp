@@ -104,9 +104,9 @@
                     views: {
                         'menuContent': {
                             templateUrl: 'templates/trigger.html',
-                            controller: 'TriggerCtrl',
+                            controller: 'TriggerDetailCtrl',
                             resolve: {
-                                trigger:['$stateParams', 'installationService',  function ($stateParams, installationService) {
+                                trigger: ['$stateParams', 'installationService',  function ($stateParams, installationService) {
                                     return installationService.getTrigger($stateParams.triggerid);
                                 }]
                             }

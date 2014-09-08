@@ -1,50 +1,149 @@
-2014-09-04 13:20:42.436 Decoplant[14869:70b] Multi-tasking -> Device: YES, App: YES
-2014-09-04 13:20:42.443 Decoplant[14869:70b] Unlimited access to network resources
-2014-09-04 13:20:42.464 Decoplant[14869:70b] [CDVTimer][keyboard] 0.100017ms
-2014-09-04 13:20:42.474 Decoplant[14869:70b] [CDVTimer][statusbar] 9.651959ms
-2014-09-04 13:20:42.475 Decoplant[14869:70b] [CDVTimer][TotalPluginStartup] 10.848999ms
-2014-09-04 13:20:42.514 Decoplant[14869:70b] Resetting plugins due to page load.
-2014-09-04 13:20:43.687 Decoplant[14869:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/E06FE3B2-3F84-4DF3-92BD-55897CFA9121/Decoplant.app/www/index.html#/app/main
-2014-09-04 13:21:28.417 Decoplant[14869:70b] Received memory warning.
-2014-09-04 21:27:42.270 Decoplant[16417:70b] Multi-tasking -> Device: YES, App: YES
-2014-09-04 21:27:42.277 Decoplant[16417:70b] Unlimited access to network resources
-2014-09-04 21:27:42.294 Decoplant[16417:70b] [CDVTimer][keyboard] 0.099957ms
-2014-09-04 21:27:42.300 Decoplant[16417:70b] [CDVTimer][statusbar] 6.218016ms
-2014-09-04 21:27:42.301 Decoplant[16417:70b] [CDVTimer][TotalPluginStartup] 6.922007ms
-2014-09-04 21:27:42.401 Decoplant[16417:70b] Resetting plugins due to page load.
-2014-09-04 21:27:43.441 Decoplant[16417:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/E06FE3B2-3F84-4DF3-92BD-55897CFA9121/Decoplant.app/www/index.html#/app/main
-2014-09-04 21:36:33.887 Decoplant[16620:70b] Multi-tasking -> Device: YES, App: YES
-2014-09-04 21:36:33.893 Decoplant[16620:70b] Unlimited access to network resources
-2014-09-04 21:36:33.911 Decoplant[16620:70b] [CDVTimer][keyboard] 0.123024ms
-2014-09-04 21:36:33.917 Decoplant[16620:70b] [CDVTimer][statusbar] 6.357014ms
-2014-09-04 21:36:33.918 Decoplant[16620:70b] [CDVTimer][TotalPluginStartup] 7.045984ms
-2014-09-04 21:36:34.015 Decoplant[16620:70b] Resetting plugins due to page load.
-2014-09-04 21:36:35.504 Decoplant[16620:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/E06FE3B2-3F84-4DF3-92BD-55897CFA9121/Decoplant.app/www/index.html#/app/main
-2014-09-04 21:43:25.565 Decoplant[16821:70b] Multi-tasking -> Device: YES, App: YES
-2014-09-04 21:43:25.572 Decoplant[16821:70b] Unlimited access to network resources
-2014-09-04 21:43:25.589 Decoplant[16821:70b] [CDVTimer][keyboard] 0.094950ms
-2014-09-04 21:43:25.596 Decoplant[16821:70b] [CDVTimer][statusbar] 6.439030ms
-2014-09-04 21:43:25.596 Decoplant[16821:70b] [CDVTimer][TotalPluginStartup] 7.182956ms
-2014-09-04 21:43:25.699 Decoplant[16821:70b] Resetting plugins due to page load.
-2014-09-04 21:43:27.114 Decoplant[16821:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/E06FE3B2-3F84-4DF3-92BD-55897CFA9121/Decoplant.app/www/index.html#/app/main
-2014-09-06 13:43:41.547 Decoplant[23165:70b] Multi-tasking -> Device: YES, App: YES
-2014-09-06 13:43:42.005 Decoplant[23165:70b] Unlimited access to network resources
-2014-09-06 13:43:43.768 Decoplant[23165:70b] [CDVTimer][keyboard] 0.081003ms
-2014-09-06 13:43:43.826 Decoplant[23165:70b] [CDVTimer][statusbar] 57.851970ms
-2014-09-06 13:43:43.826 Decoplant[23165:70b] [CDVTimer][TotalPluginStartup] 58.959007ms
-2014-09-06 13:43:44.006 Decoplant[23165:70b] Resetting plugins due to page load.
-2014-09-06 13:43:45.264 Decoplant[23165:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/E06FE3B2-3F84-4DF3-92BD-55897CFA9121/Decoplant.app/www/index.html#/login
-2014-09-06 13:44:38.486 Decoplant[23424:70b] Multi-tasking -> Device: YES, App: YES
-2014-09-06 13:44:38.493 Decoplant[23424:70b] Unlimited access to network resources
-2014-09-06 13:44:38.510 Decoplant[23424:70b] [CDVTimer][keyboard] 0.095963ms
-2014-09-06 13:44:38.517 Decoplant[23424:70b] [CDVTimer][statusbar] 6.152987ms
-2014-09-06 13:44:38.517 Decoplant[23424:70b] [CDVTimer][TotalPluginStartup] 7.121980ms
-2014-09-06 13:44:38.609 Decoplant[23424:70b] Resetting plugins due to page load.
-2014-09-06 13:44:39.574 Decoplant[23424:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/E06FE3B2-3F84-4DF3-92BD-55897CFA9121/Decoplant.app/www/index.html#/app/main
-2014-09-06 13:48:58.387 Decoplant[23656:70b] Multi-tasking -> Device: YES, App: YES
-2014-09-06 13:48:58.394 Decoplant[23656:70b] Unlimited access to network resources
-2014-09-06 13:48:58.411 Decoplant[23656:70b] [CDVTimer][keyboard] 0.095010ms
-2014-09-06 13:48:58.418 Decoplant[23656:70b] [CDVTimer][statusbar] 6.453991ms
-2014-09-06 13:48:58.419 Decoplant[23656:70b] [CDVTimer][TotalPluginStartup] 7.453024ms
-2014-09-06 13:48:58.507 Decoplant[23656:70b] Resetting plugins due to page load.
-2014-09-06 13:48:59.491 Decoplant[23656:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/E06FE3B2-3F84-4DF3-92BD-55897CFA9121/Decoplant.app/www/index.html#/app/main
+2014-09-07 14:24:35.175 Decoplant[36842:70b] Multi-tasking -> Device: YES, App: YES
+2014-09-07 14:24:35.183 Decoplant[36842:70b] Unlimited access to network resources
+2014-09-07 14:24:35.199 Decoplant[36842:70b] [CDVTimer][keyboard] 0.090003ms
+2014-09-07 14:24:35.206 Decoplant[36842:70b] [CDVTimer][statusbar] 6.420016ms
+2014-09-07 14:24:35.206 Decoplant[36842:70b] [CDVTimer][TotalPluginStartup] 7.535994ms
+2014-09-07 14:24:35.664 Decoplant[36842:70b] Resetting plugins due to page load.
+2014-09-07 14:24:36.846 Decoplant[36842:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/0AE7E359-449C-455E-BAA6-C353FE3FE6FC/Decoplant.app/www/index.html#/login
+2014-09-07 15:12:10.231 Decoplant[37933:70b] Multi-tasking -> Device: YES, App: YES
+2014-09-07 15:12:10.238 Decoplant[37933:70b] Unlimited access to network resources
+2014-09-07 15:12:10.264 Decoplant[37933:70b] [CDVTimer][keyboard] 0.084996ms
+2014-09-07 15:12:10.271 Decoplant[37933:70b] [CDVTimer][statusbar] 6.127000ms
+2014-09-07 15:12:10.272 Decoplant[37933:70b] [CDVTimer][TotalPluginStartup] 7.252991ms
+2014-09-07 15:12:10.327 Decoplant[37933:70b] Resetting plugins due to page load.
+2014-09-07 15:12:11.316 Decoplant[37933:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/0AE7E359-449C-455E-BAA6-C353FE3FE6FC/Decoplant.app/www/index.html#/app/main
+2014-09-07 17:22:08.484 Decoplant[38633:70b] Multi-tasking -> Device: YES, App: YES
+2014-09-07 17:22:08.492 Decoplant[38633:70b] Unlimited access to network resources
+2014-09-07 17:22:08.533 Decoplant[38633:70b] [CDVTimer][keyboard] 0.100017ms
+2014-09-07 17:22:08.540 Decoplant[38633:70b] [CDVTimer][statusbar] 6.353974ms
+2014-09-07 17:22:08.540 Decoplant[38633:70b] [CDVTimer][TotalPluginStartup] 7.811010ms
+2014-09-07 17:22:08.638 Decoplant[38633:70b] Resetting plugins due to page load.
+2014-09-07 17:22:09.642 Decoplant[38633:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/0AE7E359-449C-455E-BAA6-C353FE3FE6FC/Decoplant.app/www/index.html#/app/main
+2014-09-07 17:22:25.312 Decoplant[38633:70b] Received memory warning.
+2014-09-07 17:28:32.653 Decoplant[38986:70b] Multi-tasking -> Device: YES, App: YES
+2014-09-07 17:28:32.660 Decoplant[38986:70b] Unlimited access to network resources
+2014-09-07 17:28:32.678 Decoplant[38986:70b] [CDVTimer][keyboard] 0.101030ms
+2014-09-07 17:28:32.702 Decoplant[38986:70b] [CDVTimer][statusbar] 23.149014ms
+2014-09-07 17:28:32.702 Decoplant[38986:70b] [CDVTimer][TotalPluginStartup] 23.805022ms
+2014-09-07 17:28:32.809 Decoplant[38986:70b] Resetting plugins due to page load.
+2014-09-07 17:28:33.894 Decoplant[38986:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/0AE7E359-449C-455E-BAA6-C353FE3FE6FC/Decoplant.app/www/index.html#/app/main
+2014-09-07 17:29:47.447 Decoplant[39181:70b] Multi-tasking -> Device: YES, App: YES
+2014-09-07 17:29:47.454 Decoplant[39181:70b] Unlimited access to network resources
+2014-09-07 17:29:47.478 Decoplant[39181:70b] [CDVTimer][keyboard] 0.105023ms
+2014-09-07 17:29:47.490 Decoplant[39181:70b] [CDVTimer][statusbar] 11.125028ms
+2014-09-07 17:29:47.490 Decoplant[39181:70b] [CDVTimer][TotalPluginStartup] 11.843026ms
+2014-09-07 17:29:47.612 Decoplant[39181:70b] Resetting plugins due to page load.
+2014-09-07 17:29:48.681 Decoplant[39181:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/06338399-931B-4B1F-939F-859A4E972097/Decoplant.app/www/index.html#/login
+2014-09-07 17:33:26.188 Decoplant[39532:70b] Multi-tasking -> Device: YES, App: YES
+2014-09-07 17:33:26.196 Decoplant[39532:70b] Unlimited access to network resources
+2014-09-07 17:33:26.214 Decoplant[39532:70b] [CDVTimer][keyboard] 0.093043ms
+2014-09-07 17:33:26.223 Decoplant[39532:70b] [CDVTimer][statusbar] 8.383989ms
+2014-09-07 17:33:26.223 Decoplant[39532:70b] [CDVTimer][TotalPluginStartup] 9.056032ms
+2014-09-07 17:33:26.334 Decoplant[39532:70b] Resetting plugins due to page load.
+2014-09-07 17:33:27.396 Decoplant[39532:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/6C72A3DB-4EF6-4ACF-A990-2576F454875B/Decoplant.app/www/index.html#/login
+2014-09-07 17:42:01.830 Decoplant[39887:70b] Multi-tasking -> Device: YES, App: YES
+2014-09-07 17:42:01.837 Decoplant[39887:70b] Unlimited access to network resources
+2014-09-07 17:42:01.854 Decoplant[39887:70b] [CDVTimer][keyboard] 0.095010ms
+2014-09-07 17:42:01.861 Decoplant[39887:70b] [CDVTimer][statusbar] 6.528020ms
+2014-09-07 17:42:01.861 Decoplant[39887:70b] [CDVTimer][TotalPluginStartup] 7.201016ms
+2014-09-07 17:42:01.957 Decoplant[39887:70b] Resetting plugins due to page load.
+2014-09-07 17:42:03.153 Decoplant[39887:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/6C72A3DB-4EF6-4ACF-A990-2576F454875B/Decoplant.app/www/index.html#/app/main
+2014-09-07 17:44:44.440 Decoplant[40153:70b] Multi-tasking -> Device: YES, App: YES
+2014-09-07 17:44:44.446 Decoplant[40153:70b] Unlimited access to network resources
+2014-09-07 17:44:44.462 Decoplant[40153:70b] [CDVTimer][keyboard] 0.092030ms
+2014-09-07 17:44:44.469 Decoplant[40153:70b] [CDVTimer][statusbar] 6.060004ms
+2014-09-07 17:44:44.469 Decoplant[40153:70b] [CDVTimer][TotalPluginStartup] 6.705999ms
+2014-09-07 17:44:44.501 Decoplant[40153:70b] Resetting plugins due to page load.
+2014-09-07 17:44:45.450 Decoplant[40153:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/6C72A3DB-4EF6-4ACF-A990-2576F454875B/Decoplant.app/www/index.html#/app/main
+2014-09-07 18:10:14.775 Decoplant[40518:70b] Multi-tasking -> Device: YES, App: YES
+2014-09-07 18:10:14.783 Decoplant[40518:70b] Unlimited access to network resources
+2014-09-07 18:10:14.816 Decoplant[40518:70b] [CDVTimer][keyboard] 0.115037ms
+2014-09-07 18:10:14.823 Decoplant[40518:70b] [CDVTimer][statusbar] 6.599009ms
+2014-09-07 18:10:14.824 Decoplant[40518:70b] [CDVTimer][TotalPluginStartup] 7.604003ms
+2014-09-07 18:10:14.926 Decoplant[40518:70b] Resetting plugins due to page load.
+2014-09-07 18:10:16.030 Decoplant[40518:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/6C72A3DB-4EF6-4ACF-A990-2576F454875B/Decoplant.app/www/index.html#/app/main
+2014-09-07 18:10:25.905 Decoplant[40518:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 18:10:30.034 Decoplant[40518:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 18:10:31.306 Decoplant[40518:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 18:10:32.813 Decoplant[40518:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 18:10:35.288 Decoplant[40518:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 18:10:36.469 Decoplant[40518:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 18:10:57.799 Decoplant[40518:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 18:10:58.586 Decoplant[40518:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 18:11:00.881 Decoplant[40518:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 18:11:37.706 Decoplant[40518:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 18:11:39.706 Decoplant[40518:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 18:11:40.819 Decoplant[40518:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 18:11:41.776 Decoplant[40518:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 18:11:42.777 Decoplant[40518:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 18:11:44.138 Decoplant[40518:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 18:11:45.152 Decoplant[40518:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 18:11:46.051 Decoplant[40518:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 18:11:46.748 Decoplant[40518:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 18:23:15.244 Decoplant[40863:70b] Multi-tasking -> Device: YES, App: YES
+2014-09-07 18:23:15.251 Decoplant[40863:70b] Unlimited access to network resources
+2014-09-07 18:23:15.268 Decoplant[40863:70b] [CDVTimer][keyboard] 0.097036ms
+2014-09-07 18:23:15.274 Decoplant[40863:70b] [CDVTimer][statusbar] 6.022036ms
+2014-09-07 18:23:15.275 Decoplant[40863:70b] [CDVTimer][TotalPluginStartup] 7.124007ms
+2014-09-07 18:23:15.306 Decoplant[40863:70b] Resetting plugins due to page load.
+2014-09-07 18:23:16.628 Decoplant[40863:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/6C72A3DB-4EF6-4ACF-A990-2576F454875B/Decoplant.app/www/index.html#/app/main
+2014-09-07 18:24:48.349 Decoplant[40863:70b] Received memory warning.
+2014-09-07 21:00:51.796 Decoplant[41583:70b] Multi-tasking -> Device: YES, App: YES
+2014-09-07 21:00:51.803 Decoplant[41583:70b] Unlimited access to network resources
+2014-09-07 21:00:51.825 Decoplant[41583:70b] [CDVTimer][keyboard] 0.095010ms
+2014-09-07 21:00:51.832 Decoplant[41583:70b] [CDVTimer][statusbar] 6.289005ms
+2014-09-07 21:00:51.832 Decoplant[41583:70b] [CDVTimer][TotalPluginStartup] 6.968021ms
+2014-09-07 21:00:51.930 Decoplant[41583:70b] Resetting plugins due to page load.
+2014-09-07 21:00:53.008 Decoplant[41583:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/6C72A3DB-4EF6-4ACF-A990-2576F454875B/Decoplant.app/www/index.html#/app/main
+2014-09-07 21:01:19.749 Decoplant[41583:70b] CDVWebViewDelegate: Navigation started when state=1
+2014-09-07 21:01:19.750 Decoplant[41583:70b] Failed to load webpage with error: CDVWebViewDelegate: Navigation started when state=1
+2014-09-07 21:01:19.750 Decoplant[41583:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 21:01:29.079 Decoplant[41583:70b] CDVWebViewDelegate: Navigation started when state=1
+2014-09-07 21:01:29.079 Decoplant[41583:70b] Failed to load webpage with error: CDVWebViewDelegate: Navigation started when state=1
+2014-09-07 21:01:29.079 Decoplant[41583:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 21:01:38.857 Decoplant[41583:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 21:04:38.781 Decoplant[41833:70b] Multi-tasking -> Device: YES, App: YES
+2014-09-07 21:04:38.787 Decoplant[41833:70b] Unlimited access to network resources
+2014-09-07 21:04:38.806 Decoplant[41833:70b] [CDVTimer][keyboard] 0.087023ms
+2014-09-07 21:04:38.812 Decoplant[41833:70b] [CDVTimer][statusbar] 5.941987ms
+2014-09-07 21:04:38.812 Decoplant[41833:70b] [CDVTimer][TotalPluginStartup] 6.567001ms
+2014-09-07 21:04:39.030 Decoplant[41833:70b] Resetting plugins due to page load.
+2014-09-07 21:04:39.982 Decoplant[41833:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/0DA2E647-9562-488D-BCBA-5B93E4CF275A/Decoplant.app/www/index.html#/login
+2014-09-07 21:06:18.198 Decoplant[41833:70b] CDVWebViewDelegate: Navigation started when state=1
+2014-09-07 21:06:18.198 Decoplant[41833:70b] Failed to load webpage with error: CDVWebViewDelegate: Navigation started when state=1
+2014-09-07 21:06:18.198 Decoplant[41833:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 21:06:30.521 Decoplant[41833:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 21:16:56.011 Decoplant[42180:70b] Multi-tasking -> Device: YES, App: YES
+2014-09-07 21:16:56.018 Decoplant[42180:70b] Unlimited access to network resources
+2014-09-07 21:16:56.034 Decoplant[42180:70b] [CDVTimer][keyboard] 0.095010ms
+2014-09-07 21:16:56.041 Decoplant[42180:70b] [CDVTimer][statusbar] 6.397009ms
+2014-09-07 21:16:56.041 Decoplant[42180:70b] [CDVTimer][TotalPluginStartup] 7.064998ms
+2014-09-07 21:16:56.170 Decoplant[42180:70b] Resetting plugins due to page load.
+2014-09-07 21:16:57.354 Decoplant[42180:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/10807651-812F-4B6C-A014-4702A8D5377A/Decoplant.app/www/index.html#/login
+2014-09-07 21:17:21.676 Decoplant[42180:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 21:19:16.204 Decoplant[42180:70b] CDVWebViewDelegate: Navigation started when state=1
+2014-09-07 21:19:16.204 Decoplant[42180:70b] Failed to load webpage with error: CDVWebViewDelegate: Navigation started when state=1
+2014-09-07 21:19:16.204 Decoplant[42180:70b] Failed to load webpage with error: The URL can’t be shown
+2014-09-07 21:30:58.163 Decoplant[42597:70b] Multi-tasking -> Device: YES, App: YES
+2014-09-07 21:30:58.170 Decoplant[42597:70b] Unlimited access to network resources
+2014-09-07 21:30:58.187 Decoplant[42597:70b] [CDVTimer][keyboard] 0.099003ms
+2014-09-07 21:30:58.194 Decoplant[42597:70b] [CDVTimer][statusbar] 6.449044ms
+2014-09-07 21:30:58.194 Decoplant[42597:70b] [CDVTimer][TotalPluginStartup] 7.125974ms
+2014-09-07 21:30:58.288 Decoplant[42597:70b] Resetting plugins due to page load.
+2014-09-07 21:30:59.518 Decoplant[42597:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/10807651-812F-4B6C-A014-4702A8D5377A/Decoplant.app/www/index.html#/app/main
+2014-09-07 23:36:14.651 Decoplant[43786:70b] Multi-tasking -> Device: YES, App: YES
+2014-09-07 23:36:14.658 Decoplant[43786:70b] Unlimited access to network resources
+2014-09-07 23:36:14.697 Decoplant[43786:70b] [CDVTimer][keyboard] 0.095963ms
+2014-09-07 23:36:14.718 Decoplant[43786:70b] [CDVTimer][statusbar] 20.411015ms
+2014-09-07 23:36:14.719 Decoplant[43786:70b] [CDVTimer][TotalPluginStartup] 21.444976ms
+2014-09-07 23:36:14.810 Decoplant[43786:70b] Resetting plugins due to page load.
+2014-09-07 23:36:15.768 Decoplant[43786:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/10807651-812F-4B6C-A014-4702A8D5377A/Decoplant.app/www/index.html#/app/main
+2014-09-07 23:36:40.832 Decoplant[43786:70b] Received memory warning.
+2014-09-07 23:53:19.582 Decoplant[44167:70b] Multi-tasking -> Device: YES, App: YES
+2014-09-07 23:53:19.590 Decoplant[44167:70b] Unlimited access to network resources
+2014-09-07 23:53:19.607 Decoplant[44167:70b] [CDVTimer][keyboard] 0.173986ms
+2014-09-07 23:53:19.614 Decoplant[44167:70b] [CDVTimer][statusbar] 6.157041ms
+2014-09-07 23:53:19.614 Decoplant[44167:70b] [CDVTimer][TotalPluginStartup] 7.346988ms
+2014-09-07 23:53:19.706 Decoplant[44167:70b] Resetting plugins due to page load.
+2014-09-07 23:53:20.778 Decoplant[44167:70b] Finished load of: file:///Users/jensole/Library/Application%20Support/iPhone%20Simulator/7.1/Applications/10807651-812F-4B6C-A014-4702A8D5377A/Decoplant.app/www/index.html#/app/main
+2014-09-07 23:54:26.599 Decoplant[44167:70b] Received memory warning.

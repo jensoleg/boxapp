@@ -491,7 +491,7 @@
                 confirmPopup.then(function (res) {
                     if (res) {
                         installationService.removeTrigger(trigger._id).then(function (response) {
-                            _.pull($scope.$parent.device.triggers, trigger);
+                            _.pull($scope.device.triggers, trigger);
                         }, function (response) {
                             console.log('error', response);
                         });
@@ -524,11 +524,9 @@
             $scope.saveNew = function () {
                 installationService.newTrigger($scope.device._id, $scope.newTrigger).then(function (response) {
                     $scope.$parent.installation = response;
-
-                    $scope.$parent.device = _.find(response.devices, function (d) {
-                        return d._id == $scope.$parent.device._id;
+                    $scope.device = _.find(response.devices, function (d) {
+                        return d._id == $scope.device._id;
                     });
-
                 }, function (response) {
                     console.log('error', response);
                 });
@@ -559,7 +557,8 @@
                 delete copy.$$hashKey;
                 copy.name = 'Copy of ' + i.name;
 
-                $scope.saveNew(copy);
+                $scope.newTrigger = copy;
+                $scope.saveNew();
 
                 $ionicListDelegate.closeOptionButtons();
             };

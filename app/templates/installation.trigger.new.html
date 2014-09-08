@@ -12,19 +12,38 @@
             </label>
             <label class="item item-input item-select">
                 <div class="input-label">
-                    Control or stream
+                    Sensor
                 </div>
-                <select>
-                    <option ng-repeat="c in device.controls">{{c.name}}</option>
+                <select ng-model="newTrigger.stream_id" ng-options="c.name for c in device.controls track by obj.value">
                 </select>
             </label>
             <label class="item item-input">
                 <span class="input-label">Threshold</span>
                 <input type="text" placeholder="Threshold" ng-model="newTrigger.threshold_value">
             </label>
-            <label class="item item-input">
-                <span class="input-label">Resolution</span>
-                <input type="text" placeholder="Resolution" ng-model="newTrigger.resolution">
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Evaluation
+                </div>
+                <select ng-model="newTrigger.trigger_type track by obj.value">
+                    <option>lt</option>
+                    <option>lte</option>
+                    <option>gt</option>
+                    <option>gte</option>
+                    <option>eq</option>
+                </select>
+            </label>
+            <label class="item item-input item-select track by obj.value">
+                <div class="input-label">
+                    Resolution
+                </div>
+                <select ng-model="newTrigger.resolution">
+                    <option>sec</option>
+                    <option>min</option>
+                    <option>hour</option>
+                    <option>day</option>
+
+                </select>
             </label>
         </div>
     </ion-content>

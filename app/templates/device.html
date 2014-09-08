@@ -1,36 +1,38 @@
 <ion-view title="{{device.name}} {{device.placement}}">
     <ion-content class="has-header">
-            <div ng-controller="SensorCtrl">
-                <ion-list>
-                    <div class="item  item-icon-right item-divider ">
-                        Sensors and Controls
-                        <i class="icon ion-ios7-plus-empty" ng-click="addControl()"></i>
-                    </div>
+        <div ng-controller="SensorCtrl">
+            <ion-list>
+                <div class="item  item-icon-right item-divider ">
+                    Sensors and Controls
+                    <i class="icon ion-ios7-plus-empty" ng-click="addControl()"></i>
+                </div>
 
-                    <ion-item ng-repeat="control in device.controls" ui-sref="app.control({ id: installationId , deviceid: device._id, controlid: control._id })">
-                        <h3 style="color: #444;;">{{control.name}}</h3>
-                        <ion-option-button class="button-balanced" ng-click="copy(control)">Copy</ion-option-button>
-                        <ion-option-button class="button-positive" ng-click="edit(control)">Edit</ion-option-button>
-                        <ion-option-button class="button-assertive" ng-click="remove(control)">Delete</ion-option-button>
-                    </ion-item>
-                </ion-list>
-            </div>
+                <ion-item ng-repeat="control in device.controls"
+                          ui-sref="app.control({ id: installationId , deviceid: device._id, controlid: control._id })">
+                    <h3 style="color: #444;;">{{control.name}}</h3>
+                    <ion-option-button class="button-balanced" ng-click="copy(control)">Copy</ion-option-button>
+                    <ion-option-button class="button-positive" ng-click="edit(control)">Edit</ion-option-button>
+                    <ion-option-button class="button-assertive" ng-click="remove(control)">Delete</ion-option-button>
+                </ion-item>
+            </ion-list>
+        </div>
 
-            <div ng-controller="TriggerCtrl">
-                <ion-list>
-                    <div class="item item-icon-right item-divider">
-                        Alarms and Triggers
-                        <i class="icon ion-ios7-plus-empty" ng-click="addTrigger()"></i>
-                    </div>
+        <div ng-controller="TriggerCtrl">
+            <ion-list>
+                <div class="item item-icon-right item-divider">
+                    Alarms and Triggers
+                    <i class="icon ion-ios7-plus-empty" ng-click="addTrigger()"></i>
+                </div>
 
-                    <ion-item ng-repeat="trigger in device.triggers" ui-sref="app.trigger({ id: installationId, deviceid: device._id, triggerid: trigger._id })">
-                        <h3 style="color: #444;">{{trigger.name}}</h3>
-                        <ion-option-button class="button-balanced" ng-click="copy(trigger)">Copy</ion-option-button>
-                        <ion-option-button class="button-positive" ng-click="edit(trigger)">Edit</ion-option-button>
-                        <ion-option-button class="button-assertive" ng-click="remove(trigger)">Delete</ion-option-button>
+                <ion-item ng-repeat="trigger in device.triggers"
+                          ui-sref="app.trigger({ id: installationId, deviceid: device._id, triggerid: trigger._id })">
+                    <h3 style="color: #444;">{{trigger.name}}</h3>
+                    <ion-option-button class="button-balanced" ng-click="copy(trigger)">Copy</ion-option-button>
+                    <ion-option-button class="button-positive" ng-click="edit(trigger)">Edit</ion-option-button>
+                    <ion-option-button class="button-assertive" ng-click="remove(trigger)">Delete</ion-option-button>
 
-                    </ion-item>
-                </ion-list>
-            </div>
+                </ion-item>
+            </ion-list>
+        </div>
     </ion-content>
 </ion-view>

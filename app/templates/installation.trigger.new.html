@@ -6,19 +6,23 @@
     </ion-header-bar>
     <ion-content>
         <div class="list">
-            <label class="item item-input item-floating-label">
+            <label class="item item-input">
                 <span class="input-label">Name</span>
                 <input type="text" placeholder="Name" ng-model="newTrigger.name">
             </label>
-            <label class="item item-input item-floating-label">
-                <span class="input-label">Control</span>
-                <input type="text" placeholder="Control" ng-model="newTrigger.stream_id">
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Control or stream
+                </div>
+                <select>
+                    <option ng-repeat="c in device.controls">{{c.name}}</option>
+                </select>
             </label>
-            <label class="item item-input item-floating-label">
+            <label class="item item-input">
                 <span class="input-label">Threshold</span>
                 <input type="text" placeholder="Threshold" ng-model="newTrigger.threshold_value">
             </label>
-            <label class="item item-input item-floating-label">
+            <label class="item item-input">
                 <span class="input-label">Resolution</span>
                 <input type="text" placeholder="Resolution" ng-model="newTrigger.resolution">
             </label>

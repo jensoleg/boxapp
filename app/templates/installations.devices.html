@@ -5,42 +5,43 @@
     <ion-content>
 
         <div class="row responsive-sm" style="padding: 0px;">
-          <div class="col"  style="margin-bottom: -4px; padding: 0px;">
-                 <static-gmap ng-show="installation.location.lat"
-                        size="360x205"
-                        sensor="false"
-                        zoom="12"
-                        markers="{ color: 'red', label: '{{installation.name}} {{installation.placement}}', coords: ['{{installation.location.lat}}', '{{installation.location.lng}}'] }">
+            <div class="col" style="margin-bottom: -4px; padding: 0px;">
+                <static-gmap ng-show="installation.location.lat"
+                             size="360x205"
+                             sensor="false"
+                             zoom="12"
+                             markers="{ color: 'red', label: '{{installation.name}} {{installation.placement}}', coords: ['{{installation.location.lat}}', '{{installation.location.lng}}'] }">
                 </static-gmap>
-          </div>
-          <div class="col"  style="margin-bottom: -4px; padding: 0px;">
+            </div>
+            <div class="col" style="margin-bottom: -4px; padding: 0px;">
                 <ion-list style="padding-bottom: 10px;">
                     <ion-item style="border-style:none">
-                          <a class="item-icon-left">
+                        <a class="item-icon-left">
                             <i class="icon ion-ios7-person"></i>
-                              {{installation.contact.name}}
-                          </a>
+                            {{installation.contact.name}}
+                        </a>
                     </ion-item>
                     <ion-item style="border-style:none">
                         <a class="item-icon-left">
-                            <i class="icon ion-home" ng-click="navigateTo( '{{installation.location.lat}}' , '{{ installation.location.lng}}' )"></i>
+                            <i class="icon ion-home"
+                               ng-click="navigateTo( '{{installation.location.lat}}' , '{{ installation.location.lng}}' )"></i>
                             {{installation.address}}
                         </a>
                     </ion-item>
                     <ion-item style="border-style:none">
-                          <a class=" item-icon-left">
+                        <a class=" item-icon-left">
                             <i class="icon ion-iphone" ng-click="phoneTo('{{installation.contact.phone}}')"></i>
-                              {{installation.contact.phone}}
-                          </a>
+                            {{installation.contact.phone}}
+                        </a>
                     </ion-item>
                     <ion-item style="border-style:none">
                         <a class="item-icon-left">
                             <i class="icon ion-ios7-email" ng-click="emailTo('{{installation.contact.email}}')"></i>
                             {{installation.contact.email}}
-                          </a>
+                        </a>
                     </ion-item>
                 </ion-list>
-          </div>
+            </div>
         </div>
 
 

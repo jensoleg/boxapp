@@ -6,31 +6,32 @@
     </ion-header-bar>
     <ion-content>
         <div class="list">
-            <label class="item item-input item-floating-label">
+            <label class="item item-input">
                 <span class="input-label">Name</span>
                 <input type="text" placeholder="Name" ng-model="installation.name">
             </label>
-            <label class="item item-input item-floating-label">
+            <label class="item item-input">
                 <span class="input-label">Placement</span>
                 <input type="text" placeholder="Placement" ng-model="installation.placement">
             </label>
-            <label class="item item-input item-floating-label">
+            <label class="item item-input">
                 <span class="input-label">Address</span>
                 <google-places location="installation.location" address="installation.address"></google-places>
             </label>
-            <label class="item item-input item-stacked-label">
+            <label class="item item-input">
                 <span class="input-label">Location</span>
-                <input type="text" placeholder="{{installation.location.lat}} {{installation.location.lng}}" readonly style="background-color: transparent;">
+                <input type="text" placeholder="{{installation.location.lat}} {{installation.location.lng}}" readonly
+                       style="background-color: transparent;">
             </label>
-            <label class="item item-input item-floating-label">
+            <label class="item item-input">
                 <span class="input-label">Contact name</span>
                 <input type="text" placeholder="Contact Name" ng-model="installation.contact.name">
             </label>
-            <label class="item item-input item-floating-label">
+            <label class="item item-input">
                 <span class="input-label">Contact email</span>
                 <input type="text" placeholder="Contact email" ng-model="installation.contact.email">
             </label>
-            <label class="item item-input item-floating-label">
+            <label class="item item-input">
                 <span class="input-label">Contact phone</span>
                 <input type="text" placeholder="Contact phone" ng-model="installation.contact.phone">
             </label>

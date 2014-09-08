@@ -43,7 +43,7 @@
             };
         })
 
-        .controller('InstallationsCtrl', ['$scope',  '$state', 'installations', 'installationService', '$ionicListDelegate', '$timeout', '$ionicModal', '$ionicPopup', function ($scope, $state, installations, installationService, $ionicListDelegate, $timeout, $ionicModal, $ionicPopup) {
+        .controller('InstallationsCtrl', ['$scope', '$state', 'installations', 'installationService', '$ionicListDelegate', '$timeout', '$ionicModal', '$ionicPopup', function ($scope, $state, installations, installationService, $ionicListDelegate, $timeout, $ionicModal, $ionicPopup) {
 
             $scope.installations = installations;
             $scope.newInst = {location: {'lat': null, 'lng': null}};
@@ -319,7 +319,7 @@
 
         }])
 
-        .controller('SensorCtrl', ['$scope',  '$state', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function ($scope, $state, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
+        .controller('SensorCtrl', ['$scope', '$state', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function ($scope, $state, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
 
             $scope.newControl = {};
 
@@ -448,6 +448,7 @@
         .controller('TriggerCtrl', ['$scope', '$state', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function ($scope, $state, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
 
             $scope.newTrigger = {};
+            $scope.device = $scope.$parent.device;
 
             /* Edit Trigger */
 
@@ -521,7 +522,7 @@
             };
 
             $scope.saveNew = function () {
-                installationService.newTrigger($scope.device._id,  $scope.newTrigger).then(function (response) {
+                installationService.newTrigger($scope.device._id, $scope.newTrigger).then(function (response) {
                     $scope.$parent.installation = response;
 
                     $scope.$parent.device = _.find(response.devices, function (d) {
@@ -620,15 +621,15 @@
                     okType: 'button-clear button-positive'
                 });
                 confirmPopup.then(function (res) {
-  /*
-                    if (res) {
-                        installationService.removeRequest(request._id).then(function (response) {
-                            _.pull($scope.$parent.triggers.requests, request);
-                        }, function (response) {
-                            console.log('error', response);
-                        });
-                    }
-  */
+                    /*
+                     if (res) {
+                     installationService.removeRequest(request._id).then(function (response) {
+                     _.pull($scope.$parent.triggers.requests, request);
+                     }, function (response) {
+                     console.log('error', response);
+                     });
+                     }
+                     */
                     $ionicListDelegate.closeOptionButtons();
                 });
             };
@@ -655,18 +656,18 @@
             };
 
             $scope.saveNew = function () {
-/*
-                installationService.newrequest($scope.device._id,  $scope.newRequest).then(function (response) {
-                    $scope.$parent.installation = response;
+                /*
+                 installationService.newrequest($scope.device._id,  $scope.newRequest).then(function (response) {
+                 $scope.$parent.installation = response;
 
-                    $scope.$parent.device = _.find(response.devices, function (d) {
-                        return d._id == $scope.$parent.device._id;
-                    });
+                 $scope.$parent.device = _.find(response.devices, function (d) {
+                 return d._id == $scope.$parent.device._id;
+                 });
 
-                }, function (response) {
-                    console.log('error', response);
-                });
-*/
+                 }, function (response) {
+                 console.log('error', response);
+                 });
+                 */
             };
 
             var objectIdDel = function (copiedObjectWithId) {

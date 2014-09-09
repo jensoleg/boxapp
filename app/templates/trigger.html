@@ -1,46 +1,40 @@
 <ion-view title="Trigger">
     <ion-content class="has-header">
-        <a class="item">
-            Name
-                <span class="item-note">
-                   {{trigger.name}}
-                </span>
-        </a>
-        <a class="item">
-            Stream
-                <span class="item-note">
-                   {{trigger.stream_id}}
-                </span>
-        </a>
-        <a class="item">
-            Type
-                <span class="item-note">
-                   {{trigger.trigger_type}}
-                </span>
-        </a>
-        <a class="item">
-            Threshold value
-                <span class="item-note">
-                   {{trigger.threshold_value}}
-                </span>
-        </a>
-        <a class="item">
-            Resolution
-                <span class="item-note">
-                   {{trigger.resolution}}
-                </span>
-        </a>
 
-        <div class="item item-icon-right item-divider">
-            Requests
-            <i class="icon ion-ios7-plus-empty" ng-click="newRequest()"></i>
+        <div class="row responsive-sm" style="padding: 0px;">
+            <div class="col" style="margin-bottom: 20px; padding: 0px;">
+                <ion-list style="padding-bottom: 10px;">
+                    <ion-item style="border-style:none">
+                        <a class="item-icon-left">
+                            <i class="icon ion-ios7-pricetag" style="color:#4a87ee"></i>
+                            {{trigger.name}}
+                        </a>
+                    </ion-item>
+                    <ion-item style="border-style:none">
+                        <a class="item-icon-left">
+                            <i class="icon ion-android-alarm" style="color:#ef4e3a"></i>
+                            {{trigger.stream_id}} {{trigger.trigger_type}} {{trigger.threshold_value}} /
+                            {{trigger.resolution}}
+                        </a>
+                    </ion-item>
+                </ion-list>
+            </div>
         </div>
 
-        <a class="item" ng-repeat="request in trigger.request">
-            Request
-                <span class="item-note">
-                   {{request.name}}
-                </span>
-        </a>
+
+        <ion-list>
+            <ion-item class="item-icon-right item-divider">
+                Requests
+                <i class="icon ion-ios7-plus-empty" ng-click="addRequest()"></i>
+            </ion-item>
+
+            <ion-item ng-repeat="request in trigger.requests">
+                {{request.name}}
+                <ion-option-button class="button-calm" ng-click="test(request)">Test</ion-option-button>
+                <ion-option-button class="button-balanced" ng-click="copy(request)">Copy</ion-option-button>
+                <ion-option-button class="button-positive" ng-click="edit(request)">Edit</ion-option-button>
+                <ion-option-button class="button-assertive" ng-click="remove(request)">Delete</ion-option-button>
+            </ion-item>
+        </ion-list>
     </ion-content>
 </ion-view>

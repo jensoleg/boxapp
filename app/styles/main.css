@@ -4,6 +4,10 @@ body {
     cursor: url('http://ionicframework.com/img/finger.png'), auto;
 }
 
+.pac-container{
+    pointer-events: auto;
+}
+
 /*dark is class added to ion-content, since ion-conte*/
 /*is made up of multiple pieces and is a pain to style each*/
 .dark {

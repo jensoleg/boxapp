@@ -169,6 +169,10 @@
 
         .controller('AppCtrl', ['bobby', '$scope', 'auth', '$state', '$ionicSideMenuDelegate', function (bobby, $scope, auth, $state, $ionicSideMenuDelegate) {
 
+            auth.getProfile().then(function (profile) {
+                $scope.profile = profile;
+            });
+
             $scope.signout = function () {
                 bobby.setInstallation(null);
                 $ionicSideMenuDelegate.toggleLeft();

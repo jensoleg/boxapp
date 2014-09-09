@@ -43,7 +43,7 @@
             };
         })
 
-        .controller('InstallationsCtrl', ['$scope', '$state', 'installations', 'installationService', '$ionicListDelegate', '$timeout', '$ionicModal', '$ionicPopup', function ($scope, $state, installations, installationService, $ionicListDelegate, $timeout, $ionicModal, $ionicPopup) {
+        .controller('InstallationsCtrl', ['bobby', '$scope', '$state', 'installations', 'installationService', '$ionicListDelegate', '$timeout', '$ionicModal', '$ionicPopup', function (bobby, $scope, $state, installations, installationService, $ionicListDelegate, $timeout, $ionicModal, $ionicPopup) {
 
             $scope.installations = installations;
             $scope.newInst = {location: {'lat': null, 'lng': null}};
@@ -137,28 +137,10 @@
                 });
             };
 
-            var objectIdDel = function (copiedObjectWithId) {
-                if (copiedObjectWithId !== null && typeof copiedObjectWithId !== 'string' &&
-                    typeof copiedObjectWithId !== 'number' && typeof copiedObjectWithId !== 'boolean') {
-                    //for array length is defined however for objects length is undefined
-                    if (typeof copiedObjectWithId.length === 'undefined') {
-                        delete copiedObjectWithId._id;
-                        for (var key in copiedObjectWithId) {
-                            objectIdDel(copiedObjectWithId[key]); //recursive del calls on object elements
-                        }
-                    }
-                    else {
-                        for (var i = 0; i < copiedObjectWithId.length; i++) {
-                            objectIdDel(copiedObjectWithId[i]);  //recursive del calls on array elements
-                        }
-                    }
-                }
-            };
-
             /* Copy an installation */
             $scope.copyInstallation = function (i) {
                 var copy = _.cloneDeep(i);
-                objectIdDel(copy);
+                bobby.objectIdDel(copy);
                 delete copy.__v;
                 delete copy.$$hashKey;
                 copy.name = 'Copy of ' + i.name;
@@ -176,7 +158,7 @@
         ])
 
         .
-        controller('InstallationCtrl', ['$scope', '$state', '$window', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', function ($scope, $state, $window, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
+        controller('InstallationCtrl', ['bobby', '$scope', '$state', '$window', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', function (bobby, $scope, $state, $window, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
 
             $scope.installation = installation;
             $scope.newDevice = {};
@@ -261,28 +243,10 @@
                 });
             };
 
-            var objectIdDel = function (copiedObjectWithId) {
-                if (copiedObjectWithId !== null && typeof copiedObjectWithId !== 'string' &&
-                    typeof copiedObjectWithId !== 'number' && typeof copiedObjectWithId !== 'boolean') {
-                    //for array length is defined however for objects length is undefined
-                    if (typeof copiedObjectWithId.length === 'undefined') {
-                        delete copiedObjectWithId._id;
-                        for (var key in copiedObjectWithId) {
-                            objectIdDel(copiedObjectWithId[key]); //recursive del calls on object elements
-                        }
-                    }
-                    else {
-                        for (var i = 0; i < copiedObjectWithId.length; i++) {
-                            objectIdDel(copiedObjectWithId[i]);  //recursive del calls on array elements
-                        }
-                    }
-                }
-            };
-
             /* Copy a device */
             $scope.copy = function (i) {
                 var copy = _.cloneDeep(i);
-                objectIdDel(copy);
+                bobby.objectIdDel(copy);
                 delete copy.__v;
                 delete copy.$$hashKey;
                 copy.name = 'Copy of ' + i.name;
@@ -319,7 +283,7 @@
 
         }])
 
-        .controller('SensorCtrl', ['$scope', '$state', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function ($scope, $state, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
+        .controller('SensorCtrl', ['bobby', '$scope', '$state', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function (bobby, $scope, $state, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
 
             $scope.newControl = {};
 
@@ -406,28 +370,10 @@
                 });
             };
 
-            var objectIdDel = function (copiedObjectWithId) {
-                if (copiedObjectWithId !== null && typeof copiedObjectWithId !== 'string' &&
-                    typeof copiedObjectWithId !== 'number' && typeof copiedObjectWithId !== 'boolean') {
-                    //for array length is defined however for objects length is undefined
-                    if (typeof copiedObjectWithId.length === 'undefined') {
-                        delete copiedObjectWithId._id;
-                        for (var key in copiedObjectWithId) {
-                            objectIdDel(copiedObjectWithId[key]); //recursive del calls on object elements
-                        }
-                    }
-                    else {
-                        for (var i = 0; i < copiedObjectWithId.length; i++) {
-                            objectIdDel(copiedObjectWithId[i]);  //recursive del calls on array elements
-                        }
-                    }
-                }
-            };
-
             /* Copy a control */
             $scope.copy = function (i) {
                 var copy = _.cloneDeep(i);
-                objectIdDel(copy);
+                bobby.objectIdDel(copy);
                 delete copy.__v;
                 delete copy.$$hashKey;
                 copy.name = 'Copy of ' + i.name;
@@ -445,7 +391,7 @@
 
         }])
 
-        .controller('TriggerCtrl', ['$scope', '$state', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function ($scope, $state, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
+        .controller('TriggerCtrl', ['bobby', '$scope', '$state', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function (bobby, $scope, $state, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
 
             $scope.newTrigger = {};
             $scope.device = $scope.$parent.device;
@@ -532,28 +478,10 @@
                 });
             };
 
-            var objectIdDel = function (copiedObjectWithId) {
-                if (copiedObjectWithId !== null && typeof copiedObjectWithId !== 'string' &&
-                    typeof copiedObjectWithId !== 'number' && typeof copiedObjectWithId !== 'boolean') {
-                    //for array length is defined however for objects length is undefined
-                    if (typeof copiedObjectWithId.length === 'undefined') {
-                        delete copiedObjectWithId._id;
-                        for (var key in copiedObjectWithId) {
-                            objectIdDel(copiedObjectWithId[key]); //recursive del calls on object elements
-                        }
-                    }
-                    else {
-                        for (var i = 0; i < copiedObjectWithId.length; i++) {
-                            objectIdDel(copiedObjectWithId[i]);  //recursive del calls on array elements
-                        }
-                    }
-                }
-            };
-
             /* Copy a trigger */
             $scope.copy = function (i) {
                 var copy = _.cloneDeep(i);
-                objectIdDel(copy);
+                bobby.objectIdDel(copy);
                 delete copy.$$hashKey;
                 copy.name = 'Copy of ' + i.name;
 
@@ -574,9 +502,54 @@
 
             $scope.control = control;
 
+            $scope.gaugeSettings =
+            {
+                subvalues: $scope.gaugeSubvalues,
+                scale: $scope.gaugeScale,
+                rangeContainer: $scope.gaugeRange,
+                tooltip: { enabled: true },
+                value: $scope.gaugeValue
+            };
+
+            $scope.gaugeValue = (control.maxCritical - control.minCritical) / 2;
+
+            $scope.gaugeScale =
+            {
+                startValue: control.minValue, endValue: control.maxValue,
+                majorTick: { tickInterval: 5 },
+                minorTick: {
+                    visible: true,
+                    tickInterval: 1
+                },
+                label: {
+                    customizeText: function (arg) {
+                        return arg.valueText + ' ' + control.unit.symbol + control.unit.units;
+                    }
+                },
+                valueType: "numeric"
+            };
+
+            $scope.gaugeRange =
+            {
+                ranges: [
+                    { startValue: control.minValue, endValue: control.minCritical, color: '#0077BE'},
+                    { startValue: control.minCritical, endValue: control.maxCritical, color: '#E6E200'},
+                    { startValue: control.maxCritical, endValue: control.maxValue, color: '#77DD77'}
+                ],
+                offset: 5
+            };
+
+            $scope.gaugeSettings.value = $scope.gaugeValue;
+            $scope.gaugeSubvalues = [(control.maxCritical - control.minCritical)/2 - control.minCritical , (control.maxValue - control.minValue)/2 ];
+
+            $scope.gaugeSettings.subvalues = $scope.gaugeSubvalues;
+            $scope.gaugeSettings.scale = $scope.gaugeScale;
+            $scope.gaugeSettings.rangeContainer = $scope.gaugeRange;
+            $scope.gaugeSettings.value = $scope.gaugeValue;
+
         }])
 
-        .controller('TriggerDetailCtrl', ['$scope', '$state', 'trigger', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function ($scope, $state, trigger, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
+        .controller('TriggerDetailCtrl', ['bobby', '$scope', '$state', 'trigger', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function (bobby, $scope, $state, trigger, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
 
             $scope.trigger = trigger;
             $scope.newRequest = {};
@@ -623,7 +596,7 @@
 
                     if (res) {
                         installationService.removeRequest($state.params.id, $state.params.deviceid, $state.params.triggerid, request._id).then(function (response) {
-                            _.pull($scope.$parent.triggers.requests, request);
+                            _.pull($scope.trigger.requests, request);
                         }, function (response) {
                             console.log('error', response);
                         });
@@ -656,11 +629,24 @@
 
             $scope.saveNew = function () {
 
-                installationService.newrequest($state.params.id, $state.params.deviceid, $state.params.triggerid, $scope.newRequest).then(function (response) {
-                    $scope.$parent.installation = response;
+                installationService.newRequest($state.params.id, $state.params.deviceid, $state.params.triggerid, $scope.newRequest).then(function (response) {
 
-                    $scope.$parent.device = _.find(response.devices, function (d) {
-                        return d._id == $scope.$parent.device._id;
+                    function findNested(obj, key, memo) {
+                        _.isArray(memo) || (memo = []);
+                        _.forOwn(obj, function (val, i) {
+                            if (i === key) {
+                                memo.push(val);
+                            } else {
+                                findNested(val, key, memo);
+                            }
+                        });
+                        return memo;
+                    }
+
+                    var triggers = findNested(response, 'triggers');
+
+                    $scope.trigger = _.find(triggers[0], function (d) {
+                        return d._id == $state.params.triggerid;
                     });
 
                 }, function (response) {
@@ -669,32 +655,15 @@
 
             };
 
-            var objectIdDel = function (copiedObjectWithId) {
-                if (copiedObjectWithId !== null && typeof copiedObjectWithId !== 'string' &&
-                    typeof copiedObjectWithId !== 'number' && typeof copiedObjectWithId !== 'boolean') {
-                    //for array length is defined however for objects length is undefined
-                    if (typeof copiedObjectWithId.length === 'undefined') {
-                        delete copiedObjectWithId._id;
-                        for (var key in copiedObjectWithId) {
-                            objectIdDel(copiedObjectWithId[key]); //recursive del calls on object elements
-                        }
-                    }
-                    else {
-                        for (var i = 0; i < copiedObjectWithId.length; i++) {
-                            objectIdDel(copiedObjectWithId[i]);  //recursive del calls on array elements
-                        }
-                    }
-                }
-            };
-
             /* Copy a Request */
             $scope.copy = function (i) {
                 var copy = _.cloneDeep(i);
-                objectIdDel(copy);
+                bobby.objectIdDel(copy);
                 delete copy.$$hashKey;
                 copy.name = 'Copy of ' + i.name;
 
-                $scope.saveNew(copy);
+                $scope.newRequest = copy;
+                $scope.saveNew();
 
                 $ionicListDelegate.closeOptionButtons();
             };

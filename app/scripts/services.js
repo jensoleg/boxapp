@@ -124,6 +124,25 @@
                 }
             });
 
+
+            bobby.objectIdDel = function (copiedObjectWithId) {
+                if (copiedObjectWithId !== null && typeof copiedObjectWithId !== 'string' &&
+                    typeof copiedObjectWithId !== 'number' && typeof copiedObjectWithId !== 'boolean') {
+                    //for array length is defined however for objects length is undefined
+                    if (typeof copiedObjectWithId.length === 'undefined') {
+                        delete copiedObjectWithId._id;
+                        for (var key in copiedObjectWithId) {
+                            this.objectIdDel(copiedObjectWithId[key]); //recursive del calls on object elements
+                        }
+                    }
+                    else {
+                        for (var i = 0; i < copiedObjectWithId.length; i++) {
+                            this.objectIdDel(copiedObjectWithId[i]);  //recursive del calls on array elements
+                        }
+                    }
+                }
+            };
+
             /* set current installation */
             bobby.setInstallation = function (newInstallation) {
 
@@ -407,7 +426,7 @@
                 newRequest: function (id, deviceid, triggerid, request) {
                     var q = $q.defer();
 
-                    $http.post(apiEndpoint + 'installations/' + id + '/devices/' + deviceid + '/triggers' + triggerid + '/requests/', request, { headers: {'realm': 'decoplant'}}).success(function (response) {
+                    $http.post(apiEndpoint + 'installations/' + id + '/devices/' + deviceid + '/triggers/' + triggerid + '/requests/', request, { headers: {'realm': 'decoplant'}}).success(function (response) {
                         q.resolve(response);
                     }, function () {
                         q.resolve(null);
@@ -424,10 +443,10 @@
                     });
                     return q.promise;
                 },
-                updateRequest: function (id, deviceid, request) {
+                updateRequest: function (id, deviceid, triggerid, request) {
                     var q = $q.defer();
 
-                    $http.put(apiEndpoint + 'installations/' + id + '/devices/' + deviceid + '/triggers/' + trigger._id + '/requests/' + request._id, request, { headers: {'realm': 'decoplant'}}).success(function (response) {
+                    $http.put(apiEndpoint + 'installations/' + id + '/devices/' + deviceid + '/triggers/' + triggerid + '/requests/' + request._id, request, { headers: {'realm': 'decoplant'}}).success(function (response) {
                         q.resolve(response);
                     }, function () {
                         q.resolve(null);

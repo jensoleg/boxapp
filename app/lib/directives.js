@@ -29,9 +29,9 @@
                     }
                 }
             };
-        }).
+        })
 
-        directive('googlePlaces', function () {
+        .directive('googlePlaces', function () {
             return {
                 restrict: 'E',
                 replace: true,
@@ -40,9 +40,13 @@
                     location: '=',
                     address: '='
                 },
-                template: '<input id="google_places_ac" name="google_places_ac" type="text" placeholder="Address" ng-model="address"/>',
+                template: '<input type="text" placeholder="Address" ng-model="address"/>',
                 link: function ($scope, elm, attrs) {
-                    var autocomplete = new google.maps.places.Autocomplete(elm[0], {});
+                    var options = {
+                        componentRestrictions: { country: 'dk' },
+                        types: ['geocode']
+                    };
+                    var autocomplete = new google.maps.places.Autocomplete(elm[0], options);
                     google.maps.event.addListener(autocomplete, 'place_changed', function () {
                         var place = autocomplete.getPlace();
                         $scope.address = place.formatted_address;
@@ -53,4 +57,5 @@
                 }
             };
         });
+
 }());

@@ -97,7 +97,7 @@
                 });
                 confirmPopup.then(function (res) {
                     if (res) {
-                        installationService.removeInstallation(installation);
+                        installationService.removeInstallation(installation._id);
                         _.pull(installations, installation);
                     }
                     $ionicListDelegate.closeOptionButtons();
@@ -207,7 +207,7 @@
             };
 
             $scope.update = function () {
-                installationService.updateDevice($scope.device);
+                installationService.updateDevice($state.params.id, $scope.device);
             };
 
             /* Remove device */
@@ -221,7 +221,7 @@
                 });
                 confirmPopup.then(function (res) {
                     if (res) {
-                        installationService.removeDevice(device._id).then(function (response) {
+                        installationService.removeDevice($state.params.id, device._id).then(function (response) {
                             _.pull($scope.installation.devices, device);
                         }, function (response) {
                             console.log('error', response);
@@ -254,7 +254,7 @@
             };
 
             $scope.saveNew = function () {
-                installationService.newDevice($scope.installation._id, $scope.newDevice).then(function (response) {
+                installationService.newDevice($state.params.id, $scope.newDevice).then(function (response) {
                     $scope.installation = response;
                 }, function (response) {
                     console.log('error', response);
@@ -349,7 +349,7 @@
             };
 
             $scope.update = function () {
-                installationService.updateControl($scope.control);
+                installationService.updateControl($state.params.id, $state.params.deviceid, $scope.control);
             };
 
             /* Remove control */
@@ -363,7 +363,7 @@
                 });
                 confirmPopup.then(function (res) {
                     if (res) {
-                        installationService.removeControl(control._id).then(function (response) {
+                        installationService.removeControl($state.params.id, $state.params.deviceid, control._id).then(function (response) {
                             _.pull($scope.$parent.device.controls, control);
                         }, function (response) {
                             console.log('error', response);
@@ -395,7 +395,7 @@
             };
 
             $scope.saveNew = function () {
-                installationService.newControl($scope.device._id, $scope.newControl).then(function (response) {
+                installationService.newControl($state.params.id, $state.params.deviceid, $scope.newControl).then(function (response) {
                     $scope.$parent.installation = response;
                     $scope.$parent.device = _.find(response.devices, function (d) {
                         return d._id == $scope.$parent.device._id;
@@ -476,7 +476,7 @@
             };
 
             $scope.update = function () {
-                installationService.updateTrigger($scope.trigger);
+                installationService.updateTrigger($state.params.id, $state.params.deviceid, $scope.trigger);
             };
 
             /* Remove Trigger */
@@ -490,7 +490,7 @@
                 });
                 confirmPopup.then(function (res) {
                     if (res) {
-                        installationService.removeTrigger(trigger._id).then(function (response) {
+                        installationService.removeTrigger($state.params.id, $state.params.deviceid, trigger._id).then(function (response) {
                             _.pull($scope.device.triggers, trigger);
                         }, function (response) {
                             console.log('error', response);
@@ -522,7 +522,7 @@
             };
 
             $scope.saveNew = function () {
-                installationService.newTrigger($scope.device._id, $scope.newTrigger).then(function (response) {
+                installationService.newTrigger($state.params.id, $state.params.deviceid, $scope.newTrigger).then(function (response) {
                     $scope.$parent.installation = response;
                     $scope.device = _.find(response.devices, function (d) {
                         return d._id == $scope.device._id;
@@ -607,7 +607,7 @@
             };
 
             $scope.update = function () {
-//                installationService.updateRequest($scope.request);
+                installationService.updateRequest($state.params.id, $state.params.deviceid, $state.params.triggerid, $scope.request);
             };
 
             /* Remove Request */
@@ -620,15 +620,15 @@
                     okType: 'button-clear button-positive'
                 });
                 confirmPopup.then(function (res) {
-                    /*
-                     if (res) {
-                     installationService.removeRequest(request._id).then(function (response) {
-                     _.pull($scope.$parent.triggers.requests, request);
-                     }, function (response) {
-                     console.log('error', response);
-                     });
-                     }
-                     */
+
+                    if (res) {
+                        installationService.removeRequest($state.params.id, $state.params.deviceid, $state.params.triggerid, request._id).then(function (response) {
+                            _.pull($scope.$parent.triggers.requests, request);
+                        }, function (response) {
+                            console.log('error', response);
+                        });
+                    }
+
                     $ionicListDelegate.closeOptionButtons();
                 });
             };
@@ -655,18 +655,18 @@
             };
 
             $scope.saveNew = function () {
-                /*
-                 installationService.newrequest($scope.device._id,  $scope.newRequest).then(function (response) {
-                 $scope.$parent.installation = response;
 
-                 $scope.$parent.device = _.find(response.devices, function (d) {
-                 return d._id == $scope.$parent.device._id;
-                 });
+                installationService.newrequest($state.params.id, $state.params.deviceid, $state.params.triggerid, $scope.newRequest).then(function (response) {
+                    $scope.$parent.installation = response;
 
-                 }, function (response) {
-                 console.log('error', response);
-                 });
-                 */
+                    $scope.$parent.device = _.find(response.devices, function (d) {
+                        return d._id == $scope.$parent.device._id;
+                    });
+
+                }, function (response) {
+                    console.log('error', response);
+                });
+
             };
 
             var objectIdDel = function (copiedObjectWithId) {

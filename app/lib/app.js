@@ -78,8 +78,8 @@
                             templateUrl: 'templates/device.html',
                             controller: 'DeviceCtrl',
                             resolve: {
-                                device: ['$stateParams', 'installationService',  function ($stateParams, installationService) {
-                                    return installationService.getDevice($stateParams.deviceid);
+                                device: ['$stateParams', 'installationService', function ($stateParams, installationService) {
+                                    return installationService.getDevice($stateParams.id, $stateParams.deviceid);
                                 }]
                             }
                         }
@@ -93,7 +93,7 @@
                             controller: 'ControlDetailCtrl',
                             resolve: {
                                 control: ['$stateParams', 'installationService', function ($stateParams, installationService) {
-                                    return installationService.getControl($stateParams.controlid);
+                                    return installationService.getControl($stateParams.id, $stateParams.deviceid, $stateParams.controlid);
                                 }]
                             }
                         }
@@ -106,8 +106,8 @@
                             templateUrl: 'templates/trigger.html',
                             controller: 'TriggerDetailCtrl',
                             resolve: {
-                                trigger: ['$stateParams', 'installationService',  function ($stateParams, installationService) {
-                                    return installationService.getTrigger($stateParams.triggerid);
+                                trigger: ['$stateParams', 'installationService', function ($stateParams, installationService) {
+                                    return installationService.getTrigger($stateParams.id, $stateParams.deviceid, $stateParams.triggerid);
                                 }]
                             }
                         }
@@ -150,10 +150,10 @@
                 // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
                 // for form inputs)
                 /*
-                if (cordova && cordova.plugins.Keyboard) {
-                    cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-                }
-                */
+                 if (cordova && cordova.plugins.Keyboard) {
+                 cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+                 }
+                 */
                 if (statusbar) {
                     statusbar.styleDefault();
                 }

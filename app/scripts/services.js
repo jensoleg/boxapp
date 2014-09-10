@@ -452,6 +452,17 @@
                         q.resolve(null);
                     });
                     return q.promise;
+                },
+
+                requester: function (request) {
+                    var q = $q.defer();
+
+                    $http.post(apiEndpoint + 'requests/test', request, { headers: {'realm': 'decoplant'}}).success(function (response) {
+                        q.resolve(response);
+                    }, function () {
+                        q.resolve(null);
+                    });
+                    return q.promise;
                 }
 
             };

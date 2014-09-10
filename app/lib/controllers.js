@@ -541,7 +541,7 @@
             };
 
             $scope.gaugeSettings.value = $scope.gaugeValue;
-            $scope.gaugeSubvalues = [(control.maxCritical - control.minCritical)/2 - control.minCritical , (control.maxValue - control.minValue)/2 ];
+            $scope.gaugeSubvalues = [(control.maxCritical - control.minCritical) / 2 - control.minCritical , (control.maxValue - control.minValue) / 2 ];
 
             $scope.gaugeSettings.subvalues = $scope.gaugeSubvalues;
             $scope.gaugeSettings.scale = $scope.gaugeScale;
@@ -552,11 +552,32 @@
 
         .controller('TriggerDetailCtrl', ['bobby', '$scope', '$state', 'trigger', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function (bobby, $scope, $state, trigger, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
 
+            var responseColor;
+
             $scope.trigger = trigger;
             $scope.newRequest = {};
 
+            $scope.getColor = function (r) {
+                return responseColor;
+            };
+
             $scope.formatRequest = function (r) {
                 $scope.newRequest.request_options = JSON.stringify(JSON.parse(r), null, 3);
+            };
+
+            $scope.sendRequest = function (request) {
+                installationService.requester(JSON.stringify(JSON.parse(request), null, 3)).then(function (response) {
+                    $scope.requestResponse = JSON.parse(response);
+                    responseColor = '#66cc33';
+                }, function (response) {
+                    $scope.requestResponse = response;
+                    responseColor = '#ef4e3a';
+                });
+            };
+
+            $scope.clearResponse = function () {
+                $scope.requestResponse = null;
+                responseColor = null;
             };
 
             /* Edit Request */

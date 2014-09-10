@@ -14,7 +14,7 @@
                 <div class="input-label">
                     Sensor
                 </div>
-                <select ng-init="newTrigger.stream_id=device.controls[0].name" ng-model="newTrigger.stream_id" ng-options="c.name as c.name for c in device.controls">
+                <select ng-init="newTrigger.stream_id=device.controls[0].id" ng-model="newTrigger.stream_id" ng-options="c.id as c.name for c in device.controls">
                 </select>
             </select>
             </label>
@@ -26,24 +26,16 @@
                 <div class="input-label">
                     Evaluation
                 </div>
-                <select ng-init="newTrigger.trigger_type='lt'" ng-model="newTrigger.trigger_type">
-                    <option selected>lt</option>
-                    <option>lte</option>
-                    <option>gt</option>
-                    <option>gte</option>
-                    <option>eq</option>
-                </select>
+                <select ng-init="newTrigger.trigger_type=operators[0]" ng-model="newTrigger.trigger_type" ng-options="o as o for o in operators"> </select>
             </label>
             <label class="item item-input item-select">
                 <div class="input-label">
                     Resolution
                 </div>
                 <select ng-init="newTrigger.resolution='min'" ng-model="newTrigger.resolution">
-                    <option selected>sec</option>
-                    <option>min</option>
+                    <option selected>min</option>
                     <option>hour</option>
                     <option>day</option>
-
                 </select>
             </label>
         </div>

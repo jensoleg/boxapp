@@ -9,10 +9,18 @@
 
                 <ion-item ng-repeat="control in device.controls"
                           ui-sref="app.control({ id: installationId , deviceid: device._id, controlid: control._id })">
+
                     <h3 style="color: #444;;">{{control.name}}</h3>
+
+                    <a class="item-icon-right">
+                        <i ng-show="control.ctrlType=='data'" class="icon ion-speedometer" style="color:#4a87ee"></i>
+                        <i ng-show="control.ctrlType=='internal'" class="icon ion-ios7-gear" style="color:#4a87ee"></i>
+                    </a>
+
                     <ion-option-button class="button-balanced" ng-click="copy(control)">Copy</ion-option-button>
                     <ion-option-button class="button-positive" ng-click="edit(control)">Edit</ion-option-button>
                     <ion-option-button class="button-assertive" ng-click="remove(control)">Delete</ion-option-button>
+
                 </ion-item>
             </ion-list>
         </div>
@@ -26,23 +34,13 @@
 
                 <ion-item ng-repeat="trigger in device.triggers"
                           ui-sref="app.trigger({ id: installationId, deviceid: device._id, triggerid: trigger._id })">
-                    <h3 style="color: #444;">{{trigger.name}} {{trigger.trigger_type}} {{trigger.threshold_value}} / {{trigger.resolution}}</h3>
+
+                    <h3 style="color: #444;">{{trigger.name}} {{trigger.trigger_type | logicalop }} {{trigger.threshold_value}} / {{trigger.resolution}}</h3>
+
                     <a class="item-icon-right">
                         <i class="icon ion-android-alarm" style="color:#ef4e3a"></i>
                     </a>
-                    <!--div class="row responsive-sm" style="padding: 0px;">
-                        <div class="col" style="margin-bottom: 20px; padding: 0px;">
-                            <ion-list style="padding-bottom: 10px;">
-                                <ion-item style="border-style:none">
-                                    <a class="item-icon-left">
-                                        <i class="icon ion-android-alarm" style="color:#ef4e3a"></i>
-                                        {{trigger.stream_id}} {{trigger.trigger_type}} {{trigger.threshold_value}} /
-                                        {{trigger.resolution}}
-                                    </a>
-                                </ion-item>
-                            </ion-list>
-                        </div>
-                    </div-->
+
                     <ion-option-button class="button-balanced" ng-click="copy(trigger)">Copy</ion-option-button>
                     <ion-option-button class="button-positive" ng-click="edit(trigger)">Edit</ion-option-button>
                     <ion-option-button class="button-assertive" ng-click="remove(trigger)">Delete</ion-option-button>

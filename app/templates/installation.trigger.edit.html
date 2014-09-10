@@ -1,7 +1,7 @@
 <div class="modal">
     <ion-header-bar class="bar bar-header bar-positive">
         <button class="button button-clear button-clear" ng-click="closeEdit()">Cancel</button>
-        <h1 class="title">Edit control</h1>
+        <h1 class="title">Edit trigger</h1>
         <button class="button button-clear button-clear" ng-click="doneEdit(trigger)">Save</button>
     </ion-header-bar>
     <ion-content>
@@ -14,7 +14,7 @@
                 <div class="input-label">
                     Sensor
                 </div>
-                <select ng-model="trigger.stream_id" ng-options="c.name as c.name for c in device.controls">
+                <select ng-model="trigger.stream_id" ng-options="c.id as c.name for c in device.controls">
                 </select>
             </label>
             <label class="item item-input">
@@ -25,24 +25,17 @@
                 <div class="input-label">
                     Evaluation
                 </div>
-                <select ng-model="newTrigger.trigger_type">
-                    <option>lt</option>
-                    <option>lte</option>
-                    <option>gt</option>
-                    <option>gte</option>
-                    <option>eq</option>
+                <select ng-model="trigger.trigger_type" ng-options="o as o for o in operators">
                 </select>
             </label>
             <label class="item item-input item-select">
                 <div class="input-label">
                     Resolution
                 </div>
-                <select ng-model="newTrigger.resolution">
-                    <option>sec</option>
+                <select ng-model="trigger.resolution">
                     <option>min</option>
                     <option>hour</option>
                     <option>day</option>
-
                 </select>
             </label>
 

@@ -9,6 +9,15 @@
             };
         })
 
+        .filter('logicalop', function () {
+
+            var opertors = {'lt': '<', 'lte': '<=', 'gt': '>', 'gte': '>=', 'eq': '='};
+
+            return function (v) {
+                return opertors[v];
+            };
+        })
+
         .filter('datastreamFilter', function () {
             return function (items, device) {
                 var filtered = [];
@@ -158,8 +167,7 @@
             };
         }])
 
-        .
-        controller('InstallationCtrl', ['bobby', '$scope', '$state', '$window', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', function (bobby, $scope, $state, $window, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
+        .controller('InstallationCtrl', ['bobby', '$scope', '$state', '$window', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', function (bobby, $scope, $state, $window, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
 
             $scope.installation = installation;
             $scope.newDevice = {};
@@ -286,10 +294,10 @@
 
         }])
 
-        .controller('SensorCtrl', ['bobby', '$scope', '$state', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function (bobby, $scope, $state, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
+        .controller('SensorCtrl', ['bobby', '$scope', '$rootScope', '$state', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function (bobby, $scope, $rootScope, $state, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
 
             $scope.newControl = {};
-            $scope.types = ['data', 'internal'];
+            $scope.types = ['data', 'status'];
 
             /* Edit Control */
 
@@ -333,7 +341,13 @@
                     if (res) {
                         installationService.removeControl($state.params.id, $state.params.deviceid, control._id)
                             .then(function (response) {
-                                _.pull($scope.$parent.device.controls, control);
+                                $scope.$parent.installation = response;
+                                $scope.$parent.device = _.find(response.devices, function (d) {
+                                    return d._id === $scope.$parent.device._id;
+                                });
+                                $rootScope.$broadcast('message:control-removed', control);
+
+//                                _.pull($scope.$parent.device.controls, control);
                             }, function (response) {
                                 console.log('error', response);
                             });
@@ -367,12 +381,9 @@
                 installationService.newControl($state.params.id, $state.params.deviceid, $scope.newControl)
                     .then(function (response) {
                         $scope.$parent.installation = response;
-                        console.log($scope.$parent.device);
-
                         $scope.$parent.device = _.find(response.devices, function (d) {
                             return d._id === $scope.$parent.device._id;
                         });
-                        console.log($scope.$parent.device);
 
                     }, function (response) {
                         console.log('error', response);
@@ -400,10 +411,15 @@
 
         }])
 
-        .controller('TriggerCtrl', ['bobby', '$scope', '$state', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function (bobby, $scope, $state, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
+        .controller('TriggerCtrl', ['bobby', '$scope', '$rootScope', '$state', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function (bobby, $scope, $rootScope, $state, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
 
             $scope.newTrigger = {};
-            $scope.device = $scope.$parent.device;
+
+            $rootScope.$on('message:control-removed', function (evt, control) {
+                $scope.device = $scope.$parent.device;
+            });
+
+            $scope.operators = ['lt', 'lte', 'gt', 'gte', 'eq'];
 
             /* Edit Trigger */
 
@@ -568,16 +584,18 @@
             $scope.gaugeSettings.rangeContainer = $scope.gaugeRange;
             $scope.gaugeSettings.value = $scope.gaugeValue;
 
-        }
-        ])
+        }])
 
-        .
-        controller('TriggerDetailCtrl', ['bobby', '$scope', '$state', 'trigger', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function (bobby, $scope, $state, trigger, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
+        .controller('TriggerDetailCtrl', ['bobby', '$scope', '$state', 'trigger', 'device', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function (bobby, $scope, $state, trigger, device, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
 
             var responseColor;
 
             $scope.trigger = trigger;
             $scope.newRequest = {};
+
+            $scope.myControl = _.find(device.controls, function (c) {
+                return c.name === trigger.stream_id;
+            });
 
             $scope.getColor = function () {
                 return responseColor;
@@ -829,7 +847,4 @@
 
         }]);
 
-}
-()
-    )
-;
+}());

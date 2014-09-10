@@ -6,14 +6,15 @@
                 <ion-list style="padding-bottom: 10px;">
                     <ion-item style="border-style:none">
                         <a class="item-icon-left">
-                            <i class="icon ion-ios7-pricetag" style="color:#4a87ee"></i>
-                            {{trigger.name}}
+                            <i ng-show="myControl.ctrlType=='data'" class="icon ion-speedometer" style="color:#4a87ee"></i>
+                            <i ng-show="myControl.ctrlType=='internal'" class="icon ion-ios7-gear" style="color:#4a87ee"></i>
+                            {{myControl.name}}
                         </a>
                     </ion-item>
                     <ion-item style="border-style:none">
                         <a class="item-icon-left">
                             <i class="icon ion-android-alarm" style="color:#ef4e3a"></i>
-                            {{trigger.stream_id}} {{trigger.trigger_type}} {{trigger.threshold_value}} /
+                            {{trigger.name}} {{trigger.trigger_type | logicalop }} {{trigger.threshold_value}} /
                             {{trigger.resolution}}
                         </a>
                     </ion-item>

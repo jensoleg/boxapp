@@ -108,6 +108,9 @@
                             resolve: {
                                 trigger: ['$stateParams', 'installationService', function ($stateParams, installationService) {
                                     return installationService.getTrigger($stateParams.id, $stateParams.deviceid, $stateParams.triggerid);
+                                }],
+                                device: ['$stateParams', 'installationService', function ($stateParams, installationService) {
+                                    return installationService.getDevice($stateParams.id, $stateParams.deviceid);
                                 }]
                             }
                         }

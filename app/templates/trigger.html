@@ -1,4 +1,4 @@
-<ion-view title="Trigger">
+<ion-view title="{{trigger.name}}">
     <ion-content class="has-header">
 
         <div class="row responsive-sm" style="padding: 0px;">
@@ -30,7 +30,7 @@
 
             <ion-item ng-repeat="request in trigger.requests">
                 {{request.name}}
-                <ion-option-button class="button-calm" ng-click="test(request)">Test</ion-option-button>
+                <ion-option-button class="button-calm" ng-click="sendRequest(request.request_options)">Test</ion-option-button>
                 <ion-option-button class="button-balanced" ng-click="copy(request)">Copy</ion-option-button>
                 <ion-option-button class="button-positive" ng-click="edit(request)">Edit</ion-option-button>
                 <ion-option-button class="button-assertive" ng-click="remove(request)">Delete</ion-option-button>

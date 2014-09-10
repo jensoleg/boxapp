@@ -43,7 +43,7 @@
             };
         })
 
-        .controller('InstallationsCtrl', ['bobby', '$scope', '$state', 'installations', 'installationService', '$ionicListDelegate', '$timeout', '$ionicModal', '$ionicPopup', function (bobby, $scope, $state, installations, installationService, $ionicListDelegate, $timeout, $ionicModal, $ionicPopup) {
+        .controller('InstallationsCtrl', ['bobby', '$scope', 'installations', 'installationService', '$ionicListDelegate', '$ionicModal', '$ionicPopup', function (bobby, $scope, installations, installationService, $ionicListDelegate, $ionicModal, $ionicPopup) {
 
             $scope.installations = installations;
             $scope.newInst = {location: {'lat': null, 'lng': null}};
@@ -130,11 +130,12 @@
             };
 
             $scope.saveNew = function () {
-                installationService.newInstallation($scope.newInst).then(function (response) {
-                    $scope.installations.push(response);
-                }, function (response) {
-                    console.log('error', response);
-                });
+                installationService.newInstallation($scope.newInst)
+                    .then(function (response) {
+                        $scope.installations.push(response);
+                    }, function (response) {
+                        console.log('error', response);
+                    });
             };
 
             /* Copy an installation */
@@ -146,16 +147,16 @@
                 copy.name = 'Copy of ' + i.name;
                 $scope.newInst = copy;
                 /* save in database */
-                installationService.newInstallation($scope.newInst).then(function (response) {
-                    $scope.installations.push(response);
-                }, function (response) {
-                    console.log('error', response);
-                });
+                installationService.newInstallation($scope.newInst)
+                    .then(function (response) {
+                        $scope.installations.push(response);
+                    }, function (response) {
+                        console.log('error', response);
+                    });
 
                 $ionicListDelegate.closeOptionButtons();
             };
-        }
-        ])
+        }])
 
         .
         controller('InstallationCtrl', ['bobby', '$scope', '$state', '$window', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', function (bobby, $scope, $state, $window, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
@@ -203,11 +204,12 @@
                 });
                 confirmPopup.then(function (res) {
                     if (res) {
-                        installationService.removeDevice($state.params.id, device._id).then(function (response) {
-                            _.pull($scope.installation.devices, device);
-                        }, function (response) {
-                            console.log('error', response);
-                        });
+                        installationService.removeDevice($state.params.id, device._id)
+                            .then(function (response) {
+                                _.pull($scope.installation.devices, device);
+                            }, function (response) {
+                                console.log('error', response);
+                            });
                     }
                     $ionicListDelegate.closeOptionButtons();
                 });
@@ -236,11 +238,12 @@
             };
 
             $scope.saveNew = function () {
-                installationService.newDevice($state.params.id, $scope.newDevice).then(function (response) {
-                    $scope.installation = response;
-                }, function (response) {
-                    console.log('error', response);
-                });
+                installationService.newDevice($state.params.id, $scope.newDevice)
+                    .then(function (response) {
+                        $scope.installation = response;
+                    }, function (response) {
+                        console.log('error', response);
+                    });
             };
 
             /* Copy a device */
@@ -328,11 +331,12 @@
                 });
                 confirmPopup.then(function (res) {
                     if (res) {
-                        installationService.removeControl($state.params.id, $state.params.deviceid, control._id).then(function (response) {
-                            _.pull($scope.$parent.device.controls, control);
-                        }, function (response) {
-                            console.log('error', response);
-                        });
+                        installationService.removeControl($state.params.id, $state.params.deviceid, control._id)
+                            .then(function (response) {
+                                _.pull($scope.$parent.device.controls, control);
+                            }, function (response) {
+                                console.log('error', response);
+                            });
                     }
                     $ionicListDelegate.closeOptionButtons();
                 });
@@ -360,15 +364,19 @@
             };
 
             $scope.saveNew = function () {
-                installationService.newControl($state.params.id, $state.params.deviceid, $scope.newControl).then(function (response) {
-                    $scope.$parent.installation = response;
-                    $scope.$parent.device = _.find(response.devices, function (d) {
-                        return d._id == $scope.$parent.device._id;
-                    });
+                installationService.newControl($state.params.id, $state.params.deviceid, $scope.newControl)
+                    .then(function (response) {
+                        $scope.$parent.installation = response;
+                        console.log($scope.$parent.device);
 
-                }, function (response) {
-                    console.log('error', response);
-                });
+                        $scope.$parent.device = _.find(response.devices, function (d) {
+                            return d._id === $scope.$parent.device._id;
+                        });
+                        console.log($scope.$parent.device);
+
+                    }, function (response) {
+                        console.log('error', response);
+                    });
             };
 
             /* Copy a control */
@@ -418,6 +426,7 @@
             };
 
             $scope.edit = function (t) {
+                $scope.device = $scope.$parent.device;
                 $scope.trigger = t;
                 $scope.editTriggerModal.show();
             };
@@ -437,11 +446,12 @@
                 });
                 confirmPopup.then(function (res) {
                     if (res) {
-                        installationService.removeTrigger($state.params.id, $state.params.deviceid, trigger._id).then(function (response) {
-                            _.pull($scope.device.triggers, trigger);
-                        }, function (response) {
-                            console.log('error', response);
-                        });
+                        installationService.removeTrigger($state.params.id, $state.params.deviceid, trigger._id)
+                            .then(function (response) {
+                                _.pull($scope.device.triggers, trigger);
+                            }, function (response) {
+                                console.log('error', response);
+                            });
                     }
                     $ionicListDelegate.closeOptionButtons();
                 });
@@ -465,18 +475,20 @@
             };
 
             $scope.addTrigger = function () {
+                $scope.device = $scope.$parent.device;
                 $scope.newTriggerModal.show();
             };
 
             $scope.saveNew = function () {
-                installationService.newTrigger($state.params.id, $state.params.deviceid, $scope.newTrigger).then(function (response) {
-                    $scope.$parent.installation = response;
-                    $scope.device = _.find(response.devices, function (d) {
-                        return d._id == $scope.device._id;
+                installationService.newTrigger($state.params.id, $state.params.deviceid, $scope.newTrigger)
+                    .then(function (response) {
+                        $scope.$parent.installation = response;
+                        $scope.device = _.find(response.devices, function (d) {
+                            return d._id === $scope.device._id;
+                        });
+                    }, function (response) {
+                        console.log('error', response);
                     });
-                }, function (response) {
-                    console.log('error', response);
-                });
             };
 
             /* Copy a trigger */
@@ -503,8 +515,7 @@
 
             $scope.control = control;
 
-            $scope.gaugeSettings =
-            {
+            $scope.gaugeSettings = {
                 subvalues: $scope.gaugeSubvalues,
                 scale: $scope.gaugeScale,
                 rangeContainer: $scope.gaugeRange,
@@ -514,9 +525,9 @@
 
             $scope.gaugeValue = (control.maxCritical - control.minCritical) / 2;
 
-            $scope.gaugeScale =
-            {
-                startValue: control.minValue, endValue: control.maxValue,
+            $scope.gaugeScale = {
+                startValue: control.minValue,
+                endValue: control.maxValue,
                 majorTick: { tickInterval: 5 },
                 minorTick: {
                     visible: true,
@@ -524,14 +535,23 @@
                 },
                 label: {
                     customizeText: function (arg) {
-                        return arg.valueText + ' ' + control.unit.symbol + control.unit.units;
-                    }
-                },
-                valueType: "numeric"
+                        if (control.unit.symbol && control.unit.units) {
+                            return arg.valueText + ' ' + control.unit.symbol + control.unit.units;
+                        }
+
+                        if (control.unit.symbol) {
+                            return arg.valueText + ' ' + control.unit.symbol;
+                        }
+
+                        if (control.unit.units) {
+                            return arg.valueText + ' ' + control.unit.units;
+                        }
+                    },
+                    valueType: "numeric"
+                }
             };
 
-            $scope.gaugeRange =
-            {
+            $scope.gaugeRange = {
                 ranges: [
                     { startValue: control.minValue, endValue: control.minCritical, color: '#0077BE'},
                     { startValue: control.minCritical, endValue: control.maxCritical, color: '#E6E200'},
@@ -541,23 +561,25 @@
             };
 
             $scope.gaugeSettings.value = $scope.gaugeValue;
-            $scope.gaugeSubvalues = [(control.maxCritical - control.minCritical) / 2 - control.minCritical , (control.maxValue - control.minValue) / 2 ];
+            $scope.gaugeSubvalues = [(control.maxCritical - control.minCritical) / 2 - control.minCritical, (control.maxValue - control.minValue) / 2 ];
 
             $scope.gaugeSettings.subvalues = $scope.gaugeSubvalues;
             $scope.gaugeSettings.scale = $scope.gaugeScale;
             $scope.gaugeSettings.rangeContainer = $scope.gaugeRange;
             $scope.gaugeSettings.value = $scope.gaugeValue;
 
-        }])
+        }
+        ])
 
-        .controller('TriggerDetailCtrl', ['bobby', '$scope', '$state', 'trigger', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function (bobby, $scope, $state, trigger, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
+        .
+        controller('TriggerDetailCtrl', ['bobby', '$scope', '$state', 'trigger', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function (bobby, $scope, $state, trigger, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
 
             var responseColor;
 
             $scope.trigger = trigger;
             $scope.newRequest = {};
 
-            $scope.getColor = function (r) {
+            $scope.getColor = function () {
                 return responseColor;
             };
 
@@ -566,13 +588,17 @@
             };
 
             $scope.sendRequest = function (request) {
-                installationService.requester(JSON.stringify(JSON.parse(request), null, 3)).then(function (response) {
-                    $scope.requestResponse = JSON.parse(response);
-                    responseColor = '#66cc33';
-                }, function (response) {
-                    $scope.requestResponse = response;
-                    responseColor = '#ef4e3a';
-                });
+                if (!request) {
+                    return;
+                }
+                installationService.requester(JSON.stringify(JSON.parse(request), null, 3))
+                    .then(function (response) {
+                        $scope.requestResponse = JSON.parse(response);
+                        responseColor = '#66cc33';
+                    }, function (response) {
+                        $scope.requestResponse = response;
+                        responseColor = '#ef4e3a';
+                    });
             };
 
             $scope.clearResponse = function () {
@@ -601,6 +627,9 @@
             };
 
             $scope.edit = function (t) {
+                responseColor = null;
+                $scope.requestResponse = null;
+
                 $scope.request = t;
                 $scope.editRequestModal.show();
             };
@@ -621,11 +650,12 @@
                 confirmPopup.then(function (res) {
 
                     if (res) {
-                        installationService.removeRequest($state.params.id, $state.params.deviceid, $state.params.triggerid, request._id).then(function (response) {
-                            _.pull($scope.trigger.requests, request);
-                        }, function (response) {
-                            console.log('error', response);
-                        });
+                        installationService.removeRequest($state.params.id, $state.params.deviceid, $state.params.triggerid, request._id)
+                            .then(function (response) {
+                                _.pull($scope.trigger.requests, request);
+                            }, function (response) {
+                                console.log('error', response);
+                            });
                     }
 
                     $ionicListDelegate.closeOptionButtons();
@@ -650,34 +680,39 @@
             };
 
             $scope.addRequest = function () {
+                responseColor = null;
+                $scope.requestResponse = null;
                 $scope.newRequestModal.show();
             };
 
             $scope.saveNew = function () {
 
-                installationService.newRequest($state.params.id, $state.params.deviceid, $state.params.triggerid, $scope.newRequest).then(function (response) {
+                installationService.newRequest($state.params.id, $state.params.deviceid, $state.params.triggerid, $scope.newRequest)
+                    .then(function (response) {
 
-                    function findNested(obj, key, memo) {
-                        _.isArray(memo) || (memo = []);
-                        _.forOwn(obj, function (val, i) {
-                            if (i === key) {
-                                memo.push(val);
-                            } else {
-                                findNested(val, key, memo);
-                            }
+                        function findNested(obj, key, memo) {
+                            _.isArray(memo) || (memo = []);
+                            _.forOwn(obj, function (val, i) {
+                                if (i === key) {
+                                    memo.push(val);
+                                } else {
+                                    findNested(val, key, memo);
+                                }
+                            });
+                            return memo;
+                        }
+
+                        var triggers = findNested(response, 'triggers');
+
+                        $scope.trigger = _.find(triggers[0], function (d) {
+                            return d._id == $state.params.triggerid;
                         });
-                        return memo;
-                    }
 
-                    var triggers = findNested(response, 'triggers');
+                        console.log($scope.trigger);
 
-                    $scope.trigger = _.find(triggers[0], function (d) {
-                        return d._id == $state.params.triggerid;
+                    }, function (response) {
+                        console.log('error', response);
                     });
-
-                }, function (response) {
-                    console.log('error', response);
-                });
 
             };
 
@@ -794,4 +829,7 @@
 
         }]);
 
-}());
+}
+()
+    )
+;

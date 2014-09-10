@@ -2,20 +2,20 @@
     <ion-header-bar class="bar bar-header bar-positive">
         <button class="button button-clear button-clear" ng-click="closeEdit()">Cancel</button>
         <h1 class="title">Edit trigger request</h1>
-        <button class="button button-clear button-clear" ng-click="doneEdit(newRequest)">Save</button>
+        <button class="button button-clear button-clear" ng-click="doneEdit(request)">Save</button>
     </ion-header-bar>
     <ion-content>
 
         <label class="item item-input">
             <span class="input-label">Name</span>
-            <input type="text" placeholder="Name" ng-model="newRequest.name">
+            <input type="text" placeholder="Name" ng-model="request.name">
         </label>
 
-        <div class="item" style="padding-bottom: 0px;">
+        <div class="item" style="padding-bottom: 0;">
             <a class="button icon-left ion-android-drawer button-clear button-positive"
-               ng-click="formatRequest(newRequest.request_options)">Format</a>
+               ng-click="formatRequest(request.request_options)">Format</a>
             <a class="button icon-left ion-ios7-play button-clear" ng-style="{'color': getColor()}"
-               ng-click="sendRequest(newRequest.request_options)">Test</a>
+               ng-click="sendRequest(request.request_options)">Test</a>
         </div>
 
         <div class="item-input-inset" ng-show="requestResponse">
@@ -26,7 +26,7 @@
         </div>
 
         <label class="item item-input">
-            <textarea placeholder="Request" rows="15" ng-model="newRequest.request_options"></textarea>
+            <textarea placeholder="Request" rows="15" ng-model="request.request_options"></textarea>
         </label>
         <a class="padding" ng-href="https://github.com/mikeal/request#requestoptions-callback">Please see request
             options here</a>

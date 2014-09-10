@@ -1,21 +1,26 @@
 <div class="modal">
     <ion-header-bar class="bar bar-header bar-positive">
         <button class="button button-clear button-clear" ng-click="closeEdit()">Cancel</button>
-        <h1 class="title">New trigger request</h1>
+        <h1 class="title">Edit trigger request</h1>
         <button class="button button-clear button-clear" ng-click="doneEdit(newRequest)">Save</button>
     </ion-header-bar>
     <ion-content>
         <div class="list">
             <label class="item item-input">
                 <span class="input-label">Name</span>
-                <input type="text" placeholder="Name" ng-model="request.name">
+                <input type="text" placeholder="Name" ng-model="newRequest.name">
             </label>
+
+            <div class="item" style="padding-bottom: 0;">
+                <a class="button icon-left ion-android-drawer button-clear button-positive"
+                   ng-click="formatRequest(newRequest.request_options)">Format</a>
+                <a class="button icon-left ion-ios7-play button-clear">Test</a>
+            </div>
             <label class="item item-input">
-                <span class="input-label">Request</span>
-                <textarea rows="30" ng-model="request.request_options">
-                </textarea>
+                <textarea placeholder="Request" rows="15" ng-model="newRequest.request_options"></textarea>
             </label>
         </div>
-        <p class="padding">Please see https://github.com/mikeal/request#requestoptions-callback</p>
+        <a class="padding" ng-href="https://github.com/mikeal/request#requestoptions-callback">Please see request
+            options here</a>
     </ion-content>
 </div>

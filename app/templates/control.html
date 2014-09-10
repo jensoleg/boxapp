@@ -1,7 +1,8 @@
-<ion-view title="{{control.name}}">
+<ion-view title="{{control.name}} - id {{control.id}}">
     <ion-content class="has-header">
 
-        <div ng-show="control.ctrlType='data'" class="row responsive-sm">
+        <div ng-show="control.ctrlType=='data' && control.maxCritical > 0" class="row responsive-sm">
+
             <div class="col">
                 <div style="height: 200px" dx-circular-gauge="{tooltip: gaugeSettings.tooltip,
                                                                subvalueIndicator: gaugeSettings.subvalueIndicator,
@@ -16,7 +17,7 @@
         </div>
 
 
-        <div ng-hide="control.ctrlType='data'" class="list">
+        <div class="list">
             <a class="item">
                 Id
                 <span class="item-note">

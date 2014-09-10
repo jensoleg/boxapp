@@ -7,12 +7,20 @@
     <ion-content>
         <div class="list">
             <label class="item item-input">
-                <span class="input-label">Request</span>
-                <!--textarea placeholder="Enter request. Please see https://github.com/mikeal/request#requestoptions-callback" rows="8" cols="10"-->
-                <textarea rows="30" ng-model="newRequest.request_options">
-                </textarea>
+                <span class="input-label">Name</span>
+                <input type="text" placeholder="Name" ng-model="newRequest.name">
+            </label>
+
+            <div class="item" style="padding-bottom: 0px;">
+                <a class="button icon-left ion-android-drawer button-clear button-positive"
+                   ng-click="formatRequest(newRequest.request_options)">Format</a>
+                <a class="button icon-left ion-ios7-play button-clear">Test</a>
+            </div>
+            <label class="item item-input">
+                <textarea placeholder="Request" rows="15" ng-model="newRequest.request_options"></textarea>
             </label>
         </div>
-        <p class="padding">Please see https://github.com/mikeal/request#requestoptions-callback</p>
+        <a class="padding" ng-href="https://github.com/mikeal/request#requestoptions-callback">Please see request
+            options here</a>
     </ion-content>
 </div>

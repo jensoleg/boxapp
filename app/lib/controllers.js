@@ -286,6 +286,7 @@
         .controller('SensorCtrl', ['bobby', '$scope', '$state', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function (bobby, $scope, $state, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
 
             $scope.newControl = {};
+            $scope.types = ['data', 'internal'];
 
             /* Edit Control */
 
@@ -553,6 +554,10 @@
 
             $scope.trigger = trigger;
             $scope.newRequest = {};
+
+            $scope.formatRequest = function (r) {
+                $scope.newRequest.request_options = JSON.stringify(JSON.parse(r), null, 3);
+            };
 
             /* Edit Request */
 

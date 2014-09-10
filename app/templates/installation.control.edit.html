@@ -18,9 +18,7 @@
                 <div class="input-label">
                     Type
                 </div>
-                <select ng-model="control.ctrlType">
-                    <option>data</option>
-                    <option>internal</option>
+                <select ng-model="control.ctrlType" ng-options="t as t for t in types">
                 </select>
             </label>
             <label class="item item-input">

@@ -8,6 +8,31 @@ body {
     pointer-events: auto;
 }
 
+.detail  > .angular-google-map > .angular-google-map-container{
+    height: 205px;
+    width: 360px;
+}
+
+.full  > .angular-google-map > .angular-google-map-container{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+.scroll {
+    height: 100%;
+}
+
+/*
+.pac-container {
+    top: auto !important;
+    bottom: 45px !important;
+    min-width: 100%;
+    left: 0 !important;
+    pointer-events: auto;
+}
+*/
+
 /*dark is class added to ion-content, since ion-conte*/
 /*is made up of multiple pieces and is a pain to style each*/
 .dark {

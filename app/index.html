@@ -25,6 +25,8 @@
 
 <ion-nav-view></ion-nav-view>
 
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false"></script>
+
 <!-- build:js scripts/vendor.js -->
 <!-- bower:js -->
 <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -40,7 +42,7 @@
 <script src="bower_components/collide/collide.js"></script>
 <script src="bower_components/ionic/release/js/ionic.js"></script>
 <script src="bower_components/ionic/release/js/ionic-angular.js"></script>
-<script src="bower_components/angular-google-staticmaps/angular-google-staticmaps.js"></script>
+<script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
@@ -50,10 +52,8 @@
 <script src="lib/dx.chartjs.js"></script>
 <script src="lib/auth0-widget.min.js"></script>
 <script src="lib/auth0-angular.min.js"></script>
-<!--script src="http://maps.google.com/maps/api/js?sensor=true&libraries=places&language=en-US"></script-->
-<script src=http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false></script></script>
-<script src="cordova.js"></script>
 
+<script src="cordova.js"></script>
 
 <!-- build:js scripts/scripts.js -->
 <script src="scripts/box.state.js"></script>

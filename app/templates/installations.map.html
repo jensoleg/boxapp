@@ -1,0 +1,39 @@
+<ion-view hide-nav-bar="true">
+
+    <ion-header-bar id="header" class="bar bar-header bar-clear">
+        <div class="buttons left-buttons">
+            <span class="">
+                <button menu-toggle="left" class="button button-icon button-clear button-dark ion-navicon"></button>
+            </span>
+        </div>
+    </ion-header-bar>
+
+    <ion-content class="no-header">
+
+                <google-map class="full"
+                            data-tap-disabled="true"
+                            center="map.center"
+                            zoom="map.zoom"
+                            draggable="true"
+                            dragging="map.dragging"
+                            bounds="map.bounds"
+                            events="map.events"
+                            options="map.options"
+                            pan="true"
+                            control="map.control">
+
+                    <markers
+                            models="map.markers"
+                            coords="'self'"
+                            icon="'icon'"
+                            click="'onClicked'"
+                            options="'self'">
+                    </markers>
+
+                </google-map>
+            </div>
+        </div>
+
+    </ion-content>
+
+</ion-view>

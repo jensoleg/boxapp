@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('BobbyApp.controllers', ['dx', 'ionic', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives', 'chart', 'box', 'wu.staticGmap'])
+    angular.module('BobbyApp.controllers', ['dx', 'ionic', 'google-maps', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives', 'chart', 'box'])
 
         .filter('int', function () {
             return function (v) {
@@ -135,6 +135,7 @@
             };
 
             $scope.newInstallation = function () {
+                $scope.newInst = {};
                 $scope.newModal.show();
             };
 
@@ -167,7 +168,44 @@
             };
         }])
 
-        .controller('InstallationCtrl', ['bobby', '$scope', '$state', '$window', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', function (bobby, $scope, $state, $window, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
+        .controller('InstallationCtrl', ['bobby', '$scope', '$state', '$window', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', '$location', function (bobby, $scope, $state, $window, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate, $location) {
+
+            google.maps.visualRefresh = true;
+
+            var marker = {
+                id: installation._id,
+                latitude: installation.location.lat,
+                longitude: installation.location.lng,
+                options: {
+                    visible: false
+                }
+            };
+
+            angular.extend($scope, {
+                map: {
+                    control: {},
+                    center: {
+                        latitude: installation.location.lat,
+                        longitude: installation.location.lng
+                    },
+                    marker: marker,
+                    zoom: 12,
+                    options: {
+                        disableDefaultUI: true,
+                        panControl: false,
+                        navigationControl: false,
+                        scrollwheel: false,
+                        scaleControl: false
+                    },
+                    refresh: function () {
+                        $scope.map.control.refresh(origCenter);
+                    },
+                    onMarkerClick: function (m) {
+                        //$location.path('/app/installations/' + m.id);
+                        $state.go('app.main');
+                    }
+                }
+            });
 
             $scope.installation = installation;
             $scope.newDevice = {};
@@ -242,6 +280,7 @@
             };
 
             $scope.addDevice = function () {
+                $scope.newDevice = {};
                 $scope.newModal.show();
             };
 
@@ -347,7 +386,6 @@
                                 });
                                 $rootScope.$broadcast('message:control-removed', control);
 
-//                                _.pull($scope.$parent.device.controls, control);
                             }, function (response) {
                                 console.log('error', response);
                             });
@@ -374,6 +412,7 @@
             };
 
             $scope.addControl = function () {
+                $scope.newControl = {};
                 $scope.newSensorModal.show();
             };
 
@@ -492,6 +531,7 @@
 
             $scope.addTrigger = function () {
                 $scope.device = $scope.$parent.device;
+                $scope.newTrigger = {};
                 $scope.newTriggerModal.show();
             };
 
@@ -594,7 +634,7 @@
             $scope.newRequest = {};
 
             $scope.myControl = _.find(device.controls, function (c) {
-                return c.name === trigger.stream_id;
+                return c.id === trigger.stream_id;
             });
 
             $scope.getColor = function () {
@@ -699,6 +739,7 @@
 
             $scope.addRequest = function () {
                 responseColor = null;
+                $scope.newRequest = {};
                 $scope.requestResponse = null;
                 $scope.newRequestModal.show();
             };
@@ -844,6 +885,85 @@
             }, true);
 
             bobby.setInstallation($scope.installation);
+
+        }])
+
+
+        .controller('MapCtrl', ['$scope', 'installations', '$location', function ($scope, installations, $location) {
+            // Enable the new Google Maps visuals until it gets enabled by default.
+            // See http://googlegeodevelopers.blogspot.ca/2013/05/a-fresh-new-look-for-maps-api-for-all.html
+            google.maps.visualRefresh = true;
+
+            var markers = [],
+                pinShadow = new google.maps.MarkerImage(
+                    'images/map-marker-green.png',
+                    null,
+                    null,
+                    /* Offset x axis 33% of overall size, Offset y axis 100% of overall size */
+                    null, //new google.maps.Point(40, 110),
+                    new google.maps.Size(42, 68)
+                );
+
+            angular.forEach(installations, function (item) {
+                var ret = {
+                    latitude: item.location.lat,
+                    longitude: item.location.lng,
+                    title: item.name,
+                    id: item._id,
+                    options: { title: item.name + ' ' + item.placement }
+                    //icon: pinShadow
+                };
+
+                markers.push(ret);
+            });
+
+            angular.extend($scope, {
+                map: {
+                    control: {},
+                    showTraffic: false,
+                    showBicycling: false,
+                    showWeather: false,
+                    showHeat: false,
+                    center: {
+                        latitude: 56.03833,
+                        longitude: 9.96037
+                    },
+                    options: {
+                        streetViewControl: true,
+                        panControl: false,
+                        maxZoom: 20,
+                        minZoom: 3,
+                        scrollwheel: false,
+                        zoomControlOptions: {
+                            position: google.maps.ControlPosition.RIGHT_TOP
+                        }
+                    },
+                    zoom: 7,
+                    dragging: true,
+                    bounds: {},
+                    markers: markers,
+                    events: {
+                        tilesloaded: function (map, eventName, originalEventArgs) {
+                        }
+                    }
+                }
+            });
+
+            $scope.map.markers = markers;
+
+            var onMarkerClicked = function (marker) {
+                $location.path('/app/installations/' + marker.id);
+                //window.alert("Marker: lat: " + marker.latitude + ", lon: " + marker.longitude + " clicked!!");
+            };
+
+            $scope.onMarkerClicked = onMarkerClicked;
+
+            _.each(markers, function (marker) {
+                marker.onClicked = function () {
+                    onMarkerClicked(marker);
+                };
+            });
+
 
         }]);
 

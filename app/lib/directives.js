@@ -30,12 +30,10 @@
                 }
             };
         })
-
         .directive('googlePlaces', function () {
             return {
                 restrict: 'E',
                 replace: true,
-                //transclude: true,
                 scope: {
                     location: '=',
                     address: '='

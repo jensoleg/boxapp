@@ -115,6 +115,20 @@
                             }
                         }
                     }
+                })
+                .state('app.map', {
+                    url: '/map',
+                    views: {
+                        'menuContent': {
+                            templateUrl: 'templates/installations.map.html',
+                            controller: 'MapCtrl',
+                            resolve: {
+                                installations: ['installationService', function (installationService) {
+                                    return installationService.all();
+                                }]
+                            }
+                        }
+                    }
                 });
 
             authProvider.init({

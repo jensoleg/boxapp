@@ -21,7 +21,7 @@
                     }
                 })
                 .state('app.main', {
-                    url: '/main',
+                    url: '/main/:id',
                     views: {
                         'menuContent': {
                             templateUrl: 'templates/main.html',
@@ -146,7 +146,7 @@
             });
 
             authProvider.on('loginSuccess', function ($location) {
-                $location.path('/app/main');
+                $location.path('/app/installations');
             });
 
             authProvider.on('loginFailure', function ($location) {

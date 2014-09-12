@@ -1,12 +1,17 @@
-<ion-view title="" hide-nav-bar="true">
+<!--ion-view ng-if="!backNav" title="" hide-nav-bar="true"-->
+<ion-view>
 
-    <div class="wrapper bar bar-header" style="border-bottom-width: 0;background-size: 100% 0;">
+    <div class="bar bar-header" style="border-bottom-width: 0;background-size: 100% 0;">
 
-        <div class="buttons left-buttons"> <span class="">
+        <div class="buttons left-buttons">
+            <button class="button button-icon button-clear button-dark ion-back"></button>
+        </div>
+
+        <div class="buttons left-buttons">
             <button menu-toggle="left" class="button button-icon button-clear button-dark ion-navicon"></button>
-        </span></div>
+        </div>
 
-        <label style="width:100%">
+        <!--label style="width:100%">
             <div class="item item-input"
                  style="color: rgba(255, 255, 255, 0.9);background-color: transparent;border-width: 0;width: 100%;display: inline-block;text-align: center;padding-left: 0;">
                 {{installation.name + ' ' + installation.placement}}
@@ -16,10 +21,21 @@
                     ng-model="installation"
                     ng-change="selectInstallation(installation)">
             </select>
-        </label>
+        </label-->
+        <!--label style="width:100%">
+            <div class="item item-input"
+                 style="color: rgba(255, 255, 255, 0.9);background-color: transparent;border-width: 0;width: 100%;display: inline-block;text-align: center;padding-left: 0;">
+                {{installation.name + ' ' + installation.placement}}
+            </div>
+            <select style="font-size: 20px;opacity: 0;width: 50%;position: absolute;right: 100px;top: 10px;"
+                    ng-options="t.placement group by t.name for t in installations"
+                    ng-model="installation"
+                    ng-change="selectInstallation(installation)">
+            </select>
+        </label-->
     </div>
 
-    <ion-content class="wrapper has-header padding" style="padding:0;margin-top: 0;">
+    <ion-content class="has-header" style="padding:0;margin-top: 0;">
         <div id="reading-content">
             <box></box>
         </div>

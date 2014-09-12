@@ -7,6 +7,7 @@
         <div class="row responsive-sm" style="padding: 0px;">
             <div class="col" style="padding: 0px;">
                     <google-map class="detail"
+                                data-tap-disabled="true"
                                 center="map.center"
                                 zoom="map.zoom"
                                 options="map.options"
@@ -53,8 +54,8 @@
         <ion-list>
             <ion-item ng-repeat="device in installation.devices"
                       ui-sref="app.device({ id: installation._id, deviceid: device._id })">
-                <h3 style="color: #444;">{{device.name}} {{device.placement}}</h3>
-                <h4 style="color: #444;">{{device.id}}</h4>
+                <h3>{{device.name}} {{device.placement}}</h3>
+                <h4>{{device.id}}</h4>
                 <span class="badge badge-balanced">0</span>
                 <ion-option-button class="button-calm" ng-click="update(device)">Update</ion-option-button>
                 <ion-option-button class="button-balanced" ng-click="copy(device)">Copy</ion-option-button>

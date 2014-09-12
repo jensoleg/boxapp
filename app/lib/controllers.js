@@ -168,7 +168,7 @@
             };
         }])
 
-        .controller('InstallationCtrl', ['bobby', '$scope', '$state', '$window', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', '$location', function (bobby, $scope, $state, $window, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate, $location) {
+        .controller('InstallationCtrl', ['bobby', '$scope', '$state', '$window', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', function (bobby, $scope, $state, $window, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
 
             google.maps.visualRefresh = true;
 
@@ -202,7 +202,7 @@
                     },
                     onMarkerClick: function (m) {
                         //$location.path('/app/installations/' + m.id);
-                        $state.go('app.main');
+                        $state.go('app.main', {id: m.id});
                     }
                 }
             });
@@ -300,6 +300,7 @@
                 delete copy.__v;
                 delete copy.$$hashKey;
                 copy.name = 'Copy of ' + i.name;
+                copy.id = null;
 
                 $scope.newDevice = copy;
                 $scope.saveNew();
@@ -591,15 +592,15 @@
                 },
                 label: {
                     customizeText: function (arg) {
-                        if (control.unit.symbol && control.unit.units) {
+                        if (control.unit && control.unit.symbol && control.unit.units) {
                             return arg.valueText + ' ' + control.unit.symbol + control.unit.units;
                         }
 
-                        if (control.unit.symbol) {
+                        if (control.unit && control.unit.symbol) {
                             return arg.valueText + ' ' + control.unit.symbol;
                         }
 
-                        if (control.unit.units) {
+                        if (control.unit && control.unit.units) {
                             return arg.valueText + ' ' + control.unit.units;
                         }
                     },
@@ -750,7 +751,7 @@
                     .then(function (response) {
 
                         function findNested(obj, key, memo) {
-                            _.isArray(memo) || (memo = []);
+                            _.isArray(memo) || (memo === []);
                             _.forOwn(obj, function (val, i) {
                                 if (i === key) {
                                     memo.push(val);
@@ -764,7 +765,7 @@
                         var triggers = findNested(response, 'triggers');
 
                         $scope.trigger = _.find(triggers[0], function (d) {
-                            return d._id == $state.params.triggerid;
+                            return d._id === $state.params.triggerid;
                         });
 
                         console.log($scope.trigger);
@@ -796,13 +797,20 @@
 
         }])
 
-        .controller('BoxCtrl', ['installations', '$scope', '$rootScope', 'bobby', 'chart', 'box', function (installations, $scope, $rootScope, bobby, chart, box) {
+        .controller('BoxCtrl', ['installations', '$scope', '$state', '$rootScope', 'bobby', 'chart', 'box', function (installations, $scope, $state, $rootScope, bobby, chart, box) {
 
             var ts = bobby.getTimeScale();
 
             $scope.domainName = $rootScope.domain.charAt(0).toUpperCase() + $rootScope.domain.slice(1);
 
-            if (box.installation === null) {
+            if ($state.params.id && box.installation && box.installation._id === $state.params.id) {
+                $scope.installation = box.installation;
+            } else if ($state.params.id) {
+                box.activeStream = null;
+                box.showChart = false;
+                box.shownDevice = [];
+                $scope.installation = box.installation = _.find(installations, { '_id': $state.params.id });
+            } else if (box.installation === null) {
                 $scope.installation = box.installation = installations[0];
             } else {
                 $scope.installation = _.find(installations, { '_id': box.installation._id });
@@ -894,15 +902,7 @@
             // See http://googlegeodevelopers.blogspot.ca/2013/05/a-fresh-new-look-for-maps-api-for-all.html
             google.maps.visualRefresh = true;
 
-            var markers = [],
-                pinShadow = new google.maps.MarkerImage(
-                    'images/map-marker-green.png',
-                    null,
-                    null,
-                    /* Offset x axis 33% of overall size, Offset y axis 100% of overall size */
-                    null, //new google.maps.Point(40, 110),
-                    new google.maps.Size(42, 68)
-                );
+            var markers = [];
 
             angular.forEach(installations, function (item) {
                 var ret = {
@@ -911,7 +911,6 @@
                     title: item.name,
                     id: item._id,
                     options: { title: item.name + ' ' + item.placement }
-                    //icon: pinShadow
                 };
 
                 markers.push(ret);
@@ -935,10 +934,10 @@
                         minZoom: 3,
                         scrollwheel: false,
                         zoomControlOptions: {
-                            position: google.maps.ControlPosition.RIGHT_TOP
+                            position: google.maps.ControlPosition.LEFT_BOTTOM
                         }
                     },
-                    zoom: 7,
+                    zoom: 8,
                     dragging: true,
                     bounds: {},
                     markers: markers,
@@ -953,7 +952,6 @@
 
             var onMarkerClicked = function (marker) {
                 $location.path('/app/installations/' + marker.id);
-                //window.alert("Marker: lat: " + marker.latitude + ", lon: " + marker.longitude + " clicked!!");
             };
 
             $scope.onMarkerClicked = onMarkerClicked;

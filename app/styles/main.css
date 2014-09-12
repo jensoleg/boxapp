@@ -93,12 +93,12 @@ border-color: #0000cc;
         background-size: 100px 14px;
     }
 }
-
+/*
 h1, h2, h3, h4, h5 {
     color: #fff;
     font-weight: 300;
 }
-
+*/
 #reading-content {
     color: #fff;
     padding: 5px;
@@ -112,6 +112,7 @@ h1, h2, h3, h4, h5 {
 /**
  * Header
  */
+/*
 #header {
     background-color: transparent;
     height: 44px;
@@ -126,7 +127,7 @@ h1, h2, h3, h4, h5 {
     line-height: 20px;
     margin-top: 4px;
 }
-
+*/
 #current-device {
     height: 40px;
     box-sizing: content-box;
@@ -174,9 +175,9 @@ h1, h2, h3, h4, h5 {
  * Forecast and details
  */
 .weather-box {
-    background-color: rgba(0, 0, 0, 0.2);
-    padding: 9px;
-    margin: 10px 0px;
+    background-color: rgba(36, 168, 84, 0.57);
+/*    padding: 9px;
+    margin: 10px 0px; */
     color: rgba(255, 255, 255, 0.9);
 }
 
@@ -245,7 +246,6 @@ h1, h2, h3, h4, h5 {
 #forecast-scroll {
     height: 70px;
     margin: 10px 0px;
-
 }
 
 #forecast-scroll .scroll {
@@ -256,12 +256,6 @@ h1, h2, h3, h4, h5 {
     display: inline-block;
     margin-right: 10px;
     text-align: center;
-}
-
-#forecast .wunderground-logo {
-    float: right;
-    margin-top: 4px;
-    margin-right: 4px;
 }
 
 #forecast .bobby-logo {
@@ -436,7 +430,7 @@ optgroup {
 .logo {
     margin: 30px 0px;
 }
-
+/**
 #list {
     width: 170px;
     margin: 30px auto;
@@ -452,7 +446,7 @@ optgroup {
     list-style: decimal;
     margin: 10px 0px;
 }
-
+*/
 .list .row.item-accordion {
     height: 34px;
     padding-top: 0;

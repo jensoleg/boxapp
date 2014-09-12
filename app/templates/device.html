@@ -10,7 +10,7 @@
                 <ion-item ng-repeat="control in device.controls"
                           ui-sref="app.control({ id: installationId , deviceid: device._id, controlid: control._id })">
 
-                    <h3 style="color: #444;;">{{control.name}}</h3>
+                    <h3>{{control.name}}</h3>
 
                     <a class="item-icon-right">
                         <i ng-show="control.ctrlType=='data'" class="icon ion-speedometer" style="color:#4a87ee"></i>
@@ -35,7 +35,7 @@
                 <ion-item ng-repeat="trigger in device.triggers"
                           ui-sref="app.trigger({ id: installationId, deviceid: device._id, triggerid: trigger._id })">
 
-                    <h3 style="color: #444;">{{trigger.name}} {{trigger.trigger_type | logicalop }} {{trigger.threshold_value}} / {{trigger.resolution}}</h3>
+                    <h3>{{trigger.name}} {{trigger.trigger_type | logicalop }} {{trigger.threshold_value}} / {{trigger.resolution}}</h3>
 
                     <a class="item-icon-right">
                         <i class="icon ion-android-alarm" style="color:#ef4e3a"></i>

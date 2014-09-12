@@ -8,13 +8,13 @@
                 <div class="col-icon col">
                     <i class="col-icon-font icon ion-cube"
                        ng-click="toggleDevice(device.id)"
-                       ng-style="device.id == activeStream.deviceid && {'color': '#4a87ee'} || {'color': 'white'}">
+                       ng-style="device.id == activeStream.deviceid && {'color': 'rgb(82, 154, 233)'} || {'color': 'white'}">
                     </i>
                 </div>
                 <div class="col">
                     <i class="col-icon-font icon ion-wifi"
                        ng-click="showData(device.id, 'online')"
-                       ng-style="datastreams[device.id + 'online'].id == 'online' && datastreams[device.id + 'online'].current_value == '0' && {'color': 'rgb(216, 90, 95)'} || {'color': 'rgb(113, 221, 71)'}">
+                       ng-style="datastreams[device.id + 'online'].id == 'online' && datastreams[device.id + 'online'].current_value == '0' && {'color': 'rgb(253, 57, 80)'} || {'color': 'rgb(172, 255, 139)'}">
                     </i>
                 </div>
             </div>
@@ -32,7 +32,7 @@
                     <i class="col-icon-font icon ion-arrow-graph-up-right"
                        ng-show="readings.ctrlType == 'data' && (readings.id != activeStream.id || readings.deviceid != activeStream.deviceid || !showChart)"
                        ng-click="showData(readings.deviceid, readings.id)"
-                       ng-style="readings.id == activeStream.id && readings.deviceid == activeStream.deviceid && {'color': '#4a87ee'} || {'color': 'white'}">
+                       ng-style="readings.id == activeStream.id && readings.deviceid == activeStream.deviceid && {'color': 'rgb(82, 154, 233)'} || {'color': 'white'}">
                     </i>
                 </div>
                 <div class="col" ng-show="isDeviceShown(device.id)">

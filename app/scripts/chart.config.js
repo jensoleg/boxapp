@@ -27,7 +27,7 @@
                         visible: true,
                         color: 'white'
                     },
-                    color: 'rgb(74, 135, 238)',
+                    color: 'rgb(82, 154, 233)',
                     hoverStyle: { color: 'rgb(74, 135, 238)' }
                 }
             ],

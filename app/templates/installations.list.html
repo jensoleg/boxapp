@@ -13,8 +13,8 @@
         </div>
         <ion-list>
             <ion-item ng-repeat="i in installations | filter: data.searchQuery" ui-sref="app.detail({ id: i._id })">
-                <h3 style="color: #444;">{{i.name}}</h3>
-                <h4 style="color: #444;">{{i.placement}}</h4>
+                <h3>{{i.name}}</h3>
+                <h4>{{i.placement}}</h4>
                 <span class="badge badge-balanced">0</span>
                 <ion-option-button class="button-balanced" ng-click="copyInstallation(i)">copy</ion-option-button>
                 <ion-option-button class="button-positive" ng-click="editInstallation(i)">Edit</ion-option-button>

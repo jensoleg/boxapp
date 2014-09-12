@@ -1,77 +1,84 @@
-<div id="forecast" class="weather-box">
-    <ion-list>
-        <div ng-repeat="device in installation.devices">
-            <div class="row">
-                <div class="col">
-                    <label>{{device.name}}</label>
-                </div>
-                <div class="col-icon col">
-                    <i class="col-icon-font icon ion-cube"
-                       ng-click="toggleDevice(device.id)"
-                       ng-style="device.id == activeStream.deviceid && {'color': 'rgb(82, 154, 233)'} || {'color': 'white'}">
-                    </i>
-                </div>
-                <div class="col">
-                    <i class="col-icon-font icon ion-wifi"
-                       ng-click="showData(device.id, 'online')"
-                       ng-style="datastreams[device.id + 'online'].id == 'online' && datastreams[device.id + 'online'].current_value == '0' && {'color': 'rgb(253, 57, 80)'} || {'color': 'rgb(172, 255, 139)'}">
-                    </i>
-                </div>
-            </div>
-            <div class="row item-accordion" style="margin-top: 0"
-                 ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }| orderObjectBy:'name':'reverse'"
-                 ng-show="isDeviceShown(device.id)">
-                <div class="col" ng-show="isDeviceShown(device.id)">
-                    <label>{{readings.name}}</label>
-                </div>
-                <div class="col-icon col" ng-show="isDeviceShown(device.id)">
-                    <i class="col-icon-font icon ion-ios7-gear"
-                       ng-hide="readings.ctrlType == 'data' && (readings.id != activeStream.id || readings.deviceid != activeStream.deviceid || !showChart)"
-                       style="color: #4a87ee">
-                    </i>
-                    <i class="col-icon-font icon ion-arrow-graph-up-right"
-                       ng-show="readings.ctrlType == 'data' && (readings.id != activeStream.id || readings.deviceid != activeStream.deviceid || !showChart)"
-                       ng-click="showData(readings.deviceid, readings.id)"
-                       ng-style="readings.id == activeStream.id && readings.deviceid == activeStream.deviceid && {'color': 'rgb(82, 154, 233)'} || {'color': 'white'}">
-                    </i>
-                </div>
-                <div class="col" ng-show="isDeviceShown(device.id)">
-                    <div ng-show="readings.ctrlType == 'data'">
-                        <div ng-class="{ critical: readings.triggered}">
-                            <span class="temp-high">{{readings.current_value}}{{readings.unit.symbol}}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </ion-list>
+<ion-view>
 
-    <div ng-show="activeStream" style="padding-top: 10px;">
-        <h4 class="title">
-            <div class="row" style="border-bottom: 0px">
-                <div class="col col-50">
+    <div class="bar bar-header">
+
+        <div class="buttons left-buttons">
+            <button class="button button-icon button-clear button-dark ion-back"></button>
+        </div>
+
+        <div class="buttons left-buttons">
+            <button menu-toggle="left" class="button button-icon button-clear button-dark ion-navicon"></button>
+        </div>
+
+    </div>
+
+    <ion-content>
+
+        <ion-list>
+            <div ng-repeat="device in installation.devices">
+                <ion-item class=" item-icon-right"
+                          style="border-width: 1px; border-style: dotted;"
+                          ng-click="toggleDevice(device.id)">
+                    <label>
+                        <i class="icon-item ion-cube"
+                           ng-style="device.id == activeStream.deviceid && {'color': 'rgb(129, 207, 98)' } || {'color': 'rgb(82, 154, 233)'} ">
+                        </i>
+                        {{device.name}}
+                    </label>
+                    <i class="icon ion-wifi"
+                       style="font-size: 24px; right: 32px;"
+                       ng-click="showData(device.id, 'online')"
+                       ng-style="datastreams[device.id + 'online'].id == 'online' && datastreams[device.id + 'online'].current_value == '0' && {'color': 'rgb(253, 57, 80)'} || {'color': 'rgb(129, 207, 98)'}">
+                    </i>
+                    <ion-option-button class="button-assertive">Alarms</ion-option-button>
+                    <ion-option-button class="button-positive">Controls</ion-option-button>
+                </ion-item>
+
+                <ion-item class="item-icon-right"
+                          style="padding-left: 14px; border-width: 1px; border-style: dotted;"
+                          ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }| orderObjectBy:'name':'reverse'"
+                          ng-click="showData(readings.deviceid, readings.id)"
+                          ng-show="isDeviceShown(device.id)">
+                    <label>
+                        <i class="icon-item ion-load-d"
+                           ng-hide="readings.ctrlType == 'data' && (readings.id != activeStream.id || readings.deviceid != activeStream.deviceid || !showChart)"
+                           style="color: rgb(82, 154, 233);">
+                        </i>
+                        <i class="icon-item ion-ios7-speedometer"
+                           ng-show="readings.ctrlType == 'data' && (readings.id != activeStream.id || readings.deviceid != activeStream.deviceid || !showChart)"
+                           ng-style="device.id == activeStream.deviceid && {'color': 'rgb(129, 207, 98)'} || {'color': 'rgb(82, 154, 233)'}">
+                        </i>
+                        {{readings.name}}
+                    </label>
+                    <span class="badge badge-balanced">
+                            {{readings.current_value}} {{readings.unit.symbol}}
+                    </span>
+                    <ion-option-button class="button-assertive">Alarms</ion-option-button>
+                    <ion-option-button class="button-positive" ng-click="controlDetails(device.id, readings.id)">Details</ion-option-button>
+
+                </ion-item>
+            </div>
+
+            <label class="item item-input item-icon-left item-select"
+                   style="background-color: #f5f5f5;"
+                   ng-show="activeStream">
+
+                <i class="ion-ios7-clock-outline">
                     {{datastreams[activeStream.deviceid + activeStream.id].name}}
                     {{datastreams[activeStream.deviceid +
                     activeStream.id].current_value}}{{datastreams[activeStream.deviceid + activeStream.id].unit.symbol}}
-                </div>
-                <div class="col ui-select">
-                    <div class="custom-select-container">
-                        <select class="custom replaced"
-                                ng-options="t.text group by t.type for t in timescale"
-                                ng-model="timeScale"
-                                ng-change="selectAction(timeScale, activeStream.deviceid, activeStream.id)">
-                        </select>
-                        <span class="custom-select" aria-hidden="true">
-                               <span>{{timeScale.text}}</span>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </h4>
-    </div>
+                </i>
 
-    <div id="chartContainer" style="height: 200px"
-         dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
+                <select style="background:none; padding: 7px 48px 16px 16px;"
+                        ng-options="t.text group by t.type for t in timescale"
+                        ng-model="timeScale"
+                        ng-change="selectAction(timeScale, activeStream.deviceid, activeStream.id)">
+                </select>
+
+            </label>
+
+            <div id="chartContainer" style="height: 200px"
+                 dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
                                          argumentAxis: 'chartSettings.argumentAxis',
                                          series: 'chartSettings.series'
                                         },
@@ -81,13 +88,8 @@
                                          crosshair: chartSettings.crosshair,
                                          loadingIndicator: chartSettings.loadingIndicator
                         }"
-         ng-show="chartSettings.dataSource.length">
-    </div>
-
-    <div class="clearfix">
-        <a href="http://bobbytechnologies.dk" onClick="javascript:return openExternal(this)">
-            <div class="bobby-logo"></div>
-        </a>
-    </div>
-
-</div>
+                 ng-show="chartSettings.dataSource.length">
+            </div>
+        </ion-list>
+    </ion-content>
+</ion-view>

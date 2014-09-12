@@ -831,6 +831,11 @@
             $scope.series = chart.series;
             $scope.chartSettings = chart.chartSettings;
 
+
+            $scope.controlDetails = function (deviceId, controlId) {
+                $state.go('app.main', {deviceid: deviceId, controlid: controlId});
+            };
+
             $scope.toggleDevice = function (device) {
                 $scope.shownDevice[device] = !$scope.isDeviceShown(device);
             };

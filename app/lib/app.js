@@ -24,7 +24,7 @@
                     url: '/main/:id',
                     views: {
                         'menuContent': {
-                            templateUrl: 'templates/main.html',
+                            templateUrl: 'templates/bobbybox.html',
                             controller: 'BoxCtrl',
                             resolve: {
                                 installations: ['installationService', function (installationService) {

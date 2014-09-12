@@ -2,14 +2,6 @@
     'use strict';
     angular.module('BobbyApp.directives', [])
 
-        .directive('box', ['$timeout', function () {
-            return {
-                restrict: 'E',
-                replace: true,
-                templateUrl: '../templates/bobbybox.html'
-            };
-        }])
-
         .directive('fadeBar', function ($timeout, $ionicSideMenuDelegate) {
             return {
                 restrict: 'E',

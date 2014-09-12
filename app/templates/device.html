@@ -10,11 +10,11 @@
                 <ion-item ng-repeat="control in device.controls"
                           ui-sref="app.control({ id: installationId , deviceid: device._id, controlid: control._id })">
 
-                    <h3>{{control.name}}</h3>
+                    {{control.name}}
 
                     <a class="item-icon-right">
-                        <i ng-show="control.ctrlType=='data'" class="icon ion-speedometer" style="color:#4a87ee"></i>
-                        <i ng-show="control.ctrlType=='status'" class="icon ion-ios7-gear" style="color:#4a87ee"></i>
+                        <i ng-if="control.ctrlType=='data'" class="icon ion-speedometer" style="color:#4a87ee"></i>
+                        <i ng-if="control.ctrlType=='status'" class="icon ion-ios7-gear" style="color:#4a87ee"></i>
                     </a>
 
                     <ion-option-button class="button-balanced" ng-click="copy(control)">Copy</ion-option-button>
@@ -35,10 +35,10 @@
                 <ion-item ng-repeat="trigger in device.triggers"
                           ui-sref="app.trigger({ id: installationId, deviceid: device._id, triggerid: trigger._id })">
 
-                    <h3>{{trigger.name}} {{trigger.trigger_type | logicalop }} {{trigger.threshold_value}} / {{trigger.resolution}}</h3>
+                    {{trigger.name}} {{trigger.trigger_type | logicalop }} {{trigger.threshold_value}} / {{trigger.resolution}}
 
                     <a class="item-icon-right">
-                        <i class="icon ion-android-alarm" style="color:#ef4e3a"></i>
+                        <i class="icon ion-android-alarm" style="color:#ef4e3a; font-size: 24px;"></i>
                     </a>
 
                     <ion-option-button class="button-balanced" ng-click="copy(trigger)">Copy</ion-option-button>

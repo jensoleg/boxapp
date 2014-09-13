@@ -1,8 +1,19 @@
 <ion-view title="Installations">
-    <ion-nav-buttons side="right">
-        <button ng-click="newInstallation()"
-                class="button icon-left ion-ios7-plus-empty button-clear button-dark"></button>
-    </ion-nav-buttons>
+
+    <ion-nav-bar class="nav-title-slide-ios7 bar-light">
+        <ion-nav-buttons side="left">
+            <button menu-toggle="left" class="button button-icon button-clear ion-navicon"></button>
+        </ion-nav-buttons>
+
+        <ion-nav-buttons side="right">
+            <button ng-click="$state.go('app.map')"
+                    class="button icon-left ion-location button-clear button-assertive"></button>
+            <button ng-click="newInstallation()"
+                    class="button icon-left ion-ios7-plus-empty button-clear button-dark"></button>
+        </ion-nav-buttons>
+
+    </ion-nav-bar>
+
     <ion-content start-y="55">
         <div class="item-input-inset">
             <div class="item-input-wrapper">

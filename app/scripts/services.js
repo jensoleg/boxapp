@@ -9,11 +9,46 @@
         })
 
         .factory('cordova', function () {
-            return window.cordova; // assumes cordova has already been loaded on the page
+            return window.cordova;
         })
 
         .factory('statusbar', function () {
             return window.StatusBar; // assumes cordova has already been loaded on the page
+        })
+
+        .factory('util', function () {
+            var util = {};
+            util.objectIdDel = function (copiedObjectWithId) {
+                if (copiedObjectWithId !== null && typeof copiedObjectWithId !== 'string' &&
+                    typeof copiedObjectWithId !== 'number' && typeof copiedObjectWithId !== 'boolean') {
+                    //for array length is defined however for objects length is undefined
+                    if (typeof copiedObjectWithId.length === 'undefined') {
+                        delete copiedObjectWithId._id;
+                        for (var key in copiedObjectWithId) {
+                            this.objectIdDel(copiedObjectWithId[key]); //recursive del calls on object elements
+                        }
+                    }
+                    else {
+                        for (var i = 0; i < copiedObjectWithId.length; i++) {
+                            this.objectIdDel(copiedObjectWithId[i]);  //recursive del calls on array elements
+                        }
+                    }
+                }
+            };
+
+            util.findNested = function findNested(obj, key, memo) {
+                _.isArray(memo) || (memo === []);
+                _.forOwn(obj, function (val, i) {
+                    if (i === key) {
+                        memo.push(val);
+                    } else {
+                        findNested(val, key, memo);
+                    }
+                });
+                return memo;
+            };
+
+            return util;
         })
 
         .factory('Settings', ['DEFAULT_SETTINGS', function (DEFAULT_SETTINGS) {

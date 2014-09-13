@@ -1,13 +1,27 @@
 <ion-view title="{{trigger.name}}">
-    <ion-content class="has-header">
+
+    <ion-nav-bar class="nav-title-slide-ios7 bar-light">
+
+        <ion-nav-back-button class="button-clear"><i class="icon ion-ios7-arrow-back"></i></ion-nav-back-button>
+
+        <ion-nav-buttons side="left">
+            <button menu-toggle="left" class="button button-icon button-clear ion-navicon"></button>
+        </ion-nav-buttons>
+
+    </ion-nav-bar>
+
+
+    <ion-content>
 
         <div class="row responsive-sm" style="padding: 0px;">
             <div class="col" style="margin-bottom: 20px; padding: 0px;">
                 <ion-list style="padding-bottom: 10px;">
                     <ion-item style="border-style:none">
                         <a class="item-icon-left">
-                            <i ng-show="myControl.ctrlType=='data'" class="icon ion-speedometer" style="color:#4a87ee"></i>
-                            <i ng-show="myControl.ctrlType=='status'" class="icon ion-ios7-gear" style="color:#4a87ee"></i>
+                            <i ng-show="myControl.ctrlType=='data'" class="icon ion-speedometer"
+                               style="color:#4a87ee"></i>
+                            <i ng-show="myControl.ctrlType=='status'" class="icon ion-ios7-gear"
+                               style="color:#4a87ee"></i>
                             {{myControl.name}}
                         </a>
                     </ion-item>
@@ -31,7 +45,8 @@
 
             <ion-item ng-repeat="request in trigger.requests">
                 {{request.name}}
-                <ion-option-button class="button-calm" ng-click="sendRequest(request.request_options)">Test</ion-option-button>
+                <ion-option-button class="button-calm" ng-click="sendRequest(request.request_options)">Test
+                </ion-option-button>
                 <ion-option-button class="button-balanced" ng-click="copy(request)">Copy</ion-option-button>
                 <ion-option-button class="button-positive" ng-click="edit(request)">Edit</ion-option-button>
                 <ion-option-button class="button-assertive" ng-click="remove(request)">Delete</ion-option-button>

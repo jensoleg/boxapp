@@ -52,10 +52,11 @@
             };
         })
 
-        .controller('InstallationsCtrl', ['bobby', '$scope', 'installations', 'installationService', '$ionicListDelegate', '$ionicModal', '$ionicPopup', function (bobby, $scope, installations, installationService, $ionicListDelegate, $ionicModal, $ionicPopup) {
+        .controller('InstallationsCtrl', ['bobby', '$scope', '$state', 'installations', 'installationService', '$ionicListDelegate', '$ionicModal', '$ionicPopup', function (bobby, $scope, $state, installations, installationService, $ionicListDelegate, $ionicModal, $ionicPopup) {
 
             $scope.installations = installations;
             $scope.newInst = {location: {'lat': null, 'lng': null}};
+            $scope.$state = $state;
 
             $scope.clearSearch = function () {
                 this.data.searchQuery = '';
@@ -627,7 +628,7 @@
 
         }])
 
-        .controller('TriggerDetailCtrl', ['bobby', '$scope', '$state', 'trigger', 'device', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function (bobby, $scope, $state, trigger, device, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
+        .controller('TriggerDetailCtrl', ['bobby', '$scope', '$state', 'trigger', 'device', 'util', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function (bobby, $scope, $state, trigger, device, util, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
 
             var responseColor;
 
@@ -750,19 +751,7 @@
                 installationService.newRequest($state.params.id, $state.params.deviceid, $state.params.triggerid, $scope.newRequest)
                     .then(function (response) {
 
-                        function findNested(obj, key, memo) {
-                            _.isArray(memo) || (memo === []);
-                            _.forOwn(obj, function (val, i) {
-                                if (i === key) {
-                                    memo.push(val);
-                                } else {
-                                    findNested(val, key, memo);
-                                }
-                            });
-                            return memo;
-                        }
-
-                        var triggers = findNested(response, 'triggers');
+                        var triggers = util.findNested(response, 'triggers');
 
                         $scope.trigger = _.find(triggers[0], function (d) {
                             return d._id === $state.params.triggerid;
@@ -797,7 +786,7 @@
 
         }])
 
-        .controller('BoxCtrl', ['installations', '$scope', '$state', '$rootScope', 'bobby', 'chart', 'box', function (installations, $scope, $state, $rootScope, bobby, chart, box) {
+        .controller('BoxCtrl', ['installations', '$scope', '$state', '$rootScope', 'bobby', 'chart', 'box', 'util', function (installations, $scope, $state, $rootScope, bobby, chart, box, util) {
 
             var ts = bobby.getTimeScale();
 
@@ -833,7 +822,11 @@
 
 
             $scope.controlDetails = function (deviceId, controlId) {
-                $state.go('app.main', {deviceid: deviceId, controlid: controlId});
+
+                var device = _.find($scope.installation.devices, { 'id': deviceId });
+                var control = _.find(device.controls, { 'id': controlId });
+
+                $state.go('app.control', {id: $state.params.id, deviceid: device._id, controlid: control._id});
             };
 
             $scope.toggleDevice = function (device) {
@@ -902,7 +895,11 @@
         }])
 
 
-        .controller('MapCtrl', ['$scope', 'installations', '$location', function ($scope, installations, $location) {
+        .controller('MapCtrl', ['$scope', 'installations', '$location', '$state', function ($scope, installations, $location, $state) {
+
+            $scope.$state = $state;
+
+
             // Enable the new Google Maps visuals until it gets enabled by default.
             // See http://googlegeodevelopers.blogspot.ca/2013/05/a-fresh-new-look-for-maps-api-for-all.html
             google.maps.visualRefresh = true;
@@ -940,6 +937,10 @@
                         scrollwheel: false,
                         zoomControlOptions: {
                             position: google.maps.ControlPosition.LEFT_BOTTOM
+                        },
+                        mapTypeControlOptions: {
+                            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                            position: google.maps.ControlPosition.RIGHT_BOTTOM
                         }
                     },
                     zoom: 8,

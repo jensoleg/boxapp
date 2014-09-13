@@ -3,31 +3,42 @@ body {
 }
 
 /* google places */
-.pac-container{
+.pac-container {
     pointer-events: auto;
 }
 
 /* google map full and detail */
-.detail  > .angular-google-map > .angular-google-map-container{
+.detail > .angular-google-map > .angular-google-map-container {
     height: 205px;
     width: 360px;
 }
 
-.full  > .angular-google-map > .angular-google-map-container{
+.full > .angular-google-map > .angular-google-map-container {
     height: 100%;
     width: 100%;
     position: absolute;
 }
 
-.scroll {
+.map > .scroll {
     height: 100%;
 }
+
+.map.bar.bar-clear .button {
+    color: #444;
+}
+
+.map.scroll-content {
+    top: 0 !important;
+    bottom: 0 !important;
+}
+
 /* end google map full and detail */
 
 /* trigger fired - Color reading*/
 .critical {
     color: red;
 }
+
 /* trigger fired */
 
 .bobby-logo {
@@ -52,3 +63,6 @@ body {
     opacity: 0;
     background-color: rgb(68, 68, 68);
 }
+
+
+

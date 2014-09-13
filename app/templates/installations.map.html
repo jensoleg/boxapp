@@ -1,39 +1,38 @@
 <ion-view>
+    <ion-nav-bar class="nav-title-slide-ios7 map bar-clear">
 
-    <ion-header-bar class="bar bar-header bar-clear">
-        <div class="buttons left-buttons">
-            <span class="">
-                <button menu-toggle="left" class="button button-icon button-clear button-dark ion-navicon"></button>
-            </span>
-        </div>
-    </ion-header-bar>
+        <ion-nav-buttons side="left">
+            <button menu-toggle="left" class="button button-icon icon ion-navicon button-dark"></button>
+        </ion-nav-buttons>
 
-    <ion-content class="no-header">
+        <ion-nav-buttons side="right">
+            <button ng-click="$state.go('app.installations')"
+                    class="button button-icon icon-left ion-android-drawer button-dark"></button>
+        </ion-nav-buttons>
 
-                <google-map class="full"
-                            data-tap-disabled="true"
-                            center="map.center"
-                            zoom="map.zoom"
-                            draggable="true"
-                            dragging="map.dragging"
-                            bounds="map.bounds"
-                            events="map.events"
-                            options="map.options"
-                            pan="true"
-                            control="map.control">
+    </ion-nav-bar>
 
-                    <markers
-                            models="map.markers"
-                            coords="'self'"
-                            icon="'icon'"
-                            click="'onClicked'"
-                            options="'self'">
-                    </markers>
+    <ion-content class="map">
+        <google-map class="full"
+                    data-tap-disabled="true"
+                    center="map.center"
+                    zoom="map.zoom"
+                    draggable="true"
+                    dragging="map.dragging"
+                    bounds="map.bounds"
+                    events="map.events"
+                    options="map.options"
+                    pan="true"
+                    control="map.control">
 
-                </google-map>
-            </div>
-        </div>
+            <markers
+                    models="map.markers"
+                    coords="'self'"
+                    icon="'icon'"
+                    click="'onClicked'"
+                    options="'self'">
+            </markers>
 
+        </google-map>
     </ion-content>
-
 </ion-view>

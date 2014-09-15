@@ -1,7 +1,23 @@
 (function () {
     'use strict';
 
-    angular.module('BobbyApp.controllers', ['dx', 'ionic', 'google-maps', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives', 'chart', 'box'])
+    angular.module('BobbyApp.controllers', ['dx', 'ionic', 'ionic.contrib.ui.cards', 'google-maps', 'ngGPlaces', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives', 'chart', 'box', 'map-icons'])
+
+        .config(function (ngGPlacesAPIProvider) {
+            ngGPlacesAPIProvider.setDefaults({
+                radius: 1000,
+                sensor: false,
+                latitude: null,
+                longitude: null,
+                types: ['food'],
+                map: null,
+                elem: null,
+                nearbySearchKeys: ['name', 'reference', 'vicinity'],
+                placeDetailsKeys: ['formatted_address', 'formatted_phone_number', 'reference', 'website', 'photos'],
+                nearbySearchErr: 'Unable to find nearby places',
+                placeDetailsErr: 'Unable to find place details'
+            });
+        })
 
         .filter('int', function () {
             return function (v) {
@@ -169,7 +185,7 @@
             };
         }])
 
-        .controller('InstallationCtrl', ['bobby', '$scope', '$state', '$window', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', function (bobby, $scope, $state, $window, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
+        .controller('InstallationCtrl', ['bobby', 'icons', '$scope', '$state', '$window', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', function (bobby, icons, $scope, $state, $window, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
 
             google.maps.visualRefresh = true;
 
@@ -177,10 +193,12 @@
                 id: installation._id,
                 latitude: installation.location.lat,
                 longitude: installation.location.lng,
+                icon: icons.cube,
                 options: {
                     visible: false
                 }
             };
+
 
             angular.extend($scope, {
                 map: {
@@ -895,10 +913,9 @@
         }])
 
 
-        .controller('MapCtrl', ['$scope', 'installations', '$location', '$state', function ($scope, installations, $location, $state) {
+        .controller('MapCtrl', ['$scope', 'ngGPlacesAPI', 'icons', 'installations', '$state', function ($scope, ngGPlacesAPI, icons, installations, $state) {
 
             $scope.$state = $state;
-
 
             // Enable the new Google Maps visuals until it gets enabled by default.
             // See http://googlegeodevelopers.blogspot.ca/2013/05/a-fresh-new-look-for-maps-api-for-all.html
@@ -910,11 +927,15 @@
                 var ret = {
                     latitude: item.location.lat,
                     longitude: item.location.lng,
-                    title: item.name,
                     id: item._id,
-                    options: { title: item.name + ' ' + item.placement }
+                    icon: icons.cube,
+                    options: {
+                        title: item.name + ' ' + item.placement,
+                        labelAnchor: '-30 -4',
+                        labelContent: item.name + ' ' + item.placement
+                        //labelClass: 'labelMarker'
+                    }
                 };
-
                 markers.push(ret);
             });
 
@@ -934,14 +955,63 @@
                         panControl: false,
                         maxZoom: 20,
                         minZoom: 3,
-                        scrollwheel: false,
+                        scrollwheel: true,
+                        streetViewControlOptions: {
+                            position: google.maps.ControlPosition.RIGHT_BOTTOM
+                        },
                         zoomControlOptions: {
                             position: google.maps.ControlPosition.LEFT_BOTTOM
                         },
                         mapTypeControlOptions: {
-                            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-                            position: google.maps.ControlPosition.RIGHT_BOTTOM
-                        }
+                            position: google.maps.ControlPosition.BOTTOM_CENTER
+                        },
+                        styles: [
+                            {"featureType": "water", "elementType": "geometry", "stylers": [
+                                {"color": "#a2daf2"}
+                            ]},
+                            {"featureType": "landscape.man_made", "elementType": "geometry", "stylers": [
+                                {"color": "#f7f1df"}
+                            ]},
+                            {"featureType": "landscape.natural", "elementType": "geometry", "stylers": [
+                                {"color": "#d0e3b4"}
+                            ]},
+                            {"featureType": "landscape.natural.terrain", "elementType": "geometry", "stylers": [
+                                {"visibility": "off"}
+                            ]},
+                            {"featureType": "poi.park", "elementType": "geometry", "stylers": [
+                                {"color": "#bde6ab"}
+                            ]},
+                            {"featureType": "poi", "elementType": "labels", "stylers": [
+                                {"visibility": "off"}
+                            ]},
+                            {"featureType": "poi.medical", "elementType": "geometry", "stylers": [
+                                {"visibility": "off"}
+                            ]},
+                            {"featureType": "poi.business", "stylers": [
+                                {"visibility": "off"}
+                            ]},
+                            {"featureType": "road", "elementType": "geometry.stroke", "stylers": [
+                                {"visibility": "off"}
+                            ]},
+                            {"featureType": "road", "elementType": "labels", "stylers": [
+                                {"visibility": "off"}
+                            ]},
+                            {"featureType": "road.highway", "elementType": "geometry.fill", "stylers": [
+                                {"color": "#ffe15f"}
+                            ]},
+                            {"featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [
+                                {"color": "#efd151"}
+                            ]},
+                            {"featureType": "road.arterial", "elementType": "geometry.fill", "stylers": [
+                                {"color": "#ffffff"}
+                            ]},
+                            {"featureType": "road.local", "elementType": "geometry.fill", "stylers": [
+                                {"color": "black"}
+                            ]},
+                            {"featureType": "transit.station.airport", "elementType": "geometry.fill", "stylers": [
+                                {"color": "#cfb2db"}
+                            ]}
+                        ]
                     },
                     zoom: 8,
                     dragging: true,
@@ -949,15 +1019,47 @@
                     markers: markers,
                     events: {
                         tilesloaded: function (map, eventName, originalEventArgs) {
+                            $scope.$apply(function () {
+                                $scope.mapInstance = map;
+                                $scope.service = google.maps.places.PlacesService($scope.mapInstance);
+                            });
                         }
+                    },
+                    getGMap: function () {
                     }
                 }
             });
 
             $scope.map.markers = markers;
 
+
             var onMarkerClicked = function (marker) {
-                $location.path('/app/installations/' + marker.id);
+
+
+                var request = {
+                    placeId: 'ChIJmaSKgPYySUYRKLlyaho0O6Y' /* marker.placeId */
+                };
+
+                $scope.details = ngGPlacesAPI.placeDetails(request)
+                    .then(function (data) {
+
+                        var newCard = _.find(installations, { '_id': marker.id });
+                        newCard.id = Math.random();
+
+                        $scope.cards = [];
+
+                        if (data.photos) {
+                            newCard.image = data.photos[0].getUrl({'maxWidth': 200, 'maxHeight': 110});
+                        } else {
+                            newCard.image = 'images/default-map.jpg';
+                        }
+
+                        $scope.cards.push(angular.extend({}, newCard));
+
+                        return data;
+                    });
+
+
             };
 
             $scope.onMarkerClicked = onMarkerClicked;
@@ -968,7 +1070,43 @@
                 };
             });
 
+            /*
+             $scope.refreshMap = function () {
+             //optional param if you want to refresh you can pass null undefined or false or empty arg
+             $scope.map.control.refresh({latitude: 32.779680, longitude: -79.935493});
+             $scope.map.control.getGMap().setZoom(11);
+             };
 
+             var origCenter = {latitude: $scope.map.center.latitude, longitude: $scope.map.center.longitude};
+             */
+        }])
+
+        .controller('CardCtrl', ['$scope', '$location', '$window', '$ionicSwipeCardDelegate', '$state', function ($scope, $location, $window, $ionicSwipeCardDelegate, $state) {
+            $scope.status = function () {
+                var card = $ionicSwipeCardDelegate.getSwipebleCard($scope);
+                console.log($scope.$parent.card);
+                card.swipe();
+                //$state.go('app.main', {id: $scope.$parent.card._id});
+                $location.path('/app/main/' + $scope.$parent.card._id);
+            };
+            $scope.setup = function () {
+                var card = $ionicSwipeCardDelegate.getSwipebleCard($scope);
+                card.swipe();
+                //$state.go('app.installations', {id: $scope.$parent.card._id});
+                $location.path('/app/installations/' + $scope.$parent.card._id);
+            };
+
+            $scope.phoneTo = function (tel) {
+                $window.location.href = 'tel:' + tel;
+            };
+
+            $scope.emailTo = function (email) {
+                $window.location.href = 'mailto:' + email;
+            };
+
+            $scope.navigateTo = function (lat, lng) {
+                $window.location.href = 'maps://maps.apple.com/?q=' + lat + ',' + lng;
+            };
         }]);
 
 }());

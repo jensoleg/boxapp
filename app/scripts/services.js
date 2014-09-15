@@ -16,7 +16,7 @@
             return window.StatusBar; // assumes cordova has already been loaded on the page
         })
 
-        .factory('util', function () {
+        .factory('util', ['$q', '$http',  function ($q, $http) {
             var util = {};
             util.objectIdDel = function (copiedObjectWithId) {
                 if (copiedObjectWithId !== null && typeof copiedObjectWithId !== 'string' &&
@@ -48,8 +48,22 @@
                 return memo;
             };
 
+
+            util.googlePlacesPhoto = function (reference) {
+                var q = $q.defer();
+
+                $http.get("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=CpQBiQAAAE6cwDA4UrVPsrckAZsGXgrLsMLirXCfCgQk2aCgzRjKzl3EhIV378Gr50qjKETePYjwTvRFA1py5yXRqz3LNBW8U1mHLC8G-H5tF3MYhzpv4CyJRyGWWVkuia7ogQ9wMAT5wtQM8gEd4v16FBslWM-oDYCvpqNNlQEdr0ELzOvf4XmFa1jGCp1DzEZe8qlehRIQUB7e_xtaHKyOq_JJdNByohoUFInBomSjPAWhQs7Ja4Ph5Gu_SbI").success(function (data) {
+                    q.resolve(data);
+                }, function () {
+                    q.resolve(null);
+                });
+                return q.promise;
+            };
+
+
+
             return util;
-        })
+        }])
 
         .factory('Settings', ['DEFAULT_SETTINGS', function (DEFAULT_SETTINGS) {
             var ts,

@@ -1,6 +1,19 @@
 body {
     cursor: url('http://ionicframework.com/img/finger.png'), auto;
 }
+/*
+.scroll-content {
+    background: url('http://p1.pichost.me/160x160/46/1697848.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.list {
+opacity: 0.9;
+}
+*/
 
 /* google places */
 .pac-container {
@@ -10,7 +23,7 @@ body {
 /* google map full and detail */
 .detail > .angular-google-map > .angular-google-map-container {
     height: 205px;
-    width: 360px;
+    width: 100%;
 }
 
 .full > .angular-google-map > .angular-google-map-container {
@@ -19,17 +32,19 @@ body {
     position: absolute;
 }
 
+
 .map > .scroll {
     height: 100%;
 }
 
-.map.bar.bar-clear .button {
-    color: #444;
-}
-
 .map.scroll-content {
+    z-index: 1;
     top: 0 !important;
     bottom: 0 !important;
+}
+
+.labelMarker {
+    color: #007FFF;
 }
 
 /* end google map full and detail */
@@ -64,5 +79,69 @@ body {
     background-color: rgb(68, 68, 68);
 }
 
+/*  swipe cards */
+
+.swipe-cards {
+    position: fixed;
+}
+
+.swipe-card {
+    -webkit-perspective: 1000;
+    -webkit-backface-visibility: hidden;
+    display: none;
+    position: fixed;
+    -webkit-transform: scale(1,1);
+    left: 50%;
+    top: 50%;
+    width: 250px;
+    height: 300px;
+    margin-left: -120px;
+    margin-top: -150px;
+    box-sizing: border-box;
+    background-color: rgb(255,255,255);
+    border-radius: 4px;
+    overflow: hidden;
+    -webkit-animation-fill-mode: forwards;
+}
+
+.swipe-card .title {
+    height: 40px;
+    padding: 5px;
+    line-height: 30px;
+    color: #444;
+}
+.swipe-card .info {
+    overflow: hidden;
+    max-height: 210px;
+}
+
+.swipe-card .image {
+    overflow: hidden;
+    height: 110px;
+}
+
+.swipe-card .image img {
+    width: 100%;
+    border-radius: 0px 0px 4px 4px;
+}
+
+@-webkit-keyframes bounceIn {
+    0% {
+        -webkit-transform: scale(0,0);
+    }
+    70% {
+        -webkit-transform: scale(1.2,1.2);
+    }
+    100% {
+        -webkit-transform: scale(1,1);
+    }
+}
+
+.swipe-card.pop-in-start {
+    -webkit-transform: scale(0,0);
+}
+.swipe-card.pop-in {
+    -webkit-animation: bounceIn 0.3s ease-out;
+}
 
 

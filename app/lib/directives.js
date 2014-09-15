@@ -1,7 +1,18 @@
 (function () {
     'use strict';
     angular.module('BobbyApp.directives', [])
+        .directive('noScroll', function ($document) {
 
+            return {
+                restrict: 'A',
+                link: function ($scope, $element, $attr) {
+
+                    $document.on('touchmove', function (e) {
+                        e.preventDefault();
+                    });
+                }
+            };
+        })
         .directive('fadeBar', function ($timeout, $ionicSideMenuDelegate) {
             return {
                 restrict: 'E',

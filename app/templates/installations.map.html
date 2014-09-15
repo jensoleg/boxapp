@@ -1,38 +1,98 @@
 <ion-view>
-    <ion-nav-bar class="nav-title-slide-ios7 map bar-clear">
-
+    <ion-nav-bar class="nav-title-slide-ios7 bar-clear">
         <ion-nav-buttons side="left">
-            <button menu-toggle="left" class="button button-icon icon ion-navicon button-dark"></button>
+            <button menu-toggle="left" class="button icon  ion-navicon button-clear button-dark">
+            </button>
         </ion-nav-buttons>
-
         <ion-nav-buttons side="right">
-            <button ng-click="$state.go('app.installations')"
-                    class="button button-icon icon-left ion-android-drawer button-dark"></button>
+            <button style="color: #4F8EF7;"
+                    class="button icon ion-ios7-paper button-clear button-dark"
+                    ng-click="$state.go('app.installations')">
+            </button>
         </ion-nav-buttons>
-
     </ion-nav-bar>
 
-    <ion-content class="map">
-        <google-map class="full"
-                    data-tap-disabled="true"
-                    center="map.center"
-                    zoom="map.zoom"
-                    draggable="true"
-                    dragging="map.dragging"
-                    bounds="map.bounds"
-                    events="map.events"
-                    options="map.options"
-                    pan="true"
-                    control="map.control">
+    <ion-content scroll="false" class="map">
+        <div>
+            <google-map class="full"
+                        center="map.center"
+                        zoom="map.zoom"
+                        draggable="true"
+                        dragging="map.dragging"
+                        bounds="map.bounds"
+                        events="map.events"
+                        options="map.options"
+                        pan="true"
+                        control="map.control">
 
-            <markers
-                    models="map.markers"
-                    coords="'self'"
-                    icon="'icon'"
-                    click="'onClicked'"
-                    options="'self'">
-            </markers>
+                <markers
+                        models="map.markers"
+                        coords="'self'"
+                        doCluster="true"
+                        icon="'icon'"
+                        click="'onClicked'"
+                        options="'options'"
+                        isLabel='true'>
+                </markers>
 
-        </google-map>
+            </google-map>
+        </div>
+        <swipe-cards bg-positive>
+            <swipe-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)">
+                <div ng-controller="CardCtrl">
+                    <div class="title">
+                        {{card.name}} {{card.placement}}
+                    </div>
+                    <div class="image">
+                        <img ng-src="{{card.image}}">
+                    </div>
+                    <div class="info">
+                        <div class="col" style="padding: 0;">
+                            <ion-list>
+                                <ion-item style="border-style:none border-top:1px; padding: 7px;font-size: 12px;">
+                                    <a class="item-icon-left"
+                                       style="padding-left: 35px;">
+                                        <i class="icon ion-location"
+                                           style="font-size: 24px;"
+                                           ng-click="navigateTo( '{{card.location.lat}}' , '{{ card.location.lng}}' )">
+                                        </i>
+                                        {{card.address}}
+                                    </a>
+                                </ion-item>
+                                <ion-item style="border-style:none; padding: 7px;font-size: 12px;">
+                                    <a class=" item-icon-left"
+                                       style="padding-left: 35px;">
+                                        <i class="icon ion-iphone"
+                                           style="font-size: 24px;"
+                                           ng-click="phoneTo('{{card.contact.phone}}')">
+                                        </i>
+                                        {{card.contact.phone}}
+                                    </a>
+                                </ion-item>
+                                <ion-item style="border-top-width: 0px;padding: 7px;font-size: 12px;">
+                                    <a class="item-icon-left"
+                                       style="padding-left: 35px;">
+                                        <i style="font-size: 16px;" class="icon ion-android-mail"
+                                           ng-click="emailTo('{{card.contact.email}}')">
+                                        </i>
+                                        {{card.contact.email}}
+                                    </a>
+                                </ion-item>
+                            </ion-list>
+                        </div>
+                        <div class="button-bar">
+                            <button class="button button-clear button-positive"
+                                    style="border-right-width: 2px;border-bottom-width: 0px; font-size: 14px;"
+                                    ng-click="status()">Conditions
+                            </button>
+                            <button class="button button-clear button-positive"
+                                    style="font-size: 14px;"
+                                    ng-click="setup()">Setup
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </swipe-card>
+        </swipe-cards>
     </ion-content>
 </ion-view>

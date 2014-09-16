@@ -43,10 +43,42 @@ opacity: 0.9;
     bottom: 0 !important;
 }
 
+
 .labelMarker {
-    color: #007FFF;
+    color: white;
+    font-size: 12px;
+    background-color: black;
+    background-size: 100% 100%;
+    opacity: 0.5;
+    margin: 15px 0px 0px 12px;
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 4px;
+    /*cursor: none;*/
 }
 
+.map.bar.bar-stable{
+    background-color:rgba(0,0,0,0.3) !important;
+}
+
+/*
+.labelMarker{
+    height: 50px;
+    width: 200px;
+    margin-left: -100px;
+    background-size: 100% 100%;
+    opacity: 0.8;
+    display: -webkit-box;
+    cursor: pointer !important;
+}
+
+.infobox .content{
+    margin: 15px 0px 0px 12px;
+    color: white;
+    font-size: 12px;
+    width: 75%;
+}
+*/
 /* end google map full and detail */
 
 /* trigger fired - Color reading*/

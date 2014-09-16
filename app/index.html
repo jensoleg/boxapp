@@ -14,11 +14,11 @@
 
     <!-- build:css({.tmp,app}) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
+    <!--link  rel='stylesheet' href="styles/loading-bar.css"/-->
     <!-- endbuild -->
 
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-    <link href='styles/loading-bar.css' rel='stylesheet' />
 
 </head>
 
@@ -26,7 +26,7 @@
 
 <ion-nav-view></ion-nav-view>
 
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=false&key=AIzaSyDYMiqXnyqG-OH4Hp3Cy8pUYqPzZb5ysqM"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places,weather&sensor=false&key=AIzaSyDYMiqXnyqG-OH4Hp3Cy8pUYqPzZb5ysqM"></script>
 
 <!-- build:js scripts/vendor.js -->
 <!-- bower:js -->
@@ -58,10 +58,11 @@
 
 <!-- build:js scripts/scripts.js -->
 <script src="scripts/box.state.js"></script>
+<script src="scripts/map.style.js"></script>
 <script src="scripts/chart.config.js"></script>
 <script src="scripts/map.icons.js"></script>
 <script src="scripts/ionic.swipecards.js"></script>
-<script src="scripts/loading-bar.js"></script>
+<!--script src="scripts/loading-bar.js"></script-->
 
 <script src="scripts/services.js"></script>
 

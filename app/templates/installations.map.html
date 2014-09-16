@@ -1,14 +1,16 @@
 <ion-view>
-    <ion-nav-bar class="nav-title-slide-ios7 bar-clear">
+    <ion-nav-bar class="nav-title-slide-ios7 map bar-stable">
         <ion-nav-buttons side="left">
-            <button menu-toggle="left" class="button icon  ion-navicon button-clear button-dark">
+            <button style="color: #202020;"
+                    menu-toggle="left" class="button icon  ion-navicon button-clear button-dark">
             </button>
         </ion-nav-buttons>
         <ion-nav-buttons side="right">
-            <button style="color: #4F8EF7;"
+            <button style="color: #EAEEFC"
                     class="button icon ion-ios7-paper button-clear button-dark"
                     ng-click="$state.go('app.installations')">
             </button>
+
         </ion-nav-buttons>
     </ion-nav-bar>
 
@@ -25,6 +27,8 @@
                         pan="true"
                         control="map.control">
 
+                <layer namespace="weather" type="WeatherLayer" show="map.showWeather"></layer>
+
                 <markers
                         models="map.markers"
                         coords="'self'"
@@ -32,7 +36,8 @@
                         icon="'icon'"
                         click="'onClicked'"
                         options="'options'"
-                        isLabel='true'>
+                        isLabel='true'
+                        clusterOptions="map.clusterOptions">
                 </markers>
 
             </google-map>
@@ -95,4 +100,15 @@
             </swipe-card>
         </swipe-cards>
     </ion-content>
+    <ion-footer-bar class="bar-clear">
+
+        <a style="color: #646464"
+           class="button button-icon ion-android-locate"></a>
+        <a ng-style="map.showWeather && {'color': '#6184F3'} || {'color': '#646464'}"
+           ng-click="map.showWeather = !map.showWeather"
+           class="button button-icon ion-ios7-cloud"></a>
+        <a class="button button-clear button-large"></a>
+
+    </ion-footer-bar>
+
 </ion-view>

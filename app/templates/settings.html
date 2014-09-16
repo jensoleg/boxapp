@@ -1,34 +1,41 @@
 <ion-view title="Settings" hide-back-button="true">
 
-    <ion-nav-buttons side="right">
-        <button class="button button-clear button-positive" ng-click="saveSettings()">Save</button>
-    </ion-nav-buttons>
+    <ion-nav-bar class="nav-title-slide-ios7 bar-light">
+        <ion-nav-buttons side="left">
+            <button menu-toggle="left" class="button icon button-clear ion-navicon"></button>
+        </ion-nav-buttons>
+
+    </ion-nav-bar>
 
     <ion-content>
         <div class="list">
-            <a class="item item-button-right">
-                Use celcious
-                <div class="button-bar">
-                    <i class="button button-clear" ng-class="{'button-balanced': settings.tempUnits=='c'}"
-                       ng-click="settings.tempUnits='f'">&deg;C
-                    </i>
-                    <i class="button button-clear" ng-class="{'button-balanced': settings.tempUnits=='f'}"
-                       ng-click="settings.tempUnits='f'">&deg;F
-                    </i>
-                </div>
-            </a>
-            <!--div class="list">
-                 <div class="item item-button-right">
-                    Use celcius
-                    <a class="button button-clear" ng-class="{'button-balanced': settings.tempUnits=='c'}"
-                       ng-click="settings.tempUnits='f'">&deg;C
-                </a>
-            </div>
             <div class="item item-button-right">
-                Use Fahrenheit
-                <a class="button button-clear" ng-class="{'button-balanced': settings.tempUnits=='f'}"
-                   ng-click="settings.tempUnits='f'">&deg;F</a>
+                Units
+                <button ng-click="settings.tempUnits=='F' ? settings.tempUnits='C' : settings.tempUnits='F'"
+                        class="button button-clear button-balanced"
+                        ng-model=settings.tempUnits>°{{settings.tempUnits}}
+                </button>
             </div>
-        </div-->
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Map style
+                </div>
+                <select ng-model="settings.mapStyle">
+                    <option>Custom grey</option>
+                    <option>Google map</option>
+                    <option>Apple map</option>
+                </select>
+            </label>
+
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Start at
+                </div>
+                <select ng-model="settings.startAt">
+                    <option>List</option>
+                    <option>Map</option>
+                </select>
+            </label>
+        </div>
     </ion-content>
 </ion-view>

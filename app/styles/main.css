@@ -57,7 +57,8 @@ opacity: 0.9;
     /*cursor: none;*/
 }
 
-.map.bar.bar-stable{
+.map.bar.bar-dark{
+    border-style: hidden;
     background-color:rgba(0,0,0,0.3) !important;
 }
 

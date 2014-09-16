@@ -913,7 +913,10 @@
         }])
 
 
-        .controller('MapCtrl', ['$scope', 'ngGPlacesAPI', 'icons', 'styles', 'installations', '$state', function ($scope, ngGPlacesAPI, icons, styles, installations, $state) {
+        .controller('MapCtrl', ['$scope', 'ngGPlacesAPI', 'Settings', 'icons', 'styles', 'installations', '$state', function ($scope, ngGPlacesAPI, Settings, icons, styles, installations, $state) {
+
+            var mapStyles = {'Custom grey': 'grey', 'Google map': 'default', 'Apple map': 'ios'},
+                markers = [];
 
             $scope.$state = $state;
 
@@ -921,7 +924,6 @@
             // See http://googlegeodevelopers.blogspot.ca/2013/05/a-fresh-new-look-for-maps-api-for-all.html
             google.maps.visualRefresh = true;
 
-            var markers = [];
 
             angular.forEach(installations, function (item) {
                 var ret = {
@@ -999,7 +1001,7 @@
                         mapTypeControlOptions: {
                             position: google.maps.ControlPosition.BOTTOM_CENTER
                         },
-                        styles: styles.grey
+                        styles: styles[mapStyles[Settings.get('mapStyle')]]
                     },
                     zoom: 7,
                     dragging: true,
@@ -1015,7 +1017,6 @@
             });
 
             $scope.map.markers = markers;
-
 
             var onMarkerClicked = function (marker) {
 

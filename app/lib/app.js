@@ -1,9 +1,9 @@
 (function () {
     'use strict';
 
-    angular.module('BobbyApp', ['dx', 'ionic', 'auth0', 'config', 'BobbyApp.controllers', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives'])
+    angular.module('BobbyApp', ['dx', 'ionic', 'auth0', 'config', 'angular-loading-bar', 'ngAnimate', 'BobbyApp.controllers', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives'])
 
-        .config([ '$stateProvider', '$urlRouterProvider', '$httpProvider', 'authProvider', 'ENV', function ($stateProvider, $urlRouterProvider, $httpProvider, authProvider, ENV) {
+        .config([ '$stateProvider', '$urlRouterProvider', '$httpProvider', 'authProvider', 'ENV', 'cfpLoadingBarProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, authProvider, ENV, cfpLoadingBarProvider) {
 
             $stateProvider
                 .state('login', {
@@ -145,8 +145,14 @@
                 $location.path('/login');
             });
 
-            authProvider.on('loginSuccess', function ($location) {
-                $location.path('/app/installations');
+            authProvider.on('loginSuccess', function ($location, auth) {
+                auth.getProfile().then(function (profile) {
+                    if (profile.app && profile.app.startAt && profile.app.startAt === 'Map') {
+                        $location.path('/app/map');
+                    } else {
+                        $location.path('/app/installations');
+                    }
+                });
             });
 
             authProvider.on('loginFailure', function ($location) {
@@ -156,6 +162,10 @@
             $httpProvider.interceptors.push('authInterceptor');
 
             $urlRouterProvider.otherwise('/login');
+
+            /* loading bar */
+            cfpLoadingBarProvider.latencyThreshold = 300;
+            cfpLoadingBarProvider.includeSpinner = false;
 
         }])
 
@@ -229,11 +239,9 @@
                 Settings.save(event);
             }, true);
 
-            $scope.saveSettings = function () {
+            $scope.$on("$destroy", function () {
                 auth0Service.updateUser(auth.profile.user_id, { app: Settings.getSettings()});
-            };
+            });
+
         }]);
-}
-()
-    )
-;
+}());

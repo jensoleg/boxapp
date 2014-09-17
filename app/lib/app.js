@@ -136,35 +136,37 @@
                 clientID: ENV.auth.clientID,
                 callbackURL: 'dummy',
                 loginState: 'login',
-                minutesToRenewToken: 120,
                 dict: {signin: {title: ' '}}
             });
+            /*
+             authProvider.on('forbidden', function ($location, auth) {
+             auth.signout();
+             $location.path('/login');
+             });
 
-            authProvider.on('forbidden', function ($location, auth) {
-                auth.signout();
-                $location.path('/login');
-            });
+             authProvider.on('loginSuccess', function ($location, auth) {
+             auth.getProfile().then(function (profile) {
+             if (profile.app && profile.app.startAt && profile.app.startAt === 'Map') {
+             $location.path('/app/map');
+             } else {
+             console.log(profile);
+             $location.path('/app/installations');
+             }
+             }, function (error) {
+             $location.path('/app/installations');
+             });
+             });
 
-            authProvider.on('loginSuccess', function ($location, auth) {
-                auth.getProfile().then(function (profile) {
-                    if (profile.app && profile.app.startAt && profile.app.startAt === 'Map') {
-                        $location.path('/app/map');
-                    } else {
-                        $location.path('/app/installations');
-                    }
-                });
-            });
-
-            authProvider.on('loginFailure', function ($location) {
-                $location.path('/login');
-            });
-
+             authProvider.on('loginFailure', function ($location) {
+             $location.path('/login');
+             });
+             */
             $httpProvider.interceptors.push('authInterceptor');
 
-            $urlRouterProvider.otherwise('/login');
+            $urlRouterProvider.otherwise('/app/installations');
 
             /* loading bar */
-            cfpLoadingBarProvider.latencyThreshold = 300;
+            cfpLoadingBarProvider.latencyThreshold = 500;
             cfpLoadingBarProvider.includeSpinner = false;
 
         }])
@@ -196,10 +198,6 @@
 
         .controller('AppCtrl', ['bobby', '$scope', 'auth', '$state', '$ionicSideMenuDelegate', function (bobby, $scope, auth, $state, $ionicSideMenuDelegate) {
 
-            auth.getProfile().then(function (profile) {
-                $scope.profile = profile;
-            });
-
             $scope.signout = function () {
                 bobby.setInstallation(null);
                 $ionicSideMenuDelegate.toggleLeft();
@@ -209,7 +207,7 @@
 
         }])
 
-        .controller('LoginCtrl', ['auth', '$rootScope', function (auth, $rootScope) {
+        .controller('LoginCtrl', ['auth', '$rootScope', '$location', function (auth, $rootScope, $location) {
 
             var logo = './images/' + $rootScope.domain + '.png';
 
@@ -218,10 +216,21 @@
                 showSignup: true,
                 standalone: true,
                 offline_mode: true,
-                device: 'Phone',
-                enableReturnUserExperience: false,
+//                enableReturnUserExperience: false,
                 icon: logo,
                 showIcon: true
+            }, function (profile) {
+
+                $rootScope.profile = profile
+                console.log(profile);
+
+                if (profile.app && profile.app.startAt && profile.app.startAt === 'Map') {
+                    $location.path('/app/map');
+                } else {
+                    $location.path('/app/installations');
+                }
+            }, function (error) {
+                console.log("There was an error logging in", error);
             });
 
         }])

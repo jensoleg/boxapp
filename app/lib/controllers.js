@@ -912,10 +912,9 @@
 
         }])
 
-
         .controller('MapCtrl', ['$scope', 'ngGPlacesAPI', 'Settings', 'icons', 'styles', 'installations', '$state', function ($scope, ngGPlacesAPI, Settings, icons, styles, installations, $state) {
 
-            var mapStyles = {'Custom grey': 'grey', 'Google map': 'default', 'Apple map': 'ios'},
+            var mapStyles = {'Custom grey blue': 'GreyBlue', 'Custom grey': 'grey', 'Google map': 'default', 'Apple map': 'ios'},
                 markers = [];
 
             $scope.$state = $state;

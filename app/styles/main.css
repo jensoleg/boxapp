@@ -1,6 +1,7 @@
 body {
     cursor: url('http://ionicframework.com/img/finger.png'), auto;
 }
+
 /*
 .scroll-content {
     background: url('http://p1.pichost.me/160x160/46/1697848.jpg') no-repeat center center fixed;
@@ -20,6 +21,38 @@ opacity: 0.9;
     pointer-events: auto;
 }
 
+/* side menu style */
+.item-avatar {
+    min-height: 42px;
+}
+
+.item-avatar > img:first-child {
+    top: 4px;
+    max-width: 35px;
+    max-height: 35px;
+}
+
+ion-side-menu.menu-left.menu {
+    background-color: rgb(48, 144, 223);
+}
+
+ion-side-menu .item, ion-side-menu .item-content, ion-side-menu .item-complex, ion-side-menu .item-radio {
+    background-color: rgb(48, 144, 223);
+    color: white !important;
+    border-color: #4B97DD;
+}
+
+ion-side-menu .item > .item-content, ion-side-menu .item > .item-complex, ion-side-menu .item > .item-radio {
+    background-color: rgb(48, 144, 223);
+    color: white !important;
+    border-color: #4B97DD;
+}
+
+ion-side-menu .item > .item-content.activated {
+    background-color: #4B97DD;
+    color: white !important;
+}
+
 /* google map full and detail */
 .detail > .angular-google-map > .angular-google-map-container {
     height: 205px;
@@ -32,7 +65,6 @@ opacity: 0.9;
     position: absolute;
 }
 
-
 .map > .scroll {
     height: 100%;
 }
@@ -42,7 +74,6 @@ opacity: 0.9;
     top: 0 !important;
     bottom: 0 !important;
 }
-
 
 .labelMarker {
     color: white;
@@ -57,9 +88,9 @@ opacity: 0.9;
     /*cursor: none;*/
 }
 
-.map.bar.bar-dark{
+.map.bar.bar-dark {
     border-style: hidden;
-    background-color:rgba(0,0,0,0.3) !important;
+    background-color: rgba(0, 0, 0, 0.3) !important;
 }
 
 /*
@@ -123,7 +154,7 @@ opacity: 0.9;
     -webkit-backface-visibility: hidden;
     display: none;
     position: fixed;
-    -webkit-transform: scale(1,1);
+    -webkit-transform: scale(1, 1);
     left: 50%;
     top: 50%;
     width: 250px;
@@ -131,7 +162,7 @@ opacity: 0.9;
     margin-left: -120px;
     margin-top: -150px;
     box-sizing: border-box;
-    background-color: rgb(255,255,255);
+    background-color: rgb(255, 255, 255);
     border-radius: 4px;
     overflow: hidden;
     -webkit-animation-fill-mode: forwards;
@@ -143,6 +174,7 @@ opacity: 0.9;
     line-height: 30px;
     color: #444;
 }
+
 .swipe-card .info {
     overflow: hidden;
     max-height: 210px;
@@ -160,19 +192,20 @@ opacity: 0.9;
 
 @-webkit-keyframes bounceIn {
     0% {
-        -webkit-transform: scale(0,0);
+        -webkit-transform: scale(0, 0);
     }
     70% {
-        -webkit-transform: scale(1.2,1.2);
+        -webkit-transform: scale(1.2, 1.2);
     }
     100% {
-        -webkit-transform: scale(1,1);
+        -webkit-transform: scale(1, 1);
     }
 }
 
 .swipe-card.pop-in-start {
-    -webkit-transform: scale(0,0);
+    -webkit-transform: scale(0, 0);
 }
+
 .swipe-card.pop-in {
     -webkit-animation: bounceIn 0.3s ease-out;
 }

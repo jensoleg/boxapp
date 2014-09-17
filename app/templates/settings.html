@@ -10,7 +10,7 @@
     <ion-content>
         <div class="list">
             <div class="item item-button-right">
-                Units
+                Temp units
                 <button ng-click="settings.tempUnits=='F' ? settings.tempUnits='C' : settings.tempUnits='F'"
                         class="button button-clear button-balanced"
                         ng-model=settings.tempUnits>°{{settings.tempUnits}}
@@ -21,9 +21,10 @@
                     Map style
                 </div>
                 <select ng-model="settings.mapStyle">
-                    <option>Custom grey</option>
                     <option>Google map</option>
                     <option>Apple map</option>
+                    <option>Custom grey</option>
+                    <option>Custom grey blue</option>
                 </select>
             </label>
 

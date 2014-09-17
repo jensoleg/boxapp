@@ -7,11 +7,13 @@
     </ion-side-menu-content>
 
     <ion-side-menu side="left">
-        <ion-header-bar class="bar-dark">
-            <h1 class="title">{{profile.name}}</h1>
-            <button class="ion-ios7-gear button button-clear"></button>
+        <ion-header-bar class="bar-clear">
+            <a class="item-avatar">
+                <img src='{{profile.picture}}'>
+                <h5>{{profile.name}}</h5>
+            </a>
         </ion-header-bar>
-        <ion-content class="has-header" class="bg-image">
+        <ion-content class="has-header">
             <ion-list>
                 <ion-item nav-clear menu-close ui-sref='app.installations'>
                     Installations
@@ -28,7 +30,7 @@
             </ion-list>
         </ion-content>
 
-        <ion-footer-bar style="background-size: 100% 0;">
+        <ion-footer-bar class="bar-clear">
             <p>&nbsp;&nbsp; &copy; bobbytechnologies.dk </p>
         </ion-footer-bar>
     </ion-side-menu>

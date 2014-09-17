@@ -1,13 +1,15 @@
 <ion-view>
-    <ion-nav-bar class="nav-title-slide-ios7 map bar-dark">
+    <ion-nav-bar class="nav-title-slide-ios7 bar-clear">
 
         <ion-nav-buttons side="left">
-            <button menu-toggle="left" class="button icon  ion-navicon button-clear button-light">
+            <button menu-toggle="left"
+                    style="color: #404040;"
+                    class="button icon  ion-navicon button-clear">
             </button>
         </ion-nav-buttons>
         <ion-nav-buttons side="right">
-            <button style="color: #4773FF;"
-                    class="button icon ion-social-buffer button-clear button-dark"
+            <button style="color: #404040;"
+                    class="button icon ion-social-buffer button-clear"
                     ng-click="$state.go('app.installations')">
             </button>
 
@@ -102,9 +104,9 @@
     </ion-content>
     <ion-footer-bar class="bar-clear">
 
-        <a style="color: #646464"
+        <a style="color: #404040"
            class="button button-icon ion-android-locate"></a>
-        <a ng-style="map.showWeather && {'color': '#6184F3'} || {'color': '#646464'}"
+        <a ng-style="map.showWeather && {'color': 'rgb(97, 132, 243)'} || {'color': '#404040'}"
            ng-click="map.showWeather = !map.showWeather"
            class="button button-icon ion-ios7-cloud"></a>
         <a class="button button-clear button-large"></a>

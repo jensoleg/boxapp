@@ -23,7 +23,8 @@ opacity: 0.9;
 
 /* side menu style */
 .item-avatar {
-    min-height: 42px;
+    min-height: 35px;
+    padding-left: 58px;
 }
 
 .item-avatar > img:first-child {
@@ -49,8 +50,15 @@ ion-side-menu .item > .item-content, ion-side-menu .item > .item-complex, ion-si
 }
 
 ion-side-menu .item > .item-content.activated {
-    background-color: #4B97DD;
+    background-color: #1284EE;
     color: white !important;
+    border-color: #4B97DD;
+}
+
+ion-side-menu .item.activated {
+    background-color: #1284EE;
+    color: white !important;
+    border-color: #4B97DD;
 }
 
 /* google map full and detail */

@@ -138,29 +138,7 @@
                 loginState: 'login',
                 dict: {signin: {title: ' '}}
             });
-            /*
-             authProvider.on('forbidden', function ($location, auth) {
-             auth.signout();
-             $location.path('/login');
-             });
 
-             authProvider.on('loginSuccess', function ($location, auth) {
-             auth.getProfile().then(function (profile) {
-             if (profile.app && profile.app.startAt && profile.app.startAt === 'Map') {
-             $location.path('/app/map');
-             } else {
-             console.log(profile);
-             $location.path('/app/installations');
-             }
-             }, function (error) {
-             $location.path('/app/installations');
-             });
-             });
-
-             authProvider.on('loginFailure', function ($location) {
-             $location.path('/login');
-             });
-             */
             $httpProvider.interceptors.push('authInterceptor');
 
             $urlRouterProvider.otherwise('/app/installations');
@@ -190,6 +168,10 @@
             });
 
             $rootScope.domain = ENV.auth.domain.split('.')[0];
+
+            if (window.localStorage.getItem("profile") !== null) {
+                $rootScope.profile = JSON.parse(window.localStorage.profile);
+            }
 
             // This hooks al auth events to check everything as soon as the app starts
             auth.hookEvents();
@@ -222,7 +204,8 @@
             }, function (profile) {
 
                 $rootScope.profile = profile
-                console.log(profile);
+
+                window.localStorage.profile = JSON.stringify(profile);
 
                 if (profile.app && profile.app.startAt && profile.app.startAt === 'Map') {
                     $location.path('/app/map');

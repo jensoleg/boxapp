@@ -15,7 +15,7 @@
         <ion-list>
             <div ng-repeat="device in installation.devices">
                 <ion-item class=" item-icon-right"
-                          style="border-width: 1px; border-style: dotted;"
+                          style="border-width: 1px;"
                           ng-click="toggleDevice(device.id)">
                     <label>
                         <i class="icon-item ion-cube"
@@ -34,25 +34,24 @@
                 </ion-item>
 
                 <ion-item class="item-icon-right"
-                          style="padding-left: 14px; border-width: 1px; border-style: dotted;"
+                          style="padding-left: 14px; border-width: 1px;"
                           ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }| orderObjectBy:'name':'reverse'"
                           ng-click="showData(readings.deviceid, readings.id)"
                           ng-show="isDeviceShown(device.id)">
                     <label>
                         <i class="icon-item ion-load-d"
-                           style="vertical-align: middle;font-size: 140%;"
-                           ng-hide="readings.ctrlType == 'data' && (readings.id != activeStream.id || readings.deviceid != activeStream.deviceid || !showChart)"
-                           style="color: rgb(82, 154, 233);">
+                           style="vertical-align: middle;font-size: 140%; color: rgb(82, 154, 233);"
+                           ng-hide="readings.ctrlType == 'data' && (readings.id != activeStream.id || readings.deviceid != activeStream.deviceid || !showChart)">
                         </i>
                         <i class="icon-item ion-ios7-speedometer"
                            style="vertical-align: middle;font-size: 140%;"
                            ng-show="readings.ctrlType == 'data' && (readings.id != activeStream.id || readings.deviceid != activeStream.deviceid || !showChart)"
-                           ng-style="device.id == activeStream.deviceid && {'color': 'rgb(129, 207, 98)'} || {'color': 'rgb(82, 154, 233)'}">
+                           ng-style="readings.id == activeStream.id && device.id == activeStream.deviceid && {'color': 'rgb(129, 207, 98)'} || {'color': 'rgb(82, 154, 233)'}">
                         </i>
                         {{readings.name}}
                     </label>
-                    <span class="badge badge-balanced" style="top: 9px;">
-                            {{readings.current_value}} {{readings.unit.symbol}}
+                    <span class="badge badge-balanced">
+                            {{readings.current_value}} {{readings.unit.symbol}}{{readings.unit.units}}
                     </span>
                     <ion-option-button class="button-assertive">Alarms</ion-option-button>
                     <ion-option-button class="button-positive" ng-click="controlDetails(device.id, readings.id)">
@@ -63,7 +62,7 @@
             </div>
 
             <ion-item class="item item-icon-right stable-bg"
-                      ng-show="activeStream">
+                      ng-show="activeStream  && chartSettings.dataSource.length">
 
                 <label>
                     {{datastreams[activeStream.deviceid + activeStream.id].name}}
@@ -83,8 +82,10 @@
 
             </ion-item>
 
-            <div id="chartContainer" style="height: 200px"
-                 dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
+            <ion-item ng-show="activeStream"
+                      style="border-width: 0px;">
+                <div id="chartContainer" style="height: 300px"
+                     dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
                                          argumentAxis: 'chartSettings.argumentAxis',
                                          series: 'chartSettings.series'
                                         },
@@ -92,10 +93,15 @@
                                          legend: chartSettings.legend,
                                          tooltip: chartSettings.tooltip,
                                          crosshair: chartSettings.crosshair,
+                                         palette: chartSettings.palette,
+                                         commonAxisSettings: chartSettings.commonAxisSettings,
+                                         commonPaneSettings: chartSettings.commonPaneSettings,
+                                         animation: chartSettings.animation,
                                          loadingIndicator: chartSettings.loadingIndicator
                         }"
-                 ng-show="chartSettings.dataSource.length">
-            </div>
+                     ng-show="chartSettings.dataSource.length">
+                </div>
+            </ion-item>
         </ion-list>
     </ion-content>
 </ion-view>

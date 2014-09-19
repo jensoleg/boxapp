@@ -4,17 +4,7 @@
     angular.module("chart", [])
         .constant("chart", {
             chartLabel: {
-                argumentType: 'datetime',
-                label: {
-                    format: 'H:mm',
-                    font: {
-                        color: 'white'
-                    }
-                },
-                valueMarginsEnabled: false,
-                tick: {
-                    visible: true
-                }
+                argumentType: 'datetime'
             },
             series: [
                 {
@@ -22,31 +12,45 @@
                     valueField: 'value',
                     type: 'area',
                     point: { visible: false },
-                    opacity: 1.00,
-                    tick: {
-                        visible: true,
-                        color: 'white'
-                    },
-                    color: 'rgb(82, 154, 233)',
-                    hoverStyle: { color: 'rgb(74, 135, 238)' }
+                    color: 'cornflowerblue' // ''rgb(82, 154, 233)',
                 }
             ],
             chartSettings: {
+                palette: ['#7CBAB4', '#92C7E2', '#75B5D6', '#B78C9B', '#F2CA84', '#A7CA74'],
+                commonAxisSettings: {
+                    valueMarginsEnabled: false,
+                    grid: {
+                        color: '#e9e9e9',
+                        visible: true,
+                        opacity: 0.5
+                    },
+                    label: {
+                        font: {
+                            color: '#7f7f7f'
+                        }
+                    },
+                    tick: {
+                        visible: true
+                    }
+                },
+                animation: {
+                    enabled: true
+                },
                 dataSource: [],
                 valueAxis: {
-                    valueMarginsEnabled: false,
-                    tick: {
-                        visible: true,
-                        color: 'white'
-                    },
                     showZero: false,
-                    type: 'continuous',
-                    valueType: 'numeric',
-                    grid: {visible: false},
-                    label: { font: { color: 'white'}}
+                    //type: 'continuous',
+                    valueType: 'numeric'
                 },
                 legend: {
                     visible: false
+                },
+                commonPaneSettings: {
+                    border: {
+                        visible: false,
+                        color: '#e9e9e9',
+                        opacity: 0.5
+                    }
                 },
                 tooltip: {
                     enabled: true
@@ -54,14 +58,12 @@
                 crosshair: {
                     enabled: true,
                     horizontalLine: {
-                        color: 'white',
                         dashStyle: 'longDash'
                     },
                     verticalLine: {
-                        color: 'white',
-                        dashStyle: 'dotdashdot'
-                    },
-                    opacity: 0.8
+                        dashStyle: 'longDash'
+                    }
+                    //opacity: 1.0
                 }
             },
             timescale: [

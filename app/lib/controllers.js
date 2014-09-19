@@ -258,6 +258,9 @@
                 installationService.updateDevice($state.params.id, $scope.device);
             };
 
+            $scope.activate = function (device) {
+                installationService.activateDevice(device);
+            };
             /* Remove device */
 
             $scope.remove = function (device) {
@@ -887,19 +890,21 @@
                 $scope.showChart = false;
                 if (angular.isDefined(data) && data.length > 0 && $scope.activeStream !== null) {
                     if ($scope.timeScale.value <= 86400) {
-                        $scope.chartLabel.label = { format: 'H:mm', font: { color: 'white'}};
+                        $scope.chartLabel.label = { format: 'H:mm'};
                     } else if ($scope.timeScale.value <= 604800) {
-                        $scope.chartLabel.label = { format: 'ddd', font: { color: 'white'}};
+                        $scope.chartLabel.label = { format: 'ddd'};
                     } else if ($scope.timeScale.value <= 2592000) {
-                        $scope.chartLabel.label = { format: 'dd-MM', font: { color: 'white'}};
+                        $scope.chartLabel.label = { format: 'dd-MM'};
                     } else {
-                        $scope.chartLabel.label = { format: 'MMM', font: { color: 'white'}};
+                        $scope.chartLabel.label = { format: 'MMM'};
                     }
+                    /*
                     if ($scope.activeStream.id === 'online') {
                         $scope.series[0].type = 'stepLine';
                     } else {
                         $scope.series[0].type = 'area';
                     }
+                    */
                     $scope.chartSettings.argumentAxis = $scope.chartLabel;
                     $scope.chartSettings.series = $scope.series;
                     $scope.chartSettings.dataSource = data;

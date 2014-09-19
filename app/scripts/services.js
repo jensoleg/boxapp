@@ -62,8 +62,10 @@
                     },
                     // Save the settings to localStorage
                     save: function (settings) {
-                        _settings = settings;
-                        window.localStorage.settings = JSON.stringify(settings);
+                        if (settings) {
+                            _settings = settings;
+                        }
+                        window.localStorage.settings = JSON.stringify(_settings);
                     },
                     // Get a settings val
                     get: function (k) {
@@ -358,6 +360,23 @@
                     }, function () {
                         q.resolve(null);
                     });
+                    return q.promise;
+                },
+
+                activateDevice: function (device) {
+                    var q = $q.defer();
+
+                    $http.post(apiEndpoint + 'agent/' + device.id + '?config', {
+                        "customer": "development",
+                        "user": "contact@bobbytechnologies.dk",
+                        "pass": "tekno",
+                        "client_id": "kpWrEQ5gJclwuAljKpHgNcJA3NwNZ0FL"
+                    }).
+                        success(function (response) {
+                            q.resolve(response);
+                        }, function () {
+                            q.resolve(null);
+                        });
                     return q.promise;
                 },
 

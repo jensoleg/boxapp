@@ -35,6 +35,7 @@
 
                 <ion-item class="item-icon-right"
                           style="padding-left: 14px; border-width: 1px;"
+                          ng-class="{'selected' : readings.id == activeStream.id && device.id == activeStream.deviceid}"
                           ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }| orderObjectBy:'name':'reverse'"
                           ng-click="showData(readings.deviceid, readings.id)"
                           ng-show="isDeviceShown(device.id)">
@@ -61,7 +62,8 @@
                 </ion-item>
             </div>
 
-            <ion-item class="item item-icon-right stable-bg"
+            <ion-item class="item item-icon-right"
+                      style="background-color:#EEEEEE;"
                       ng-show="activeStream  && chartSettings.dataSource.length">
 
                 <label>

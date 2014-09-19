@@ -42,11 +42,11 @@ module.exports = function (grunt) {
                     ENV: {
                         name: 'development',
                         auth: {
-                            domain: 'decoplant.auth0.com',
-                            clientID: 'riQAyvtyyRBNvO9zhRsQAXMEtaQA02uW'
+                            domain: 'development.auth0.com',
+                            clientID: 'kpWrEQ5gJclwuAljKpHgNcJA3NwNZ0FL'
                         },
-                        apiEndpoint: '/api/',
-                        MQTTServer: 'mqtt.bobbytechnologies.dk'
+                        apiEndpoint: 'bobbytech.dk/api/',
+                        MQTTServer: 'mqtt.bobbytech.dk'
                     }
                 }
             },
@@ -55,24 +55,12 @@ module.exports = function (grunt) {
                     ENV: {
                         name: 'development',
                         auth: {
-                            domain: 'decoplant.auth0.com',
-                            clientID: 'riQAyvtyyRBNvO9zhRsQAXMEtaQA02uW'
+                            domain: 'development.auth0.com',
+                            clientID: 'kpWrEQ5gJclwuAljKpHgNcJA3NwNZ0FL'
                         },
-                        apiEndpoint: '/api/',
-                        MQTTServer: 'mqtt.bobbytechnologies.dk'
+                        apiEndpoint: 'bobbytech.dk/api/',
+                        MQTTServer: 'mqtt.bobbytech.dk'
                     }
-
-/*
-                    ENV: {
-                        name: 'production',
-                        auth: {
-                            domain: 'decoplant.auth0.com',
-                            clientID: 'riQAyvtyyRBNvO9zhRsQAXMEtaQA02uW'
-                        },
-                        apiEndpoint: '.bobbytechnologies.dk/api/',
-                        MQTTServer: 'mqtt.bobbytechnologies.dk'
-                    }
-*/
                 }
             }
         },

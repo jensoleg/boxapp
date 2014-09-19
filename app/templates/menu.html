@@ -7,31 +7,36 @@
     </ion-side-menu-content>
 
     <ion-side-menu side="left">
-        <ion-header-bar class="bar-clear">
-            <a class="item-avatar">
-                <img src='{{profile.picture}}'>
-                <div style="color: #353535; margin-top:6px;">{{profile.name}}</div>
-            </a>
-        </ion-header-bar>
-        <ion-content class="has-header">
+        <ion-content>
             <ion-list>
-                <ion-item nav-clear menu-close ui-sref='app.installations'>
+                <ion-item style="padding-left: 0px;padding-bottom: 0px;">
+                    <a style="border-width:0px;" class="item item-avatar">
+                        <img src='{{profile.picture}}'>
+                        <h2>{{profile.name}}</h2>
+                        <p></p>
+                    </a>
+                </ion-item>
+                <ion-item nav-clear item-icon-left menu-close ui-sref='app.installations'>
+                    <i class="icon ion-cube"></i>
                     Installations
                 </ion-item>
-                <ion-item nav-clear menu-close ui-sref='app.map'>
+                <ion-item nav-clear item-icon-left menu-close ui-sref='app.map'>
+                    <i class="icon ion-ios7-world"></i>
                     Map
                 </ion-item>
-                <ion-item nav-clear menu-close ui-sref='app.settings'>
+                <ion-item nav-clear item-icon-left menu-close ui-sref='app.settings'>
+                    <i class="icon ion-gear-b"></i>
                     Settings
                 </ion-item>
-                <ion-item nav-clear menu-close ng-click="signout()">
+                <ion-item nav-clear item-icon-leftmenu-close ng-click="signout()">
+                    <i class="icon ion-log-out"></i>
                     Sign out
                 </ion-item>
             </ion-list>
         </ion-content>
 
         <ion-footer-bar class="bar-clear">
-            <p>&nbsp;&nbsp; &copy; bobbytechnologies.dk </p>
+            <p style="color: #79A1C5;">&nbsp;&nbsp; &copy; bobbytechnologies.dk </p>
         </ion-footer-bar>
     </ion-side-menu>
 

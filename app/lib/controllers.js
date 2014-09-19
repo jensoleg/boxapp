@@ -152,7 +152,7 @@
             };
 
             $scope.newInstallation = function () {
-                $scope.newInst = {};
+                $scope.newInst = {location: {'lat': null, 'lng': null}};
                 $scope.newModal.show();
             };
 
@@ -912,7 +912,7 @@
 
         }])
 
-        .controller('MapCtrl', ['$scope', 'ngGPlacesAPI', 'Settings', 'icons', 'styles', 'installations', '$state', function ($scope, ngGPlacesAPI, Settings, icons, styles, installations, $state) {
+        .controller('MapCtrl', ['$scope', '$rootScope', 'ngGPlacesAPI', 'Settings', 'icons', 'styles', 'installations', '$state', function ($scope, $rootScope, ngGPlacesAPI, Settings, icons, styles, installations, $state) {
 
             var mapStyles = {'Custom grey blue': 'GreyBlue', 'Custom grey': 'grey', 'Google map': 'default', 'Apple map': 'ios'},
                 markers = [];
@@ -922,7 +922,6 @@
             // Enable the new Google Maps visuals until it gets enabled by default.
             // See http://googlegeodevelopers.blogspot.ca/2013/05/a-fresh-new-look-for-maps-api-for-all.html
             google.maps.visualRefresh = true;
-
 
             angular.forEach(installations, function (item) {
                 var ret = {
@@ -948,8 +947,8 @@
                     showWeather: false,
                     showHeat: false,
                     center: {
-                        latitude: 55.51833,
-                        longitude: 10.46037
+                        latitude: $rootScope.origCenter ? $rootScope.origCenter.latitude : 55.51833,
+                        longitude: $rootScope.origCenter ? $rootScope.origCenter.longitude : 10.46037
                     },
                     clusterOptions: {
                         gridSize: 60,
@@ -1002,7 +1001,7 @@
                         },
                         styles: styles[mapStyles[Settings.get('mapStyle')]]
                     },
-                    zoom: 7,
+                    zoom: $rootScope.origZoom ? $rootScope.origZoom : 7,
                     dragging: true,
                     bounds: {},
                     markers: markers,
@@ -1052,6 +1051,11 @@
                 marker.onClicked = function () {
                     onMarkerClicked(marker);
                 };
+            });
+
+            $scope.$on("$destroy", function () {
+                $rootScope.origCenter = {latitude: $scope.map.center.latitude, longitude: $scope.map.center.longitude};
+                $rootScope.origZoom = $scope.map.control.getGMap().getZoom();
             });
 
             /*

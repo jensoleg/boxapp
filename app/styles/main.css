@@ -22,43 +22,51 @@ opacity: 0.9;
 }
 
 /* side menu style */
-.item-avatar {
+.avatar {
     min-height: 35px;
     padding-left: 58px;
 }
 
-.item-avatar > img:first-child {
-    top: 4px;
+.avatar{
+/*    top: 4px; */
     max-width: 35px;
     max-height: 35px;
 }
 
 ion-side-menu.menu-left.menu {
     background-color: rgb(48, 144, 223);
+    background: -webkit-linear-gradient(top, rgba(255,0,0,0), rgb(48, 144, 223)); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(bottom, rgba(255,0,0,0), rgb(48, 144, 223)); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(bottom, rgba(255,0,0,0), rgb(48, 144, 223)); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to top, rgba(255,0,0,0), rgb(48, 144, 223)); /* Standard syntax (must be last) */
 }
 
 ion-side-menu .item, ion-side-menu .item-content, ion-side-menu .item-complex, ion-side-menu .item-radio {
     background-color: rgb(48, 144, 223);
     color: white !important;
-    border-color: #4B97DD;
+    border-color: #7AA1C5;
+    background: none;
 }
 
 ion-side-menu .item > .item-content, ion-side-menu .item > .item-complex, ion-side-menu .item > .item-radio {
     background-color: rgb(48, 144, 223);
     color: white !important;
-    border-color: #4B97DD;
+    border-color: #7AA1C5;
+    background: none;
 }
 
 ion-side-menu .item > .item-content.activated {
     background-color: #1284EE;
     color: white !important;
-    border-color: #4B97DD;
+    border-color: #7AA1C5;
+    background: none;
 }
 
 ion-side-menu .item.activated {
     background-color: #1284EE;
     color: white !important;
-    border-color: #4B97DD;
+    border-color: #7AA1C5;
+    background: none;
 }
 
 /* google map full and detail */

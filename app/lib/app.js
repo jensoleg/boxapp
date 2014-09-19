@@ -149,8 +149,7 @@
 
         }])
 
-        .
-        run(['auth', '$rootScope', '$ionicPlatform', 'cordova', 'statusbar', 'ENV', function (auth, $rootScope, $ionicPlatform, cordova, statusbar, ENV) {
+        .run(['auth', '$rootScope', '$ionicPlatform', 'cordova', 'statusbar', 'ENV', function (auth, $rootScope, $ionicPlatform, cordova, statusbar, ENV) {
 
             $ionicPlatform.ready(function () {
 
@@ -203,7 +202,7 @@
                 showIcon: true
             }, function (profile) {
 
-                $rootScope.profile = profile
+                $rootScope.profile = profile;
 
                 window.localStorage.profile = JSON.stringify(profile);
 
@@ -220,19 +219,15 @@
 
         .controller('SettingsCtrl', ['$scope', 'Settings', 'auth', 'auth0Service', function ($scope, Settings, auth, auth0Service) {
 
-            $scope.settings = Settings.getSettings();
-
-            auth0Service.getUser(auth.profile.user_id).then(function (profile) {
-                $scope.settings = profile.data.app;
-            });
-
-            // Watch deeply for settings changes, and save them if necessary
-            $scope.$watch('settings', function (event) {
-                Settings.save(event);
-            }, true);
+            if (auth.profile.app) {
+                $scope.settings = auth.profile.app;
+            } else {
+                $scope.settings = Settings.getSettings();
+            }
 
             $scope.$on("$destroy", function () {
-                auth0Service.updateUser(auth.profile.user_id, { app: Settings.getSettings()});
+                Settings.save($scope.settings);
+                auth0Service.updateUser(auth.profile.user_id, { app: $scope.settings});
             });
 
         }]);

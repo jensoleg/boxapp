@@ -1,6 +1,7 @@
 (function () {
     'use strict';
     angular.module('BobbyApp.directives', [])
+
         .directive('noScroll', function ($document) {
 
             return {
@@ -13,6 +14,7 @@
                 }
             };
         })
+
         .directive('fadeBar', function ($timeout, $ionicSideMenuDelegate) {
             return {
                 restrict: 'E',
@@ -33,6 +35,7 @@
                 }
             };
         })
+
         .directive('googlePlaces', function () {
             return {
                 restrict: 'E',

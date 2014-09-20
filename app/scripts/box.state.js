@@ -1,8 +1,8 @@
 (function () {
     'use strict';
 
-    angular.module("box", [])
-        .constant("box", {
+    angular.module('config.box', [])
+        .constant('box', {
             activeStream: null,
             showChart: false,
             shownDevice: [],

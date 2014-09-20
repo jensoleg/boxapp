@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('BobbyApp.controllers', ['dx', 'ionic', 'ionic.contrib.ui.cards', 'google-maps', 'ngGPlaces', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives', 'chart', 'box', 'map-icons', 'map-styles'])
+    angular.module('BobbyApp.controllers', ['dx', 'ionic', 'ionic.contrib.ui.cards', 'google-maps', 'ngGPlaces', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives', 'chart', 'config.box', 'map-icons', 'map-styles'])
 
         .config(function (ngGPlacesAPIProvider) {
             ngGPlacesAPIProvider.setDefaults({
@@ -808,7 +808,7 @@
 
         }])
 
-        .controller('BoxCtrl', ['installations', '$scope', '$state', '$rootScope', 'bobby', 'chart', 'box', 'util', function (installations, $scope, $state, $rootScope, bobby, chart, box, util) {
+        .controller('BoxCtrl', ['installations', '$scope', '$state', '$rootScope', 'bobby', 'chart', 'box', 'util', function (installations, $scope, $state, $rootScope, bobby, chart, box) {
 
             var ts = bobby.getTimeScale();
 

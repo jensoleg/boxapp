@@ -13,10 +13,10 @@
 
     <ion-content>
 
-        <div ng-show="control.ctrlType=='data' && control.maxCritical > 0" class="row responsive-sm">
-
             <div class="col">
-                <div style="height: 200px" dx-circular-gauge="{tooltip: gaugeSettings.tooltip,
+                <div style="height: 200px"
+                ng-show="control.ctrlType=='data' && control.maxCritical > 0" class="row responsive-sm"
+                dx-circular-gauge="{tooltip: gaugeSettings.tooltip,
                                                                subvalueIndicator: gaugeSettings.subvalueIndicator,
                                                                bindingOptions: {scale: 'gaugeSettings.scale',
                                                                        value: 'gaugeSettings.value',
@@ -26,7 +26,6 @@
 
                 </div>
             </div>
-        </div>
 
 
         <div class="list">

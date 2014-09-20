@@ -186,7 +186,7 @@
             };
         }])
 
-        .controller('InstallationCtrl', ['bobby', 'icons', '$scope', '$state', '$window', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', function (bobby, icons, $scope, $state, $window, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
+        .controller('InstallationCtrl', ['bobby', 'icons', '$scope', '$state', '$window', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', '$ionicSlideBoxDelegate', function (bobby, icons, $scope, $state, $window, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate, $ionicSlideBoxDelegate) {
 
             google.maps.visualRefresh = true;
 
@@ -229,6 +229,14 @@
 
             $scope.installation = installation;
             $scope.newDevice = {};
+
+            $scope.nextSlide = function () {
+                $ionicSlideBoxDelegate.next();
+            };
+
+            $scope.previousSlide = function () {
+                $ionicSlideBoxDelegate.previous();
+            };
 
             /* Edit device */
 
@@ -1095,6 +1103,44 @@
             $scope.navigateTo = function (lat, lng) {
                 $window.location.href = 'maps://maps.apple.com/?q=' + lat + ',' + lng;
             };
+        }])
+
+        .controller('NotesCtrl', ['$scope', '$timeout', '$ionicScrollDelegate', function ($scope, $timeout, $ionicScrollDelegate) {
+
+            var alternate,
+                isIOS = ionic.Platform.isWebView() && ionic.Platform.isIOS();
+
+            $scope.sendMessage = function () {
+                alternate = !alternate;
+                $scope.messages.push({
+                    userId: alternate ? '12345' : '54321',
+                    text: $scope.data.message
+                });
+                delete $scope.data.message;
+                $ionicScrollDelegate.scrollBottom(true);
+            };
+
+            $scope.inputUp = function () {
+                if (isIOS) $scope.data.keyboardHeight = 216;
+                $timeout(function () {
+                    $ionicScrollDelegate.scrollBottom(true);
+                }, 300);
+
+            };
+            $scope.inputDown = function () {
+                if (isIOS) $scope.data.keyboardHeight = 0;
+                $ionicScrollDelegate.resize();
+            };
+
+            $scope.data = {};   
+            $scope.myId = '1';
+            $scope.messages = [
+                {userid: '1', text: 'Hej dfsd dsf dsfs dfsdf sdfdsf dsfsd fdsfdsf sdfdsf '},
+                {userid: '2', text: 'Hej dfsd dsf dsfs dfsdf sdfdsf dsfsd fdsfdsf sdfdsf'},
+                {userid: '1', text: 'Hej dfsd dsf dsfs dfsdf sdfdsf dsfsd fdsfdsf sdfdsf Hej dfsd dsf dsfs dfsdf sdfdsf dsfsd fdsfdsf sdfdsf'},
+                {userid: '2', text: 'Hej dfsd dsf dsfs dfsdf sdfdsf dsfsd fdsfdsf sdfdsf Hej dfsd dsf dsfs dfsdf sdfdsf dsfsd fdsfdsf sdfdsf Hej dfsd dsf dsfs dfsdf sdfdsf dsfsd fdsfdsf sdfdsf'}
+            ];
+
         }]);
 
 }());

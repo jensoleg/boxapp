@@ -20,9 +20,10 @@
                 commonAxisSettings: {
                     valueMarginsEnabled: false,
                     grid: {
-                        color: '#e9e9e9',
-                        visible: true,
-                        opacity: 0.5
+                       // color: '#e9e9e9',
+                        color: 'white',
+                        visible: true
+                        //opacity: 0.8
                     },
                     label: {
                         font: {
@@ -30,7 +31,7 @@
                         }
                     },
                     tick: {
-                        visible: true
+                        visible: false
                     }
                 },
                 animation: {

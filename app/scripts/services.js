@@ -306,9 +306,20 @@
                 },
 
                 updateInstallation: function (installation) {
-                    var q = $q.defer();
+                    var q = $q.defer(),
+                        myInstallation = {};
 
-                    $http.put(apiEndpoint + 'installations/' + installation._id, installation).success(function (response) {
+                    angular.copy(installation, myInstallation);
+
+                    if (!_.isNull(myInstallation.__v)) {
+                        delete myInstallation.__v;
+                    }
+
+                    if (!_.isNull(myInstallation._id)) {
+                        delete myInstallation._id;
+                    }
+
+                    $http.put(apiEndpoint + 'installations/' + installation._id, myInstallation).success(function (response) {
                         q.resolve(response);
                     }, function () {
                         q.resolve(null);

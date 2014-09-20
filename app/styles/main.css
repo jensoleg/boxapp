@@ -26,6 +26,15 @@ opacity: 0.9;
     background-color: #f8f8f8;
 }
 
+.reading .item-content {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.item .badge {
+    top: 10px;
+}
+
 /* side menu style */
 .avatar {
     min-height: 35px;
@@ -40,10 +49,6 @@ opacity: 0.9;
 
 ion-side-menu.menu-left.menu {
     background-color: rgb(48, 144, 223);
-    background: -webkit-linear-gradient(top, rgba(255, 0, 0, 0), rgb(48, 144, 223)); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(bottom, rgba(255, 0, 0, 0), rgb(48, 144, 223)); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(bottom, rgba(255, 0, 0, 0), rgb(48, 144, 223)); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(to top, rgba(255, 0, 0, 0), rgb(48, 144, 223)); /* Standard syntax (must be last) */
 }
 
 ion-side-menu .item, ion-side-menu .item-content, ion-side-menu .item-complex, ion-side-menu .item-radio {

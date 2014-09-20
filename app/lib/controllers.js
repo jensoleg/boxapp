@@ -170,6 +170,7 @@
                 var copy = _.cloneDeep(i);
                 bobby.objectIdDel(copy);
                 delete copy.__v;
+                delete copy._id;
                 delete copy.$$hashKey;
                 copy.name = 'Copy of ' + i.name;
                 $scope.newInst = copy;
@@ -899,12 +900,12 @@
                         $scope.chartLabel.label = { format: 'MMM'};
                     }
                     /*
-                    if ($scope.activeStream.id === 'online') {
-                        $scope.series[0].type = 'stepLine';
-                    } else {
-                        $scope.series[0].type = 'area';
-                    }
-                    */
+                     if ($scope.activeStream.id === 'online') {
+                     $scope.series[0].type = 'stepLine';
+                     } else {
+                     $scope.series[0].type = 'area';
+                     }
+                     */
                     $scope.chartSettings.argumentAxis = $scope.chartLabel;
                     $scope.chartSettings.series = $scope.series;
                     $scope.chartSettings.dataSource = data;
@@ -937,7 +938,7 @@
                     opacity: 1,
                     options: {
                         labelAnchor: '-30 -4',
-                        labelContent: item.name + ' ' + item.placement,
+                        labelContent: item.name, // + ' ' + item.placement,
                         labelClass: 'labelMarker'
                     }
                 };
@@ -1023,7 +1024,6 @@
 
             var onMarkerClicked = function (marker) {
 
-
                 var request = {
                     placeId: 'ChIJmaSKgPYySUYRKLlyaho0O6Y' /* marker.placeId */
                 };
@@ -1046,8 +1046,6 @@
 
                         return data;
                     });
-
-
             };
 
             $scope.onMarkerClicked = onMarkerClicked;
@@ -1074,7 +1072,7 @@
              */
         }])
 
-        .controller('CardCtrl', ['$scope', '$location', '$window', '$ionicSwipeCardDelegate', '$state', function ($scope, $location, $window, $ionicSwipeCardDelegate, $state) {
+        .controller('CardCtrl', ['$scope', '$location', '$window', '$ionicSwipeCardDelegate', function ($scope, $location, $window, $ionicSwipeCardDelegate) {
             $scope.status = function () {
                 var card = $ionicSwipeCardDelegate.getSwipebleCard($scope);
                 card.swipe();

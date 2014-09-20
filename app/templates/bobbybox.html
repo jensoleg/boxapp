@@ -14,8 +14,8 @@
 
         <ion-list>
             <div ng-repeat="device in installation.devices">
-                <ion-item class=" item-icon-right"
-                          style="border-width: 1px;"
+                <ion-item class="reading item-icon-right"
+                          style="border-width: 0px;"
                           ng-click="toggleDevice(device.id)">
                     <label>
                         <i class="icon-item ion-cube"
@@ -33,8 +33,8 @@
                     <ion-option-button class="button-positive">Timers</ion-option-button>
                 </ion-item>
 
-                <ion-item class="item-icon-right"
-                          style="padding-left: 14px; border-width: 1px;"
+                <ion-item class="reading item-icon-right"
+                          style="padding-left: 14px; border-width: 0px;"
                           ng-class="{'selected' : readings.id == activeStream.id && device.id == activeStream.deviceid}"
                           ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }| orderObjectBy:'name':'reverse'"
                           ng-click="showData(readings.deviceid, readings.id)"
@@ -63,13 +63,12 @@
             </div>
 
             <ion-item class="item item-icon-right"
-                      style="background-color:#EEEEEE;"
+                      style="background-color:#EEEEEE; padding: 10px;"
                       ng-show="activeStream  && chartSettings.dataSource.length">
 
                 <label>
                     {{datastreams[activeStream.deviceid + activeStream.id].name}}
-                    {{datastreams[activeStream.deviceid +
-                    activeStream.id].current_value}}{{datastreams[activeStream.deviceid + activeStream.id].unit.symbol}}
+                    {{datastreams[activeStream.deviceid + activeStream.id].current_value}}{{datastreams[activeStream.deviceid + activeStream.id].unit.symbol}}
                 </label>
 
                 <span style="position: absolute;right: 30px;">{{timeScale.text}}</span>
@@ -85,7 +84,7 @@
             </ion-item>
 
             <ion-item ng-show="activeStream"
-                      style="border-width: 0px;">
+                      style="border-width: 0px; padding: 10px; background-color:#EEEEEE;">
                 <div id="chartContainer" style="height: 300px"
                      dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
                                          argumentAxis: 'chartSettings.argumentAxis',

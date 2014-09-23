@@ -101,7 +101,7 @@
             return obj;
         }])
 
-        .factory('bobby', ['$rootScope', '$http', 'auth', 'Settings', 'ENV', function ($rootScope, $http, auth, Settings, ENV) {
+        .factory('bobby', ['$rootScope', '$http', 'auth', 'Settings', 'ENV', 'installationService', function ($rootScope, $http, auth, Settings, ENV, installationService) {
 
             var bobby = {},
                 client = {},
@@ -111,6 +111,7 @@
                     device: null,
                     stream: null
                 },
+                _this = this,
                 apiEndpoint = 'http://' + $rootScope.domain + '.' + ENV.apiEndpoint;
 
             $rootScope.datastreams = {};
@@ -219,6 +220,14 @@
                         });
                     });
                 }
+            };
+
+
+            bobby.refreshInstallation = function (installation) {
+                currentInstallation = null;
+                installationService.get(installation._id).then(function (response) {
+                    bobby.setInstallation(response);
+                });
             };
 
             // get time series values

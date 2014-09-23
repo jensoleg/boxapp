@@ -186,7 +186,7 @@
             };
         }])
 
-        .controller('InstallationCtrl', ['bobby', 'icons', '$scope', '$state', '$window', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', '$ionicSlideBoxDelegate', function (bobby, icons, $scope, $state, $window, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate, $ionicSlideBoxDelegate) {
+        .controller('InstallationCtrl', ['bobby', 'icons', '$scope', '$state', '$window', 'installation', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', '$ionicSlideBoxDelegate', '$interval', function (bobby, icons, $scope, $state, $window, installation, installationService, $ionicModal, $ionicPopup, $ionicListDelegate, $ionicSlideBoxDelegate, $interval) {
 
             google.maps.visualRefresh = true;
 
@@ -229,15 +229,61 @@
 
             $scope.installation = installation;
             $scope.newDevice = {};
+            $scope.currentSlideIndex = 0;
+            /*
+             $scope.nextSlide = function () {
+             $ionicSlideBoxDelegate.next();
+             $scope.currentSlideIndex = $ionicSlideBoxDelegate.currentIndex();
+             };
 
-            $scope.nextSlide = function () {
-                $ionicSlideBoxDelegate.next();
-            };
+             $scope.previousSlide = function () {
+             $ionicSlideBoxDelegate.previous();
+             $scope.currentSlideIndex = $ionicSlideBoxDelegate.currentIndex();
+             };
 
-            $scope.previousSlide = function () {
-                $ionicSlideBoxDelegate.previous();
-            };
+             $scope.sparkSettings = {dataSource: []};
 
+             $scope.sparkSettings.dataSource = [
+             { month: 1, 2010: 1115, 2011: 1358, 2012: 1661 },
+             { month: 2, 2010: 1099, 2011: 1375, 2012: 1742 },
+             { month: 3, 2010: 1114, 2011: 1423, 2012: 1677 },
+             { month: 4, 2010: 1150, 2011: 1486, 2012: 1650 },
+             { month: 5, 2010: 1205, 2011: 1511, 2012: 1589 },
+             { month: 6, 2010: 1235, 2011: 1529, 2012: 1602 },
+             { month: 7, 2010: 1193, 2011: 1573, 2012: 1593 },
+             { month: 8, 2010: 1220, 2011: 1765, 2012: 1634 },
+             { month: 9, 2010: 1272, 2011: 1771, 2012: 1750 },
+             { month: 10, 2010: 1345, 2011: 1672, 2012: 1745 },
+             { month: 11, 2010: 1370, 2011: 1741, 2012: 1720 },
+             { month: 12, 2010: 1392, 2011: 1643, 2012: 1684 }
+             ];
+
+             $interval(function () {
+             var source = $scope.sparkSettings.dataSource,
+             lastValue = source.shift();
+             lastValue.month = lastValue.month + 1;
+             $scope.sparkSettings.dataSource = null;
+             source.push(lastValue);
+             $scope.sparkSettings.dataSource = source;
+             //$scope.sparkSettings.dataSource.push(lastValue);
+             }, 5000);
+
+             $scope.hasTopPost = false;
+             $scope.hasComment = false;
+             $scope.post = '';
+             $scope.topPost = '';
+             $scope.newTopPost = '';
+             $scope.newComment = function () {
+             $scope.hasComment = true;
+             };
+
+             $scope.newTopPost = function () {
+             console.log(this.topPost);
+             $scope.hasTopPost = true;
+             $scope.newTopPost = this.topPost;
+             this.topPost = "";
+             };
+             */
             /* Edit device */
 
             $ionicModal.fromTemplateUrl('templates/installation.device.edit.html', {
@@ -344,18 +390,19 @@
                 $scope.newModal.remove();
 
             });
+            /*
+             $scope.phoneTo = function (tel) {
+             $window.location.href = 'tel:' + tel;
+             };
 
-            $scope.phoneTo = function (tel) {
-                $window.location.href = 'tel:' + tel;
-            };
+             $scope.emailTo = function (email) {
+             $window.location.href = 'mailto:' + email;
+             };
 
-            $scope.emailTo = function (email) {
-                $window.location.href = 'mailto:' + email;
-            };
-
-            $scope.navigateTo = function (lat, lng) {
-                $window.location.href = 'maps://maps.apple.com/?q=' + lat + ',' + lng;
-            };
+             $scope.navigateTo = function (lat, lng) {
+             $window.location.href = 'maps://maps.apple.com/?q=' + lat + ',' + lng;
+             };
+             */
         }])
 
         .controller('DeviceCtrl', ['$stateParams', '$scope', 'device', function ($stateParams, $scope, device) {
@@ -681,6 +728,7 @@
                 if (!request) {
                     return;
                 }
+
                 installationService.requester(JSON.stringify(JSON.parse(request), null, 3))
                     .then(function (response) {
                         $scope.requestResponse = JSON.parse(response);
@@ -816,7 +864,7 @@
 
         }])
 
-        .controller('BoxCtrl', ['installations', '$scope', '$state', '$rootScope', 'bobby', 'chart', 'box', 'util', function (installations, $scope, $state, $rootScope, bobby, chart, box) {
+        .controller('BoxCtrl', ['installations', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', 'icons', function (installations, $scope, $state, $rootScope, $window, bobby, chart, box, $interval, icons) {
 
             var ts = bobby.getTimeScale();
 
@@ -834,6 +882,107 @@
             } else {
                 $scope.installation = _.find(installations, { '_id': box.installation._id });
             }
+
+
+            /****** protoyping ********************/
+
+            google.maps.visualRefresh = true;
+
+            var marker = {
+                id: $scope.installation._id,
+                latitude: $scope.installation.location.lat,
+                longitude: $scope.installation.location.lng,
+                icon: icons.cube,
+                options: {
+                    visible: false
+                }
+            };
+
+
+            angular.extend($scope, {
+                map: {
+                    control: {},
+                    center: {
+                        latitude: $scope.installation.location.lat,
+                        longitude: $scope.installation.location.lng
+                    },
+                    marker: marker,
+                    zoom: 12,
+                    options: {
+                        disableDefaultUI: true,
+                        panControl: false,
+                        navigationControl: false,
+                        scrollwheel: false,
+                        scaleControl: false
+                    },
+                    refresh: function () {
+                        $scope.map.control.refresh(origCenter);
+                    },
+                    onMarkerClick: function (m) {
+                        //$location.path('/app/installations/' + m.id);
+                        $state.go('app.main', {id: m.id});
+                    }
+                }
+            });
+
+            $scope.sparkSettings = {dataSource: []};
+
+            $scope.sparkSettings.dataSource = [
+                { month: 1, 2010: 1115, 2011: 1358, 2012: 1661 },
+                { month: 2, 2010: 1099, 2011: 1375, 2012: 1742 },
+                { month: 3, 2010: 1114, 2011: 1423, 2012: 1677 },
+                { month: 4, 2010: 1150, 2011: 1486, 2012: 1650 },
+                { month: 5, 2010: 1205, 2011: 1511, 2012: 1589 },
+                { month: 6, 2010: 1235, 2011: 1529, 2012: 1602 },
+                { month: 7, 2010: 1193, 2011: 1573, 2012: 1593 },
+                { month: 8, 2010: 1220, 2011: 1765, 2012: 1634 },
+                { month: 9, 2010: 1272, 2011: 1771, 2012: 1750 },
+                { month: 10, 2010: 1345, 2011: 1672, 2012: 1745 },
+                { month: 11, 2010: 1370, 2011: 1741, 2012: 1720 },
+                { month: 12, 2010: 1392, 2011: 1643, 2012: 1684 }
+            ];
+
+            $interval(function () {
+                var source = $scope.sparkSettings.dataSource,
+                    lastValue = source.shift();
+                lastValue.month = lastValue.month + 1;
+                $scope.sparkSettings.dataSource = null;
+                source.push(lastValue);
+                $scope.sparkSettings.dataSource = source;
+                //$scope.sparkSettings.dataSource.push(lastValue);
+            }, 5000);
+
+            $scope.hasTopPost = false;
+            $scope.hasComment = false;
+            $scope.post = '';
+            $scope.topPost = '';
+            $scope.newTopPost = '';
+            $scope.newComment = function () {
+                $scope.hasComment = true;
+            };
+
+            $scope.newTopPost = function () {
+                console.log(this.topPost);
+                $scope.hasTopPost = true;
+                $scope.newTopPost = this.topPost;
+                this.topPost = "";
+            };
+
+            $scope.phoneTo = function (tel) {
+                $window.location.href = 'tel:' + tel;
+            };
+
+            $scope.emailTo = function (email) {
+                $window.location.href = 'mailto:' + email;
+            };
+
+            $scope.navigateTo = function (lat, lng) {
+                $window.location.href = 'maps://maps.apple.com/?q=' + lat + ',' + lng;
+            };
+
+            /****** protoyping ********************/
+
+
 
             $scope.installations = installations;
 
@@ -853,8 +1002,8 @@
 
             $scope.controlDetails = function (deviceId, controlId) {
 
-                var device = _.find($scope.installation.devices, { 'id': deviceId });
-                var control = _.find(device.controls, { 'id': controlId });
+                var device = _.find($scope.installation.devices, { 'id': deviceId }),
+                    control = _.find(device.controls, { 'id': controlId });
 
                 $state.go('app.control', {id: $state.params.id, deviceid: device._id, controlid: control._id});
             };
@@ -922,11 +1071,34 @@
                 }
             }, true);
 
+            if ($scope.shownDevice.length == 0) {
+                angular.forEach($scope.installation.devices, function (item) {
+                    $scope.shownDevice[item.id] = true;
+                });
+            }
+
             bobby.setInstallation($scope.installation);
+
+            $scope.doRefresh = function () {
+
+                bobby.refreshInstallation($scope.installation);
+
+                $scope.$broadcast('scroll.refreshComplete');
+                /*
+                 $http.get('/new-items')
+                 .success(function(newItems) {
+                 $scope.items = newItems;
+                 })
+                 .finally(function() {
+                 // Stop the ion-refresher from spinning
+                 $scope.$broadcast('scroll.refreshComplete');
+                 });
+                 */
+            };
 
         }])
 
-        .controller('MapCtrl', ['$scope', '$rootScope', 'ngGPlacesAPI', 'Settings', 'icons', 'styles', 'installations', '$state', function ($scope, $rootScope, ngGPlacesAPI, Settings, icons, styles, installations, $state) {
+        .controller('MapCtrl', ['$scope', '$location', '$rootScope', 'ngGPlacesAPI', 'Settings', 'icons', 'styles', 'installations', '$state', '$ionicLoading', function ($scope, $location, $rootScope, ngGPlacesAPI, Settings, icons, styles, installations, $state, $ionicLoading) {
 
             var mapStyles = {'Custom grey blue': 'GreyBlue', 'Custom grey': 'grey', 'Google map': 'default', 'Apple map': 'ios'},
                 markers = [];
@@ -1032,28 +1204,31 @@
 
             var onMarkerClicked = function (marker) {
 
-                var request = {
-                    placeId: 'ChIJmaSKgPYySUYRKLlyaho0O6Y' /* marker.placeId */
-                };
+                $location.path('/app/main/' + marker.id);
+                /*
+                 var request = {
+                 placeId: 'ChIJmaSKgPYySUYRKLlyaho0O6Y'
+                 };
 
-                $scope.details = ngGPlacesAPI.placeDetails(request)
-                    .then(function (data) {
+                 $scope.details = ngGPlacesAPI.placeDetails(request)
+                 .then(function (data) {
 
-                        var newCard = _.find(installations, { '_id': marker.id });
-                        newCard.id = Math.random();
+                 var newCard = _.find(installations, { '_id': marker.id });
+                 newCard.id = Math.random();
 
-                        $scope.cards = [];
+                 $scope.cards = [];
 
-                        if (data.photos) {
-                            newCard.image = data.photos[0].getUrl({'maxWidth': 200, 'maxHeight': 110});
-                        } else {
-                            newCard.image = 'images/default-map.jpg';
-                        }
+                 if (data.photos) {
+                 newCard.image = data.photos[0].getUrl({'maxWidth': 200, 'maxHeight': 110});
+                 } else {
+                 newCard.image = 'images/default-map.jpg';
+                 }
 
-                        $scope.cards.push(angular.extend({}, newCard));
+                 $scope.cards.push(angular.extend({}, newCard));
 
-                        return data;
-                    });
+                 return data;
+                 });
+                 */
             };
 
             $scope.onMarkerClicked = onMarkerClicked;
@@ -1068,6 +1243,30 @@
                 $rootScope.origCenter = {latitude: $scope.map.center.latitude, longitude: $scope.map.center.longitude};
                 $rootScope.origZoom = $scope.map.control.getGMap().getZoom();
             });
+
+
+            var onSuccess = function (position) {
+                $ionicLoading.hide();
+                $scope.map.center = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                };
+                $scope.map.control.getGMap().setZoom(14);
+                $scope.$apply();
+            };
+
+            function onError(error) {
+                $ionicLoading.hide();
+                console.log('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+            }
+
+
+            $scope.myPosition = function () {
+                $ionicLoading.show({
+                    template: 'Finding your location...'
+                });
+                navigator.geolocation.getCurrentPosition(onSuccess, onError);
+            };
 
             /*
              $scope.refreshMap = function () {
@@ -1132,7 +1331,7 @@
                 $ionicScrollDelegate.resize();
             };
 
-            $scope.data = {};   
+            $scope.data = {};
             $scope.myId = '1';
             $scope.messages = [
                 {userid: '1', text: 'Hej dfsd dsf dsfs dfsdf sdfdsf dsfsd fdsfdsf sdfdsf '},

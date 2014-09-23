@@ -94,7 +94,7 @@
                             </button>
                             <button class="button button-clear button-positive"
                                     style="font-size: 14px;"
-                                    ng-click="setup()">Info
+                                    ng-click="setup()">Feed
                             </button>
                         </div>
                     </div>
@@ -104,7 +104,8 @@
     </ion-content>
     <ion-footer-bar class="bar-clear">
 
-        <a style="color: #404040"
+        <a ng-click="myPosition()"
+           style="color: #404040"
            class="button button-icon ion-android-locate"></a>
         <a ng-style="map.showWeather && {'color': 'rgb(97, 132, 243)'} || {'color': '#404040'}"
            ng-click="map.showWeather = !map.showWeather"

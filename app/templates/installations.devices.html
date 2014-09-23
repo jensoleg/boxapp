@@ -1,121 +1,414 @@
 <ion-view title="{{installation.name}} {{installation.placement}}">
 
-    <ion-nav-bar class="nav-title-slide-ios7 bar-light">
+<ion-nav-bar class="nav-title-slide-ios7 bar-light">
 
-        <ion-nav-back-button class="button-clear"><i class="icon ion-ios7-arrow-back"></i></ion-nav-back-button>
+    <ion-nav-back-button class="button-clear"><i class="icon ion-ios7-arrow-back"></i></ion-nav-back-button>
 
-        <ion-nav-buttons side="left">
-            <button menu-toggle="left" class="button button-icon button-clear ion-navicon"></button>
-        </ion-nav-buttons>
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon button-clear ion-navicon"></button>
+    </ion-nav-buttons>
 
-        <ion-nav-buttons side="right">
-            <button ng-click="addDevice()"
-                    class="button icon-left ion-ios7-plus-empty button-clear button-dark"></button>
-        </ion-nav-buttons>
+    <!--ion-nav-buttons side="right">
 
-    </ion-nav-bar>
-    <ion-content>
+        <button ng-if="currentSlideIndex == 1"
+                ng-click="addDevice()"
+                class="button icon-left ion-ios7-plus-empty button-clear button-dark">
+        </button>
 
-        <div class="row responsive-sm" style="padding: 0px">
-            <div class="col" style="padding: 0px;">
-                <google-map class="detail"
-                            data-tap-disabled="true"
-                            center="map.center"
-                            zoom="map.zoom"
-                            options="map.options"
-                            draggable="false"
-                            control="map.control">
-                    <marker coords="map.marker" idkey="map.marker.id" icon="map.marker.icon"
-                            click="map.onMarkerClick(map.marker)">
-                    </marker>
-                </google-map>
+        <button ng-if="currentSlideIndex == 1"
+                style="color: #4a87ee"
+                class="button icon ion-chatbubbles button-clear"
+                ng-click="previousSlide()">
+        </button>
+
+        <button ng-if="currentSlideIndex == 0"
+                style="color: #4a87ee"
+                class="button icon ion-gear-b button-clear"
+                ng-click="nextSlide()">
+        </button>
+
+    </ion-nav-buttons-->
+
+</ion-nav-bar>
+
+<ion-content>
+
+<div class="row responsive-sm" style="padding: 0px">
+    <div class="col" style="padding: 0px;">
+        <google-map class="detail"
+                    data-tap-disabled="true"
+                    center="map.center"
+                    zoom="map.zoom"
+                    options="map.options"
+                    draggable="false"
+                    control="map.control">
+            <marker coords="map.marker" idkey="map.marker.id" icon="map.marker.icon"
+                    click="map.onMarkerClick(map.marker)">
+            </marker>
+        </google-map>
+    </div>
+
+    <div class="col" style="padding: 0px;">
+        <ion-list style="padding-bottom: 10px;">
+            <ion-item style="border-style:none; padding: 6px;">
+                <a style="font-size: 85%;" class="item-icon-left">
+                    <i class="icon ion-ios7-person"></i>
+                    {{installation.contact.name}}
+                </a>
+            </ion-item>
+            <ion-item style="border-style:none;  padding: 6px;">
+                <a style="font-size: 85%;" class="item-icon-left">
+                    <i style="font-size: 24px;" class="icon ion-location"
+                       ng-click="navigateTo( '{{installation.location.lat}}' , '{{ installation.location.lng}}' )"></i>
+                    {{installation.address}}
+                </a>
+            </ion-item>
+            <ion-item style="border-style:none;  padding: 6px;">
+                <a class=" item-icon-left">
+                    <i style="font-size: 24px;" class="icon ion-iphone"
+                       ng-click="phoneTo('{{installation.contact.phone}}')"></i>
+                    {{installation.contact.phone}}
+                </a>
+            </ion-item>
+            <ion-item style="border-style:none;  padding: 6px;">
+                <a style="font-size: 85%;" class="item-icon-left">
+                    <i style="font-size: 16px;" class="icon ion-android-mail"
+                       ng-click="emailTo('{{installation.contact.email}}')"></i>
+                    {{installation.contact.email}}
+                </a>
+            </ion-item>
+        </ion-list>
+    </div>
+</div>
+
+<!--
+<ion-slide-box show-pager="false">
+<ion-slide>
+
+
+<div class="comment-nest">
+<ul class="media-list">
+<li class="media">
+    <a class="pull-left" href="#">
+        <img class="media-object img-circle" alt="36x36"
+             src="./images/laj.jpg" style="width: 36px; height: 36px;">
+    </a>
+
+    <div class="media-body">
+        <div class="social-profile">
+            <textarea msd-elastic placeholder="Enter a message" style="margin-top: 0px;" rows="1" ng-model="topPost"
+                      ng-enter="newTopPost()">
+            </textarea>
+        </div>
+    </div>
+    <hr class="thin">
+    <div ng-if="hasTopPost" class="media">
+        <a class="pull-left" href="#">
+            <img class="media-object img-circle" data-src="holder.js/36x36"
+                 alt="36x36" src="./images/laj.jpg"
+                 style="width: 36px; height: 36px;">
+        </a>
+
+        <div class="media-body">
+
+            <div class="social-profile">
+                <h3><a class="text-green" href="#">Lars Jessen</a>
+                    <span ><i class="fa fa-globe"></i>&nbsp;2 days ago</span>
+                </h3>
+                {{newTopPost}}
+
+                <h3>
+                                        <span><a class="text-green" ng-click="reply5 ? reply5=false : reply5=true"><i
+                                                class="fa fa-reply"></i>&nbsp;Reply</a>
+                                        </span>
+
+                </h3>
+
+                <textarea ng-if="reply5== true"
+                          msd-elastic
+                          placeholder="Enter your message"
+                          rows="1"
+                          ng-model="fool1">
+                </textarea>
+            </div>
+        </div>
+    </div>
+    <div class="media">
+        <a class="pull-left" href="#">
+            <img class="media-object img-circle" data-src="holder.js/36x36" alt="36x36"
+                 src="./images/cs.jpg" style="width: 36px; height: 36px;">
+        </a>
+
+
+        <div class="media-body">
+
+            <div class="social-profile">
+                <h3>
+                    <a class="text-green" href="#">Claus Stoustrup</a>
+                    <span ><i class="fa fa-globe"></i>&nbsp;1 hours ago</span>
+                </h3>
+
+                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante
+                sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra
+                turpis.
+
+                <h3>
+                                        <span><a class="text-green" ng-click="reply1? reply1=false : reply1=true"><i
+                                                class="fa fa-reply"></i>&nbsp;Reply</a>
+                                        </span>
+
+                </h3>
+
+                <textarea msd-elastic ng-show="reply1 == true && !hasComment" data-ng-model="post"
+                          ng-enter="newComment()" placeholder="Enter your message" rows="1">
+                </textarea>
             </div>
 
-            <div class="col" style="padding: 0px;">
-                <ion-list style="padding-bottom: 10px;">
-                    <ion-item style="border-style:none; padding: 6px;">
-                        <a style="font-size: 85%;" class="item-icon-left">
-                            <i class="icon ion-ios7-person"></i>
-                            {{installation.contact.name}}
-                        </a>
-                    </ion-item>
-                    <ion-item style="border-style:none;  padding: 6px;">
-                        <a style="font-size: 85%;" class="item-icon-left">
-                            <i style="font-size: 24px;" class="icon ion-location"
-                               ng-click="navigateTo( '{{installation.location.lat}}' , '{{ installation.location.lng}}' )"></i>
-                            {{installation.address}}
-                        </a>
-                    </ion-item>
-                    <ion-item style="border-style:none;  padding: 6px;">
-                        <a class=" item-icon-left">
-                            <i style="font-size: 24px;" class="icon ion-iphone"
-                               ng-click="phoneTo('{{installation.contact.phone}}')"></i>
-                            {{installation.contact.phone}}
-                        </a>
-                    </ion-item>
-                    <ion-item style="border-style:none;  padding: 6px;">
-                        <a style="font-size: 85%;" class="item-icon-left">
-                            <i style="font-size: 16px;" class="icon ion-android-mail"
-                               ng-click="emailTo('{{installation.contact.email}}')"></i>
-                            {{installation.contact.email}}
-                        </a>
-                    </ion-item>
-                </ion-list>
+
+            <div ng-if="hasComment" class="media">
+                <a class="pull-left" href="#">
+                    <img class="media-object img-circle" data-src="holder.js/36x36" alt="36x36"
+                         src="./images/laj.jpg" style="width: 36px; height: 36px;">
+                </a>
+
+                <div class="media-body">
+
+                    <div class="social-profile">
+                        <h3><a class="text-green" href="#">Lars Jessen</a>
+                            <span ><i class="fa fa-globe"></i>&nbsp;1 minute ago</span>
+                        </h3>
+                        {{post}}
+                        <h3>
+                                <span><a class="text-green" ng-click="reply2 ? reply2=false : reply2=true"><i
+                                        class="fa fa-reply"></i>&nbsp;Reply</a>
+                                </span>
+
+                        </h3>
+
+                        <textarea ng-if="reply2 == true"
+                                  msd-elastic
+                                  placeholder="Enter your message"
+                                  rows="1"
+                                  ng-model="fool2">
+                        </textarea>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="media">
+                <a class="pull-left" href="#">
+                    <img class="media-object img-circle" data-src="holder.js/36x36" alt="36x36"
+                         src="./images/laj.jpg" style="width: 36px; height: 36px;">
+                </a>
+
+                <div class="media-body">
+
+                    <div class="social-profile">
+                        <h3><a class="text-green" href="#">Lars Jessen</a>
+                            <span ><i class="fa fa-globe"></i>&nbsp;1 hours ago</span>
+
+                        </h3>
+                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante
+                        sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra
+                        turpis.
+
+                        <h3>
+                                <span><a class="text-green" ng-click="reply2 ? reply2=false : reply2=true"><i
+                                        class="fa fa-reply"></i>&nbsp;Reply</a>
+                                </span>
+
+                        </h3>
+
+                        <textarea ng-if="reply2 == true"
+                                  msd-elastic
+                                  placeholder="Enter your message"
+                                  rows="1"
+                                  ng-model="fool2">
+                        </textarea>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</li>
+<hr class="thin">
+<li class="media">
+    <a class="pull-left" ui-sref="app.main({ id:installation._id })">
+        <i class="icon-item ion-cube"
+           style="margin-right: 16px;vertical-align: middle; font-size: 225%; color: rgb(129, 207, 98);">
+        </i>
+    </a>
+
+    <div class="media-body">
+
+        <div class="social-profile">
+            <h3><a class="text-green" ui-sref="app.main({ id:installation._id })">Mosture is to high at
+                top left corner</a>
+                <span ><i class="fa fa-globe"></i>&nbsp;2 days ago</span>
+
+            </h3>
+
+            <div class="social-profile">
+                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante
+                sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus
+                viverra
+                turpis.
+                <div id="chartContainer" class="sparkline" dx-Sparkline="{
+                        bindingOptions: {dataSource: 'sparkSettings.dataSource'},
+                        argumentField: 'month',
+                        valueField: '2012',
+                        type: 'spline',
+                        lineWidth: 3,
+                        lineColor: '#9ab57e',
+                        minColor: '#6babac',
+                        maxColor: '#ebdd8f',
+                        showMinMax: true,
+                        showFirstLast: true
+                    }">
+                </div>
+
+                <h3>
+                     <span>
+                         Do you want to water upper left corner
+                         <a class="text-green">
+                             <i class="fa fa-thumbs-up "></i>2 min&nbsp;
+                         </a>
+                                                  <a class="text-green">
+                                                      <i class="fa fa-thumbs-up "></i>5 min&nbsp;
+                                                  </a>
+                                                  <a class="text-green">
+                                                      <i class="fa fa-thumbs-up "></i>10 min
+                                                  </a>
+                         ?
+                     </span>
+                </h3>
+
+                <h3>
+                     <span>
+                         <a class="text-green" ng-click="reply4 ? reply4=false : reply4=true">
+                             <i class="fa fa-reply"></i>&nbsp;Reply
+                         </a>
+                     </span>
+                </h3>
+                <textarea ng-if="reply4== true"
+                          msd-elastic
+                          placeholder="Enter your message"
+                          rows="1"
+                          ng-model="fool1">
+                </textarea>
             </div>
         </div>
 
-        <ion-slide-box show-pager="false">
-            <ion-slide>
-                <div class="list" style="padding-top: 0px;padding-bottom: 0px;margin-bottom: 0px;">
-                    <div class="item item-button-right" style="border-width: 0px;">
-                        Boxes
-                        <button ng-click="nextSlide()"
-                                class="button button-clear button-positive">
-                            Notes&nbsp;
-                            <i class="icon ion-ios7-arrow-forward"></i>
-                        </button>
-                    </div>
-                </div>
-                <ion-list>
-                    <ion-item ng-repeat="device in installation.devices"
-                              ui-sref="app.device({ id: installation._id, deviceid: device._id })">
-                        <h3>{{device.name}} {{device.placement}}</h3>
-                        <h4>{{device.id}}</h4>
-                        <span class="badge badge-balanced">0</span>
-                        <ion-option-button class="button-calm" ng-click="activate(device)">Activate
-                        </ion-option-button>
-                        <ion-option-button class="button-balanced" ng-click="copy(device)">Copy</ion-option-button>
-                        <ion-option-button class="button-positive" ng-click="edit(device)">Edit</ion-option-button>
-                        <ion-option-button class="button-assertive" ng-click="remove(device)">Delete
-                        </ion-option-button>
-                    </ion-item>
-                </ion-list>
-            </ion-slide>
-            <ion-slide>
-                <div class="list" style="padding-top: 0px;padding-bottom: 0px;margin-bottom: 0px;">
-                    <div class="item item-button-left" style="border-width: 0px;">
-                        <button ng-click="previousSlide()"
-                                class="button button-clear button-positive">
-                            <i class="icon ion-ios7-arrow-back"></i>
-                            &nbsp;Boxes
-                        </button>
-                        <span style="float: right" >
-                          Notes
-                        </span>
-                    </div>
-                </div>
-                <div ng-controller="NotesCtrl" class="messaging-view">
-                    <div ng-repeat="message in messages" ng-class="{ other: message.userId == myId }" class="message">
+        <div class="media">
+            <a class="pull-left" href="#">
+                <img class="media-object img-circle" data-src="holder.js/36x36"
+                     alt="36x36" src="./images/pn.jpg"
+                     style="width: 36px; height: 36px;">
+            </a>
 
-                        <div class="photo icon ion-person"></div>
+            <div class="media-body">
 
-                        <div class="message">
-                            <span>{{ message.text }}
-                            </span>
-                        </div>
-                    </div>
+                <div class="social-profile">
+                    <h3><a class="text-green" href="#">Palle Nielsen</a>
+                        <span ><i class="fa fa-globe"></i>&nbsp;2 days ago</span>
+                    </h3>
+                    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante
+                    sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus
+                    viverra
+                    turpis.
+
+                    <h3>
+                                        <span><a class="text-green" ng-click="reply5 ? reply5=false : reply5=true"><i
+                                                class="fa fa-reply"></i>&nbsp;Reply</a>
+                                        </span>
+
+                    </h3>
+
+                    <textarea ng-if="reply5== true"
+                              msd-elastic
+                              placeholder="Enter your message"
+                              rows="1"
+                              ng-model="fool1">
+                    </textarea>
                 </div>
-            </ion-slide>
-        </ion-slide-box>
-    </ion-content>
+            </div>
+        </div>
+    </div>
+</li>
+<hr class="thin">
+<li class="media">
+    <a class="pull-left" href="#">
+        <img class="media-object img-circle" data-src="holder.js/36x36" alt="36x36"
+             src="./images/kp.jpg" style="width: 36px; height: 36px;">
+    </a>
+
+    <div class="media-body">
+        <div class="social-profile">
+            <h3><a class="text-green" href="#">Kristina Petersen</a>
+                <span ><i class="fa fa-globe"></i>&nbsp;3 days ago</span>
+            </h3>
+            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante
+            sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus
+            viverra
+            turpis.
+
+            <h3>
+                <span><i class="fa fa-globe"></i>&nbsp;1 hours ago</span>
+                                    <span><a class="text-green" ng-click="reply3 ? reply3=false : reply3=true"><i
+                                            class="fa fa-reply"></i>&nbsp;Reply</a>
+                                    </span>
+
+            </h3>
+
+            <textarea ng-if="reply3 == true"
+                      msd-elastic
+                      placeholder="Enter your message"
+                      rows="1"
+                      ng-model="fool3">
+            </textarea>
+        </div>
+    </div>
+</li>
+</ul>
+</div>
+
+
+</ion-slide>
+<ion-slide>
+-->
+    <!--div class="list" style="padding-top: 0px;padding-bottom: 0px;margin-bottom: 0px;">
+        <div class="item item-button-left" style="border-width: 0px;">
+            <button ng-click="previousSlide()"
+                    class="button button-clear button-positive">
+                <i class="icon ion-ios7-arrow-back"></i>
+                &nbsp;Notes
+            </button>
+            <span style="float: right" >
+            Boxes
+            </span>
+        </div>
+    </div-->
+    <ion-list>
+        <ion-item ng-repeat="device in installation.devices"
+                  ui-sref="app.device({ id: installation._id, deviceid: device._id })">
+            <h3>{{device.name}} {{device.placement}}</h3>
+            <h4>{{device.id}}</h4>
+            <span class="badge badge-balanced">0</span>
+            <ion-option-button class="button-calm" ng-click="activate(device)">Activate
+            </ion-option-button>
+            <ion-option-button class="button-balanced" ng-click="copy(device)">Copy</ion-option-button>
+            <ion-option-button class="button-positive" ng-click="edit(device)">Edit</ion-option-button>
+            <ion-option-button class="button-assertive" ng-click="remove(device)">Delete
+            </ion-option-button>
+        </ion-item>
+    </ion-list>
+<!--
+</ion-slide>
+
+</ion-slide-box>
+-->
+</ion-content>
 </ion-view>

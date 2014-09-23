@@ -1,9 +1,9 @@
 (function () {
     'use strict';
 
-    angular.module('BobbyApp', ['dx', 'ionic', 'auth0', 'config', 'angular-loading-bar', 'ngAnimate', 'BobbyApp.controllers', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives'])
+    angular.module('BobbyApp', ['monospaced.elastic', 'dx', 'ionic', 'auth0', 'config', 'angular-loading-bar', 'ngAnimate', 'BobbyApp.controllers', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives'])
 
-        .config([ '$stateProvider', '$urlRouterProvider', '$httpProvider', 'authProvider', 'ENV', 'cfpLoadingBarProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, authProvider, ENV, cfpLoadingBarProvider) {
+        .config([ '$stateProvider', '$urlRouterProvider', '$httpProvider', 'authProvider', 'ENV', 'cfpLoadingBarProvider', 'msdElasticConfig', function ($stateProvider, $urlRouterProvider, $httpProvider, authProvider, ENV, cfpLoadingBarProvider, msdElasticConfig) {
 
             $stateProvider
                 .state('login', {
@@ -146,6 +146,9 @@
             /* loading bar */
             cfpLoadingBarProvider.latencyThreshold = 500;
             cfpLoadingBarProvider.includeSpinner = false;
+
+            /* elastic textarea */
+            //msdElasticConfig.append = '\n';
 
         }])
 

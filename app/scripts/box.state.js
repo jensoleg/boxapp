@@ -3,9 +3,10 @@
 
     angular.module('config.box', [])
         .constant('box', {
-            activeStream: null,
-            showChart: false,
+            chartColorNumber: null,
+            chartColor: [],
             shownDevice: [],
+            selectedScale: null,
             installation: null
         });
 

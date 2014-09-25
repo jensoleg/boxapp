@@ -105,12 +105,9 @@
 
             var bobby = {},
                 client = {},
-                controlTypes = ['data', 'ctrlValue', 'ctrlSwitch', 'ctrlTimeValue'],
+                controlTypes = ['data', 'control'],
                 currentInstallation = null,
-                currentStream = {
-                    device: null,
-                    stream: null
-                },
+                refreshing = false,
                 _this = this,
                 apiEndpoint = 'http://' + $rootScope.domain + '.' + ENV.apiEndpoint;
 
@@ -155,13 +152,11 @@
                         });
                     });
 
-                    if (currentStream.device === device && currentStream.stream === stream) {
-                        now = new Date();
-                        $rootScope.$broadcast('message:new-reading', { timestamp: now, value: message });
-                    }
+                    now = Date.now();
+                    $rootScope.$broadcast('message:new-reading', { name: device + stream, timestamp: moment(moment()).utc().toJSON(), value: parseFloat(message) });
 
                     $rootScope.datastreams[device + stream].current_value = message;
-                    $rootScope.$apply();
+                    // $rootScope.$apply();
                 }
             });
 
@@ -187,12 +182,12 @@
             /* set current installation */
             bobby.setInstallation = function (newInstallation) {
 
-                if (newInstallation && currentInstallation && currentInstallation._id === newInstallation._id) {
+                if (!refreshing && newInstallation && currentInstallation && currentInstallation._id === newInstallation._id) {
                     return;
                 }
 
                 // remove current subscriptions
-                if (currentInstallation) {
+                if (!refreshing && currentInstallation) {
                     angular.forEach(currentInstallation.devices, function (device) {
                         angular.forEach(device.controls, function (stream) {
                             client.unsubscribe('/' + $rootScope.domain + '/' + device.id + "/" + stream.id);
@@ -202,7 +197,7 @@
                     currentInstallation = null;
                 }
 
-                if (newInstallation) {
+                if (!refreshing && newInstallation) {
 
                     currentInstallation = newInstallation;
 
@@ -215,18 +210,44 @@
                                 $rootScope.datastreams[device.id + stream.id].deviceid = device.id;
                                 /* maybe trigger should be evaluated initially */
                                 $rootScope.datastreams[device.id + stream.id].triggered = false;
+
+                                client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
                             }
-                            client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
                         });
                     });
                 }
-            };
 
+
+                if (refreshing && newInstallation) {
+
+                    currentInstallation = newInstallation;
+
+                    // set controls
+                    angular.forEach(currentInstallation.devices, function (device) {
+                        angular.forEach(device.controls, function (stream) {
+                            if (_.contains(controlTypes, stream.ctrlType)) {
+                                if (!$rootScope.datastreams[device.id + stream.id]) {
+
+                                    $rootScope.datastreams[device.id + stream.id] = stream;
+                                    $rootScope.datastreams[device.id + stream.id].id = stream.id;
+                                    $rootScope.datastreams[device.id + stream.id].deviceid = device.id;
+                                    /* maybe trigger should be evaluated initially */
+                                    $rootScope.datastreams[device.id + stream.id].triggered = false;
+
+                                    client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
+                                }
+                            }
+                        })
+                    });
+                }
+
+            }
 
             bobby.refreshInstallation = function (installation) {
-                currentInstallation = null;
+                refreshing = true;
                 installationService.get(installation._id).then(function (response) {
                     bobby.setInstallation(response);
+                    $rootScope.$broadcast('scroll.refreshComplete');
                 });
             };
 
@@ -244,9 +265,7 @@
                 $http.get(apiEndpoint + 'datastreams/' + device + '/' + stream, {
                     params: options
                 }).success(function (data) {
-                    currentStream.device = device;
-                    currentStream.stream = stream;
-                    $rootScope.$broadcast('message:data', data.data);
+                    $rootScope.$broadcast('message:data', {stream: device + stream, data: data.data});
 
                 });
             };
@@ -258,6 +277,11 @@
 
             bobby.getTimeScale = function () {
                 return Settings.get('timeScale');
+            };
+
+
+            bobby.getColorScheme = function () {
+                return ['#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5'];
             };
 
             return bobby;

@@ -1,6 +1,6 @@
 <ion-view title="{{installation.name}} {{installation.placement}}">
 
-<ion-nav-bar class="nav-title-slide-ios7 bar-light">
+<ion-nav-bar class="nav-title-slide-ios7 bar-stable">
 
     <ion-nav-back-button class="button-clear"><i class="icon ion-ios7-arrow-back"></i></ion-nav-back-button>
 
@@ -25,8 +25,7 @@
                     options="map.options"
                     draggable="false"
                     control="map.control">
-            <marker coords="map.marker" idkey="map.marker.id" icon="map.marker.icon"
-                    click="map.onMarkerClick(map.marker)">
+            <marker coords="map.marker" idkey="map.marker.id" icon="map.marker.icon">
             </marker>
         </google-map>
     </div>
@@ -89,19 +88,15 @@
 
         <ion-item class="reading item-icon-right"
                   style="padding-left: 14px; border-width: 0px;"
-                  ng-class="{'selected' : readings.id == activeStream.id && device.id == activeStream.deviceid}"
                   ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }| orderObjectBy:'name':'reverse'"
                   ng-click="showData(readings.deviceid, readings.id)"
                   ng-show="isDeviceShown(device.id)">
             <label>
-                <i class="icon-item ion-load-d"
-                   style="vertical-align: middle;font-size: 140%; color: rgb(82, 154, 233);"
-                   ng-hide="readings.ctrlType == 'data' && (readings.id != activeStream.id || readings.deviceid != activeStream.deviceid || !showChart)">
-                </i>
-                <i class="icon-item ion-ios7-speedometer"
-                   style="vertical-align: middle;font-size: 140%;"
-                   ng-show="readings.ctrlType == 'data' && (readings.id != activeStream.id || readings.deviceid != activeStream.deviceid || !showChart)"
-                   ng-style="readings.id == activeStream.id && device.id == activeStream.deviceid && {'color': 'rgb(129, 207, 98)'} || {'color': 'rgb(82, 154, 233)'}">
+                <i
+                        ng-class="readings.color ? 'icon-item ion-ios7-speedometer' : 'icon-item ion-speedometer'"
+                        style="vertical-align: middle;font-size: 140%;"
+                        ng-show="readings.ctrlType == 'data'"
+                        ng-style="readings.color  && {'color': readings.color, 'opacity': 0.5}">
                 </i>
                 {{readings.name}}
             </label>
@@ -116,44 +111,33 @@
         </ion-item>
     </div>
 
-    <ion-item class="item item-icon-right"
-              style="background-color:#EEEEEE; padding: 10px;"
-              ng-show="activeStream  && chartSettings.dataSource.length">
+    <ion-item ng-show="chartColor.length > 0"
+              style="border-width: 0px; padding: 10px; background-color:#EEEEEE;">
 
-        <label>
-            {{datastreams[activeStream.deviceid + activeStream.id].name}}
-            {{datastreams[activeStream.deviceid + activeStream.id].current_value}}{{datastreams[activeStream.deviceid +
-            activeStream.id].unit.symbol}}
-        </label>
+        <span style="position: absolute; left: 54px; font-weight: normal; font-size: 14px; line-height: 1.52857;">{{selectedScale.text}}</span>
 
-        <span style="position: absolute;right: 30px;">{{timeScale.text}}</span>
-
-        <i class="icon ion-ios7-clock-outline">
+        <i style="padding-left: 22px;"
+           class="icon ion-ios7-clock-outline">
             <select style="background:none;opacity:0"
-                    ng-options="t.text group by t.type for t in timescale"
-                    ng-model="timeScale"
-                    ng-change="selectAction(timeScale, activeStream.deviceid, activeStream.id)">
+                    ng-options="t.text group by t.type for t in timeScales"
+                    ng-model="selectedScale"
+                    ng-change="selectAction(selectedScale)">
             </select>
         </i>
 
-    </ion-item>
-
-    <ion-item ng-show="activeStream"
-              style="border-width: 0px; padding: 10px; background-color:#EEEEEE;">
         <div id="chartContainer" style="height: 300px"
              dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
-                                         argumentAxis: 'chartSettings.argumentAxis',
-                                         series: 'chartSettings.series'
-                                        },
+                                        argumentAxis: 'chartSettings.argumentAxis',
+                                        seriesTemplate: 'chartSettings.seriesTemplate'},
                                          valueAxis: chartSettings.valueAxis,
+                                         commonSeriesSettings: chartSettings.commonSeriesSettings,
                                          legend: chartSettings.legend,
                                          tooltip: chartSettings.tooltip,
                                          crosshair: chartSettings.crosshair,
                                          palette: chartSettings.palette,
                                          commonAxisSettings: chartSettings.commonAxisSettings,
                                          commonPaneSettings: chartSettings.commonPaneSettings,
-                                         animation: chartSettings.animation,
-                                         loadingIndicator: chartSettings.loadingIndicator
+                                         animation: chartSettings.animation
                         }"
              ng-show="chartSettings.dataSource.length">
         </div>
@@ -190,7 +174,7 @@
 
             <div class="social-profile">
                 <h3><a class="text-green" href="#">Lars Jessen</a>
-                    <span><i class="fa fa-globe"></i>&nbsp;2 days ago</span>
+                    <span><i class="fa fa-clock-o "></i>&nbsp;1 min ago</span>
                 </h3>
                 {{newTopPost}}
 
@@ -222,7 +206,7 @@
             <div class="social-profile">
                 <h3>
                     <a class="text-green" href="#">Claus Stoustrup</a>
-                    <span><i class="fa fa-globe"></i>&nbsp;1 hours ago</span>
+                    <span><i class="fa fa-clock-o "></i>&nbsp;1 hours ago</span>
                 </h3>
 
                 Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante
@@ -252,7 +236,7 @@
 
                     <div class="social-profile">
                         <h3><a class="text-green" href="#">Lars Jessen</a>
-                            <span><i class="fa fa-globe"></i>&nbsp;1 minute ago</span>
+                            <span><i class="fa fa-clock-o "></i>&nbsp;1 minute ago</span>
                         </h3>
                         {{post}}
                         <h3>
@@ -283,7 +267,7 @@
 
                     <div class="social-profile">
                         <h3><a class="text-green" href="#">Lars Jessen</a>
-                            <span><i class="fa fa-globe"></i>&nbsp;1 hours ago</span>
+                            <span><i class="fa fa-clock-o "></i>&nbsp;1 hours ago</span>
 
                         </h3>
                         Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante
@@ -322,9 +306,9 @@
     <div class="media-body">
 
         <div class="social-profile">
-            <h3><a class="text-green" ui-sref="app.main({ id:installation._id })">Mosture is to high at
-                top left corner</a>
-                <span><i class="fa fa-globe"></i>&nbsp;2 days ago</span>
+            <h3><a class="text-green" ui-sref="app.main({ id:installation._id })">Seems Moisture is to low at
+                top left corner ?</a>
+                <span><i class="fa fa-clock-o "></i>&nbsp;2 days ago</span>
 
             </h3>
 
@@ -333,7 +317,7 @@
                 sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus
                 viverra
                 turpis.
-                <div id="chartContainer" class="sparkline" dx-Sparkline="{
+                <div id="splContainer" class="sparkline" dx-Sparkline="{
                         bindingOptions: {dataSource: 'sparkSettings.dataSource'},
                         argumentField: 'month',
                         valueField: '2012',
@@ -351,13 +335,13 @@
                      <span>
                          Do you want to water upper left corner ?
                          <a class="text-green">
-                             <i class="fa fa-thumbs-up "></i>2 min&nbsp;
+                             <i class="fa fa-tint "></i>&nbsp;2 min&nbsp;
                          </a>
                                                   <a class="text-green">
-                                                      <i class="fa fa-thumbs-up "></i>5 min&nbsp;
+                                                      <i class="fa fa-tint "></i>&nbsp;5 min&nbsp;
                                                   </a>
                                                   <a class="text-green">
-                                                      <i class="fa fa-thumbs-up "></i>10 min
+                                                      <i class="fa fa-tint "></i>&nbsp;10 min
                                                   </a>
                      </span>
                 </h3>
@@ -389,7 +373,7 @@
 
                 <div class="social-profile">
                     <h3><a class="text-green" href="#">Palle Nielsen</a>
-                        <span><i class="fa fa-globe"></i>&nbsp;2 days ago</span>
+                        <span><i class="fa fa-clock-o "></i>&nbsp;2 days ago</span>
                     </h3>
                     Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante
                     sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus
@@ -424,7 +408,7 @@
     <div class="media-body">
         <div class="social-profile">
             <h3><a class="text-green" href="#">Kristina Petersen</a>
-                <span><i class="fa fa-globe"></i>&nbsp;3 days ago</span>
+                <span><i class="fa fa-clock-o "></i>&nbsp;3 days ago</span>
             </h3>
             Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante
             sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus

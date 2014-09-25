@@ -16,21 +16,17 @@ opacity: 0.9;
 }
 */
 
-.scroll-refresher {
-    background-color: rgb(97, 155, 209);
-}
-
-
 /* google places */
 .pac-container {
     pointer-events: auto;
 }
 
 /* bobby box */
+/*
 .selected .item-content, .selected {
     background-color: #f8f8f8;
 }
-
+*/
 .reading .item-content {
     padding-top: 8px;
     padding-bottom: 8px;
@@ -53,18 +49,18 @@ opacity: 0.9;
 }
 
 ion-side-menu.menu-left.menu {
-    background-color: rgb(48, 144, 223);
+    background-color: rgb(48, 92, 128);;
 }
 
 ion-side-menu .item, ion-side-menu .item-content, ion-side-menu .item-complex, ion-side-menu .item-radio {
-    background-color: rgb(48, 144, 223);
+    background-color: rgb(48, 92, 128);;
     color: white !important;
     border-color: #7AA1C5;
     background: none;
 }
 
 ion-side-menu .item > .item-content, ion-side-menu .item > .item-complex, ion-side-menu .item > .item-radio {
-    background-color: rgb(48, 144, 223);
+    background-color: rgb(48, 92, 128);;
     color: white !important;
     border-color: #7AA1C5;
     background: none;

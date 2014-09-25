@@ -835,8 +835,6 @@
                             return d._id === $state.params.triggerid;
                         });
 
-                        console.log($scope.trigger);
-
                     }, function (response) {
                         console.log('error', response);
                     });
@@ -864,25 +862,55 @@
 
         }])
 
-        .controller('BoxCtrl', ['installations', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', 'icons', function (installations, $scope, $state, $rootScope, $window, bobby, chart, box, $interval, icons) {
-
-            var ts = bobby.getTimeScale();
+        .controller('BoxCtrl', ['installation', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', 'icons', function (installation, $scope, $state, $rootScope, $window, bobby, chart, box, $interval, icons) {
 
             $scope.domainName = $rootScope.domain.charAt(0).toUpperCase() + $rootScope.domain.slice(1);
 
+            var seriesData = [],
+                colorScheme = bobby.getColorScheme();
+
+            $scope.shownDevice = [];
+            $scope.chartColorNumber = 0;
+            $scope.chartColor = [];
+
+            var ts = bobby.getTimeScale();
+            $scope.timeScales = chart.timeScales;
+            /* get graf time scale form settings */
+            $scope.selectedScale = _.find($scope.timeScales, { 'value': ts.value });
+
+            $scope.chartLabel = chart.chartLabel;
+            $scope.chartSettings = chart.chartSettings;
+            $scope.installation = installation;
+
             if ($state.params.id && box.installation && box.installation._id === $state.params.id) {
-                $scope.installation = box.installation;
-            } else if ($state.params.id) {
-                box.activeStream = null;
-                box.showChart = false;
-                box.shownDevice = [];
-                $scope.installation = box.installation = _.find(installations, { '_id': $state.params.id });
-            } else if (box.installation === null) {
-                $scope.installation = box.installation = installations[0];
+                $scope.shownDevice = box.shownDevice;
+                $scope.chartColorNumber = box.chartColorNumber;
+                $scope.chartColor = box.chartColor;
+                if (box.selectedScale) {
+                    $scope.selectedScale = box.selectedScale;
+                }
+                seriesData = $scope.chartSettings.dataSource;
+
             } else {
-                $scope.installation = _.find(installations, { '_id': box.installation._id });
+                chart.chartSettings.dataSource = [];
             }
 
+            $scope.chartSettings.seriesTemplate = {
+                nameField: "name",
+                customizeSeries: function (stream) {
+                    return { color: $rootScope.datastreams[stream].color};
+                }
+            };
+
+            $scope.$on('$destroy', function () {
+                // Make sure that the interval is destroyed too
+                sparklineFeed = undefined;
+                box.installation = $scope.installation;
+                box.shownDevice = $scope.shownDevice;
+                box.chartColorNumber = $scope.chartColorNumber;
+                box.chartColor = $scope.chartColor;
+                box.selectedScale = $scope.selectedScale;
+            });
 
             /****** protoyping ********************/
 
@@ -897,7 +925,6 @@
                     visible: false
                 }
             };
-
 
             angular.extend($scope, {
                 map: {
@@ -942,7 +969,7 @@
                 { month: 12, 2010: 1392, 2011: 1643, 2012: 1684 }
             ];
 
-            $interval(function () {
+            var sparklineFeed = $interval(function () {
                 var source = $scope.sparkSettings.dataSource,
                     lastValue = source.shift();
                 lastValue.month = lastValue.month + 1;
@@ -983,28 +1010,9 @@
             /****** protoyping ********************/
 
 
-
-            $scope.installations = installations;
-
-            $scope.timescale = chart.timescale;
-            /* get graf time scale form settings */
-            $scope.timeScale = _.find($scope.timescale, { 'value': ts.value });
-
-            $scope.activeStream = box.activeStream;
-
-            $scope.showChart = box.showChart;
-            $scope.shownDevice = box.shownDevice;
-
-            $scope.chartLabel = chart.chartLabel;
-            $scope.series = chart.series;
-            $scope.chartSettings = chart.chartSettings;
-
-
             $scope.controlDetails = function (deviceId, controlId) {
-
                 var device = _.find($scope.installation.devices, { 'id': deviceId }),
                     control = _.find(device.controls, { 'id': controlId });
-
                 $state.go('app.control', {id: $state.params.id, deviceid: device._id, controlid: control._id});
             };
 
@@ -1016,62 +1024,83 @@
                 return $scope.shownDevice[device];
             };
 
-            $scope.selectInstallation = function (installation) {
-                $scope.installation = box.installation = installation;
-                bobby.setInstallation(installation);
-            };
+            $scope.selectAction = function (time) {
 
-            $scope.selectAction = function (time, deviceid, id) {
-                $scope.timeScale = _.find($scope.timescale, { 'value': time.value });
-                bobby.setTimeScale($scope.timeScale, deviceid, id);
-                $scope.showChart = true;
+                $scope.selectedScale = _.find($scope.timeScales, { 'value': time.value });
+
+                angular.forEach($scope.installation.devices, function (device) {
+                    angular.forEach(device.controls, function (control) {
+                        if (_.find($scope.chartColor, { 'control': device.id + control.id})) {
+                            bobby.setTimeScale($scope.selectedScale, device.id, control.id);
+                        }
+                    });
+                });
             };
 
             $scope.showData = function (device, stream) {
-                if (!(angular.isUndefined($scope.activeStream) || $scope.activeStream === null) && $scope.activeStream.id === stream && $scope.activeStream.deviceid === device) {
-                    $scope.activeStream = box.activeStream = null;
-                    $scope.chartSettings.dataSource = null;
+
+                var controlColor = _.find($scope.chartColor, { 'control': device + stream });
+                if (controlColor) {
+
+                    seriesData = _.filter(seriesData, function (item) {
+                        return item.name !== device + stream;
+                    });
+
+                    $scope.chartSettings.dataSource = seriesData;
+                    $scope.chartColor = _.without($scope.chartColor, controlColor);
+
+                    $rootScope.datastreams[device + stream].color = null;
+
                 } else {
-                    $scope.showChart = true;
+
+                    var color = colorScheme[$scope.chartColorNumber];
+
+                    $scope.chartColor.push({ control: device + stream, color: color});
+                    ($scope.chartColorNumber < 19) ? $scope.chartColorNumber++ : $scope.chartColorNumber = 0;
+                    $rootScope.datastreams[device + stream].color = color;
+
                     bobby.getStream(device, stream);
-                    $scope.activeStream = box.activeStream = $rootScope.datastreams[device + stream];
                 }
             };
 
             $rootScope.$on('message:new-reading', function (evt, data) {
-                if ($scope.activeStream !== null) {
+
+                if (_.find($scope.chartColor, { 'control': data.name})) {
                     $scope.chartSettings.dataSource.push(data);
                 }
             });
 
             $rootScope.$on('message:data', function (evt, data) {
-                $scope.showChart = false;
-                if (angular.isDefined(data) && data.length > 0 && $scope.activeStream !== null) {
-                    if ($scope.timeScale.value <= 86400) {
+                if (angular.isDefined(data.data) && data.data.length > 0) {
+                    if ($scope.selectedScale.value <= 86400) {
                         $scope.chartLabel.label = { format: 'H:mm'};
-                    } else if ($scope.timeScale.value <= 604800) {
+                    } else if ($scope.selectedScale.value <= 604800) {
                         $scope.chartLabel.label = { format: 'ddd'};
-                    } else if ($scope.timeScale.value <= 2592000) {
+                    } else if ($scope.selectedScale.value <= 2592000) {
                         $scope.chartLabel.label = { format: 'dd-MM'};
                     } else {
                         $scope.chartLabel.label = { format: 'MMM'};
                     }
-                    /*
-                     if ($scope.activeStream.id === 'online') {
-                     $scope.series[0].type = 'stepLine';
-                     } else {
-                     $scope.series[0].type = 'area';
-                     }
-                     */
+
                     $scope.chartSettings.argumentAxis = $scope.chartLabel;
-                    $scope.chartSettings.series = $scope.series;
-                    $scope.chartSettings.dataSource = data;
+
+
+                    seriesData = _.filter(seriesData, function (item) {
+                        return item.name !== data.stream;
+                    });
+
+                    _.forEach(data.data, function (obs) {
+                        seriesData.push({ 'name': data.stream, 'timestamp': obs.timestamp, 'value': obs.value});
+                    });
+
+                    $scope.chartSettings.dataSource = seriesData;
                 } else {
                     $scope.chartSettings.dataSource = [];
                 }
             }, true);
 
-            if ($scope.shownDevice.length == 0) {
+
+            if ($scope.shownDevice.length === 0) {
                 angular.forEach($scope.installation.devices, function (item) {
                     $scope.shownDevice[item.id] = true;
                 });
@@ -1080,20 +1109,7 @@
             bobby.setInstallation($scope.installation);
 
             $scope.doRefresh = function () {
-
                 bobby.refreshInstallation($scope.installation);
-
-                $scope.$broadcast('scroll.refreshComplete');
-                /*
-                 $http.get('/new-items')
-                 .success(function(newItems) {
-                 $scope.items = newItems;
-                 })
-                 .finally(function() {
-                 // Stop the ion-refresher from spinning
-                 $scope.$broadcast('scroll.refreshComplete');
-                 });
-                 */
             };
 
         }])

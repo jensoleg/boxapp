@@ -27,8 +27,8 @@
                             templateUrl: 'templates/bobbybox.html',
                             controller: 'BoxCtrl',
                             resolve: {
-                                installations: ['installationService', function (installationService) {
-                                    return installationService.all();
+                                installation: ['$stateParams', 'installationService', function ($stateParams, installationService) {
+                                    return installationService.get($stateParams.id);
                                 }]
                             }
                         }

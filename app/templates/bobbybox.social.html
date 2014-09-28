@@ -1,0 +1,347 @@
+<div class="comment-nest">
+<ul class="media-list">
+<li class="media">
+<a class="pull-left" href="#">
+    <img class="media-object img-circle" alt="36x36"
+         src="./images/laj.jpg" style="width: 36px; height: 36px;">
+</a>
+
+<div class="media-body">
+    <div class="social-profile">
+        <textarea msd-elastic placeholder="Enter a message" style="margin-top: 0px;" rows="1" ng-model="topPost"
+                  ng-enter="newTopPost()">
+        </textarea>
+    </div>
+</div>
+<hr class="thin">
+<div ng-if="hasTopPost" class="media">
+    <a class="pull-left" href="#">
+        <img class="media-object img-circle" data-src="holder.js/36x36"
+             alt="36x36" src="./images/laj.jpg"
+             style="width: 36px; height: 36px;">
+    </a>
+
+    <div class="media-body">
+
+        <div class="social-profile">
+            <h3><a class="text-green" href="#">Lars Jessen</a>
+                <span><i class="fa fa-clock-o "></i>&nbsp;1 min ago</span>
+            </h3>
+            {{newTopPost}}
+
+            <h3>
+                                        <span><a class="text-green" ng-click="reply5 ? reply5=false : reply5=true"><i
+                                                class="fa fa-reply"></i>&nbsp;Reply</a>
+                                        </span>
+
+            </h3>
+
+            <textarea ng-if="reply5== true"
+                      msd-elastic
+                      placeholder="Enter your message"
+                      rows="1"
+                      ng-model="fool1">
+            </textarea>
+        </div>
+    </div>
+</div>
+<div class="media">
+    <a class="pull-left" href="#">
+        <img class="media-object img-circle" data-src="holder.js/36x36" alt="36x36"
+             src="./images/cs.jpg" style="width: 36px; height: 36px;">
+    </a>
+
+
+    <div class="media-body">
+
+        <div class="social-profile">
+            <h3>
+                <a class="text-green" href="#">Claus Stoustrup</a>
+                <span><i class="fa fa-clock-o "></i>&nbsp;1 hours ago</span>
+            </h3>
+
+            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante
+            sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra
+
+            <!--div id="container">
+
+                <div id="page" style="min-height: 80px; margin-top: 20px; border-left: 1px; float: left; ">
+
+                    <div id="cols" style="">
+
+                        <div class="single_wrapper"
+                             style="overflow: visible; font-family: Georgia, Cambria, Times, serif; font-size: 62.5%;color: #535353;line-height: 1;">
+                            <div class="post narrow  video" style="position: relative; top: 0px; left: 0px;">
+                                <div class="panel_head"></div>
+
+                                <div class="embed-video" style="display: block;">
+                                    <div class="videoWrapper">
+                                        <iframe width="400" height="224"
+                                                src="https://www.youtube.com/embed/Z9IODJdi3GA?feature=oembed"
+                                                frameborder="0"
+                                                allowfullscreen=""></iframe>
+                                    </div>
+                                </div>
+                                <div class="panel_content base_format" style="background-color:#F5F5F5">
+                                    <div class="caption"><p class="last">Radiohead, <em>All I Need</em> — Live in
+                                        the
+                                        basement. This is one of a whole series of them playing songs from <em>In
+                                            Rainbows</em> live, which are well worth the watch.</p></div>
+                                </div>
+
+                                <div class="meta_foot" style="background-color:#F5F5F5">
+
+                                    <ul class="tags">
+                                        <li style="display: none;"><a href="http://scaffold.tumblr.com/tagged/music"
+                                                                      class="tag">music</a></li>
+                                        <li style="display: none;"><a href="http://scaffold.tumblr.com/tagged/video"
+                                                                      class="tag">video</a></li>
+                                        <li style="display: none;"><a
+                                                href="http://scaffold.tumblr.com/tagged/radiohead"
+                                                class="tag">radiohead</a></li>
+                                        <li style="display: none;"><a href="http://scaffold.tumblr.com/tagged/live"
+                                                                      class="tag">live</a></li>
+                                    </ul>
+
+                                    <ul class="meta">
+                                        <li class="end"><a
+                                                href="http://scaffold.tumblr.com/post/467716519/radiohead-all-i-need-live-in-the-basement-this"
+                                                class="meta_permalink replace"
+                                                title="Permanent link to this post">Permalink</a></li>
+                                        <li>
+                                            <a href="http://scaffold.tumblr.com/post/467716519/radiohead-all-i-need-live-in-the-basement-this#notes"
+                                               class="meta_likes" title="This post has 492 notes">492</a></li>
+
+                                    </ul>
+
+                                </div>
+
+                                <div class="panel_foot"
+                                     style="background-image: none;background-color:#F5F5F5"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div-->
+
+            <h3>
+                                        <span><a class="text-green" ng-click="reply1? reply1=false : reply1=true"><i
+                                                class="fa fa-reply"></i>&nbsp;Reply</a>
+                                        </span>
+
+            </h3>
+
+            <textarea msd-elastic ng-show="reply1 == true && !hasComment" data-ng-model="post"
+                      ng-enter="newComment()" placeholder="Enter your message" rows="1">
+            </textarea>
+        </div>
+
+
+        <div ng-if="hasComment" class="media">
+            <a class="pull-left" href="#">
+                <img class="media-object img-circle" data-src="holder.js/36x36" alt="36x36"
+                     src="./images/laj.jpg" style="width: 36px; height: 36px;">
+            </a>
+
+            <div class="media-body">
+
+                <div class="social-profile">
+                    <h3><a class="text-green" href="#">Lars Jessen</a>
+                        <span><i class="fa fa-clock-o "></i>&nbsp;1 minute ago</span>
+                    </h3>
+                    {{post}}
+                    <h3>
+                                <span><a class="text-green" ng-click="reply2 ? reply2=false : reply2=true"><i
+                                        class="fa fa-reply"></i>&nbsp;Reply</a>
+                                </span>
+
+                    </h3>
+
+                    <textarea ng-if="reply2 == true"
+                              msd-elastic
+                              placeholder="Enter your message"
+                              rows="1"
+                              ng-model="fool2">
+                    </textarea>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="media">
+            <a class="pull-left" href="#">
+                <img class="media-object img-circle" data-src="holder.js/36x36" alt="36x36"
+                     src="./images/laj.jpg" style="width: 36px; height: 36px;">
+            </a>
+
+            <div class="media-body">
+
+                <div class="social-profile">
+                    <h3><a class="text-green" href="#">Lars Jessen</a>
+                        <span><i class="fa fa-clock-o "></i>&nbsp;1 hours ago</span>
+
+                    </h3>
+                    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante
+                    sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra
+                    turpis.
+
+                    <h3>
+                                <span><a class="text-green" ng-click="reply2 ? reply2=false : reply2=true"><i
+                                        class="fa fa-reply"></i>&nbsp;Reply</a>
+                                </span>
+
+                    </h3>
+
+                    <textarea ng-if="reply2 == true"
+                              msd-elastic
+                              placeholder="Enter your message"
+                              rows="1"
+                              ng-model="fool2">
+                    </textarea>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</li>
+<hr class="thin">
+<li class="media">
+    <a class="pull-left" ui-sref="app.main({ id:installation._id })">
+        <i class="icon-item ion-cube"
+           style="margin-right: 16px;vertical-align: middle; font-size: 225%; color: rgb(248, 187, 57);">
+        </i>
+    </a>
+
+    <div class="media-body">
+
+        <div class="social-profile">
+            <h3><a class="text-green" ui-sref="app.main({ id:installation._id })">Seems Moisture is to low at
+                top left corner ?</a>
+                <span><i class="fa fa-clock-o "></i>&nbsp;2 days ago</span>
+
+            </h3>
+
+            <div class="social-profile">
+                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante
+                sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus
+                viverra
+                turpis.
+                <div id="splContainer" class="sparkline" dx-Sparkline="{
+                        bindingOptions: {dataSource: 'sparkSettings.dataSource'},
+                        argumentField: 'month',
+                        valueField: '2012',
+                        type: 'spline',
+                        lineWidth: 3,
+                        lineColor: '#9ab57e',
+                        minColor: '#6babac',
+                        maxColor: '#ebdd8f',
+                        showMinMax: true,
+                        showFirstLast: true
+                    }">
+                </div>
+
+                <h3>
+                     <span>
+                         Do you want to water upper left corner ?
+                         <a class="text-green">
+                             <i class="fa fa-tint "></i>&nbsp;2 min&nbsp;
+                         </a>
+                                                  <a class="text-green">
+                                                      <i class="fa fa-tint "></i>&nbsp;5 min&nbsp;
+                                                  </a>
+                                                  <a class="text-green">
+                                                      <i class="fa fa-tint "></i>&nbsp;10 min
+                                                  </a>
+                     </span>
+                </h3>
+
+                <h3>
+                     <span>
+                         <a class="text-green" ng-click="reply4 ? reply4=false : reply4=true">
+                             <i class="fa fa-reply"></i>&nbsp;Reply
+                         </a>
+                     </span>
+                </h3>
+                <textarea ng-if="reply4== true"
+                          msd-elastic
+                          placeholder="Enter your message"
+                          rows="1"
+                          ng-model="fool1">
+                </textarea>
+            </div>
+        </div>
+
+        <div class="media">
+            <a class="pull-left" href="#">
+                <img class="media-object img-circle" data-src="holder.js/36x36"
+                     alt="36x36" src="./images/pn.jpg"
+                     style="width: 36px; height: 36px;">
+            </a>
+
+            <div class="media-body">
+
+                <div class="social-profile">
+                    <h3><a class="text-green" href="#">Palle Nielsen</a>
+                        <span><i class="fa fa-clock-o "></i>&nbsp;2 days ago</span>
+                    </h3>
+                    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante
+                    sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus
+                    viverra
+                    turpis.
+
+                    <h3>
+                                        <span><a class="text-green" ng-click="reply5 ? reply5=false : reply5=true"><i
+                                                class="fa fa-reply"></i>&nbsp;Reply</a>
+                                        </span>
+
+                    </h3>
+
+                    <textarea ng-if="reply5== true"
+                              msd-elastic
+                              placeholder="Enter your message"
+                              rows="1"
+                              ng-model="fool1">
+                    </textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>
+<hr class="thin">
+<li class="media">
+    <a class="pull-left" href="#">
+        <img class="media-object img-circle" data-src="holder.js/36x36" alt="36x36"
+             src="./images/kp.jpg" style="width: 36px; height: 36px;">
+    </a>
+
+    <div class="media-body">
+        <div class="social-profile">
+            <h3><a class="text-green" href="#">Kristina Petersen</a>
+                <span><i class="fa fa-clock-o "></i>&nbsp;3 days ago</span>
+            </h3>
+            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante
+            sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus
+            viverra
+            turpis.
+
+            <h3>
+                                    <span><a class="text-green" ng-click="reply3 ? reply3=false : reply3=true"><i
+                                            class="fa fa-reply"></i>&nbsp;Reply</a>
+                                    </span>
+
+            </h3>
+
+            <textarea ng-if="reply3 == true"
+                      msd-elastic
+                      placeholder="Enter your message"
+                      rows="1"
+                      ng-model="fool3">
+            </textarea>
+        </div>
+    </div>
+</li>
+</ul>
+</div>

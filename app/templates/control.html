@@ -1,22 +1,26 @@
-<ion-view title="{{control.name}} - id {{control.id}}">
+<ion-view title="">
 
 
     <ion-nav-bar class="nav-title-slide-ios7 bar-stable">
 
-        <ion-nav-back-button class="button-clear"><i class="icon ion-ios7-arrow-back"></i></ion-nav-back-button>
-
         <ion-nav-buttons side="left">
-            <button menu-toggle="left" class="button button-icon button-clear ion-navicon"></button>
+
+            <button menu-toggle="left" ng-hide="$exposeAside.active" class="button button-icon button-clear ion-navicon"></button>
+
+            <ion-nav-back-button class="button-clear"><i class="icon ion-ios7-arrow-back"></i>
+                {{control.name}} - id {{control.id}}
+            </ion-nav-back-button>
+
         </ion-nav-buttons>
 
     </ion-nav-bar>
 
     <ion-content>
 
-            <div class="col">
-                <div style="height: 200px"
-                ng-show="control.ctrlType=='data' && control.maxCritical > 0" class="row responsive-sm"
-                dx-circular-gauge="{tooltip: gaugeSettings.tooltip,
+        <div class="col">
+            <div style="height: 200px"
+                 ng-show="control.ctrlType=='data' && control.maxCritical > 0" class="row responsive-sm"
+                 dx-circular-gauge="{tooltip: gaugeSettings.tooltip,
                                                                subvalueIndicator: gaugeSettings.subvalueIndicator,
                                                                bindingOptions: {scale: 'gaugeSettings.scale',
                                                                        value: 'gaugeSettings.value',
@@ -24,8 +28,8 @@
                                                                        subvalues : 'gaugeSettings.subvalues'}
                                                                        }">
 
-                </div>
             </div>
+        </div>
 
 
         <div class="list">

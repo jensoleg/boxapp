@@ -12,14 +12,30 @@
                     controller: 'LoginCtrl'
                 })
                 .state('app', {
-                    url: "/app",
+                    url: '/app',
                     abstract: true,
                     templateUrl: "templates/menu.html",
-                    controller: 'AppCtrl',
+                    controller: 'InstallationsCtrl',
+                    resolve: {
+                        installations: ['installationService', function (installationService) {
+                            return installationService.all();
+                        }]
+                    },
                     data: {
                         requiresLogin: true
                     }
                 })
+                /*
+                 .state('app', {
+                 url: "/app",
+                 abstract: true,
+                 templateUrl: "templates/menu.html",
+                 controller: 'AppCtrl',
+                 data: {
+                 requiresLogin: true
+                 }
+                 })
+                 */
                 .state('app.main', {
                     url: '/main/:id',
                     views: {
@@ -34,6 +50,7 @@
                         }
                     }
                 })
+                /*
                 .state('app.settings', {
                     url: '/settings',
                     views: {
@@ -43,6 +60,7 @@
                         }
                     }
                 })
+
                 .state('app.installations', {
                     url: '/installations',
                     views: {
@@ -57,6 +75,7 @@
                         }
                     }
                 })
+
                 .state('app.detail', {
                     url: '/installations/:id',
                     views: {
@@ -116,6 +135,7 @@
                         }
                     }
                 })
+                */
                 .state('app.map', {
                     url: '/map',
                     views: {
@@ -141,7 +161,7 @@
 
             $httpProvider.interceptors.push('authInterceptor');
 
-            $urlRouterProvider.otherwise('/app/installations');
+            $urlRouterProvider.otherwise('/app/map');
 
             /* loading bar */
             cfpLoadingBarProvider.latencyThreshold = 500;
@@ -179,7 +199,7 @@
             auth.hookEvents();
 
         }])
-
+/*
         .controller('AppCtrl', ['bobby', '$scope', 'auth', '$state', '$ionicSideMenuDelegate', function (bobby, $scope, auth, $state, $ionicSideMenuDelegate) {
 
             $scope.signout = function () {
@@ -190,7 +210,7 @@
             };
 
         }])
-
+*/
         .controller('LoginCtrl', ['auth', '$rootScope', '$location', function (auth, $rootScope, $location) {
 
             var logo = './images/' + $rootScope.domain + '.png';
@@ -200,7 +220,7 @@
                 showSignup: true,
                 standalone: true,
                 offline_mode: true,
-//                enableReturnUserExperience: false,
+                enableReturnUserExperience: false,
                 icon: logo,
                 showIcon: true
             }, function (profile) {
@@ -218,8 +238,8 @@
                 console.log("There was an error logging in", error);
             });
 
-        }])
-
+        }]);
+/*
         .controller('SettingsCtrl', ['$scope', 'Settings', 'auth', 'auth0Service', function ($scope, Settings, auth, auth0Service) {
 
             if (auth.profile.app) {
@@ -234,4 +254,5 @@
             });
 
         }]);
+*/
 }());

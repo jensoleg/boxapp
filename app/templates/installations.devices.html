@@ -1,33 +1,19 @@
-<ion-view title="{{installation.name}} {{installation.placement}}">
+<ion-view title="">
 
 <ion-nav-bar class="nav-title-slide-ios7 bar-stable">
 
-    <ion-nav-back-button class="button-clear"><i class="icon ion-ios7-arrow-back"></i></ion-nav-back-button>
 
     <ion-nav-buttons side="left">
-        <button menu-toggle="left" class="button button-icon button-clear ion-navicon"></button>
+
+        <button menu-toggle="left" ng-hide="$exposeAside.active" class="button button-icon button-clear ion-navicon"></button>
+
+        <ion-nav-back-button class="button-clear"><i class="icon ion-ios7-arrow-back"></i>
+            {{installation.name}} {{installation.placement}}
+        </ion-nav-back-button>
+
     </ion-nav-buttons>
 
-    <!--ion-nav-buttons side="right">
 
-        <button ng-if="currentSlideIndex == 1"
-                ng-click="addDevice()"
-                class="button icon-left ion-ios7-plus-empty button-clear button-dark">
-        </button>
-
-        <button ng-if="currentSlideIndex == 1"
-                style="color: #4a87ee"
-                class="button icon ion-chatbubbles button-clear"
-                ng-click="previousSlide()">
-        </button>
-
-        <button ng-if="currentSlideIndex == 0"
-                style="color: #4a87ee"
-                class="button icon ion-gear-b button-clear"
-                ng-click="nextSlide()">
-        </button>
-
-    </ion-nav-buttons-->
 
 </ion-nav-bar>
 
@@ -43,7 +29,7 @@
                     draggable="false"
                     control="map.control">
             <marker coords="map.marker" idkey="map.marker.id" icon="map.marker.icon"
-                    click="map.onMarkerClick(map.marker)">
+                    click="map.onMarkerClicked(map.marker)">
             </marker>
         </google-map>
     </div>

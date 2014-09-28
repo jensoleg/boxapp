@@ -137,26 +137,25 @@
                      */
 
                     /* streamTriggers should be set when installation is changed !!!!!!!!! */
+                    /*
+                     angular.forEach(currentInstallation.devices, function (d) {
+                     if (d.triggers.length > 0 && d.id === device) {
+                     streamTriggers.push(_.filter(d.triggers, { 'stream_id': stream }));
+                     }
+                     });
 
-                    angular.forEach(currentInstallation.devices, function (d) {
-                        if (d.triggers.length > 0 && d.id === device) {
-                            streamTriggers.push(_.filter(d.triggers, { 'stream_id': stream }));
-                        }
-                    });
-
-                    angular.forEach(streamTriggers, function (triggers) {
-                        angular.forEach(triggers, function (trigger) {
-                            if (trigger) {
-                                $rootScope.datastreams[device + stream].triggered = eval(message + operators[trigger.trigger_type] + trigger.threshold_value);
-                            }
-                        });
-                    });
-
+                     angular.forEach(streamTriggers, function (triggers) {
+                     angular.forEach(triggers, function (trigger) {
+                     if (trigger) {
+                     $rootScope.datastreams[device + stream].triggered = eval(message + operators[trigger.trigger_type] + trigger.threshold_value);
+                     }
+                     });
+                     });
+                     */
                     now = Date.now();
                     $rootScope.$broadcast('message:new-reading', { name: device + stream, timestamp: moment(moment()).utc().toJSON(), value: parseFloat(message) });
 
                     $rootScope.datastreams[device + stream].current_value = message;
-                    // $rootScope.$apply();
                 }
             });
 
@@ -177,6 +176,14 @@
                         }
                     }
                 }
+            };
+
+            bobby.disableSubscriptions = function () {
+                angular.forEach(currentInstallation.devices, function (device) {
+                    angular.forEach(device.controls, function (stream) {
+                        client.unsubscribe('/' + $rootScope.domain + '/' + device.id + "/" + stream.id);
+                    });
+                });
             };
 
             /* set current installation */
@@ -222,26 +229,28 @@
 
                     currentInstallation = newInstallation;
 
-                    // set controls
+                    var newStreams = {};
+
+                    // set / remove controls
                     angular.forEach(currentInstallation.devices, function (device) {
                         angular.forEach(device.controls, function (stream) {
                             if (_.contains(controlTypes, stream.ctrlType)) {
-                                if (!$rootScope.datastreams[device.id + stream.id]) {
-
-                                    $rootScope.datastreams[device.id + stream.id] = stream;
-                                    $rootScope.datastreams[device.id + stream.id].id = stream.id;
-                                    $rootScope.datastreams[device.id + stream.id].deviceid = device.id;
-                                    /* maybe trigger should be evaluated initially */
-                                    $rootScope.datastreams[device.id + stream.id].triggered = false;
-
-                                    client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
+                                if ($rootScope.datastreams[device.id + stream.id]) {
+                                    newStreams[device.id + stream.id] = $rootScope.datastreams[device.id + stream.id]
+                                    client.unsubscribe('/' + $rootScope.domain + '/' + device.id + "/" + stream.id);
                                 }
+                                newStreams[device.id + stream.id] = stream;
+                                newStreams[device.id + stream.id].id = stream.id;
+                                newStreams[device.id + stream.id].deviceid = device.id;
+                                client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
                             }
                         })
                     });
-                }
 
-            }
+                    $rootScope.datastreams = newStreams;
+                    refreshing = false;
+                }
+            };
 
             bobby.refreshInstallation = function (installation) {
                 refreshing = true;
@@ -407,10 +416,10 @@
                     return q.promise;
                 },
 
-                activateDevice: function (device) {
+                activateDevice: function (deviceId) {
                     var q = $q.defer();
 
-                    $http.post(apiEndpoint + 'agent/' + device.id + '?config', {
+                    $http.post(apiEndpoint + 'agent/' + deviceId + '?config', {
                         "customer": "development",
                         "user": "contact@bobbytechnologies.dk",
                         "pass": "tekno",

@@ -2,23 +2,35 @@
     <ion-nav-bar class="nav-title-slide-ios7 bar-clear">
 
         <ion-nav-buttons side="left">
-            <button menu-toggle="left"
+            <button ng-hide="$exposeAside.active"
+                    menu-toggle="left"
                     style="color: #404040;"
                     class="button icon  ion-navicon button-clear">
             </button>
         </ion-nav-buttons>
+
         <ion-nav-buttons side="right">
-            <button style="color: #404040;"
+            <!--button style="color: #404040;"
                     class="button icon ion-social-buffer button-clear"
                     ng-click="$state.go('app.installations')">
-            </button>
+            </button-->
+            <a ng-style="map.showWeather && {'color': 'rgb(97, 132, 243)'} || {'color': '#404040'}"
+               ng-click="map.showWeather = !map.showWeather"
+               class="button button-icon ion-ios7-cloud"></a>
+            <a ng-click="myPosition()"
+               style="color: #404040"
+               class="button button-icon ion-android-locate"></a>
 
+            <a ng-click="popover.show($event)"
+               style="color: #404040"
+               class="button button-icon ion-more"></a>
         </ion-nav-buttons>
+
     </ion-nav-bar>
 
     <ion-content scroll="false" class="map">
         <div>
-            <google-map class="full"
+            <google-map class="fullmap"
                         center="map.center"
                         zoom="map.zoom"
                         draggable="true"
@@ -44,7 +56,7 @@
 
             </google-map>
         </div>
-        <swipe-cards bg-positive>
+        <!--swipe-cards bg-positive>
             <swipe-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)">
                 <div ng-controller="CardCtrl">
                     <div class="title">
@@ -100,9 +112,9 @@
                     </div>
                 </div>
             </swipe-card>
-        </swipe-cards>
+        </swipe-cards-->
     </ion-content>
-    <ion-footer-bar class="bar-clear">
+    <!--ion-footer-bar class="bar-clear">
 
         <a ng-click="myPosition()"
            style="color: #404040"
@@ -112,6 +124,6 @@
            class="button button-icon ion-ios7-cloud"></a>
         <a class="button button-clear button-large"></a>
 
-    </ion-footer-bar>
+    </ion-footer-bar-->
 
 </ion-view>

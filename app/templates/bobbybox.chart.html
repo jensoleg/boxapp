@@ -15,18 +15,19 @@
                ng-click="showData(device.id, 'online')"
                ng-style="datastreams[device.id + 'online'].id == 'online' && datastreams[device.id + 'online'].current_value == '0' && {'color': 'rgb(253, 57, 80)'} || {'color': 'rgb(129, 207, 98)'}">
             </i>
-            <ion-option-button class="button-calm" ng-click="activateDevice(device.id)">Activate
+            <ion-option-button class="button-calm" ng-click="activateDevice(device.id)">Update
             </ion-option-button>
             <ion-option-button class="button-assertive" ng-click="aRemoveDevice(device.id)">Remove</ion-option-button>
             <ion-option-button class="button-balanced" ng-click="aCopyDevice(device.id)">Copy</ion-option-button>
             <ion-option-button class="button-positive" ng-click="aEditDevice(device.id)">Edit</ion-option-button>
-            <ion-option-button class="button-stable" ng-click="aNewControl(device.id)">Add Control</ion-option-button>
+            <ion-option-button class="button-stable" ng-click="aNewControl(device.id)">Add</ion-option-button>
         </ion-item>
 
-        <!--ng-repeat="readings in datastreams"-->
+<!--        ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }| orderObjectBy:'name':'reverse'" -->
+
         <ion-item class="reading item-icon-right"
                   style="padding-left: 14px; border-width: 0px;"
-                  ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }| orderObjectBy:'name':'reverse'"
+                  ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }"
                   ng-click="showData(readings.deviceid, readings.id)"
                   ng-show="isDeviceShown(device.id)">
             <label>

@@ -16,7 +16,8 @@
     "angular-google-maps": "~1.2.1",
     "angularjs-google-places": "~0.1.0",
     "angular-elastic": "~2.4.0",
-    "jquery": "2.1.1"
+    "jquery": "2.1.1",
+    "ngCordova": "~0.1.4-alpha"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.12",

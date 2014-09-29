@@ -1,11 +1,11 @@
 <ion-view title="">
 
-    <ion-nav-bar class="nav-title-slide-ios7 bar-stable">
+    <ion-nav-bar class="nav-title-slide-ios7 bar-clear">
         <ion-nav-buttons side="left">
             <button menu-toggle="left" ng-hide="$exposeAside.active"
-                    class="button button-icon button-clear ion-navicon">
+                    class="button button-icon button-clear button-dark ion-navicon">
             </button>
-            <button ui-sref="app.map()" class="button  button-icon button-clear  button-dark ion-ios7-arrow-back">
+            <button ui-sref="app.map()" class="button  button-icon button-clear button-dark ion-android-earth">
                 &nbsp;{{installation.name}} {{installation.placement}}
             </button>
         </ion-nav-buttons>
@@ -17,10 +17,6 @@
     </ion-nav-bar>
 
     <ion-content>
-        <!--ion-refresher
-                pulling-text="Refresh feed..."
-                on-refresh="doRefresh()">
-        </ion-refresher-->
         <!---- device overview -->
         <div class="row responsive-sm" style="padding: 0px;border-bottom: 1px;border-style: ridge;">
             <div class="col" style="padding: 0px;">
@@ -72,10 +68,10 @@
         <!---- device overview -->
         <bobby-device></bobby-device>
 
+        <bobby-setup></bobby-setup>
+
         <!-----   soicail IOT ----->
         <bobby-social></bobby-social>
-
-        <bobby-Setup></bobby-setup>
 
     </ion-content>
 </ion-view>

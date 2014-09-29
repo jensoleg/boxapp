@@ -1,4 +1,4 @@
-// Generated on 2014-08-28 using generator-ionic 0.5.3
+// Generated on 2014-09-29 using generator-ionic 0.5.4
 'use strict';
 
 var _ = require('lodash');
@@ -183,9 +183,6 @@ module.exports = function (grunt) {
 
         // Automatically inject Bower components into the app
         wiredep: {
-            options: {
-                cwd: '<%= yeoman.app %>'
-            },
             app: {
                 src: ['<%= yeoman.app %>/index.html'],
                 ignorePath: /\.\.\//

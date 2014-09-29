@@ -192,25 +192,21 @@
             };
         }])
 
-        .controller('InstallationCtrl', ['bobby', '$scope', '$state', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', '$interval', function (bobby, $scope, $state, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
+        .controller('InstallationCtrl', ['bobby', '$scope', 'installationService', '$ionicModal', '$ionicPopup', '$interval', function (bobby, $scope, installationService, $ionicModal, $ionicPopup) {
 
             $scope.newDevice = {};
 
 
             $scope.$on('message:new-device', function (evt) {
-                console.log('new device: ');
                 $scope.addDevice();
             });
             $scope.$on('message:edit-device', function (evt, device) {
-                console.log('edit device: ', device);
                 $scope.editDevice(device);
             });
             $scope.$on('message:remove-device', function (evt, device) {
-                console.log('remove device: ', device);
                 $scope.removeDevice(device);
             });
             $scope.$on('message:copy-device', function (evt, device) {
-                console.log('copy device: ', device);
                 $scope.copyDevice(device);
             });
 
@@ -323,7 +319,7 @@
 
         }])
 
-        .controller('SensorCtrl', ['bobby', '$scope', '$timeout', '$rootScope', '$state', '$ionicModal', '$ionicPopup', '$ionicListDelegate', 'installationService', function (bobby, $scope, $timeout, $rootScope, $state, $ionicModal, $ionicPopup, $ionicListDelegate, installationService) {
+        .controller('SensorCtrl', ['bobby', '$scope', '$rootScope', '$ionicModal', '$ionicPopup', 'installationService', function (bobby, $scope, $rootScope, $ionicModal, $ionicPopup, installationService) {
 
             var deviceId;
 
@@ -331,26 +327,18 @@
             $scope.types = ['data', 'status'];
 
             $scope.$on('message:new-control', function (evt, device) {
-                console.log('new control: ');
-                console.log('on device: ', device);
                 deviceId = device._id;
                 $scope.addControl();
             });
             $scope.$on('message:edit-control', function (evt, device, control) {
-                console.log('edit control: ', control);
-                console.log('on device: ', device);
                 deviceId = device._id;
                 $scope.editControl(control);
             });
             $scope.$on('message:remove-control', function (evt, device, control) {
-                console.log('remove control: ', control);
-                console.log('on device: ', device);
                 deviceId = device._id;
                 $scope.removeControl(control);
             });
             $scope.$on('message:copy-control', function (evt, device, control) {
-                console.log('copy control: ', control);
-                console.log('on device: ', device);
                 deviceId = device._id;
                 $scope.copyControl(control);
             });
@@ -465,9 +453,9 @@
         }])
 
 
-        .controller('BoxCtrl', ['installation', 'installationService', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', 'icons', '$ionicViewService', '$ionicListDelegate', function (installation, installationService, $scope, $state, $rootScope, $window, bobby, chart, box, $interval, icons, $ionicViewService, $ionicListDelegate) {
+        .controller('BoxCtrl', ['installation', 'installationService', '$ionicSideMenuDelegate', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', 'icons', '$ionicListDelegate', function (installation, installationService, $ionicSideMenuDelegate, $scope, $state, $rootScope, $window, bobby, chart, box, $interval, icons, $ionicListDelegate) {
 
-            $ionicViewService.clearHistory();
+            $ionicSideMenuDelegate.toggleLeft(false);
 
             $scope.domainName = $rootScope.domain.charAt(0).toUpperCase() + $rootScope.domain.slice(1);
 
@@ -573,7 +561,6 @@
                 installationService.activateDevice(deviceId);
             };
 
-            /****** protoyping ********************/
 
             google.maps.visualRefresh = true;
 
@@ -608,6 +595,9 @@
                     }
                 }
             });
+
+            /****** protoyping ********************/
+
 
             $scope.sparkSettings = {dataSource: []};
 
@@ -661,7 +651,11 @@
             };
 
             $scope.navigateTo = function (lat, lng) {
-                $window.location.href = 'maps://maps.apple.com/?q=' + lat + ',' + lng;
+                if (ionic.Platform.isAndroid()) {
+                    $window.location.href = 'geo:' + lat + ',' + lng + ';u=35';
+                } else {
+                    $window.location.href = 'maps://maps.apple.com/?q=' + lat + ',' + lng;
+                }
             };
 
             /****** protoyping ********************/
@@ -734,7 +728,6 @@
 
                     $scope.chartSettings.argumentAxis = $scope.chartLabel;
 
-
                     seriesData = _.filter(seriesData, function (item) {
                         return item.name !== data.stream;
                     });
@@ -742,11 +735,12 @@
                     _.forEach(data.data, function (obs) {
                         seriesData.push({ 'name': data.stream, 'timestamp': obs.timestamp, 'value': obs.value});
                     });
-
                     $scope.chartSettings.dataSource = seriesData;
+
                 } else {
                     $scope.chartSettings.dataSource = [];
                 }
+
             }, true);
 
 
@@ -757,14 +751,10 @@
             }
 
             bobby.setInstallation($scope.installation);
-            /*
-             $scope.doRefresh = function () {
-             bobby.refreshInstallation($scope.installation);
-             };
-             */
+
         }])
 
-        .controller('MapCtrl', ['$scope', '$location', '$rootScope', 'ngGPlacesAPI', 'Settings', 'icons', 'styles', 'installations', '$state', '$ionicLoading', '$ionicPopover', function ($scope, $location, $rootScope, ngGPlacesAPI, Settings, icons, styles, installations, $state, $ionicLoading, $ionicPopover) {
+        .controller('MapCtrl', ['$scope', '$location', '$rootScope', '$cordovaGeolocation', 'Settings', 'icons', 'styles', 'installations', '$state', '$ionicLoading', '$ionicPopover', function ($scope, $location, $rootScope, $cordovaGeolocation, Settings, icons, styles, installations, $state, $ionicLoading, $ionicPopover) {
 
             var mapStyles = {'Custom grey blue': 'GreyBlue', 'Custom grey': 'grey', 'Google map': 'default', 'Apple map': 'ios'},
                 markers = [];
@@ -772,14 +762,14 @@
             $scope.$state = $state;
 
             $ionicPopover.fromTemplateUrl('templates/selectMapType.html', {
-                scope: $scope,
+                scope: $scope
             }).then(function (popover) {
                 $scope.popover = popover;
             });
 
             $scope.setMapStyle = function (mapStyle) {
-                console.log('map style: ', mapStyle);
                 $scope.map.options.styles = styles[mapStyle];
+                $scope.popover.hide();
             };
 
 
@@ -942,10 +932,18 @@
 
 
             $scope.myPosition = function () {
+
                 $ionicLoading.show({
                     template: 'Finding your location...'
                 });
-                navigator.geolocation.getCurrentPosition(onSuccess, onError);
+
+                if (ionic.Platform.isWebView()) {
+                    $cordovaGeolocation
+                        .getCurrentPosition()
+                        .then(onSuccess, onError);
+                } else {
+                    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+                }
             };
 
             /*

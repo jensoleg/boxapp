@@ -20,7 +20,7 @@ var Orchestrator = require('orchestrator');
 
 var BASES = {
   android: 'res',
-  ios: 'Decoplant/Resources'
+  ios: 'Bobbyapp/Resources'
 };
 var RESOURCE_DIR = 'resources';
 

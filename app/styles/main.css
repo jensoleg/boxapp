@@ -21,6 +21,10 @@ opacity: 0.9;
 }
 */
 
+.popover {
+    height: 225px;
+}
+
 /* google places */
 .pac-container {
     pointer-events: auto;

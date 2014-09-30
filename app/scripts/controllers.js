@@ -68,7 +68,7 @@
             };
         })
 
-        .controller('InstallationsCtrl', ['bobby', '$scope', '$state', 'installations', 'installationService', '$ionicListDelegate', '$ionicModal', '$ionicPopup', 'auth', '$ionicSideMenuDelegate', function (bobby, $scope, $state, installations, installationService, $ionicListDelegate, $ionicModal, $ionicPopup, auth, $ionicSideMenuDelegate) {
+        .controller('InstallationsCtrl', ['bobby', '$scope', '$timeout', 'Settings', '$state', 'installations', 'installationService', '$ionicListDelegate', '$ionicModal', '$ionicPopup', 'auth', 'auth0Service', '$ionicSideMenuDelegate', function (bobby, $scope, $timeout, Settings, $state, installations, installationService, $ionicListDelegate, $ionicModal, $ionicPopup, auth, auth0Service, $ionicSideMenuDelegate) {
 
             $scope.installations = installations;
             $scope.newInst = {location: {'lat': null, 'lng': null}};
@@ -79,10 +79,15 @@
             };
 
             $scope.signout = function () {
+                var settings = Settings.getSettings();
+                Settings.save(settings);
+                auth0Service.updateUser(auth.profile.user_id, { app: settings});
                 bobby.setInstallation(null);
                 $ionicSideMenuDelegate.toggleLeft();
-                auth.signout();
-                $state.go('login');
+                $timeout(function () {
+                    auth.signout();
+                    $state.go('login');
+                }, 300);
             };
             /* Edit installation */
 
@@ -453,7 +458,7 @@
         }])
 
 
-        .controller('BoxCtrl', ['installation', 'installationService', '$ionicSideMenuDelegate', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', 'icons', '$ionicListDelegate', function (installation, installationService, $ionicSideMenuDelegate, $scope, $state, $rootScope, $window, bobby, chart, box, $interval, icons, $ionicListDelegate) {
+        .controller('BoxCtrl', ['installation', 'installationService', '$cordovaKeyboard', '$ionicSideMenuDelegate', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', 'icons', '$ionicListDelegate', function (installation, installationService, $cordovaKeyboard, $ionicSideMenuDelegate, $scope, $state, $rootScope, $window, bobby, chart, box, $interval, $ionicListDelegate) {
 
             $ionicSideMenuDelegate.toggleLeft(false);
 
@@ -561,41 +566,6 @@
                 installationService.activateDevice(deviceId);
             };
 
-
-            google.maps.visualRefresh = true;
-
-            var marker = {
-                id: $scope.installation._id,
-                latitude: $scope.installation.location.lat,
-                longitude: $scope.installation.location.lng,
-                icon: icons.cube,
-                options: {
-                    visible: false
-                }
-            };
-
-            angular.extend($scope, {
-                map: {
-                    control: {},
-                    center: {
-                        latitude: $scope.installation.location.lat,
-                        longitude: $scope.installation.location.lng
-                    },
-                    marker: marker,
-                    zoom: 12,
-                    options: {
-                        disableDefaultUI: true,
-                        panControl: false,
-                        navigationControl: false,
-                        scrollwheel: false,
-                        scaleControl: false
-                    },
-                    refresh: function () {
-                        $scope.map.control.refresh(origCenter);
-                    }
-                }
-            });
-
             /****** protoyping ********************/
 
 
@@ -640,6 +610,7 @@
                 $scope.hasTopPost = true;
                 $scope.newTopPost = this.topPost;
                 this.topPost = "";
+                $cordovaKeyboard.close();
             };
 
             $scope.phoneTo = function (tel) {
@@ -754,7 +725,7 @@
 
         }])
 
-        .controller('MapCtrl', ['$scope', '$location', '$rootScope', '$cordovaGeolocation', 'Settings', 'icons', 'styles', 'installations', '$state', '$ionicLoading', '$ionicPopover', function ($scope, $location, $rootScope, $cordovaGeolocation, Settings, icons, styles, installations, $state, $ionicLoading, $ionicPopover) {
+        .controller('MapCtrl', ['$scope', '$location', '$rootScope', '$cordovaGeolocation', 'Settings', 'icons', 'styles', 'installations', '$state', '$ionicLoading', '$ionicPopover', 'auth', 'auth0Service', function ($scope, $location, $rootScope, $cordovaGeolocation, Settings, icons, styles, installations, $state, $ionicLoading, $ionicPopover, auth, auth0Service) {
 
             var mapStyles = {'Custom grey blue': 'GreyBlue', 'Custom grey': 'grey', 'Google map': 'default', 'Apple map': 'ios'},
                 markers = [];
@@ -768,10 +739,15 @@
             });
 
             $scope.setMapStyle = function (mapStyle) {
+
+                Settings.set('mapStyle', mapStyle);
+
+                var settings = Settings.getSettings();
+                auth0Service.updateUser(auth.profile.user_id, { app: settings});
+
                 $scope.map.options.styles = styles[mapStyle];
                 $scope.popover.hide();
             };
-
 
             // Enable the new Google Maps visuals until it gets enabled by default.
             // See http://googlegeodevelopers.blogspot.ca/2013/05/a-fresh-new-look-for-maps-api-for-all.html
@@ -854,16 +830,12 @@
                         mapTypeControlOptions: {
                             position: google.maps.ControlPosition.BOTTOM_CENTER
                         },
-                        styles: styles[mapStyles[Settings.get('mapStyle')]]
+                        styles: styles[Settings.get('mapStyle')]
                     },
                     zoom: $rootScope.origZoom ? $rootScope.origZoom : 7,
                     dragging: true,
                     bounds: {},
                     markers: markers,
-                    events: {
-                        tilesloaded: function (map, eventName, originalEventArgs) {
-                        }
-                    },
                     getGMap: function () {
                     }
                 }
@@ -872,6 +844,8 @@
             $scope.map.markers = markers;
 
             var onMarkerClicked = function (marker) {
+
+                marker.icon = icons.gear;
 
                 $location.path('/app/main/' + marker.id);
                 /*
@@ -946,15 +920,6 @@
                 }
             };
 
-            /*
-             $scope.refreshMap = function () {
-             //optional param if you want to refresh you can pass null undefined or false or empty arg
-             $scope.map.control.refresh({latitude: 32.779680, longitude: -79.935493});
-             $scope.map.control.getGMap().setZoom(11);
-             };
-
-             var origCenter = {latitude: $scope.map.center.latitude, longitude: $scope.map.center.longitude};
-             */
         }]);
 
 }());

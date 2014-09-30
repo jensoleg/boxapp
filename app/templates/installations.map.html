@@ -1,5 +1,5 @@
 <ion-view>
-    <ion-nav-bar class="nav-title-slide-ios7 bar-clear">
+    <ion-nav-bar class="bar-clear">
 
         <ion-nav-buttons side="left">
             <button ng-hide="$exposeAside.active"
@@ -10,10 +10,7 @@
         </ion-nav-buttons>
 
         <ion-nav-buttons side="right">
-            <!--button style="color: #404040;"
-                    class="button icon ion-social-buffer button-clear"
-                    ng-click="$state.go('app.installations')">
-            </button-->
+
             <a ng-style="map.showWeather && {'color': 'rgb(97, 132, 243)'} || {'color': '#404040'}"
                ng-click="map.showWeather = !map.showWeather"
                class="button button-icon ion-ios7-cloud"></a>

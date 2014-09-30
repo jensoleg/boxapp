@@ -67,27 +67,13 @@
             $urlRouterProvider.otherwise('/app/map');
 
             /* loading bar */
-            cfpLoadingBarProvider.latencyThreshold = 300;
+            cfpLoadingBarProvider.latencyThreshold = 100;
             cfpLoadingBarProvider.includeSpinner = false;
 
         }])
 
-        .run(['auth', '$rootScope', '$ionicPlatform', 'cordova', 'statusbar', 'ENV', function (auth, $rootScope, $ionicPlatform, cordova, statusbar, ENV) {
+        .run(['auth', '$rootScope', 'ENV', function (auth, $rootScope, ENV) {
 
-            $ionicPlatform.ready(function () {
-
-                // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-                // for form inputs)
-                /*
-                 if (cordova && cordova.plugins.Keyboard) {
-                 cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-                 }
-                 */
-                if (statusbar) {
-                    statusbar.styleDefault();
-                }
-
-            });
 
             $rootScope.domain = ENV.auth.domain.split('.')[0];
 
@@ -100,7 +86,7 @@
 
         }])
 
-        .controller('LoginCtrl', ['auth', '$rootScope', '$location', function (auth, $rootScope, $location) {
+        .controller('LoginCtrl', ['$location', 'auth', '$rootScope', 'Settings', function ($location, auth, $rootScope, Settings) {
 
             var logo = './images/' + $rootScope.domain + '.png';
 
@@ -116,32 +102,16 @@
 
                 $rootScope.profile = profile;
 
-                window.localStorage.profile = JSON.stringify(profile);
-
-                if (profile.app && profile.app.startAt && profile.app.startAt === 'Map') {
-                    $location.path('/app/map');
-                } else {
-                    $location.path('/app/installations');
+                if (profile.app) {
+                    Settings.save(profile.app);
                 }
+
+                $location.path('/app/installations');
+
             }, function (error) {
                 console.log("There was an error logging in", error);
             });
 
         }]);
-/*
-        .controller('SettingsCtrl', ['$scope', 'Settings', 'auth', 'auth0Service', function ($scope, Settings, auth, auth0Service) {
 
-            if (auth.profile.app) {
-                $scope.settings = auth.profile.app;
-            } else {
-                $scope.settings = Settings.getSettings();
-            }
-
-            $scope.$on("$destroy", function () {
-                Settings.save($scope.settings);
-                auth0Service.updateUser(auth.profile.user_id, { app: $scope.settings});
-            });
-
-        }]);
-*/
 }());

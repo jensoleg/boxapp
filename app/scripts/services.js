@@ -5,7 +5,7 @@
 
         .constant('DEFAULT_SETTINGS', {
             'startAt': 'List',
-            'mapStyle': 'Custom grey',
+            'mapStyle': 'default',
             'tempUnits': 'C',
             'timeScale': {value: 86400, interval: 60, text: '1 day', type: 'Averaged datapoints'}
         })
@@ -82,22 +82,14 @@
                     }
                 };
 
+
             try {
                 _settings = JSON.parse(window.localStorage.settings);
             } catch (ignore) {
             }
 
-            // Just in case we have new settings that need to be saved
-            _settings = angular.extend({}, DEFAULT_SETTINGS, _settings);
+            _settings = angular.extend({}, _settings, DEFAULT_SETTINGS);
 
-            // upgrade silently
-            ts = _settings.timeScale;
-
-            if (typeof ts !== 'object') {
-                _settings.timeScale = DEFAULT_SETTINGS.timeScale;
-            }
-            // Save the settings to be safe
-            obj.save(_settings);
             return obj;
         }])
 
@@ -152,10 +144,12 @@
                      });
                      });
                      */
+
+                    $rootScope.datastreams[device + stream].current_value = message;
+
                     now = Date.now();
                     $rootScope.$broadcast('message:new-reading', { name: device + stream, timestamp: moment(moment()).utc().toJSON(), value: parseFloat(message) });
 
-                    $rootScope.datastreams[device + stream].current_value = message;
                 }
             });
 
@@ -179,11 +173,13 @@
             };
 
             bobby.disableSubscriptions = function () {
-                angular.forEach(currentInstallation.devices, function (device) {
-                    angular.forEach(device.controls, function (stream) {
-                        client.unsubscribe('/' + $rootScope.domain + '/' + device.id + "/" + stream.id);
+                if (currentInstallation) {
+                    angular.forEach(currentInstallation.devices, function (device) {
+                        angular.forEach(device.controls, function (stream) {
+                            client.unsubscribe('/' + $rootScope.domain + '/' + device.id + "/" + stream.id);
+                        });
                     });
-                });
+                }
             };
 
             /* set current installation */

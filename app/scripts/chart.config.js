@@ -12,8 +12,13 @@
                     valueField: 'value',
                     type: 'area',
                     point: { visible: false },
-                    opacity: 0.4,
-                    label: { visible: false }
+                    opacity: 0.2,
+                    label: { visible: false },
+                    border: {
+                        width: 3,
+                        visible: true,
+                        dashStyle: 'solid'
+                    }
                 },
                 seriesTemplate: {
                     nameField: "name"
@@ -34,9 +39,9 @@
                     }
                 },
                 animation: {
-                    enabled: false,
-                    duration: 250,
-                    easing: 'linear'
+                    enabled: true
+                   // duration: 250,
+                   // easing: 'linear'
                 },
                 dataSource: [],
                 valueAxis: {

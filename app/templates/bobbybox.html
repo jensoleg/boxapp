@@ -1,6 +1,6 @@
 <ion-view title="">
 
-    <ion-nav-bar class="nav-title-slide-ios7 bar-clear">
+    <ion-nav-bar class="bar-stable">
         <ion-nav-buttons side="left">
             <button menu-toggle="left" ng-hide="$exposeAside.active"
                     class="button button-icon button-clear button-dark ion-navicon">
@@ -17,22 +17,18 @@
     </ion-nav-bar>
 
     <ion-content>
+
         <!---- device overview -->
         <div class="row responsive-sm" style="padding: 0px;border-bottom: 1px;border-style: ridge;">
-            <div class="col" style="padding: 0px;">
-                <google-map class="feed"
-                            data-tap-disabled="true"
-                            center="map.center"
-                            zoom="map.zoom"
-                            options="map.options"
-                            draggable="false"
-                            control="map.control">
-                    <marker coords="map.marker" idkey="map.marker.id" icon="map.marker.icon">
-                    </marker>
-                </google-map>
+            <div class="col-50" style="padding: 0px; background-position-x: 50%; background-position-y: 50%;
+            background-image: url('http://maps.googleapis.com/maps/api/staticmap?center={{installation.location.lat}},{{installation.location.lng}}&zoom=12&size=640x640&maptype=roadmap&sensor=false&markers=size:small%7Ccolor:red%7C{{installation.location.lat}},{{installation.location.lng}}')">
+
+                <img style="max-width: 100%; opacity: 0;"
+                     ng-src='http://maps.googleapis.com/maps/api/staticmap?center={{installation.location.lat}},{{installation.location.lng}}&zoom=12&size=640x205&maptype=roadmap&sensor=false&markers=size:small%7Ccolor:red%7C{{installation.location.lat}},{{installation.location.lng}}'/>
+
             </div>
 
-            <div class="col" style="padding: 0px;">
+            <div class="col-50" style="padding: 0px;">
                 <ion-list style="padding-bottom: 10px;">
                     <ion-item style="border-style:none; padding: 6px;">
                         <a style="font-size: 85%;" class="item-icon-left">
@@ -68,6 +64,7 @@
         <!---- device overview -->
         <bobby-device></bobby-device>
 
+        <!---- device setup ontrollers -->
         <bobby-setup></bobby-setup>
 
         <!-----   soicail IOT ----->

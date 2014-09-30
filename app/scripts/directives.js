@@ -57,11 +57,11 @@
 
                 ionic.requestAnimationFrame(function () {
 
-                    /*
+
                     console.log('amt: ', amt);
                     console.log('fadeAmt: ', fadeAmt);
                     console.log('ionic transform:', ionic.CSS.TRANSFORM);
-                    */
+
                     header.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
                     for (var i = 0, j = header.children.length; i < j; i++) {
                         header.children[i].style.opacity = fadeAmt;
@@ -156,7 +156,7 @@
                 }
             };
         })
-        .directive('bobbyDevice', function ($timeout) {
+        .directive('bobbyDevice', function () {
             return {
                 restrict: 'E',
                 replace: true,
@@ -165,7 +165,7 @@
                 }
             }
         })
-        .directive('bobbySocial', function ($timeout) {
+        .directive('bobbySocial', function () {
             return {
                 restrict: 'E',
                 replace: true,
@@ -174,7 +174,7 @@
                 }
             }
         })
-        .directive('bobbySetup', function ($timeout) {
+        .directive('bobbySetup', function () {
             return {
                 restrict: 'E',
                 replace: true,

@@ -9,7 +9,7 @@
  */
 
 
-(function () {
+(function() {
 
     'use strict';
 
@@ -90,13 +90,13 @@
 
 
                 return {
-                    'request': function (config) {
+                    'request': function(config) {
                         // Check to make sure this request hasn't already been cached and that
                         // the requester didn't explicitly ask us to ignore this request:
                         if (!config.ignoreLoadingBar && !isCached(config)) {
                             $rootScope.$broadcast('cfpLoadingBar:loading', {url: config.url});
                             if (reqsTotal === 0) {
-                                startTimeout = $timeout(function () {
+                                startTimeout = $timeout(function() {
                                     cfpLoadingBar.start();
                                 }, latencyThreshold);
                             }
@@ -106,7 +106,7 @@
                         return config;
                     },
 
-                    'response': function (response) {
+                    'response': function(response) {
                         if (!response.config.ignoreLoadingBar && !isCached(response.config)) {
                             reqsCompleted++;
                             $rootScope.$broadcast('cfpLoadingBar:loaded', {url: response.config.url});
@@ -119,7 +119,7 @@
                         return response;
                     },
 
-                    'responseError': function (rejection) {
+                    'responseError': function(rejection) {
                         if (!rejection.config.ignoreLoadingBar && !isCached(rejection.config)) {
                             reqsCompleted++;
                             $rootScope.$broadcast('cfpLoadingBar:loaded', {url: rejection.config.url});
@@ -148,7 +148,7 @@
      * use a service.
      */
     angular.module('cfp.loadingBar', [])
-        .provider('cfpLoadingBar', function () {
+        .provider('cfpLoadingBar', function() {
 
             this.includeSpinner = true;
             this.includeBar = true;
@@ -156,11 +156,12 @@
             this.startSize = 0.02;
             this.parentSelector = 'body';
             this.spinnerTemplate = '<div id="loading-bar-spinner"><div class="spinner-icon"></div></div>';
+            this.loadingBarTemplate = '<div id="loading-bar"><div class="bar"><div class="peg"></div></div></div>';
 
             this.$get = ['$injector', '$document', '$timeout', '$rootScope', function ($injector, $document, $timeout, $rootScope) {
                 var $animate;
                 var $parentSelector = this.parentSelector,
-                    loadingBarContainer = angular.element('<div id="loading-bar"><div class="bar"><div class="peg"></div></div></div>'),
+                    loadingBarContainer = angular.element(this.loadingBarTemplate),
                     loadingBar = loadingBarContainer.find('div').eq(0),
                     spinner = angular.element(this.spinnerTemplate);
 
@@ -181,7 +182,7 @@
                         $animate = $injector.get('$animate');
                     }
 
-                    var $parent = $document.find($parentSelector);
+                    var $parent = $document.find($parentSelector).eq(0);
                     $timeout.cancel(completeTimeout);
 
                     // do not continually broadcast the started event:
@@ -220,7 +221,7 @@
                     // progress but make sure to cancel the previous timeouts so we don't
                     // have multiple incs running at the same time.
                     $timeout.cancel(incTimeout);
-                    incTimeout = $timeout(function () {
+                    incTimeout = $timeout(function() {
                         _inc();
                     }, 250);
                 }
@@ -280,7 +281,7 @@
                     $timeout.cancel(completeTimeout);
 
                     // Attempt to aggregate any start/complete calls within 500ms:
-                    completeTimeout = $timeout(function () {
+                    completeTimeout = $timeout(function() {
                         var promise = $animate.leave(loadingBarContainer, _completeAnimation);
                         if (promise && promise.then) {
                             promise.then(_completeAnimation);
@@ -290,15 +291,15 @@
                 }
 
                 return {
-                    start: _start,
-                    set: _set,
-                    status: _status,
-                    inc: _inc,
-                    complete: _complete,
-                    includeSpinner: this.includeSpinner,
-                    latencyThreshold: this.latencyThreshold,
-                    parentSelector: this.parentSelector,
-                    startSize: this.startSize
+                    start            : _start,
+                    set              : _set,
+                    status           : _status,
+                    inc              : _inc,
+                    complete         : _complete,
+                    includeSpinner   : this.includeSpinner,
+                    latencyThreshold : this.latencyThreshold,
+                    parentSelector   : this.parentSelector,
+                    startSize        : this.startSize
                 };
 
 

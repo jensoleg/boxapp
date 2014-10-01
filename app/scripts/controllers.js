@@ -680,7 +680,7 @@
 
             $rootScope.$on('message:new-reading', function (evt, data) {
 
-                if (_.find($scope.chartColor, { 'control': data.name})) {
+                if ($scope.chartSettings.dataSource.length > 0  && _.find($scope.chartColor, { 'control': data.name})) {
                     $scope.chartSettings.dataSource.push(data);
                 }
             });

@@ -68,7 +68,6 @@
                     ng-change="selectAction(selectedScale)">
             </select>
         </i>
-
         <div id="chartContainer" style="height: 300px"
              dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
                               argumentAxis: 'chartSettings.argumentAxis',
@@ -83,7 +82,7 @@
                                commonPaneSettings: chartSettings.commonPaneSettings,
                                animation: chartSettings.animation
               }"
-             ng-show="chartSettings.dataSource.length">
+             ng-show="chartSettings.dataSource.length > 0 && chartColor.length > 0">
         </div>
     </ion-item>
 

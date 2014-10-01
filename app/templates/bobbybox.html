@@ -1,12 +1,12 @@
 <ion-view title="">
 
-    <ion-nav-bar class="bar-stable">
+    <ion-nav-bar class="bar-shrink bar-stable">
         <ion-nav-buttons side="left">
             <button menu-toggle="left" ng-hide="$exposeAside.active"
                     class="button button-icon button-clear button-dark ion-navicon">
             </button>
             <button ui-sref="app.map()" class="button  button-icon button-clear button-dark ion-android-earth">
-                &nbsp;{{installation.name}} {{installation.placement}}
+                {{installation.name}} {{installation.placement}}
             </button>
         </ion-nav-buttons>
 
@@ -16,8 +16,8 @@
 
     </ion-nav-bar>
 
-    <ion-content>
-
+    <ion-content header-shrink scroll-event-interval="5">
+        <div style="height: 44px;"></div>
         <!---- device overview -->
         <div class="row responsive-sm" style="padding: 0px;border-bottom: 1px;border-style: ridge;">
             <div class="col-50" style="padding: 0px; background-position-x: 50%; background-position-y: 50%;

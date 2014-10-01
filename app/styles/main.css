@@ -21,6 +21,12 @@ opacity: 0.9;
 }
 */
 
+/* Shrinking header */
+[header-shrink].scroll-content{
+    top:0 !important
+}
+/* end shrinking header */
+
 .popover {
     height: 225px;
 }

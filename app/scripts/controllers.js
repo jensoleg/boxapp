@@ -155,11 +155,14 @@
 
             $scope.closeNew = function () {
                 $scope.newModal.hide();
+                $ionicListDelegate.closeOptionButtons();
+
             };
 
             $scope.doneNew = function () {
                 $scope.newModal.hide();
                 $scope.saveNew();
+                $ionicListDelegate.closeOptionButtons();
             };
 
             $scope.newInstallation = function () {
@@ -197,7 +200,7 @@
             };
         }])
 
-        .controller('InstallationCtrl', ['bobby', '$scope', 'installationService', '$ionicModal', '$ionicPopup', '$interval', function (bobby, $scope, installationService, $ionicModal, $ionicPopup) {
+        .controller('InstallationCtrl', ['bobby', '$scope', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', function (bobby, $scope, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
 
             $scope.newDevice = {};
 
@@ -224,11 +227,13 @@
 
             $scope.closeEditDevice = function () {
                 $scope.editModal.hide();
+                $ionicListDelegate.closeOptionButtons();
             };
 
             $scope.doneEditDevice = function () {
                 $scope.editModal.hide();
                 $scope.updateDevice();
+                $ionicListDelegate.closeOptionButtons();
             };
 
             $scope.editDevice = function (d) {
@@ -265,6 +270,7 @@
                                 console.log('error', response);
                             });
                     }
+                    $ionicListDelegate.closeOptionButtons();
                 });
 
             };
@@ -279,11 +285,13 @@
 
             $scope.closeNewDevice = function () {
                 $scope.newModal.hide();
+                $ionicListDelegate.closeOptionButtons();
             };
 
             $scope.doneNewDevice = function () {
                 $scope.newModal.hide();
                 $scope.saveNewDevice();
+                $ionicListDelegate.closeOptionButtons();
             };
 
             $scope.addDevice = function () {
@@ -313,7 +321,7 @@
 
                 $scope.newDevice = copy;
                 $scope.saveNewDevice();
-
+                $ionicListDelegate.closeOptionButtons();
             };
 
             $scope.$on('$destroy', function () {
@@ -324,7 +332,7 @@
 
         }])
 
-        .controller('SensorCtrl', ['bobby', '$scope', '$rootScope', '$ionicModal', '$ionicPopup', 'installationService', function (bobby, $scope, $rootScope, $ionicModal, $ionicPopup, installationService) {
+        .controller('SensorCtrl', ['bobby', '$scope', '$rootScope', '$ionicModal', '$ionicPopup', 'installationService', '$ionicListDelegate', function (bobby, $scope, $rootScope, $ionicModal, $ionicPopup, installationService, $ionicListDelegate) {
 
             var deviceId;
 
@@ -359,11 +367,13 @@
 
             $scope.closeEditControl = function () {
                 $scope.editSensorModal.hide();
+                $ionicListDelegate.closeOptionButtons();
             };
 
             $scope.doneEditControl = function () {
                 $scope.editSensorModal.hide();
                 $scope.updateControl();
+                $ionicListDelegate.closeOptionButtons();
             };
 
             $scope.editControl = function (c) {
@@ -400,6 +410,7 @@
                             }, function (response) {
                                 console.log('error', response);
                             });
+                        $ionicListDelegate.closeOptionButtons();
                     }
                 });
             };
@@ -414,13 +425,14 @@
 
             $scope.closeNewControl = function () {
                 $scope.newSensorModal.hide();
+                $ionicListDelegate.closeOptionButtons();
             };
 
             $scope.doneNewControl = function () {
                 $scope.newSensorModal.hide();
                 $scope.saveNewControl();
+                $ionicListDelegate.closeOptionButtons();
             };
-
 
             $scope.addControl = function () {
                 $scope.newControl = {};
@@ -448,6 +460,7 @@
 
                 $scope.newControl = copy;
                 $scope.saveNewControl();
+                $ionicListDelegate.closeOptionButtons();
             };
 
             $scope.$on('$destroy', function () {
@@ -458,7 +471,7 @@
         }])
 
 
-        .controller('BoxCtrl', ['installation', 'installationService', '$cordovaKeyboard', '$ionicSideMenuDelegate', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', 'icons', '$ionicListDelegate', function (installation, installationService, $cordovaKeyboard, $ionicSideMenuDelegate, $scope, $state, $rootScope, $window, bobby, chart, box, $interval, $ionicListDelegate) {
+        .controller('BoxCtrl', ['installation', 'installationService', '$cordovaKeyboard', '$ionicSideMenuDelegate', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', function (installation, installationService, $cordovaKeyboard, $ionicSideMenuDelegate, $scope, $state, $rootScope, $window, bobby, chart, box, $interval) {
 
             $ionicSideMenuDelegate.toggleLeft(false);
 
@@ -516,57 +529,48 @@
             $scope.aNewControl = function (deviceId) {
                 var device = _.find($scope.installation.devices, { 'id': deviceId });
                 $scope.$broadcast('message:new-control', device);
-                $ionicListDelegate.closeOptionButtons();
             };
 
             $scope.aEditControl = function (deviceId, controlId) {
                 var device = _.find($scope.installation.devices, { 'id': deviceId }),
                     control = _.find(device.controls, { 'id': controlId });
                 $scope.$broadcast('message:edit-control', device, control);
-                $ionicListDelegate.closeOptionButtons();
             };
 
             $scope.aRemoveControl = function (deviceId, controlId) {
                 var device = _.find($scope.installation.devices, { 'id': deviceId }),
                     control = _.find(device.controls, { 'id': controlId });
                 $scope.$broadcast('message:remove-control', device, control);
-                $ionicListDelegate.closeOptionButtons();
             };
             $scope.aCopyControl = function (deviceId, controlId) {
                 var device = _.find($scope.installation.devices, { 'id': deviceId }),
                     control = _.find(device.controls, { 'id': controlId });
                 $scope.$broadcast('message:copy-control', device, control);
-                $ionicListDelegate.closeOptionButtons();
             };
 
             $scope.aNewDevice = function () {
                 $scope.$broadcast('message:new-device');
-                $ionicListDelegate.closeOptionButtons();
             };
 
             $scope.aEditDevice = function (deviceId) {
                 var device = _.find($scope.installation.devices, { 'id': deviceId });
                 $scope.$broadcast('message:edit-device', device);
-                $ionicListDelegate.closeOptionButtons();
             };
 
             $scope.aRemoveDevice = function (deviceId) {
                 var device = _.find($scope.installation.devices, { 'id': deviceId });
                 $scope.$broadcast('message:remove-device', device);
-                $ionicListDelegate.closeOptionButtons();
             };
             $scope.aCopyDevice = function (deviceId) {
                 var device = _.find($scope.installation.devices, { 'id': deviceId });
                 $scope.$broadcast('message:copy-device', device);
-                $ionicListDelegate.closeOptionButtons();
             };
 
             $scope.activateDevice = function (deviceId) {
-
                 installationService.activateDevice(deviceId);
             };
 
-            /****** protoyping ********************/
+//****** protoyping ********************
 
 
             $scope.sparkSettings = {dataSource: []};
@@ -629,7 +633,7 @@
                 }
             };
 
-            /****** protoyping ********************/
+//****** protoyping ********************
 
             $scope.toggleDevice = function (device) {
                 $scope.shownDevice[device] = !$scope.isDeviceShown(device);
@@ -680,7 +684,7 @@
 
             $rootScope.$on('message:new-reading', function (evt, data) {
 
-                if ($scope.chartSettings.dataSource.length > 0  && _.find($scope.chartColor, { 'control': data.name})) {
+                if ($scope.chartSettings.dataSource.length > 0 && _.find($scope.chartColor, { 'control': data.name})) {
                     $scope.chartSettings.dataSource.push(data);
                 }
             });

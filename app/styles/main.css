@@ -54,6 +54,24 @@ opacity: 0.9;
 }
 */
 /* */
+
+#container {
+/*
+    background: #f0f0f0;
+*/
+    font-family: Georgia, Cambria, Times, serif;
+    font-size: 100%;
+    color: #535353;
+    width: 966px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+#container strong { font-weight: bold; color: #333; }
+#container em { font-style: italic; }
+#containerblockquote p { font-size: 1em; }
+#container cite { font-style: normal; }
+
 div.embed-video-small {max-width:332px;}
 div.embed-video {max-width:420px;}
 div.embed-video-big {max-width:520px;}

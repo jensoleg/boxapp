@@ -17,15 +17,13 @@
     </ion-nav-bar>
 
     <ion-content header-shrink scroll-event-interval="5">
-        <div style="height: 44px;"></div>
+        <div ng-style="isWebView && {'height': '64px'} || {'height': '44px'}"></div>
         <!---- device overview -->
         <div class="row responsive-sm" style="padding: 0px;border-bottom: 1px;border-style: ridge;">
             <div class="col-50" style="padding: 0px; background-position-x: 50%; background-position-y: 50%;
-            background-image: url('http://maps.googleapis.com/maps/api/staticmap?center={{installation.location.lat}},{{installation.location.lng}}&zoom=12&size=640x640&maptype=roadmap&sensor=false&markers=size:small%7Ccolor:red%7C{{installation.location.lat}},{{installation.location.lng}}')">
-
+            background-image: url('http://maps.googleapis.com/maps/api/staticmap?center={{installation.location.lat}},{{installation.location.lng}}&zoom=10&size=640x205&maptype=roadmap&markers=markers=icon:./images/jog.png%7Ccolor:red%7C{{installation.location.lat}},{{installation.location.lng}}')">
                 <img style="max-width: 100%; opacity: 0;"
-                     ng-src='http://maps.googleapis.com/maps/api/staticmap?center={{installation.location.lat}},{{installation.location.lng}}&zoom=12&size=640x205&maptype=roadmap&sensor=false&markers=size:small%7Ccolor:red%7C{{installation.location.lat}},{{installation.location.lng}}'/>
-
+                     ng-src='http://maps.googleapis.com/maps/api/staticmap?center={{installation.location.lat}},{{installation.location.lng}}&zoom=10&size=640x205&maptype=roadmap&markers=icon:./images/jog.png%7Ccolor:red%7C{{installation.location.lat}},{{installation.location.lng}}'/>
             </div>
 
             <div class="col-50" style="padding: 0px;">
@@ -68,7 +66,7 @@
         <bobby-setup></bobby-setup>
 
         <!-----   soicail IOT ----->
-        <bobby-social></bobby-social>
+        <!-- bobby-social></bobby-social -->
 
     </ion-content>
 </ion-view>

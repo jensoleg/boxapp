@@ -82,7 +82,7 @@
                                 shrink(header, $element[0], 0, headerHeight);
                             }
                         });
-                    }, 1000);
+                    }, 1500);
                 }
             }
         })

@@ -484,6 +484,8 @@
             $scope.chartColorNumber = 0;
             $scope.chartColor = [];
 
+            $scope.isWebView = ionic.Platform.isWebView();
+
             var ts = bobby.getTimeScale();
             $scope.timeScales = chart.timeScales;
             /* get graf time scale form settings */
@@ -649,7 +651,8 @@
 
                 angular.forEach($scope.installation.devices, function (device) {
                     angular.forEach(device.controls, function (control) {
-                        if (_.find($scope.chartColor, { 'control': device.id + control.id})) {
+                        var controlColor = _.find($scope.chartColor, { 'control': device.id + control.id});
+                        if (controlColor) {
                             bobby.setTimeScale($scope.selectedScale, device.id, control.id);
                         }
                     });

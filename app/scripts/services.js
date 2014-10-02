@@ -300,7 +300,7 @@
                 all: function () {
                     var q = $q.defer();
 
-                    $http.get(apiEndpoint + 'installations').success(function (data) {
+                    $http.get(apiEndpoint + 'installations', { cache: true }).success(function (data) {
                         q.resolve(data);
                     }, function () {
                         q.resolve(null);
@@ -312,7 +312,7 @@
 
                     var q = $q.defer();
 
-                    $http.get(apiEndpoint + 'installations/' + id).success(function (response) {
+                    $http.get(apiEndpoint + 'installations/' + id, { cache: true }).success(function (response) {
                         q.resolve(response);
                     }, function () {
                         q.resolve(null);
@@ -369,7 +369,7 @@
 
                     var q = $q.defer();
 
-                    $http.get(apiEndpoint + 'installations/' + id + '/devices/' + deviceid).success(function (response) {
+                    $http.get(apiEndpoint + 'installations/' + id + '/devices/' + deviceid, { cache: true }).success(function (response) {
                         q.resolve(response);
                     }, function () {
                         q.resolve(null);
@@ -432,7 +432,7 @@
                 getControl: function (id, deviceid, controlid) {
                     var q = $q.defer();
 
-                    $http.get(apiEndpoint + 'installations/' + id + '/devices/' + deviceid + '/controls/' + controlid).success(function (response) {
+                    $http.get(apiEndpoint + 'installations/' + id + '/devices/' + deviceid + '/controls/' + controlid, { cache: true }).success(function (response) {
                         q.resolve(response);
                     }, function () {
                         q.resolve(null);
@@ -478,7 +478,7 @@
                 getTrigger: function (id, deviceid, triggerid) {
                     var q = $q.defer();
 
-                    $http.get(apiEndpoint + 'installations/' + id + '/devices/' + deviceid + '/triggers/' + triggerid).success(function (response) {
+                    $http.get(apiEndpoint + 'installations/' + id + '/devices/' + deviceid + '/triggers/' + triggerid, { cache: true }).success(function (response) {
                         q.resolve(response);
                     }, function () {
                         q.resolve(null);
@@ -521,7 +521,7 @@
                 getRequest: function (id, deviceid, triggerid, requestid) {
                     var q = $q.defer();
 
-                    $http.get(apiEndpoint + 'installations/' + id + '/devices/' + deviceid + '/triggers/' + triggerid + '/requests/' + requestid).success(function (response) {
+                    $http.get(apiEndpoint + 'installations/' + id + '/devices/' + deviceid + '/triggers/' + triggerid + '/requests/' + requestid, { cache: true }).success(function (response) {
                         q.resolve(response);
                     }, function () {
                         q.resolve(null);

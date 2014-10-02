@@ -68,11 +68,22 @@
             };
         })
 
-        .controller('InstallationsCtrl', ['bobby', '$scope', '$timeout', 'Settings', '$state', 'installations', 'installationService', '$ionicListDelegate', '$ionicModal', '$ionicPopup', 'auth', 'auth0Service', '$ionicSideMenuDelegate', function (bobby, $scope, $timeout, Settings, $state, installations, installationService, $ionicListDelegate, $ionicModal, $ionicPopup, auth, auth0Service, $ionicSideMenuDelegate) {
+        .controller('InstallationsCtrl', ['bobby', '$scope', '$timeout', 'Settings', '$state', 'installations', 'installationService', '$ionicListDelegate', '$ionicModal', '$ionicPopup', 'auth', 'auth0Service', '$ionicSideMenuDelegate', '$cacheFactory', function (bobby, $scope, $timeout, Settings, $state, installations, installationService, $ionicListDelegate, $ionicModal, $ionicPopup, auth, auth0Service, $ionicSideMenuDelegate, $cacheFactory) {
 
             $scope.installations = installations;
             $scope.newInst = {location: {'lat': null, 'lng': null}};
             $scope.$state = $state;
+
+            $scope.doRefresh = function () {
+                var $httpDefaultCache = $cacheFactory.get('$http');
+                $httpDefaultCache.removeAll();
+
+                installationService.all()
+                    .then(function (newInstallations) {
+                        $scope.installations = newInstallations;
+                        $scope.$broadcast('scroll.refreshComplete');
+                    });
+            };
 
             $scope.clearSearch = function () {
                 this.data.searchQuery = '';

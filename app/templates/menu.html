@@ -17,6 +17,10 @@
         </ion-header-bar>
 
         <ion-content start-y="55" class=" scroll-bar-fade-out">
+            <ion-refresher
+                    pulling-text="Refresh..."
+                    on-refresh="doRefresh()">
+            </ion-refresher>
             <div class="item-input-inset">
                 <div class="item-input-wrapper">
                     <i class="icon ion-ios7-search placeholder-icon"></i>

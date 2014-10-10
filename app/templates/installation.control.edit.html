@@ -5,50 +5,52 @@
         <button class="button button-clear button-clear" ng-click="doneEditControl(control)">Save</button>
     </ion-header-bar>
     <ion-content>
-        <div class="list">
+        <div class="list"
+             style="margin-bottom: 0px;">
             <label class="item item-input">
                 <span class="input-label">Name</span>
                 <input type="text" placeholder="Name" ng-model="control.name">
             </label>
-            <label class="item item-input">
-                <span class="input-label">Id</span>
-                <input type="text" placeholder="Id" ng-model="control.id">
-            </label>
-            <label class="item item-input item-select">
-                <div class="input-label">
-                    Type
-                </div>
-                <select ng-model="control.ctrlType" ng-options="t as t for t in types">
-                </select>
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Min Value</span>
-                <input type="number" placeholder="Min Value" ng-model="control.minValue">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Max Value</span>
-                <input type="number" placeholder="Max value" ng-model="control.maxValue">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Min critical</span>
-                <input type="number" placeholder="Min critical" ng-model="control.minCritical">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Max Critical</span>
-                <input type="number" placeholder="Max critical" ng-model="control.maxCritical">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Unit symbol</span>
-                <input type="text" placeholder="Unit symbol" ng-model="control.unit.symbol">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Units</span>
-                <input type="text" placeholder="Units" ng-model="control.unit.units">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Precision</span>
-                <input type="number" placeholder="Precision" ng-model="control.unit.precision">
-            </label>
+
+            <div ng-hide="control.ctrlType =='timer'">
+                <label class="item item-input item-select">
+                    <div class="input-label">
+                        Sensor type
+                    </div>
+                    <select ng-model="control.unit.name" ng-options="t as t for t in sensorTypes">
+                    </select>
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Min critical</span>
+                    <input type="number" placeholder="Min critical" ng-model="control.minCritical">
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">Max Critical</span>
+                    <input type="number" placeholder="Max critical" ng-model="control.maxCritical">
+                </label>
+            </div>
         </div>
+        <ion-list ng-show="control.ctrlType =='timer'">
+            <div class="item item-icon-right item-divider">
+                Timers
+                <i class="icon ion-ios7-plus-empty" ng-click="addTimer()"></i>
+            </div>
+
+            <ion-item class="item-checkbox item-checkbox-right"
+                      style="padding-right: 0px; padding-left: 2px;"
+                      ng-repeat="timer in control.timers">
+
+                {{timer.name}}
+
+                <label class="checkbox checkbox-balanced">
+                    <input type="checkbox" ng-model="timer.enabled">
+                </label>
+                <ion-option-button class="button-assertive"
+                                   ng-click="removeTimer(timer)">Delete</ion-option-button>
+                <ion-option-button class="button-positive"
+                                   ng-click="editTimer(timer)">edit</ion-option-button>
+
+            </ion-item>
+        </ion-list>
     </ion-content>
 </div>

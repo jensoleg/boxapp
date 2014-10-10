@@ -97,15 +97,33 @@
 
             var bobby = {},
                 client = {},
-                controlTypes = ['data', 'control'],
+                controlTypes = ['data', 'timer'],
                 currentInstallation = null,
                 refreshing = false,
                 _this = this,
-                apiEndpoint = 'http://' + $rootScope.domain + '.' + ENV.apiEndpoint;
+                apiEndpoint;
+
+            apiEndpoint = ENV.domainPrefix ? 'http://' + $rootScope.domain + '.' + ENV.apiEndpoint : 'http://' + ENV.apiEndpoint;
 
             $rootScope.datastreams = {};
 
             client = mqtt.createClient(8080, ENV.MQTTServer, {username: 'JWT/' + $rootScope.domain, "password": auth.idToken});
+
+            /*
+             bobby.start = function () {
+             client = mqtt.createClient(8080, ENV.MQTTServer, {username: 'JWT/' + $rootScope.domain, "password": auth.idToken});
+             };
+
+             bobby.close = function () {
+             if (client) {
+             client.end();
+             console.log('MQTT connection closed');
+             }
+             };
+             */
+            client.on('connect', function () {
+                console.log('MQTT connected');
+            });
 
             // recieve message on current device subscription
             client.on('message', function (topic, message) {
@@ -153,7 +171,6 @@
                 }
             });
 
-
             bobby.objectIdDel = function (copiedObjectWithId) {
                 if (copiedObjectWithId !== null && typeof copiedObjectWithId !== 'string' &&
                     typeof copiedObjectWithId !== 'number' && typeof copiedObjectWithId !== 'boolean') {
@@ -177,6 +194,7 @@
                     angular.forEach(currentInstallation.devices, function (device) {
                         angular.forEach(device.controls, function (stream) {
                             client.unsubscribe('/' + $rootScope.domain + '/' + device.id + "/" + stream.id);
+                            console.log('MQTT unsubscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
                         });
                     });
                 }
@@ -194,6 +212,8 @@
                     angular.forEach(currentInstallation.devices, function (device) {
                         angular.forEach(device.controls, function (stream) {
                             client.unsubscribe('/' + $rootScope.domain + '/' + device.id + "/" + stream.id);
+                            console.log('MQTT unsubscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
+
                         });
                     });
 
@@ -208,13 +228,16 @@
                     angular.forEach(currentInstallation.devices, function (device) {
                         angular.forEach(device.controls, function (stream) {
                             if (_.contains(controlTypes, stream.ctrlType)) {
-                                $rootScope.datastreams[device.id + stream.id] = stream;
+                                var ui_stream = angular.copy(stream);
+                                $rootScope.datastreams[device.id + stream.id] = ui_stream;
                                 $rootScope.datastreams[device.id + stream.id].id = stream.id;
                                 $rootScope.datastreams[device.id + stream.id].deviceid = device.id;
                                 /* maybe trigger should be evaluated initially */
                                 $rootScope.datastreams[device.id + stream.id].triggered = false;
 
                                 client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
+                                console.log('MQTT subscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
+
                             }
                         });
                     });
@@ -239,11 +262,14 @@
                                 newStreams[device.id + stream.id].id = stream.id;
                                 newStreams[device.id + stream.id].deviceid = device.id;
                                 client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
+                                console.log('MQTT subscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
+
                             }
                         })
                     });
 
                     $rootScope.datastreams = newStreams;
+
                     refreshing = false;
                 }
             };
@@ -252,25 +278,31 @@
                 refreshing = true;
                 installationService.get(installation._id).then(function (response) {
                     bobby.setInstallation(response);
-                    $rootScope.$broadcast('scroll.refreshComplete');
                 });
             };
 
             // get time series values
-            bobby.getStream = function (device, stream) {
+            bobby.getStream = function (deviceId, streamId) {
 
                 var timeScale = Settings.get('timeScale'),
                     options = {
                         limit: 1500,
-                        from: moment(moment()).utc().subtract(timeScale.value, 's').toJSON(),
-                        to: moment(moment()).utc().toJSON(),
+                        from: moment(moment()).utc().subtract(timeScale.value, 's').startOf('minute').toJSON(),
+                        to: moment(moment()).utc().startOf('minute').toJSON(),
                         interval: timeScale.interval
-                    };
+                    },
+                    device = _.find(currentInstallation.devices, { 'id': deviceId }),
+                    control = _.find(device.controls, { 'id': streamId });
 
-                $http.get(apiEndpoint + 'datastreams/' + device + '/' + stream, {
-                    params: options
+                if (control.ctrlType === 'timer') {
+                    options.interval = 1;
+                }
+
+                $http.get(apiEndpoint + 'datastreams/' + deviceId + '/' + streamId, {
+                    params: options,
+                    cache: true
                 }).success(function (data) {
-                    $rootScope.$broadcast('message:data', {stream: device + stream, data: data.data});
+                    $rootScope.$broadcast('message:data', {device: deviceId, control: streamId, type: control.ctrlType, data: data.data});
 
                 });
             };
@@ -294,7 +326,7 @@
 
         .factory('installationService', ['$http', '$q', '$rootScope', 'ENV', function ($http, $q, $rootScope, ENV) {
 
-            var apiEndpoint = 'http://' + $rootScope.domain + '.' + ENV.apiEndpoint;
+            var apiEndpoint = ENV.domainPrefix ? 'http://' + $rootScope.domain + '.' + ENV.apiEndpoint : 'http://' + ENV.apiEndpoint;
 
             return {
                 all: function () {
@@ -412,15 +444,22 @@
                     return q.promise;
                 },
 
-                activateDevice: function (deviceId) {
-                    var q = $q.defer();
+                activateDevice: function (installationId, device) {
+                    var q = $q.defer(),
+                        options;
+                    if (angular.isDefined(installationId) && installationId != null) {
+                        options = {
+                            installationId: installationId,
+                            deviceId: device._id,
+                            interval: device.interval
+                        };
+                    } else {
+                        options = {
+                            interval: device.interval
+                        };
+                    }
 
-                    $http.post(apiEndpoint + 'agent/' + deviceId + '?config', {
-                        "customer": "development",
-                        "user": "contact@bobbytechnologies.dk",
-                        "pass": "tekno",
-                        "client_id": "kpWrEQ5gJclwuAljKpHgNcJA3NwNZ0FL"
-                    }).
+                    $http.post(apiEndpoint + 'agent/' + device.id + '?config', options).
                         success(function (response) {
                             q.resolve(response);
                         }, function () {
@@ -462,14 +501,31 @@
                     return q.promise;
                 },
 
-                updateControl: function (id, deviceid, control) {
+
+                updateDeviceControl: function (deivceId, control) {
                     var q = $q.defer();
 
-                    $http.put(apiEndpoint + 'installations/' + id + '/devices/' + deviceid + '/controls/' + control._id, control).success(function (response) {
-                        q.resolve(response);
-                    }, function () {
-                        q.resolve(null);
-                    });
+                    console.log(control);
+
+                    $http.put(apiEndpoint + 'agent/' + deivceId + '?control', control)
+                        .success(function (response) {
+                            q.resolve(response);
+                        }, function () {
+                            q.resolve(null);
+                        });
+                    return q.promise;
+                },
+
+
+                updateControl: function (id, deviceid, deivceIdent, control) {
+                    var q = $q.defer();
+
+                    $http.put(apiEndpoint + 'installations/' + id + '/devices/' + deviceid + '/controls/' + control._id, control)
+                        .success(function (response) {
+                            q.resolve(response);
+                        }, function () {
+                            q.resolve(null);
+                        });
                     return q.promise;
                 },
 
@@ -576,7 +632,7 @@
         .
         factory('auth0Service', ['$http', '$rootScope', 'ENV', function ($http, $rootScope, ENV) {
 
-            var apiEndpoint = 'http://' + $rootScope.domain + '.' + ENV.apiEndpoint;
+            var apiEndpoint = ENV.domainPrefix ? 'http://' + $rootScope.domain + '.' + ENV.apiEndpoint : 'http://' + ENV.apiEndpoint;
 
             return {
                 getUser: function (user_id) {

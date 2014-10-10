@@ -90,10 +90,12 @@
             };
 
             $scope.signout = function () {
+
                 var settings = Settings.getSettings();
                 Settings.save(settings);
                 auth0Service.updateUser(auth.profile.user_id, { app: settings});
                 bobby.setInstallation(null);
+                // bobby.close();
                 $ionicSideMenuDelegate.toggleLeft();
                 $timeout(function () {
                     auth.signout();
@@ -211,7 +213,7 @@
             };
         }])
 
-        .controller('InstallationCtrl', ['bobby', '$scope', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', function (bobby, $scope, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
+        .controller('InstallationCtrl', ['bobby', '$scope', '$rootScope', '$ionicLoading', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate', function (bobby, $scope, $rootScope, $ionicLoading, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
 
             $scope.newDevice = {};
 
@@ -242,21 +244,45 @@
             };
 
             $scope.doneEditDevice = function () {
+                /*
+                 console.log($scope.device.timeInterval);
+                 var interval = moment.duration($scope.device.timeInterval).as('seconds');
+                 $scope.device.interval = moment.duration($scope.device.timeInterval).as('seconds');
+                 */
                 $scope.editModal.hide();
+
                 $scope.updateDevice();
                 $ionicListDelegate.closeOptionButtons();
             };
 
             $scope.editDevice = function (d) {
                 $scope.device = d;
+                /*
+                 var interval = moment.duration($scope.device.interval, 'seconds').as('minutes');
+                 $scope.device.timeInterval = moment.duration($scope.device.interval, 'seconds').as('minutes');
+                 */
                 $scope.editModal.show();
             };
 
             $scope.updateDevice = function () {
+
                 installationService.updateDevice($scope.$parent.installation._id, $scope.device)
                     .then(function (response) {
-                        bobby.refreshInstallation(response);
-                        $scope.$parent.installation = response;
+
+                        if ($scope.device.interval) {
+                            $ionicLoading.show({
+                                template: 'Reconfiguring device...'
+                            });
+
+                            installationService.activateDevice(null, $scope.device)
+                                .then(function (impResponse) {
+                                    $ionicLoading.hide();
+                                    $rootScope.$broadcast('message:installation-changed', response);
+                                });
+                        } else {
+                            $rootScope.$broadcast('message:installation-changed', response);
+                        }
+
                     }, function (response) {
                         console.log('error', response);
                     });
@@ -275,8 +301,7 @@
                     if (res) {
                         installationService.removeDevice($scope.$parent.installation._id, device._id)
                             .then(function (response) {
-                                bobby.refreshInstallation(response);
-                                $scope.$parent.installation = response;
+                                $rootScope.$broadcast('message:installation-changed', response);
                             }, function (response) {
                                 console.log('error', response);
                             });
@@ -300,6 +325,13 @@
             };
 
             $scope.doneNewDevice = function () {
+
+                /*
+                 var interval = $scope.newDevice.intervalTime,
+                 intervalToken = interval.split(":");
+
+                 $scope.device.interval = (+intervalToken[1]) * 60 + (+intervalToken[2]);
+                 */
                 $scope.newModal.hide();
                 $scope.saveNewDevice();
                 $ionicListDelegate.closeOptionButtons();
@@ -311,11 +343,28 @@
             };
 
             $scope.saveNewDevice = function () {
-                installationService.newDevice($scope.$parent.installation._id, $scope.newDevice)
-                    .then(function (response) {
-                        $scope.$parent.installation = response;
-                        bobby.refreshInstallation(response);
 
+                var installation = $scope.$parent.installation;
+                installationService.newDevice(installation._id, $scope.newDevice)
+                    .then(function (response) {
+                        if ($scope.newDevice.id) {
+                            var device = _.find(response.devices, { 'id': $scope.newDevice.id });
+
+                            $ionicLoading.show({
+                                template: 'Activating device...'
+                            });
+
+                            installationService.activateDevice(installation._id, device)
+                                .then(function (impResponse) {
+                                    var newInstallation = angular.fromJson(JSON.parse(impResponse));
+                                    $rootScope.$broadcast('message:installation-changed', newInstallation);
+                                    $ionicLoading.hide();
+                                }, function (impResponse) {
+                                    console.log('Device sctivation failed');
+                                    $ionicLoading.hide();
+                                }
+                            );
+                        }
                     }, function (response) {
                         console.log('error', response);
                     });
@@ -341,29 +390,36 @@
 
             });
 
-        }])
+        }
+        ])
 
         .controller('SensorCtrl', ['bobby', '$scope', '$rootScope', '$ionicModal', '$ionicPopup', 'installationService', '$ionicListDelegate', function (bobby, $scope, $rootScope, $ionicModal, $ionicPopup, installationService, $ionicListDelegate) {
 
-            var deviceId;
+            var deviceId,
+                curDevice;
 
             $scope.newControl = {};
             $scope.types = ['data', 'status'];
+            $scope.sensorTypes = ['moisture', 'raw'];
 
             $scope.$on('message:new-control', function (evt, device) {
                 deviceId = device._id;
+                curDevice = device;
                 $scope.addControl();
             });
             $scope.$on('message:edit-control', function (evt, device, control) {
                 deviceId = device._id;
+                curDevice = device;
                 $scope.editControl(control);
             });
             $scope.$on('message:remove-control', function (evt, device, control) {
                 deviceId = device._id;
+                curDevice = device;
                 $scope.removeControl(control);
             });
             $scope.$on('message:copy-control', function (evt, device, control) {
                 deviceId = device._id;
+                curDevice = device;
                 $scope.copyControl(control);
             });
 
@@ -393,14 +449,25 @@
             };
 
             $scope.updateControl = function () {
-                installationService.updateControl($scope.$parent.$parent.installation._id, deviceId, $scope.control)
-                    .then(function (response) {
-                        $scope.$parent.$parent.installation = response;
-                        bobby.refreshInstallation(response);
+                delete $scope.control.$$hashKey;
+                installationService.updateDeviceControl(curDevice.id, $scope.control)
+                    .then(function (control) {
+                        if ($scope.control.ctrlType === "data") {
+                            $scope.control.unit.symbol = control.unit.symbol;
+                            $scope.control.unit.units = control.unit.units;
+                        }
+                        installationService.updateControl($scope.$parent.$parent.installation._id, deviceId, curDevice.id, $scope.control)
+                            .then(function (response) {
+                                $rootScope.$broadcast('message:installation-changed', response);
+                            }, function (response) {
+                                console.log('error', response);
+                            });
+
                     }, function (response) {
                         console.log('error', response);
                     });
             };
+
 
             /* Remove control */
 
@@ -415,9 +482,7 @@
                     if (res) {
                         installationService.removeControl($scope.$parent.$parent.installation._id, deviceId, control._id)
                             .then(function (response) {
-                                bobby.refreshInstallation(response);
-                                $scope.$parent.$parent.$parent.installation = response;
-                                $rootScope.$broadcast('message:control-removed', control);
+                                $rootScope.$broadcast('message:installation-changed', response);
                             }, function (response) {
                                 console.log('error', response);
                             });
@@ -453,8 +518,7 @@
             $scope.saveNewControl = function () {
                 installationService.newControl($scope.$parent.$parent.installation._id, deviceId, $scope.newControl)
                     .then(function (response) {
-                        $scope.$parent.$parent.installation = response;
-                        bobby.refreshInstallation(response);
+                        $rootScope.$broadcast('message:installation-changed', response);
                     }, function (response) {
                         console.log('error', response);
                     });
@@ -474,15 +538,91 @@
                 $ionicListDelegate.closeOptionButtons();
             };
 
+
+            /* timers */
+
+            $scope.closeEditTimer = function () {
+                $scope.editTimerModal.hide();
+                $ionicListDelegate.closeOptionButtons();
+            };
+
+            $scope.doneEditTimer = function () {
+                $scope.editTimerModal.hide();
+                var now = new Date(),
+                    timeStr = $scope.timer.time.split(":"),
+                    min = timeStr[0],
+                    sec = timeStr[1],
+                    time = moment.utc([now.getFullYear(), now.getMonth(), now.getDate(), parseInt(min), parseInt(sec)]);
+
+                $scope.timer.timestamp = time.format('X');
+                $ionicListDelegate.closeOptionButtons();
+            };
+
+            $scope.editTimer = function (t) {
+                $scope.timer = t;
+                $scope.editTimerModal.show();
+            };
+
+            $scope.addTimer = function () {
+                $scope.newTimer = {};
+                $scope.newTimer.enabled = false;
+                $scope.newTimer.days = [false, false, false, false, false, false, false];
+                $scope.newTimerModal.show();
+            };
+
+            $scope.closeNewTimer = function () {
+                $scope.newTimerModal.hide();
+            };
+
+            $scope.doneNewTimer = function () {
+
+                $scope.newTimerModal.hide();
+                var now = new Date(),
+                    timeStr = $scope.newTimer.time.split(":"),
+                    min = timeStr[0],
+                    sec = timeStr[1],
+                    time = moment.utc([now.getFullYear(), now.getMonth(), now.getDate(), parseInt(min), parseInt(sec)]);
+
+                $scope.newTimer.timestamp = time.format('X');
+                $scope.control.timers.push($scope.newTimer);
+            };
+
+            $scope.removeTimer = function (t) {
+                _.remove($scope.control.timers, { 'name': t.name });
+            };
+
+            $scope.isTimerFormValid = function (timer) {
+                return timer && timer.name && timer.name.length > 0 &&
+                    timer.time && timer.time.length > 0 &&
+                    timer.duration && timer.duration > 0 &&
+                    timer.days && timer.days.length > 0 &&
+                    _.difference(timer.days, [true]).length < 7;
+            };
+
+            $ionicModal.fromTemplateUrl('templates/installation.timer.edit.html', {
+                scope: $scope,
+                animation: 'slide-in-right'
+            }).then(function (modal) {
+                $scope.editTimerModal = modal;
+            });
+
+            $ionicModal.fromTemplateUrl('templates/installation.timer.new.html', {
+                scope: $scope,
+                animation: 'slide-in-right'
+            }).then(function (modal) {
+                $scope.newTimerModal = modal;
+            });
+
             $scope.$on('$destroy', function () {
                 $scope.editSensorModal.remove();
                 $scope.newSensorModal.remove();
+                $scope.editTimerModal.remove();
+                $scope.newTimerModal.remove();
             });
-
         }])
 
 
-        .controller('BoxCtrl', ['installation', 'installationService', '$cordovaKeyboard', '$ionicSideMenuDelegate', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', function (installation, installationService, $cordovaKeyboard, $ionicSideMenuDelegate, $scope, $state, $rootScope, $window, bobby, chart, box, $interval) {
+        .controller('BoxCtrl', ['installation', 'installationService', '$ionicPopover', '$cordovaKeyboard', '$ionicSideMenuDelegate', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', '$timeout', '$ionicListDelegate', '$cacheFactory', function (installation, installationService, $ionicPopover, $cordovaKeyboard, $ionicSideMenuDelegate, $scope, $state, $rootScope, $window, bobby, chart, box, $interval, $timeout, $ionicListDelegate, $cacheFactory) {
 
             $ionicSideMenuDelegate.toggleLeft(false);
 
@@ -494,8 +634,9 @@
             $scope.shownDevice = [];
             $scope.chartColorNumber = 0;
             $scope.chartColor = [];
+            $scope.showChart = false;
 
-            $scope.isWebView = ionic.Platform.isWebView();
+            $scope.isWebView = ionic.Platform.isWebView() && !ionic.Platform.isAndroid();
 
             var ts = bobby.getTimeScale();
             $scope.timeScales = chart.timeScales;
@@ -510,6 +651,8 @@
                 $scope.shownDevice = box.shownDevice;
                 $scope.chartColorNumber = box.chartColorNumber;
                 $scope.chartColor = box.chartColor;
+                $scope.showChart = box.showChart;
+
                 if (box.selectedScale) {
                     $scope.selectedScale = box.selectedScale;
                 }
@@ -522,8 +665,15 @@
 
             $scope.chartSettings.seriesTemplate = {
                 nameField: "name",
-                customizeSeries: function (stream) {
-                    return { color: $rootScope.datastreams[stream].color};
+                customizeSeries: function (seriesStream) {
+                    var idStr = seriesStream.split("-"),
+                        stream = idStr[0],
+                        type = idStr[1];
+
+                    if (type === 'data') {
+                        return {type: 'area', color: $rootScope.datastreams[stream].color};
+                    }
+                    return {type: 'stepArea', color: $rootScope.datastreams[stream].color};
                 }
             };
 
@@ -535,8 +685,12 @@
                 box.chartColorNumber = $scope.chartColorNumber;
                 box.chartColor = $scope.chartColor;
                 box.selectedScale = $scope.selectedScale;
+                box.showChart = $scope.showChart;
 
                 bobby.disableSubscriptions();
+                if ($scope.popover) {
+                    $scope.popover.remove();
+                }
             });
 
             $scope.aNewControl = function (deviceId) {
@@ -574,13 +728,79 @@
                 var device = _.find($scope.installation.devices, { 'id': deviceId });
                 $scope.$broadcast('message:remove-device', device);
             };
+
             $scope.aCopyDevice = function (deviceId) {
                 var device = _.find($scope.installation.devices, { 'id': deviceId });
                 $scope.$broadcast('message:copy-device', device);
             };
 
             $scope.activateDevice = function (deviceId) {
-                installationService.activateDevice(deviceId);
+                var device = _.find($scope.installation.devices, { 'id': deviceId });
+                installationService.activateDevice($scope.installation._id, device).then(function (response) {
+                    $rootScope.$broadcast('message:installation-changed', $scope.installation);
+                });
+                $ionicListDelegate.closeOptionButtons();
+            };
+
+            $rootScope.$on('message:installation-changed', function (evt, installation) {
+                var $httpDefaultCache = $cacheFactory.get('$http');
+                $httpDefaultCache.removeAll();
+                $scope.installation = installation;
+                bobby.refreshInstallation(installation);
+            });
+
+
+            $scope.startTimer = function ($event, deviceId, controlId) {
+                $scope.currentControlId = controlId;
+                $scope.currentDeviceId = deviceId;
+
+                $ionicPopover.fromTemplateUrl('templates/setTimer.html', {
+                    scope: $scope
+                }).then(function (popover) {
+                    $scope.popover = popover;
+                    popover.show($event);
+                });
+
+            };
+
+            // Execute action on hide popover
+            $scope.$on('popover.hidden', function () {
+                $ionicListDelegate.closeOptionButtons();
+            });
+
+            // Execute action on remove popover
+            $scope.$on('popover.removed', function () {
+                console.log('popover removed');
+            });
+
+            $scope.setTimer = function (time) {
+
+                var device = _.find($scope.installation.devices, { 'id': $scope.currentDeviceId }),
+                    control = _.find(device.controls, { 'id': $scope.currentControlId }),
+                    aControl = angular.copy(control);
+
+                aControl.timers = [];
+                aControl.timers.push({
+                    name: 'StartTimer',
+                    enabled: true,
+                    time: '',
+                    timestamp: 0,
+                    duration: time,
+                    days: []
+                });
+                delete aControl.$$hashKey;
+
+                installationService.updateDeviceControl($scope.currentDeviceId, aControl)
+                    .then(function (control) {
+                        console.log('done:', control);
+                    });
+
+                $scope.currentControlId = '';
+                $scope.currentDeviceId = '';
+
+                $scope.popover.hide();
+                $ionicListDelegate.closeOptionButtons();
+
             };
 
 //****** protoyping ********************
@@ -670,27 +890,38 @@
                 });
             };
 
-            $scope.showData = function (device, stream) {
+            $scope.showData = function (device, stream, type) {
 
-                var controlColor = _.find($scope.chartColor, { 'control': device + stream });
+                var filterItem = device + stream + '-' + type,
+                    controlColor = _.find($scope.chartColor, { 'control': device + stream });
+
                 if (controlColor) {
 
+                    $scope.chartColor = _.without($scope.chartColor, controlColor);
+
+                    if ($scope.chartColor.length === 0) {
+                        $scope.showChart = false;
+                    }
+
+                    $rootScope.datastreams[device + stream].color = null;
+
                     seriesData = _.filter(seriesData, function (item) {
-                        return item.name !== device + stream;
+                        return item.name !== filterItem;
                     });
 
                     $scope.chartSettings.dataSource = seriesData;
-                    $scope.chartColor = _.without($scope.chartColor, controlColor);
-
-                    $rootScope.datastreams[device + stream].color = null;
 
                 } else {
 
                     var color = colorScheme[$scope.chartColorNumber];
 
-                    $scope.chartColor.push({ control: device + stream, color: color});
-                    ($scope.chartColorNumber < 19) ? $scope.chartColorNumber++ : $scope.chartColorNumber = 0;
+                    $scope.showChart = true;
+
                     $rootScope.datastreams[device + stream].color = color;
+
+                    $scope.chartColor.push({ control: device + stream, color: color});
+
+                    ($scope.chartColorNumber < 19) ? $scope.chartColorNumber++ : $scope.chartColorNumber = 0;
 
                     bobby.getStream(device, stream);
                 }
@@ -717,14 +948,18 @@
 
                     $scope.chartSettings.argumentAxis = $scope.chartLabel;
 
+                    var stream = data.device + data.control + '-' + data.type;
                     seriesData = _.filter(seriesData, function (item) {
-                        return item.name !== data.stream;
+                        return item.name !== stream;
                     });
 
                     _.forEach(data.data, function (obs) {
-                        seriesData.push({ 'name': data.stream, 'timestamp': obs.timestamp, 'value': obs.value});
+                        seriesData.push({ 'name': stream, 'timestamp': obs.timestamp, 'value': obs.value});
                     });
-                    $scope.chartSettings.dataSource = seriesData;
+
+                    $timeout(function () {
+                        $scope.chartSettings.dataSource = seriesData;
+                    }, 25);
 
                 } else {
                     $scope.chartSettings.dataSource = [];
@@ -766,10 +1001,6 @@
                 $scope.map.options.styles = styles[mapStyle];
                 $scope.popover.hide();
             };
-
-            // Enable the new Google Maps visuals until it gets enabled by default.
-            // See http://googlegeodevelopers.blogspot.ca/2013/05/a-fresh-new-look-for-maps-api-for-all.html
-            google.maps.visualRefresh = true;
 
             angular.forEach(installations, function (item) {
                 var ret = {

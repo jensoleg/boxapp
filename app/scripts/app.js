@@ -35,6 +35,9 @@
                                 installation: ['$stateParams', 'installationService', function ($stateParams, installationService) {
                                     return installationService.get($stateParams.id);
                                 }]
+                            },
+                            data: {
+                                requiresLogin: true
                             }
                         }
                     }
@@ -49,6 +52,9 @@
                                 installations: ['installationService', function (installationService) {
                                     return installationService.all();
                                 }]
+                            },
+                            data: {
+                                requiresLogin: true
                             }
                         }
                     }
@@ -72,10 +78,13 @@
 
         }])
 
-        .run(['auth', '$rootScope', 'ENV', function (auth, $rootScope, ENV) {
+        .run(['auth', '$rootScope', 'ENV', '$cordovaSplashscreen', '$timeout', function (auth, $rootScope, ENV, $cordovaSplashscreen, $timeout) {
 
-
-            $rootScope.domain = ENV.auth.domain.split('.')[0];
+            if (ENV.domainPrefix) {
+                $rootScope.domain = ENV.auth.domain.split('.')[0];
+            } else {
+                $rootScope.domain = ENV.name;
+            }
 
             if (window.localStorage.getItem("profile") !== null) {
                 $rootScope.profile = JSON.parse(window.localStorage.profile);
@@ -84,6 +93,11 @@
             // This hooks al auth events to check everything as soon as the app starts
             auth.hookEvents();
 
+            if (ionic.Platform.isWebView()) {
+                $timeout(function () {
+                    $cordovaSplashscreen.hide();
+                }, 5000);
+            }
         }])
 
         .controller('LoginCtrl', ['$location', 'auth', '$rootScope', 'Settings', function ($location, auth, $rootScope, Settings) {

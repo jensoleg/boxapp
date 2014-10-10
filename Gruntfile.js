@@ -37,6 +37,20 @@ module.exports = function (grunt) {
                 name: 'config',
                 dest: '<%= yeoman.app %>/scripts/config.js'
             },
+            local: {
+                constants: {
+                    ENV: {
+                        name: 'local',
+                        auth: {
+                            domain: 'development.auth0.com',
+                            clientID: 'kpWrEQ5gJclwuAljKpHgNcJA3NwNZ0FL'
+                        },
+                        domainPrefix: false,
+                        apiEndpoint: 'localhost:8081/api/',
+                        MQTTServer: 'localhost'
+                    }
+                }
+            },
             development: {
                 constants: {
                     ENV: {
@@ -45,6 +59,7 @@ module.exports = function (grunt) {
                             domain: 'development.auth0.com',
                             clientID: 'kpWrEQ5gJclwuAljKpHgNcJA3NwNZ0FL'
                         },
+                        domainPrefix: true,
                         apiEndpoint: 'bobbytech.dk/api/',
                         MQTTServer: 'mqtt.bobbytech.dk'
                     }
@@ -53,13 +68,14 @@ module.exports = function (grunt) {
             production: {
                 constants: {
                     ENV: {
-                        name: 'development',
+                        name: 'production',
                         auth: {
-                            domain: 'development.auth0.com',
+                            domain: 'decoplant.auth0.com',
                             clientID: 'kpWrEQ5gJclwuAljKpHgNcJA3NwNZ0FL'
                         },
-                        apiEndpoint: 'bobbytech.dk/api/',
-                        MQTTServer: 'mqtt.bobbytech.dk'
+                        domainPrefix: true,
+                        apiEndpoint: 'decoplant.dk/api/',
+                        MQTTServer: 'mqtt.decoplant.dk'
                     }
                 }
             }
@@ -476,7 +492,7 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
-            'ngconstant:development',
+            'ngconstant:' + target,
             'wiredep',
             'concurrent:server',
             'autoprefixer',
@@ -493,22 +509,24 @@ module.exports = function (grunt) {
         'watch:karma'
     ]);
 
-    grunt.registerTask('build', [
-        'clean:dist',
-        'ngconstant:production',
-        'wiredep',
-        'useminPrepare',
-        'concurrent:dist',
-        'autoprefixer',
-        'concat',
-        'ngAnnotate',
-        'copy:dist',
-        'cssmin',
-        'uglify',
-        'usemin',
-        'htmlmin',
-        'cordova:build'
-    ]);
+    grunt.registerTask('build', function (target) {
+        grunt.task.run([
+            'clean:dist',
+            'ngconstant:' + target,
+            'wiredep',
+            'useminPrepare',
+            'concurrent:dist',
+            'autoprefixer',
+            'concat',
+            'ngAnnotate',
+            'copy:dist',
+            'cssmin',
+            'uglify',
+            'usemin',
+            'htmlmin',
+            'cordova:build'
+        ]);
+    });
 
     grunt.registerTask('cordova', ['copy:all', 'cordova:build']);
 

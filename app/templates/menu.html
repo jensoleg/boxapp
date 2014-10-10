@@ -9,8 +9,9 @@
 
     <ion-side-menu expose-aside-when="(min-width:769px)">
         <ion-header-bar class="bar-positive">
-            <button ng-click="signout()" class="button button-clear button-small button-clear ion-power">&nbsp;Sign out
+            <button ng-click="signout()" class="button button-clear button-small button-clear ion-power">
             </button>
+            <h1 class="title">{{profile.name}}</h1>
             <button ng-click="newInstallation()"
                     class="button icon ion-ios7-plus-empty button-clear">
             </button>
@@ -33,9 +34,9 @@
                           ui-sref="app.main({ id: i._id })">
                     <h3>{{i.name}}</h3>
                     <h4>{{i.placement}}</h4>
-                    <span class="badge badge-balanced">0</span>
+                    <!-- span class="badge badge-balanced">0</span-->
                     <ion-option-button class="button-assertive" ng-click="remove(i)">Remove</ion-option-button>
-                    <ion-option-button class="button-balanced" ng-click="copyInstallation(i)">copy</ion-option-button>
+                    <!--ion-option-button class="button-balanced" ng-click="copyInstallation(i)">copy</ion-option-button-->
                     <ion-option-button class="button-positive" ng-click="editInstallation(i)">Edit</ion-option-button>
 
                 </ion-item>

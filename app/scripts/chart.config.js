@@ -10,7 +10,6 @@
                 commonSeriesSettings: {
                     argumentField: 'timestamp',
                     valueField: 'value',
-                    type: 'area',
                     point: { visible: false },
                     opacity: 0.2,
                     label: { visible: false },

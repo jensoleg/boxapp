@@ -1,18 +1,17 @@
-<ion-view title="">
+<ion-view>
 
     <ion-nav-bar class="bar-shrink bar-stable">
-        <ion-nav-buttons side="left">
+        <div class="buttons left-buttons">
             <button menu-toggle="left" ng-hide="$exposeAside.active"
                     class="button button-icon button-clear button-dark ion-navicon">
             </button>
             <button ui-sref="app.map()" class="button  button-icon button-clear button-dark ion-android-earth">
-                {{installation.name}} {{installation.placement}}
             </button>
-        </ion-nav-buttons>
-
-        <ion-nav-buttons side="right">
-            <button ng-click="aNewDevice()" class="button icon ion-ios7-plus-empty button-clear button-dark"></button>
-        </ion-nav-buttons>
+        </div>
+        <h1 class="title nav-title-slide-ios7">{{installation.name}} {{installation.placement}}</h1>
+        <div class="buttons right-buttons">
+            <button ng-click="aNewDevice()" class="button button-icon button-clear button-dark ion-ios7-plus-empty"></button>
+        </div>
 
     </ion-nav-bar>
 
@@ -21,9 +20,9 @@
         <!---- device overview -->
         <div class="row responsive-sm" style="padding: 0px;border-bottom: 1px;border-style: ridge;">
             <div class="col-50" style="padding: 0px; background-position-x: 50%; background-position-y: 50%;
-            background-image: url('http://maps.googleapis.com/maps/api/staticmap?center={{installation.location.lat}},{{installation.location.lng}}&zoom=10&size=640x205&maptype=roadmap&markers=markers=icon:./images/jog.png%7Ccolor:red%7C{{installation.location.lat}},{{installation.location.lng}}')">
+            background-image: url('http://maps.googleapis.com/maps/api/staticmap?center={{installation.location.lat}},{{installation.location.lng}}&zoom=10&size=840x205&maptype=roadmap&format=png32&markers=color:red%7C{{installation.location.lat}},{{installation.location.lng}}')">
                 <img style="max-width: 100%; opacity: 0;"
-                     ng-src='http://maps.googleapis.com/maps/api/staticmap?center={{installation.location.lat}},{{installation.location.lng}}&zoom=10&size=640x205&maptype=roadmap&markers=icon:./images/jog.png%7Ccolor:red%7C{{installation.location.lat}},{{installation.location.lng}}'/>
+                     ng-src='http://maps.googleapis.com/maps/api/staticmap?center={{installation.location.lat}},{{installation.location.lng}}&zoom=10&size=840x205&maptype=roadmap&format=png32&markers=color:red%7C{{installation.location.lat}},{{installation.location.lng}}'/>
             </div>
 
             <div class="col-50" style="padding: 0px;">

@@ -11,16 +11,16 @@
             <div class="list">
                 <label class="item item-input">
                     <span class="input-label">Name</span>
-                    <input type="text" placeholder="Name" ng-model="newTimer.name">
+                    <input type="text" placeholder="Name" ng-model="newTimer.name" required>
                 </label>
-                <p ng-if="showNameError" class="errror">Please enter a name</p>
                 <label class="item item-input">
                     <span class="input-label">Time</span>
-                    <input type="time" placeholder="Time of day" ng-model="newTimer.time">
+                    <input type="time" ng-model="newTimer.time">
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Duration</span>
-                    <input type="Number" placeholder="Duration in seconds" ng-model="newTimer.duration"d>
+                    <input type="time" step="1"  ng-model="newTimer.timeDuration">
+                    {{xyz}}
                 </label>
                 <li class="item item-checkbox">
                     <label class="checkbox">

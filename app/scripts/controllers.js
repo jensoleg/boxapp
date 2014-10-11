@@ -548,18 +548,38 @@
 
             $scope.doneEditTimer = function () {
                 $scope.editTimerModal.hide();
+
                 var now = new Date(),
                     timeStr = $scope.timer.time.split(":"),
-                    min = timeStr[0],
-                    sec = timeStr[1],
-                    time = moment.utc([now.getFullYear(), now.getMonth(), now.getDate(), parseInt(min), parseInt(sec)]);
-
+                    hour = timeStr[0],
+                    min = timeStr[1],
+                    time = moment.utc([now.getFullYear(), now.getMonth(), now.getDate(), parseInt(hour), parseInt(min)]);
                 $scope.timer.timestamp = time.format('X');
+
+                var durationTimeStr = $scope.timer.timeDuration.split(":"),
+                    dHour = durationTimeStr[0],
+                    dMin = durationTimeStr[1],
+                    dSec = durationTimeStr[2];
+
+                if (!angular.isDefined(dSec)) {
+                    dSec = '00';
+                }
+                $scope.timer.duration = parseInt(dHour, 10) * 60 * 60 + parseInt(dMin, 10) * 60 + parseInt(dSec, 10);
+
+                delete $scope.timer.timeDuration;
+
                 $ionicListDelegate.closeOptionButtons();
             };
 
             $scope.editTimer = function (t) {
                 $scope.timer = t;
+
+                var hours   = Math.floor($scope.timer.duration / 3600),
+                    minutes = Math.floor(($scope.timer.duration - (hours * 3600)) / 60),
+                    seconds = $scope.timer.duration - (hours * 3600) - (minutes * 60);
+                $scope.timer.timeDuration  = ("0" + hours).substr(-2, 2) + ':' + ("0" + minutes).substr(-2, 2) + ':' + ("0" + seconds).substr(-2, 2);
+
+                console.log($scope.timer.timeDuration);
                 $scope.editTimerModal.show();
             };
 
@@ -567,6 +587,10 @@
                 $scope.newTimer = {};
                 $scope.newTimer.enabled = false;
                 $scope.newTimer.days = [false, false, false, false, false, false, false];
+
+                $scope.newTimer.time = '00:00';
+                $scope.newTimer.timeDuration  = "00:00:00";
+
                 $scope.newTimerModal.show();
             };
 
@@ -575,15 +599,29 @@
             };
 
             $scope.doneNewTimer = function () {
-
                 $scope.newTimerModal.hide();
+
                 var now = new Date(),
                     timeStr = $scope.newTimer.time.split(":"),
-                    min = timeStr[0],
-                    sec = timeStr[1],
-                    time = moment.utc([now.getFullYear(), now.getMonth(), now.getDate(), parseInt(min), parseInt(sec)]);
+                    hour = timeStr[0],
+                    min = timeStr[1],
+                    time = moment.utc([now.getFullYear(), now.getMonth(), now.getDate(), parseInt(hour), parseInt(min)]);
 
                 $scope.newTimer.timestamp = time.format('X');
+
+                var durationTimeStr = $scope.newTimer.timeDuration.split(":"),
+                    dHour = durationTimeStr[0],
+                    dMin = durationTimeStr[1],
+                    dSec = durationTimeStr[2];
+
+                if (!angular.isDefined(dSec)) {
+                    dSec = '00';
+                }
+
+                $scope.newTimer.duration = parseInt(dHour, 10) * 60 * 60 + parseInt(dMin, 10) * 60 + parseInt(dSec, 10);
+
+                delete $scope.newTimer.timeDuration;
+
                 $scope.control.timers.push($scope.newTimer);
             };
 
@@ -594,7 +632,7 @@
             $scope.isTimerFormValid = function (timer) {
                 return timer && timer.name && timer.name.length > 0 &&
                     timer.time && timer.time.length > 0 &&
-                    timer.duration && timer.duration > 0 &&
+                    timer.timeDuration && timer.timeDuration.length > 0 &&
                     timer.days && timer.days.length > 0 &&
                     _.difference(timer.days, [true]).length < 7;
             };
@@ -622,7 +660,7 @@
         }])
 
 
-        .controller('BoxCtrl', ['installation', 'installationService', '$ionicPopover', '$cordovaKeyboard', '$ionicSideMenuDelegate', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', '$timeout', '$ionicListDelegate', '$cacheFactory', function (installation, installationService, $ionicPopover, $cordovaKeyboard, $ionicSideMenuDelegate, $scope, $state, $rootScope, $window, bobby, chart, box, $interval, $timeout, $ionicListDelegate, $cacheFactory) {
+        .controller('BoxCtrl', ['installation', 'installationService', '$log', '$ionicPopover', '$cordovaKeyboard', '$ionicSideMenuDelegate', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', '$timeout', '$ionicListDelegate', '$cacheFactory', function (installation, installationService, $log, $ionicPopover, $cordovaKeyboard, $ionicSideMenuDelegate, $scope, $state, $rootScope, $window, bobby, chart, box, $interval, $timeout, $ionicListDelegate, $cacheFactory) {
 
             $ionicSideMenuDelegate.toggleLeft(false);
 
@@ -762,7 +800,14 @@
                 });
 
             };
+/*
+            var updateTime = function () {
+                $scope.date.raw = new Date();
+                $timeout(updateTime, 1000);
+            };
 
+            updateTime();
+*/
             // Execute action on hide popover
             $scope.$on('popover.hidden', function () {
                 $ionicListDelegate.closeOptionButtons();
@@ -894,6 +939,9 @@
 
                 var filterItem = device + stream + '-' + type,
                     controlColor = _.find($scope.chartColor, { 'control': device + stream });
+
+                $log.info('control color:' + controlColor);
+                $log.info('filter item:' + filterItem);
 
                 if (controlColor) {
 

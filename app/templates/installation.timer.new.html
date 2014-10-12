@@ -15,12 +15,11 @@
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Time</span>
-                    <input type="time" ng-model="newTimer.time">
+                    <timer-time timer="newTimer"></timer-time>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Duration</span>
-                    <input type="time" step="1"  ng-model="newTimer.timeDuration">
-                    {{xyz}}
+                    <timer-duration timer="newTimer"></timer-duration>
                 </label>
                 <li class="item item-checkbox">
                     <label class="checkbox">

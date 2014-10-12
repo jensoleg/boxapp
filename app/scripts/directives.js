@@ -175,6 +175,68 @@
                 link: function ($scope, $element, $attr) {
                 }
             }
+        })
+
+        .directive('timerTime', function ($compile) {
+            return {
+                restrict: 'E',
+                scope: {
+                    timer: '='
+                },
+                template: '<input type="time" ng-model="timer.time">',
+                replace: 'true',
+                link: function (scope, elem, attr) {
+
+                    elem.bind('blur', function () {
+                        if (elem.data('old-value') != elem.val()) {
+                            scope.$apply(function () {
+
+                                var now = new Date(),
+                                    timeStr = scope.timer.time.split(":"),
+                                    hour = timeStr[0],
+                                    min = timeStr[1],
+                                    time = moment.utc([now.getFullYear(), now.getMonth(), now.getDate(), parseInt(hour), parseInt(min)]);
+
+                                scope.timer.timestamp = time.format('X');
+
+                            });
+                        }
+                    });
+                }
+            };
+        })
+
+        .directive('timerDuration', function ($compile) {
+            return {
+                restrict: 'E',
+                scope: {
+                    timer: '='
+                },
+                template: '<input type="time" step="1"  ng-model="timer.timeDuration">',
+                replace: 'true',
+                link: function (scope, elem, attr) {
+
+                    elem.bind('blur', function () {
+                        if (elem.data('old-value') != elem.val()) {
+
+                            scope.$apply(function () {
+
+                                var durationTimeStr = scope.timer.timeDuration.split(":"),
+                                    dHour = durationTimeStr[0],
+                                    dMin = durationTimeStr[1],
+                                    dSec = durationTimeStr[2];
+
+                                if (!angular.isDefined(dSec)) {
+                                    dSec = '00';
+                                }
+
+                                scope.timer.duration = parseInt(dHour, 10) * 60 * 60 + parseInt(dMin, 10) * 60 + parseInt(dSec, 10);
+
+                            });
+                        }
+                    });
+                }
+            };
         });
 
 }());

@@ -13,7 +13,7 @@
     "angular-resource": "~1.2.14",
     "collide": "~0.0.4",
     "ionic": "~1.0.0-beta.13",
-    "angular-google-maps": "~1.2.1",
+    "angular-google-maps": "~2.0.1",
     "angularjs-google-places": "~0.1.0",
     "angular-elastic": "~2.4.0",
     "jquery": "2.1.1",

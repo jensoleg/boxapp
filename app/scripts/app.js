@@ -1,9 +1,9 @@
 (function () {
     'use strict';
 
-    angular.module('BobbyApp', ['ngCordova', 'monospaced.elastic', 'dx', 'ionic', 'auth0', 'config', 'angular-loading-bar', 'ngAnimate', 'BobbyApp.controllers', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives'])
+    angular.module('BobbyApp', ['ngCordova', 'monospaced.elastic', 'google-maps'.ns(), 'dx', 'ionic', 'auth0', 'config', 'angular-loading-bar', 'ngAnimate', 'BobbyApp.controllers', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives'])
 
-        .config([ '$stateProvider', '$urlRouterProvider', '$httpProvider', 'authProvider', 'ENV', 'cfpLoadingBarProvider', 'msdElasticConfig', function ($stateProvider, $urlRouterProvider, $httpProvider, authProvider, ENV, cfpLoadingBarProvider) {
+        .config([ '$stateProvider', '$urlRouterProvider', '$httpProvider', 'authProvider', 'ENV', 'cfpLoadingBarProvider', 'GoogleMapApiProvider'.ns(), function ($stateProvider, $urlRouterProvider, $httpProvider, authProvider, ENV, cfpLoadingBarProvider, GoogleMapApi) {
 
             $stateProvider
                 .state('login', {
@@ -76,9 +76,16 @@
             cfpLoadingBarProvider.latencyThreshold = 100;
             cfpLoadingBarProvider.includeSpinner = false;
 
+
+            GoogleMapApi.configure({
+                key: 'AIzaSyDYMiqXnyqG-OH4Hp3Cy8pUYqPzZb5ysqM',
+                v: '3.18',
+                libraries: 'places,weather'
+            });
+
         }])
 
-        .run(['auth', '$rootScope', 'ENV', '$cordovaSplashscreen', '$timeout', function (auth, $rootScope, ENV, $cordovaSplashscreen, $timeout) {
+        .run(['auth', '$rootScope', 'ENV', function (auth, $rootScope, ENV) {
 
             if (ENV.domainPrefix) {
                 $rootScope.domain = ENV.auth.domain.split('.')[0];
@@ -93,11 +100,6 @@
             // This hooks al auth events to check everything as soon as the app starts
             auth.hookEvents();
 
-            if (ionic.Platform.isWebView()) {
-                $timeout(function () {
-                    $cordovaSplashscreen.hide();
-                }, 5000);
-            }
         }])
 
         .controller('LoginCtrl', ['$location', 'auth', '$rootScope', 'Settings', function ($location, auth, $rootScope, Settings) {

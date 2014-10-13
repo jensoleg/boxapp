@@ -27,7 +27,7 @@
 
     <ion-content scroll="false" class="map">
         <div>
-            <google-map class="fullmap"
+            <ui-gmap-google-map class="fullmap"
                         center="map.center"
                         zoom="map.zoom"
                         draggable="true"
@@ -38,9 +38,9 @@
                         pan="true"
                         control="map.control">
 
-                <layer namespace="weather" type="WeatherLayer" show="map.showWeather"></layer>
+                <ui-gmap-layer namespace="weather" type="WeatherLayer" show="map.showWeather"></ui-gmap-layer>
 
-                <markers
+                <ui-gmap-markers
                         models="map.markers"
                         coords="'self'"
                         doCluster="true"
@@ -49,9 +49,9 @@
                         options="'options'"
                         isLabel='true'
                         clusterOptions="map.clusterOptions">
-                </markers>
+                </ui-gmap-markers>
 
-            </google-map>
+            </ui-gmap-google-map>
         </div>
         <!--swipe-cards bg-positive>
             <swipe-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)">

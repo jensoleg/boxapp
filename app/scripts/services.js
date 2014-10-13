@@ -194,7 +194,7 @@
                     angular.forEach(currentInstallation.devices, function (device) {
                         angular.forEach(device.controls, function (stream) {
                             client.unsubscribe('/' + $rootScope.domain + '/' + device.id + "/" + stream.id);
-                            console.log('MQTT unsubscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
+                            // console.log('MQTT unsubscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
                         });
                     });
                 }
@@ -212,7 +212,7 @@
                     angular.forEach(currentInstallation.devices, function (device) {
                         angular.forEach(device.controls, function (stream) {
                             client.unsubscribe('/' + $rootScope.domain + '/' + device.id + "/" + stream.id);
-                            console.log('MQTT unsubscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
+                            // console.log('MQTT unsubscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
 
                         });
                     });
@@ -236,7 +236,7 @@
                                 $rootScope.datastreams[device.id + stream.id].triggered = false;
 
                                 client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
-                                console.log('MQTT subscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
+                                //console.log('MQTT subscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
 
                             }
                         });
@@ -262,7 +262,7 @@
                                 newStreams[device.id + stream.id].id = stream.id;
                                 newStreams[device.id + stream.id].deviceid = device.id;
                                 client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
-                                console.log('MQTT subscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
+                                // console.log('MQTT subscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
 
                             }
                         })
@@ -504,8 +504,6 @@
 
                 updateDeviceControl: function (deivceId, control) {
                     var q = $q.defer();
-
-                    console.log(control);
 
                     $http.put(apiEndpoint + 'agent/' + deivceId + '?control', control)
                         .success(function (response) {

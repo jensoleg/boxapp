@@ -3,7 +3,8 @@
         <div class="list">
             <div class="item item-input item-button-right">
                 <span class="input-label">Duration</span>
-                 <timer-duration timer="startTimer"></timer-duration>
+                 <!--timer-duration timer="startTimer"></timer-duration-->
+                <input type="number" ng-model="startTimer.duration">
                 <button class="button button-positive" ng-click="setTimer(startTimer)">
                     <i class="icon ion-play"></i>
                 </button>

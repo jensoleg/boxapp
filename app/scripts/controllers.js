@@ -1,23 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('BobbyApp.controllers', ['ionic', 'google-maps', 'ngGPlaces', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives', 'chart', 'config.box', 'map-icons', 'map-styles'])
-
-        .config(function (ngGPlacesAPIProvider) {
-            ngGPlacesAPIProvider.setDefaults({
-                radius: 1000,
-                sensor: false,
-                latitude: null,
-                longitude: null,
-                types: ['food'],
-                map: null,
-                elem: null,
-                nearbySearchKeys: ['name', 'reference', 'vicinity'],
-                placeDetailsKeys: ['formatted_address', 'formatted_phone_number', 'reference', 'website', 'photos'],
-                nearbySearchErr: 'Unable to find nearby places',
-                placeDetailsErr: 'Unable to find place details'
-            });
-        })
+    angular.module('BobbyApp.controllers', ['ionic', 'google-maps'.ns(), 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives', 'chart', 'config.box', 'map-icons', 'map-styles'])
 
         .filter('int', function () {
             return function (v) {
@@ -360,7 +344,7 @@
                                     $rootScope.$broadcast('message:installation-changed', newInstallation);
                                     $ionicLoading.hide();
                                 }, function (impResponse) {
-                                    console.log('Device sctivation failed');
+                                    console.log('Device activation failed');
                                     $ionicLoading.hide();
                                 }
                             );
@@ -555,7 +539,6 @@
                     seconds = $scope.timer.duration - (hours * 3600) - (minutes * 60);
                 $scope.timer.timeDuration = ("0" + hours).substr(-2, 2) + ':' + ("0" + minutes).substr(-2, 2) + ':' + ("0" + seconds).substr(-2, 2);
 
-                console.log($scope.timer.timeDuration);
                 $scope.editTimerModal.show();
             };
 
@@ -762,13 +745,12 @@
                         enabled: true,
                         time: '',
                         timestamp: 0,
-                        timeDuration: "00:00:00",
+                        //timeDuration: "00:00:00",
                         duration: 0,
                         days: []
                     };
                     popover.show($event);
                 });
-
             };
             /*
              var updateTime = function () {
@@ -795,7 +777,7 @@
                     aControl = angular.copy(control);
 
                 aControl.timers = [];
-                delete timer.timeDuration;
+                //delete timer.timeDuration;
                 aControl.timers.push(timer);
                 delete aControl.$$hashKey;
 
@@ -988,12 +970,28 @@
 
             bobby.setInstallation($scope.installation);
 
-        }])
+        }
+        ])
 
-        .controller('MapCtrl', ['$scope', '$location', '$rootScope', '$cordovaGeolocation', 'Settings', 'icons', 'styles', 'installations', '$state', '$ionicLoading', '$ionicPopover', 'auth', 'auth0Service', function ($scope, $location, $rootScope, $cordovaGeolocation, Settings, icons, styles, installations, $state, $ionicLoading, $ionicPopover, auth, auth0Service) {
+        .
+        controller('MapCtrl', ['GoogleMapApi'.ns(), 'IsReady'.ns(), '$cordovaSplashscreen', '$scope', '$location', '$rootScope', '$cordovaGeolocation', 'Settings', 'icons', 'styles', 'installations', '$state', '$ionicLoading', '$ionicPopover', 'auth', 'auth0Service', function (GoogleMapApi, IsReady, $cordovaSplashscreen, $scope, $location, $rootScope, $cordovaGeolocation, Settings, icons, styles, installations, $state, $ionicLoading, $ionicPopover, auth, auth0Service) {
 
             var mapStyles = {'Custom grey blue': 'GreyBlue', 'Custom grey': 'grey', 'Google map': 'default', 'Apple map': 'ios'},
                 markers = [];
+
+
+            var showSplash = true;
+
+            GoogleMapApi.then(function (maps) {
+                maps.visualRefresh = true;
+            });
+
+            IsReady.promise(2).then(function (instances) {
+                instances.forEach(function (inst) {
+                    inst.map.ourID = inst.instance;
+                });
+                showSplash = false;
+            });
 
             $scope.$state = $state;
 
@@ -1097,6 +1095,13 @@
                     dragging: true,
                     bounds: {},
                     markers: markers,
+                    events: {
+                        tilesloaded: function (map, eventName, originalEventArgs) {
+                            if (showSplash && ionic.Platform.isWebView()) {
+                                $cordovaSplashscreen.hide();
+                            }
+                        }
+                    },
                     getGMap: function () {
                     }
                 }

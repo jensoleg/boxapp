@@ -71,11 +71,11 @@ module.exports = function (grunt) {
                         name: 'production',
                         auth: {
                             domain: 'decoplant.auth0.com',
-                            clientID: 'kpWrEQ5gJclwuAljKpHgNcJA3NwNZ0FL'
+                            clientID: 'riQAyvtyyRBNvO9zhRsQAXMEtaQA02uW'
                         },
                         domainPrefix: true,
-                        apiEndpoint: 'decoplant.dk/api/',
-                        MQTTServer: 'mqtt.decoplant.dk'
+                        apiEndpoint: 'bobbytechnologies.dk/api/',
+                        MQTTServer: 'mqtt.bobbytechnologies.dk'
                     }
                 }
             }

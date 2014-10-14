@@ -284,27 +284,36 @@
             // get time series values
             bobby.getStream = function (deviceId, streamId) {
 
-                var interval = 1,
+                var pushInterval = 1,
+                    interval = 1,
                     timeScale = Settings.get('timeScale'),
                     device = _.find(currentInstallation.devices, { 'id': deviceId }),
                     control = _.find(device.controls, { 'id': streamId }),
                     minute = moment().minute();
 
                 if (angular.isDefined(device.interval) && device.interval !== null) {
-                    interval = device.interval;
+                    pushInterval = device.interval;
                 }
 
                 var fromTime = moment(moment()).utc().subtract(timeScale.value, 's'),
-                    from = fromTime.minutes(interval * Math.floor(minute * 60 / interval) / 60),
+                    from = fromTime.minutes(interval * Math.floor(minute * 60 / pushInterval) / 60),
                     toTime = moment(moment()).utc(),
-                    to = toTime.minutes(interval * Math.floor(minute * 60 / interval) / 60);
+                    to = toTime.minutes(interval * Math.floor(minute * 60 / pushInterval) / 60);
+
+                if (pushInterval >= 60 && timeScale.interval < 60) {
+                    interval = 60
+                } else {
+                    interval = timeScale.interval
+                }
 
                 var options = {
                     limit: 1500,
                     from: from.startOf('minute').toJSON(),
                     to: to.startOf('minute').toJSON(),
-                    interval: timeScale.interval
+                    interval: interval
                 };
+
+                console.log('Search options: ', options);
 
                 if (control.ctrlType === 'timer') {
                     options.interval = 1;

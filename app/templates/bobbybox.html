@@ -8,7 +8,7 @@
             <button ui-sref="app.map()" class="button  button-icon button-clear button-dark ion-android-earth">
             </button>
         </div>
-        <h1 class="title nav-title-slide-ios7">{{installation.name}} {{installation.placement}}</h1>
+        <h1 class="title nav-title-slide-ios7">{{::installation.name}} {{::installation.placement}}</h1>
         <div class="buttons right-buttons">
             <button ng-click="aNewDevice()" class="button button-icon button-clear button-dark ion-ios7-plus-empty"></button>
         </div>
@@ -20,9 +20,9 @@
         <!---- device overview -->
         <div class="row responsive-sm" style="padding: 0px;border-bottom: 1px;border-style: ridge;">
             <div class="col-50" style="padding: 0px; background-position-x: 50%; background-position-y: 50%;
-            background-image: url('http://maps.googleapis.com/maps/api/staticmap?center={{installation.location.lat}},{{installation.location.lng}}&zoom=10&size=840x205&maptype=roadmap&format=png32&markers=color:red%7C{{installation.location.lat}},{{installation.location.lng}}')">
+            background-image: url('http://maps.googleapis.com/maps/api/staticmap?center={{::installation.location.lat}},{{::installation.location.lng}}&zoom=10&size=840x205&maptype=roadmap&format=png32&markers=color:red%7C{{::installation.location.lat}},{{::installation.location.lng}}')">
                 <img style="max-width: 100%; opacity: 0;"
-                     ng-src='http://maps.googleapis.com/maps/api/staticmap?center={{installation.location.lat}},{{installation.location.lng}}&zoom=10&size=840x205&maptype=roadmap&format=png32&markers=color:red%7C{{installation.location.lat}},{{installation.location.lng}}'/>
+                     ng-src='http://maps.googleapis.com/maps/api/staticmap?center={{::installation.location.lat}},{{::installation.location.lng}}&zoom=10&size=840x205&maptype=roadmap&format=png32&markers=color:red%7C{{::installation.location.lat}},{{::installation.location.lng}}'/>
             </div>
 
             <div class="col-50" style="padding: 0px;">
@@ -30,28 +30,28 @@
                     <ion-item style="border-style:none; padding: 6px;">
                         <a style="font-size: 85%;" class="item-icon-left">
                             <i class="icon ion-ios7-person"></i>
-                            {{installation.contact.name}}
+                            {{::installation.contact.name}}
                         </a>
                     </ion-item>
                     <ion-item style="border-style:none;  padding: 6px;"
                               ng-click="navigateTo( '{{installation.location.lat}}' , '{{ installation.location.lng}}' )">
                         <a style="font-size: 85%;" class="item-icon-left">
                             <i style="font-size: 24px;" class="icon ion-location"></i>
-                            {{installation.address}}
+                            {{::installation.address}}
                         </a>
                     </ion-item>
                     <ion-item style="border-style:none;  padding: 6px;"
                               ng-click="phoneTo('{{installation.contact.phone}}')">
                         <a class=" item-icon-left">
                             <i style="font-size: 24px;" class="icon ion-iphone"></i>
-                            {{installation.contact.phone}}
+                            {{::installation.contact.phone}}
                         </a>
                     </ion-item>
                     <ion-item style="border-style:none;  padding: 6px;"
                               ng-click="emailTo('{{installation.contact.email}}')">
                         <a style="font-size: 85%;" class="item-icon-left">
                             <i style="font-size: 16px;" class="icon ion-android-mail"></i>
-                            {{installation.contact.email}}
+                            {{::installation.contact.email}}
                         </a>
                     </ion-item>
                 </ion-list>

@@ -284,15 +284,27 @@
             // get time series values
             bobby.getStream = function (deviceId, streamId) {
 
-                var timeScale = Settings.get('timeScale'),
-                    options = {
-                        limit: 1500,
-                        from: moment(moment()).utc().subtract(timeScale.value, 's').startOf('minute').toJSON(),
-                        to: moment(moment()).utc().startOf('minute').toJSON(),
-                        interval: timeScale.interval
-                    },
+                var interval = 1,
+                    timeScale = Settings.get('timeScale'),
                     device = _.find(currentInstallation.devices, { 'id': deviceId }),
-                    control = _.find(device.controls, { 'id': streamId });
+                    control = _.find(device.controls, { 'id': streamId }),
+                    minute = moment().minute();
+
+                if (angular.isDefined(device.interval) && device.interval !== null) {
+                    interval = device.interval;
+                }
+
+                var fromTime = moment(moment()).utc().subtract(timeScale.value, 's'),
+                    from = fromTime.minutes(interval * Math.floor(minute * 60 / interval) / 60),
+                    toTime = moment(moment()).utc(),
+                    to = toTime.minutes(interval * Math.floor(minute * 60 / interval) / 60);
+
+                var options = {
+                    limit: 1500,
+                    from: from.startOf('minute').toJSON(),
+                    to: to.startOf('minute').toJSON(),
+                    interval: timeScale.interval
+                };
 
                 if (control.ctrlType === 'timer') {
                     options.interval = 1;
@@ -322,9 +334,11 @@
             };
 
             return bobby;
-        }])
+        }
+        ])
 
-        .factory('installationService', ['$http', '$q', '$rootScope', 'ENV', function ($http, $q, $rootScope, ENV) {
+        .
+        factory('installationService', ['$http', '$q', '$rootScope', 'ENV', function ($http, $q, $rootScope, ENV) {
 
             var apiEndpoint = ENV.domainPrefix ? 'http://' + $rootScope.domain + '.' + ENV.apiEndpoint : 'http://' + ENV.apiEndpoint;
 

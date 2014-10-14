@@ -886,9 +886,10 @@
                 var filterItem = device + stream + '-' + type,
                     controlColor = _.find($scope.chartColor, { 'control': device + stream });
 
+/*
                 $log.info('control color:' + controlColor);
                 $log.info('filter item:' + filterItem);
-
+*/
                 if (controlColor) {
 
                     $scope.chartColor = _.without($scope.chartColor, controlColor);

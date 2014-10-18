@@ -39,8 +39,8 @@
                 },
                 animation: {
                     enabled: true
-                   // duration: 250,
-                   // easing: 'linear'
+                    // duration: 250,
+                    // easing: 'linear'
                 },
                 dataSource: [],
                 valueAxis: {
@@ -72,11 +72,11 @@
                 }
             },
             timeScales: [
-                {value: 300, interval: 1, text: '5 minutes', type: 'Raw datapoints'},
-                {value: 1800, interval: 1, text: '30 minutes', type: 'Raw datapoints'},
-                {value: 3600, interval: 1, text: '1 hours', type: 'Raw datapoints'},
-                {value: 21600, interval: 1, text: '6 hours', type: 'Raw datapoints'},
-                {value: 86400, interval: 60, text: '1 day', type: 'Averaged datapoints'},
+                {value: 300, interval: 60, text: '5 minutes', type: 'Raw datapoints'},
+                {value: 1800, interval: 60, text: '30 minutes', type: 'Raw datapoints'},
+                {value: 3600, interval: 60, text: '1 hours', type: 'Raw datapoints'},
+                {value: 21600, interval: 60, text: '6 hours', type: 'Raw datapoints'},
+                {value: 86400, interval: 60, text: '1 day', type: 'Raw datapoints'},
                 {value: 604800, interval: 3600, text: '7 days', type: 'Averaged datapoints'},
                 {value: 2592000, interval: 3600, text: '1 month', type: 'Averaged datapoints'},
                 {value: 7776000, interval: 3600, text: '3 months', type: 'Averaged datapoints'}

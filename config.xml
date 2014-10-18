@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="dk.bobbytechnologies.bobbytech" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Decoplant</name>
+    <name>Bobby</name>
     <description>
         A Bobby Tech plant system controller and monitor.
     </description>
@@ -16,5 +16,14 @@
     <preference name="DisallowOverscroll" value="true"/>
     <preference name="BackupWebStorage" value="none"/>
     <preference name="StatusBarStyle" value="default" />
+    <feature name="Keyboard">
+        <param name="ios-package" value="IonicKeyboard" onload="true" />
+    </feature>
+    <feature name="StatusBar">
+        <param name="ios-package" value="CDVStatusBar" onload="true"/>
+    </feature>
+    <feature name="InAppBrowser">
+        <param name="ios-package" value="CDVInAppBrowser" />
+    </feature>
     <!--preference name="AutoHideSplashScreen" value="false" /-->
 </widget>

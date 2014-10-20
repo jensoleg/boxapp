@@ -2,7 +2,7 @@
     <ion-header-bar class="bar bar-header bar-positive">
         <button class="button icon-left ion-ios7-arrow-back button-clear button-clear" ng-click="closeNewTimer()" >Cancel</button>
         <h1 class="title">New timer</h1>
-        <button class="button button-clear button-clear" ng-click="doneNewTimer()" ng-disabled="!isTimerFormValid(newTimer)">
+        <button class="button button-clear button-clear" ng-click="doneNewTimer()">
             Save
         </button>
     </ion-header-bar>
@@ -15,7 +15,7 @@
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Time</span>
-                    <!--timer-time timer="newTimer"></timer-time-->
+                    <timer-time timer="newTimer"></timer-time>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Duration</span>

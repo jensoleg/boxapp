@@ -191,7 +191,7 @@
                         if (elem.data('old-value') != elem.val()) {
                             scope.$apply(function () {
 
-                                console.log('time:', scope.timer.time);
+                                // console.log('time:', scope.timer.time);
 
                                 var now = new Date(),
                                     timeStr = scope.timer.time.split(":"),

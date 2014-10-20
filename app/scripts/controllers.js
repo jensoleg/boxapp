@@ -88,6 +88,7 @@
                     if (!ionic.Platform.isWebView()) {
                         store.remove('profile');
                         store.remove('token');
+                        store.remove('refreshToken');
                     }
 
                     // bobby.close();
@@ -529,18 +530,17 @@
                 $scope.editTimer = function (t) {
                     $scope.timer = t;
 
-                    /*
-                     var hours = Math.floor($scope.timer.duration / 3600),
-                     minutes = Math.floor(($scope.timer.duration - (hours * 3600)) / 60),
-                     seconds = $scope.timer.duration - (hours * 3600) - (minutes * 60);
-                     $scope.timer.timeDuration = ("0" + hours).substr(-2, 2) + ':' + ("0" + minutes).substr(-2, 2) + ':' + ("0" + seconds).substr(-2, 2);
-                     */
+                    var hours = Math.floor($scope.timer.duration / 3600),
+                        minutes = Math.floor(($scope.timer.duration - (hours * 3600)) / 60),
+                        seconds = $scope.timer.duration - (hours * 3600) - (minutes * 60);
+                    $scope.timer.timeDuration = ("0" + hours).substr(-2, 2) + ':' + ("0" + minutes).substr(-2, 2) + ':' + ("0" + seconds).substr(-2, 2);
+
                     $scope.editTimerModal.show();
                 };
 
                 $scope.doneEditTimer = function () {
                     $scope.editTimerModal.hide();
-                    //delete $scope.timer.timeDuration;
+                    delete $scope.timer.timeDuration;
                     $ionicListDelegate.closeOptionButtons();
                 };
 
@@ -550,7 +550,7 @@
                     $scope.newTimer.days = [false, false, false, false, false, false, false];
 
                     $scope.newTimer.time = '00:00';
-                    //$scope.newTimer.timeDuration = "00:00:00";
+                    $scope.newTimer.timeDuration = "00:00:00";
 
                     $scope.newTimerModal.show();
                 };
@@ -561,7 +561,7 @@
 
                 $scope.doneNewTimer = function () {
                     $scope.newTimerModal.hide();
-                    //delete $scope.newTimer.timeDuration;
+                    delete $scope.newTimer.timeDuration;
                     $scope.control.timers.push($scope.newTimer);
                 };
 
@@ -571,7 +571,7 @@
 
                 $scope.isTimerFormValid = function (timer) {
                     return timer && timer.name && timer.name.length > 0 &&
-                        timer.time && timer.time.length > 0 &&
+                      //  timer.timestamp && timer.timestamp.length > 0 &&
                         timer.duration && timer.duration.length > 0 &&
                         timer.days && timer.days.length > 0 &&
                         _.difference(timer.days, [true]).length < 7;

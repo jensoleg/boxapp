@@ -2,7 +2,7 @@
     <ion-header-bar class="bar bar-header bar-positive">
         <button class="button icon-left ion-ios7-arrow-back button-clear button-clear" ng-click="closeEditTimer()">Cancel</button>
         <h1 class="title">Edit timer</h1>
-        <button class="button button-clear button-clear" ng-click="doneEditTimer(timer)" ng-disabled="!isTimerFormValid(timer)">Save</button>
+        <button class="button button-clear button-clear" ng-click="doneEditTimer(timer)">Save</button>
     </ion-header-bar>
     <ion-content>
         <div class="list">
@@ -13,13 +13,12 @@
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Time</span>
-                    <!--timer-time timer="timer"></timer-time-->
+                    <timer-time timer="timer"></timer-time>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Duration</span>
                     <input type="number" ng-model="timer.duration">
-
-                    <!-- timer-duration timer="timer"></timer-duration -->
+                    <!--timer-duration timer="timer"></timer-duration-->
                 </label>
                 <li class="item item-checkbox">
                     <label class="checkbox">

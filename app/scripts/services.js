@@ -100,7 +100,7 @@
 
                 var bobby = {},
                     client = {},
-                    controlTypes = ['data', 'timer'],
+                    controlTypes = ['data', 'timer', 'state'],
                     currentInstallation = null,
                     refreshing = false,
                     _this = this,
@@ -112,24 +112,15 @@
 
                 client = mqtt.createClient(8080, ENV.MQTTServer, {username: 'JWT/' + $rootScope.domain, "password": auth.idToken});
 
-                /*
-                 bobby.start = function () {
-                 client = mqtt.createClient(8080, ENV.MQTTServer, {username: 'JWT/' + $rootScope.domain, "password": auth.idToken});
-                 };
-
-                 bobby.close = function () {
-                 if (client) {
-                 client.end();
-                 console.log('MQTT connection closed');
-                 }
-                 };
-                 */
                 client.on('connect', function () {
                     console.log('MQTT connected');
                 });
 
                 // recieve message on current device subscription
                 client.on('message', function (topic, message) {
+
+                    console.log('MQTT message topic: ' + topic + ' message: ' + message);
+
                     if (currentInstallation) {
                         var now,
                             topics = topic.split('/'),
@@ -168,6 +159,8 @@
 
                         $rootScope.datastreams[device + stream].current_value = message;
 
+                        console.log('MQTT message device: ' + ' stream: ' + stream + ' message: ' + message);
+
                         now = Date.now();
                         $rootScope.$broadcast('message:new-reading', { name: device + stream, timestamp: moment(moment()).utc().toJSON(), value: parseFloat(message) });
 
@@ -197,7 +190,7 @@
                         angular.forEach(currentInstallation.devices, function (device) {
                             angular.forEach(device.controls, function (stream) {
                                 client.unsubscribe('/' + $rootScope.domain + '/' + device.id + "/" + stream.id);
-                                // console.log('MQTT unsubscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
+                                //console.log('MQTT unsubscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
                             });
                         });
                     }
@@ -215,7 +208,7 @@
                         angular.forEach(currentInstallation.devices, function (device) {
                             angular.forEach(device.controls, function (stream) {
                                 client.unsubscribe('/' + $rootScope.domain + '/' + device.id + "/" + stream.id);
-                                // console.log('MQTT unsubscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
+                                //console.log('MQTT unsubscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
 
                             });
                         });
@@ -265,7 +258,7 @@
                                     newStreams[device.id + stream.id].id = stream.id;
                                     newStreams[device.id + stream.id].deviceid = device.id;
                                     client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
-                                    // console.log('MQTT subscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
+                                    //console.log('MQTT subscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
 
                                 }
                             })
@@ -316,8 +309,8 @@
                         interval: interval
                     };
 
-                    if (control.ctrlType === 'timer') {
-                        options.interval = 1;
+                    if (control.ctrlType === 'timer'  || control.ctrlType === 'state') {
+                        options.interval = 60;
                     }
 
                     $http.get(apiEndpoint + 'datastreams/' + deviceId + '/' + streamId, {

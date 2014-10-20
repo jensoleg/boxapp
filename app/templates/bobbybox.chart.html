@@ -63,7 +63,7 @@
                     </i>
                     {{readings.name}}
                 </label>
-                <i style="color: rgb(82, 154, 233);; right: 32px; font-size: 105%;"
+                <i style="color: rgb(82, 154, 233); right: 32px; font-size: 105%;"
                    ng-show="readings.current_value == 1"
                    class="icon fa fa-circle-o-notch fa-spin">
                 </i>
@@ -115,6 +115,18 @@
                                animation: chartSettings.animation
               }">
         </div>
+    </ion-item>
+
+    <ion-item class="reading item-icon-right"
+              ng-click="toggleTimeline()"
+              style="border-width: 0px;padding-top: 8px;padding-bottom: 8px;">
+        <label>
+            <i class="item-icon ion-chatbox-working"
+               style="color: rgb(82, 154, 233); vertical-align: middle;font-size: 140%;">
+            </i>
+            Time line
+        </label>
+        <span class="badge badge-balanced" style="right: 36px;">2</span>
     </ion-item>
 
 </ion-list>

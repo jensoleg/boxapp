@@ -614,6 +614,7 @@
                 $scope.chartColorNumber = 0;
                 $scope.chartColor = [];
                 $scope.showChart = false;
+                $scope.showTimeline = false;
 
                 $scope.isWebView = ionic.Platform.isWebView() && !ionic.Platform.isAndroid();
 
@@ -671,6 +672,10 @@
                         $scope.popover.remove();
                     }
                 });
+
+                $scope.toggleTimeline = function () {
+                    $scope.showTimeline = !$scope.showTimeline;
+                };
 
                 $scope.aNewControl = function (deviceId) {
                     var device = _.find($scope.installation.devices, { 'id': deviceId });

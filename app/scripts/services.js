@@ -231,7 +231,7 @@
                                     /* maybe trigger should be evaluated initially */
                                     $rootScope.datastreams[device.id + stream.id].triggered = false;
 
-                                    client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
+                                    client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id, {qos: 0});
                                     //console.log('MQTT subscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
 
                                 }
@@ -257,7 +257,7 @@
                                     newStreams[device.id + stream.id] = stream;
                                     newStreams[device.id + stream.id].id = stream.id;
                                     newStreams[device.id + stream.id].deviceid = device.id;
-                                    client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
+                                    client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id, {qos: 0});
                                     //console.log('MQTT subscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
 
                                 }

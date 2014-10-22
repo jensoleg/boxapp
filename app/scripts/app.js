@@ -109,17 +109,6 @@
                     $rootScope.domain = ENV.name;
                 }
 
-                /*
-                 $rootScope.$on('$locationChangeStart', function () {
-                 if (!auth.isAuthenticated) {
-                 var token = store.get('token');
-                 if (token) {
-                 auth.authenticate(store.get('profile'), token);
-                 }
-                 }
-                 });
-                 */
-
                 $rootScope.$on('$locationChangeStart', function () {
                     if (!auth.isAuthenticated) {
                         var token = store.get('token');

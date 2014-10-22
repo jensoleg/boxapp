@@ -3,14 +3,14 @@
  angular.module("config", [])
 
 .constant("ENV", {
-  "name": "local",
+  "name": "production",
   "auth": {
-    "domain": "development.auth0.com",
-    "clientID": "kpWrEQ5gJclwuAljKpHgNcJA3NwNZ0FL"
+    "domain": "decoplant.auth0.com",
+    "clientID": "riQAyvtyyRBNvO9zhRsQAXMEtaQA02uW"
   },
-  "domainPrefix": false,
-  "apiEndpoint": "localhost:8081/api/",
-  "MQTTServer": "localhost"
+  "domainPrefix": true,
+  "apiEndpoint": "bobbytechnologies.dk/api/",
+  "MQTTServer": "mqtt.bobbytech.dk"
 })
 
 ;

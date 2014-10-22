@@ -926,8 +926,8 @@
 
                 $rootScope.$on('message:new-reading', function (evt, data) {
 
-                    if ($scope.chartSettings.dataSource.length > 0 && _.find($scope.chartColor, { 'control': data.name})) {
-                        $scope.chartSettings.dataSource.push(data);
+                    if ($scope.chartSettings.dataSource.length > 0 && _.find($scope.chartColor, { 'control': data.device + data.control})) {
+                        $scope.chartSettings.dataSource.push({ 'name': data.device + data.control + '-' + data.type , 'timestamp': data.timestamp, 'value': data.value});
                     }
                 });
 

@@ -84,7 +84,6 @@
                         }
                     };
 
-
                 try {
                     _settings = JSON.parse(window.localStorage.settings);
                 } catch (ignore) {
@@ -119,8 +118,6 @@
                 // recieve message on current device subscription
                 client.on('message', function (topic, message) {
 
-                    console.log('MQTT message topic: ' + topic + ' message: ' + message);
-
                     if (currentInstallation) {
                         var now,
                             topics = topic.split('/'),
@@ -133,7 +130,9 @@
                                 gt: '>',
                                 gte: '>=',
                                 eq: '=='
-                            };
+                            },
+                            theDevice = _.find(currentInstallation.devices, { 'id': device }),
+                            control = _.find(theDevice.controls, { 'id': stream });
 
                         /* check state stream on device.streamid  and set scope variable installation.device.state.value.
                          UI will listen to state: installation.device.state.value and calculated
@@ -159,10 +158,9 @@
 
                         $rootScope.datastreams[device + stream].current_value = message;
 
-                        console.log('MQTT message device: ' + ' stream: ' + stream + ' message: ' + message);
-
                         now = Date.now();
-                        $rootScope.$broadcast('message:new-reading', { name: device + stream, timestamp: moment(moment()).utc().toJSON(), value: parseFloat(message) });
+                        $rootScope.$broadcast('message:new-reading', {device: device, control: stream, type: control.ctrlType, timestamp: moment(moment()).utc().toJSON(), value: parseFloat(message) });
+
 
                     }
                 });

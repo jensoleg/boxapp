@@ -42,7 +42,7 @@
                     </ion-item>
                     <ion-item style="border-style:none;  padding: 6px;"
                               ng-click="phoneTo('{{installation.contact.phone}}')">
-                        <a class=" item-icon-left">
+                        <a style="font-size: 85%;" class="item-icon-left">
                             <i style="font-size: 24px;" class="icon ion-iphone"></i>
                             {{installation.contact.phone}}
                         </a>
@@ -62,7 +62,7 @@
         <bobby-device></bobby-device>
 
         <!-----   soicail IOT ----->
-        <div ng-show="showTimeline">
+        <div ng-if="showTimeline" class="reveal-animation">
         <bobby-social></bobby-social>
         </div>
 

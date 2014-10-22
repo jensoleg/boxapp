@@ -100,8 +100,8 @@
                 $urlRouterProvider.otherwise('/app/map');
             }])
 
-        .run(['auth', 'store', '$rootScope', 'ENV',
-            function (auth, store, $rootScope, ENV) {
+        .run(['auth', 'store', '$rootScope', 'ENV', 'jwtHelper', '$location',
+            function (auth, store, $rootScope, ENV, jwtHelper, $location) {
 
                 if (ENV.domainPrefix) {
                     $rootScope.domain = ENV.auth.domain.split('.')[0];
@@ -109,12 +109,34 @@
                     $rootScope.domain = ENV.name;
                 }
 
+                /*
+                 $rootScope.$on('$locationChangeStart', function () {
+                 if (!auth.isAuthenticated) {
+                 var token = store.get('token');
+                 if (token) {
+                 auth.authenticate(store.get('profile'), token);
+                 }
+                 }
+                 });
+                 */
 
                 $rootScope.$on('$locationChangeStart', function () {
                     if (!auth.isAuthenticated) {
                         var token = store.get('token');
+                        var refreshToken = store.get('refreshToken');
                         if (token) {
-                            auth.authenticate(store.get('profile'), token);
+                            if (!jwtHelper.isTokenExpired(token)) {
+                                auth.authenticate(store.get('profile'), token);
+                            } else {
+                                if (refreshToken) {
+                                    return auth.refreshIdToken(refreshToken).then(function (idToken) {
+                                        store.set('token', idToken);
+                                        auth.authenticate(store.get('profile'), idToken);
+                                    });
+                                } else {
+                                    $location.path('/login');
+                                }
+                            }
                         }
                     }
                 });

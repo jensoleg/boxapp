@@ -73,8 +73,7 @@ module.exports = function (grunt) {
             auth: {
               domain: 'decoplant.auth0.com',
               clientID: 'riQAyvtyyRBNvO9zhRsQAXMEtaQA02uW'
-            }
-            ,
+            },
             domainPrefix: true,
             apiEndpoint: 'bobbytechnologies.dk/api/',
             MQTTServer: 'mqtt.bobbytech.dk'

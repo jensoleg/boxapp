@@ -433,8 +433,8 @@
                     installationService.updateDeviceControl(curDevice.id, $scope.control)
                         .then(function (control) {
                             if ($scope.control.ctrlType === "data") {
-                                $scope.control.unit.symbol = control.unit.symbol;
-                                $scope.control.unit.units = control.unit.units;
+                                $scope.control.unit.symbol = control.symbol;
+                                $scope.control.unit.units = control.units;
                             }
                             installationService.updateControl($scope.$parent.$parent.installation._id, deviceId, curDevice.id, $scope.control)
                                 .then(function (response) {

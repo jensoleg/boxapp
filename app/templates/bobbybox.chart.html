@@ -13,7 +13,7 @@
       </label>
       <i class="icon ion-wifi"
          style="font-size: 24px; right: 32px;"
-         ng-click="showData(device.id, 'online')"
+         ng-click="showData(device.id, 'online', 'state'); $event.stopPropagation()"
          ng-style="datastreams[device.id + 'online'].id == 'online' && datastreams[device.id + 'online'].current_value == '0' && {'color': 'rgb(253, 57, 80)'} || {'color': 'rgb(129, 207, 98)'}">
       </i>
       <!--ion-option-button class="button-calm" ng-click="activateDevice(device.id)">Update

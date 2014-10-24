@@ -148,7 +148,7 @@
 
                 auth.signin({
                     popup: true,
-                    disableSignupAction: false,
+                    disableSignupAction: true,
                     disableResetAction: false,
                     gravatar: true,
                     closable: false,

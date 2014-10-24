@@ -381,6 +381,7 @@
                 $scope.newControl = {};
                 $scope.types = ['data', 'status'];
                 $scope.sensorTypes = ['moisture', 'raw'];
+                $scope.sensorTypeEnabled = false;
 
                 $scope.$on('message:new-control', function (evt, device) {
                     deviceId = device._id;
@@ -414,17 +415,20 @@
 
                 $scope.closeEditControl = function () {
                     $scope.editSensorModal.hide();
+                    $scope.sensorTypeEnabled = false;
                     $ionicListDelegate.closeOptionButtons();
                 };
 
                 $scope.doneEditControl = function () {
                     $scope.editSensorModal.hide();
+                    $scope.sensorTypeEnabled = false;
                     $scope.updateControl();
                     $ionicListDelegate.closeOptionButtons();
                 };
 
                 $scope.editControl = function (c) {
                     $scope.control = c;
+                    $scope.sensorTypeEnabled = $scope.control && (!angular.isDefined($scope.control.unit)  || $scope.control.unit.name === '' || _.contains($scope.sensorTypes, $scope.control.unit.name));
                     $scope.editSensorModal.show();
                 };
 
@@ -1013,6 +1017,8 @@
 
                     $scope.map.options.styles = styles[mapStyle];
                     $scope.popover.hide();
+
+                    $scope.map.control.refresh();
                 };
 
                 angular.forEach(installations, function (item) {

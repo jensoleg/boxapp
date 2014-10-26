@@ -9,7 +9,7 @@
     "clientID": "riQAyvtyyRBNvO9zhRsQAXMEtaQA02uW"
   },
   "domainPrefix": true,
-  "apiEndpoint": "bobbytechnologies.dk/api/",
+  "apiEndpoint": "bobbytech.dk/api/",
   "MQTTServer": "mqtt.bobbytech.dk"
 })
 

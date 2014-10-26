@@ -24,7 +24,7 @@
       <ion-option-button class="button-stable" ng-click="aNewControl(device.id)">Add</ion-option-button>
     </ion-item>
 
-    <!--        ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }| orderObjectBy:'name':'reverse'" -->
+    <!--      ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }| orderObjectBy:'name':'reverse'" -->
 
     <div ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }">
       <ion-item class="reading item-icon-right"

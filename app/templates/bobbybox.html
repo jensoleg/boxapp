@@ -17,6 +17,7 @@
   </ion-nav-bar>
 
   <ion-content header-shrink scroll-event-interval="5">
+    <div ng-class="removed  ? 'disablingDiv' : '' " >
     <div ng-style="isWebView && {'height': '64px'} || {'height': '44px'}"></div>
     <!---- device overview -->
     <div class="row responsive-sm" style="padding: 0px;border-bottom: 1px;border-style: ridge;">
@@ -83,7 +84,7 @@
 
     <!---- device setup ontrollers -->
     <bobby-setup></bobby-setup>
-
+    </div>
   </ion-content>
-
+  </div>
 </ion-view>

@@ -21,6 +21,28 @@ opacity: 0.9;
 }
 */
 
+.disablingDiv
+{
+  /* Do not display it on entry */
+  display: block;
+
+  /* Display it on the layer with index 1001.
+     Make sure this is the highest z-index value
+     used by layers on that page */
+  z-index:1001;
+
+  /* make it cover the whole screen */
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+
+  /* make it white but fully transparent */
+  /*background-color: white;*/
+  opacity:.30;
+  filter: alpha(opacity=00);
+}
 
 .reveal-animation.ng-enter, .reveal-animation.ng-leave {
   -webkit-transition:0.3s linear all;

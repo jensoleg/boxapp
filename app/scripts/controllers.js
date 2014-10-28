@@ -52,8 +52,8 @@
             };
         })
 
-        .controller('InstallationsCtrl', ['bobby', '$scope', '$timeout', 'Settings', '$state', 'installations', 'installationService', '$ionicListDelegate', '$ionicModal', '$ionicPopup', 'auth', 'store', 'auth0Service', '$ionicSideMenuDelegate', '$cacheFactory',
-            function (bobby, $scope, $timeout, Settings, $state, installations, installationService, $ionicListDelegate, $ionicModal, $ionicPopup, auth, store, auth0Service, $ionicSideMenuDelegate, $cacheFactory) {
+        .controller('InstallationsCtrl', ['bobby', '$location', '$rootScope', '$scope', '$timeout', 'Settings', '$state', 'installations', 'installationService', '$ionicListDelegate', '$ionicModal', '$ionicPopup', 'auth', 'store', 'auth0Service', '$ionicSideMenuDelegate', '$cacheFactory',
+            function (bobby, $location, $rootScope, $scope, $timeout, Settings, $state, installations, installationService, $ionicListDelegate, $ionicModal, $ionicPopup, auth, store, auth0Service, $ionicSideMenuDelegate, $cacheFactory) {
 
                 $scope.installations = installations;
                 $scope.newInst = {location: {'lat': null, 'lng': null}};
@@ -144,7 +144,8 @@
                     confirmPopup.then(function (res) {
                         if (res) {
                             installationService.removeInstallation(installation._id);
-                            _.pull(installations, installation);
+                            _.pull($scope.installations, installation);
+                            $rootScope.$broadcast('message:installation-removed', installation);
                         }
                         $ionicListDelegate.closeOptionButtons();
                     });
@@ -183,6 +184,8 @@
                     installationService.newInstallation($scope.newInst)
                         .then(function (response) {
                             $scope.installations.push(response);
+                            $rootScope.$broadcast('message:installation-new', response);
+                            $location.path('/app/main/' + response._id);
                         }, function (response) {
                             console.log('error', response);
                         });
@@ -604,8 +607,8 @@
             }])
 
 
-        .controller('BoxCtrl', ['installation', 'installationService', '$ionicPopover', '$cordovaKeyboard', '$ionicSideMenuDelegate', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', '$timeout', '$ionicListDelegate', '$cacheFactory',
-            function (installation, installationService, $ionicPopover, $cordovaKeyboard, $ionicSideMenuDelegate, $scope, $state, $rootScope, $window, bobby, chart, box, $interval, $timeout, $ionicListDelegate, $cacheFactory) {
+        .controller('BoxCtrl', ['installation', 'installationService', '$ionicLoading', '$ionicPopover', '$cordovaKeyboard', '$ionicSideMenuDelegate', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', '$timeout', '$ionicListDelegate', '$cacheFactory',
+            function (installation, installationService, $ionicLoading, $ionicPopover, $cordovaKeyboard, $ionicSideMenuDelegate, $scope, $state, $rootScope, $window, bobby, chart, box, $interval, $timeout, $ionicListDelegate, $cacheFactory) {
 
                 $ionicSideMenuDelegate.toggleLeft(false);
 
@@ -619,6 +622,7 @@
                 $scope.chartColor = [];
                 $scope.showChart = false;
                 $scope.showTimeline = false;
+                $scope.removed = false;
 
                 $scope.isWebView = ionic.Platform.isWebView() && !ionic.Platform.isAndroid();
 
@@ -660,6 +664,10 @@
                         return {type: 'stepArea', color: $rootScope.datastreams[stream].color};
                     }
                 };
+
+                $rootScope.$on('message:installation-removed', function (evt, installation) {
+                    $scope.removed = true;
+                });
 
                 $scope.$on('$destroy', function () {
                     // Make sure that the interval is destroyed too
@@ -737,7 +745,6 @@
                     bobby.refreshInstallation(installation);
                 });
 
-
                 $scope.startTimer = function ($event, deviceId, controlId) {
                     $scope.currentControlId = controlId;
                     $scope.currentDeviceId = deviceId;
@@ -746,7 +753,7 @@
                         scope: $scope
                     }).then(function (popover) {
                         $scope.popover = popover;
-                        $scope.startTimer = {
+                        $scope.controlTimer = {
                             name: 'StartTimer',
                             enabled: true,
                             time: '',
@@ -986,7 +993,6 @@
                 var mapStyles = {'Custom grey blue': 'GreyBlue', 'Custom grey': 'grey', 'Google map': 'default', 'Apple map': 'ios'},
                     markers = [];
 
-
                 var showSplash = true;
 
                 GoogleMapApi.then(function (maps) {
@@ -1031,6 +1037,27 @@
                         options: {
                             labelAnchor: '-30 -4',
                             labelContent: item.name, // + ' ' + item.placement,
+                            labelClass: 'labelMarker'
+                        }
+                    };
+                    markers.push(ret);
+                });
+
+
+                $rootScope.$on('message:installation-removed', function (evt, installation) {
+                    _.remove(markers, function (marker) { return marker.id  === installation._id; });
+                });
+
+                $rootScope.$on('message:installation-new', function (evt, installation) {
+                    var ret = {
+                        latitude: installation.location.lat,
+                        longitude: installation.location.lng,
+                        id: installation._id,
+                        icon: icons.cube,
+                        opacity: 1,
+                        options: {
+                            labelAnchor: '-30 -4',
+                            labelContent: installation.name, // + ' ' + item.placement,
                             labelClass: 'labelMarker'
                         }
                     };

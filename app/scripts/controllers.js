@@ -975,6 +975,9 @@
 
                 }, true);
 
+                $rootScope.$on('message:resume', function (evt, data) {
+                    bobby.refreshInstallation($scope.installation);
+                });
 
                 if ($scope.shownDevice.length === 0) {
                     angular.forEach($scope.installation.devices, function (item) {

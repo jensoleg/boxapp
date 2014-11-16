@@ -130,6 +130,11 @@
                     }
                 });
 
+                $document.on("resume", function(event) {
+                // do stuff with your $rootScope such as this:
+                    $rootScope.$broadcast('message:resume');
+                });
+
                 // This hooks al auth events to check everything as soon as the app starts
                 auth.hookEvents();
 

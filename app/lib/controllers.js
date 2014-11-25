@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('BobbyApp.controllers', ['angular-storage', 'ionic', 'google-maps'.ns(), 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives', 'chart', 'config.box', 'map-icons', 'map-styles'])
+    angular.module('BobbyApp.controllers', ['angular-storage', 'ionic', 'uiGmapgoogle-maps', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives', 'chart', 'config.box', 'map-icons', 'map-styles'])
 
         .filter('int', function () {
             return function (v) {
@@ -990,7 +990,7 @@
             }
         ])
 
-        .controller('MapCtrl', ['GoogleMapApi'.ns(), 'IsReady'.ns(), '$cordovaSplashscreen', '$scope', '$location', '$rootScope', '$cordovaGeolocation', 'Settings', 'icons', 'styles', 'installations', '$state', '$ionicLoading', '$ionicPopover', 'auth', 'auth0Service',
+        .controller('MapCtrl', ['uiGmapGoogleMapApi', 'uiGmapIsReady', '$cordovaSplashscreen', '$scope', '$location', '$rootScope', '$cordovaGeolocation', 'Settings', 'icons', 'styles', 'installations', '$state', '$ionicLoading', '$ionicPopover', 'auth', 'auth0Service',
             function (GoogleMapApi, IsReady, $cordovaSplashscreen, $scope, $location, $rootScope, $cordovaGeolocation, Settings, icons, styles, installations, $state, $ionicLoading, $ionicPopover, auth, auth0Service) {
 
                 var mapStyles = {'Custom grey blue': 'GreyBlue', 'Custom grey': 'grey', 'Google map': 'default', 'Apple map': 'ios'},

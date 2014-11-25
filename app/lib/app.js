@@ -1,20 +1,20 @@
 (function () {
     'use strict';
 
-    angular.module('BobbyApp', ['angular-storage', 'angular-jwt', 'auth0', 'ngCookies', 'ngCordova', 'monospaced.elastic', 'google-maps'.ns(), 'dx', 'ionic', 'config', 'angular-loading-bar', 'ngAnimate', 'BobbyApp.controllers', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives'])
-        .config(['authProvider', 'jwtInterceptorProvider', '$stateProvider', '$urlRouterProvider', '$httpProvider', 'ENV', 'cfpLoadingBarProvider', 'GoogleMapApiProvider'.ns(),
+    angular.module('BobbyApp', ['angular-storage', 'angular-jwt', 'auth0', 'ngCookies', 'ngCordova', 'monospaced.elastic', 'uiGmapgoogle-maps', 'dx', 'ionic', 'config', 'angular-loading-bar', 'ngAnimate', 'BobbyApp.controllers', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives'])
+        .config(['authProvider', 'jwtInterceptorProvider', '$stateProvider', '$urlRouterProvider', '$httpProvider', 'ENV', 'cfpLoadingBarProvider', 'uiGmapGoogleMapApiProvider',
             function (authProvider, jwtInterceptorProvider, $stateProvider, $urlRouterProvider, $httpProvider, ENV, cfpLoadingBarProvider, GoogleMapApi) {
 
                 $stateProvider
                     .state('login', {
                         url: '/login',
-                        templateUrl: 'templates/login.html',
+                        templateUrl: '../templates/login.html',
                         controller: 'LoginCtrl'
                     })
                     .state('app', {
                         url: '/app',
                         abstract: true,
-                        templateUrl: 'templates/menu.html',
+                        templateUrl: '../templates/menu.html',
                         controller: 'InstallationsCtrl',
                         resolve: {
                             installations: ['installationService', function (installationService) {
@@ -29,7 +29,7 @@
                         url: '/main/:id',
                         views: {
                             'menuContent': {
-                                templateUrl: 'templates/bobbybox.html',
+                                templateUrl: '../templates/bobbybox.html',
                                 controller: 'BoxCtrl',
                                 resolve: {
                                     installation: ['$stateParams', 'installationService', function ($stateParams, installationService) {
@@ -46,7 +46,7 @@
                         url: '/map',
                         views: {
                             'menuContent': {
-                                templateUrl: 'templates/installations.map.html',
+                                templateUrl: '../templates/installations.map.html',
                                 controller: 'MapCtrl',
                                 resolve: {
                                     installations: ['installationService', function (installationService) {
@@ -100,8 +100,8 @@
                 $urlRouterProvider.otherwise('/app/map');
             }])
 
-        .run(['auth', 'store', '$rootScope', 'ENV', 'jwtHelper', '$location',
-            function (auth, store, $rootScope, ENV, jwtHelper, $location) {
+        .run(['auth', 'store', '$rootScope', 'ENV', 'jwtHelper', '$location', '$document',
+            function (auth, store, $rootScope, ENV, jwtHelper, $location, $document) {
 
                 if (ENV.domainPrefix) {
                     $rootScope.domain = ENV.auth.domain.split('.')[0];
@@ -130,7 +130,7 @@
                     }
                 });
 
-                $document.on("resume", function(event) {
+                $document.on("resume", function (event) {
                 // do stuff with your $rootScope such as this:
                     $rootScope.$broadcast('message:resume');
                 });

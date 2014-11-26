@@ -265,6 +265,7 @@
                         $rootScope.datastreams = newStreams;
 
                         refreshing = false;
+                        $rootScope.$broadcast('scroll.refreshComplete');
                     }
                 };
 
@@ -308,7 +309,7 @@
                     };
 
                     if (control.ctrlType === 'timer'  || control.ctrlType === 'state') {
-                        options.interval = 60;
+                        options.interval = 1;
                     }
 
                     $http.get(apiEndpoint + 'datastreams/' + deviceId + '/' + streamId, {

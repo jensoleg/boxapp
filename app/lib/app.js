@@ -8,13 +8,13 @@
                 $stateProvider
                     .state('login', {
                         url: '/login',
-                        templateUrl: '../templates/login.html',
+                        templateUrl: 'templates/login.html',
                         controller: 'LoginCtrl'
                     })
                     .state('app', {
                         url: '/app',
                         abstract: true,
-                        templateUrl: '../templates/menu.html',
+                        templateUrl: 'templates/menu.html',
                         controller: 'InstallationsCtrl',
                         resolve: {
                             installations: ['installationService', function (installationService) {
@@ -29,7 +29,7 @@
                         url: '/main/:id',
                         views: {
                             'menuContent': {
-                                templateUrl: '../templates/bobbybox.html',
+                                templateUrl: 'templates/bobbybox.html',
                                 controller: 'BoxCtrl',
                                 resolve: {
                                     installation: ['$stateParams', 'installationService', function ($stateParams, installationService) {
@@ -46,7 +46,7 @@
                         url: '/map',
                         views: {
                             'menuContent': {
-                                templateUrl: '../templates/installations.map.html',
+                                templateUrl: 'templates/installations.map.html',
                                 controller: 'MapCtrl',
                                 resolve: {
                                     installations: ['installationService', function (installationService) {
@@ -68,7 +68,7 @@
 
                 GoogleMapApi.configure({
                     key: 'AIzaSyDYMiqXnyqG-OH4Hp3Cy8pUYqPzZb5ysqM',
-                    v: '3.18',
+                    v: '3.17',
                     libraries: 'places,weather'
                 });
 
@@ -110,6 +110,7 @@
                 }
 
                 $rootScope.$on('$locationChangeStart', function () {
+
                     if (!auth.isAuthenticated) {
                         var token = store.get('token');
                         var refreshToken = store.get('refreshToken');
@@ -130,8 +131,8 @@
                     }
                 });
 
+
                 $document.on("resume", function (event) {
-                // do stuff with your $rootScope such as this:
                     $rootScope.$broadcast('message:resume');
                 });
 
@@ -148,8 +149,6 @@
                 if (!ENV.domainPrefix) {
                     logo = './images/development.png';
                 }
-
-                $log.debug('login');
 
                 auth.signin({
                     popup: true,

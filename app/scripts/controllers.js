@@ -82,7 +82,7 @@
 
                     var settings = Settings.getSettings();
                     Settings.save(settings);
-                    auth0Service.updateUser(auth.profile.user_id, { app: settings});
+                    auth0Service.updateUser(auth.profile.user_id, {app: settings});
                     bobby.setInstallation(null);
 
                     if (!ionic.Platform.isWebView()) {
@@ -330,7 +330,7 @@
                     installationService.newDevice(installation._id, $scope.newDevice)
                         .then(function (response) {
                             if ($scope.newDevice.id) {
-                                var device = _.find(response.devices, { 'id': $scope.newDevice.id });
+                                var device = _.find(response.devices, {'id': $scope.newDevice.id});
 
                                 $ionicLoading.show({
                                     template: 'Activating device...'
@@ -431,7 +431,7 @@
 
                 $scope.editControl = function (c) {
                     $scope.control = c;
-                    $scope.sensorTypeEnabled = $scope.control && (!angular.isDefined($scope.control.unit)  || $scope.control.unit.name === '' || _.contains($scope.sensorTypes, $scope.control.unit.name));
+                    $scope.sensorTypeEnabled = $scope.control && (!angular.isDefined($scope.control.unit) || $scope.control.unit.name === '' || _.contains($scope.sensorTypes, $scope.control.unit.name));
                     $scope.editSensorModal.show();
                 };
 
@@ -573,12 +573,12 @@
                 };
 
                 $scope.removeTimer = function (t) {
-                    _.remove($scope.control.timers, { 'name': t.name });
+                    _.remove($scope.control.timers, {'name': t.name});
                 };
 
                 $scope.isTimerFormValid = function (timer) {
                     return timer && timer.name && timer.name.length > 0 &&
-                      //  timer.timestamp && timer.timestamp.length > 0 &&
+                            //  timer.timestamp && timer.timestamp.length > 0 &&
                         timer.duration && timer.duration.length > 0 &&
                         timer.days && timer.days.length > 0 &&
                         _.difference(timer.days, [true]).length < 7;
@@ -629,11 +629,15 @@
                 var ts = bobby.getTimeScale();
                 $scope.timeScales = chart.timeScales;
                 /* get graf time scale form settings */
-                $scope.selectedScale = _.find($scope.timeScales, { 'value': ts.value });
+                $scope.selectedScale = _.find($scope.timeScales, {'value': ts.value});
 
                 $scope.chartLabel = chart.chartLabel;
                 $scope.chartSettings = chart.chartSettings;
                 $scope.installation = installation;
+
+                $scope.doRefresh = function () {
+                    $rootScope.$broadcast('message:resume');
+                };
 
                 if ($state.params.id && box.installation && box.installation._id === $state.params.id) {
                     $scope.shownDevice = box.shownDevice;
@@ -690,24 +694,24 @@
                 };
 
                 $scope.aNewControl = function (deviceId) {
-                    var device = _.find($scope.installation.devices, { 'id': deviceId });
+                    var device = _.find($scope.installation.devices, {'id': deviceId});
                     $scope.$broadcast('message:new-control', device);
                 };
 
                 $scope.aEditControl = function (deviceId, controlId) {
-                    var device = _.find($scope.installation.devices, { 'id': deviceId }),
-                        control = _.find(device.controls, { 'id': controlId });
+                    var device = _.find($scope.installation.devices, {'id': deviceId}),
+                        control = _.find(device.controls, {'id': controlId});
                     $scope.$broadcast('message:edit-control', device, control);
                 };
 
                 $scope.aRemoveControl = function (deviceId, controlId) {
-                    var device = _.find($scope.installation.devices, { 'id': deviceId }),
-                        control = _.find(device.controls, { 'id': controlId });
+                    var device = _.find($scope.installation.devices, {'id': deviceId}),
+                        control = _.find(device.controls, {'id': controlId});
                     $scope.$broadcast('message:remove-control', device, control);
                 };
                 $scope.aCopyControl = function (deviceId, controlId) {
-                    var device = _.find($scope.installation.devices, { 'id': deviceId }),
-                        control = _.find(device.controls, { 'id': controlId });
+                    var device = _.find($scope.installation.devices, {'id': deviceId}),
+                        control = _.find(device.controls, {'id': controlId});
                     $scope.$broadcast('message:copy-control', device, control);
                 };
 
@@ -716,22 +720,22 @@
                 };
 
                 $scope.aEditDevice = function (deviceId) {
-                    var device = _.find($scope.installation.devices, { 'id': deviceId });
+                    var device = _.find($scope.installation.devices, {'id': deviceId});
                     $scope.$broadcast('message:edit-device', device);
                 };
 
                 $scope.aRemoveDevice = function (deviceId) {
-                    var device = _.find($scope.installation.devices, { 'id': deviceId });
+                    var device = _.find($scope.installation.devices, {'id': deviceId});
                     $scope.$broadcast('message:remove-device', device);
                 };
 
                 $scope.aCopyDevice = function (deviceId) {
-                    var device = _.find($scope.installation.devices, { 'id': deviceId });
+                    var device = _.find($scope.installation.devices, {'id': deviceId});
                     $scope.$broadcast('message:copy-device', device);
                 };
 
                 $scope.activateDevice = function (deviceId) {
-                    var device = _.find($scope.installation.devices, { 'id': deviceId });
+                    var device = _.find($scope.installation.devices, {'id': deviceId});
                     installationService.activateDevice($scope.installation._id, device).then(function (response) {
                         $rootScope.$broadcast('message:installation-changed', $scope.installation);
                     });
@@ -785,8 +789,8 @@
 
                 $scope.setTimer = function (timer) {
 
-                    var device = _.find($scope.installation.devices, { 'id': $scope.currentDeviceId }),
-                        control = _.find(device.controls, { 'id': $scope.currentControlId }),
+                    var device = _.find($scope.installation.devices, {'id': $scope.currentDeviceId}),
+                        control = _.find(device.controls, {'id': $scope.currentControlId}),
                         aControl = angular.copy(control);
 
                     aControl.timers = [];
@@ -813,18 +817,18 @@
                 $scope.sparkSettings = {dataSource: []};
 
                 $scope.sparkSettings.dataSource = [
-                    { month: 1, 2010: 1115, 2011: 1358, 2012: 1661 },
-                    { month: 2, 2010: 1099, 2011: 1375, 2012: 1742 },
-                    { month: 3, 2010: 1114, 2011: 1423, 2012: 1677 },
-                    { month: 4, 2010: 1150, 2011: 1486, 2012: 1650 },
-                    { month: 5, 2010: 1205, 2011: 1511, 2012: 1589 },
-                    { month: 6, 2010: 1235, 2011: 1529, 2012: 1602 },
-                    { month: 7, 2010: 1193, 2011: 1573, 2012: 1593 },
-                    { month: 8, 2010: 1220, 2011: 1765, 2012: 1634 },
-                    { month: 9, 2010: 1272, 2011: 1771, 2012: 1750 },
-                    { month: 10, 2010: 1345, 2011: 1672, 2012: 1745 },
-                    { month: 11, 2010: 1370, 2011: 1741, 2012: 1720 },
-                    { month: 12, 2010: 1392, 2011: 1643, 2012: 1684 }
+                    {month: 1, 2010: 1115, 2011: 1358, 2012: 1661},
+                    {month: 2, 2010: 1099, 2011: 1375, 2012: 1742},
+                    {month: 3, 2010: 1114, 2011: 1423, 2012: 1677},
+                    {month: 4, 2010: 1150, 2011: 1486, 2012: 1650},
+                    {month: 5, 2010: 1205, 2011: 1511, 2012: 1589},
+                    {month: 6, 2010: 1235, 2011: 1529, 2012: 1602},
+                    {month: 7, 2010: 1193, 2011: 1573, 2012: 1593},
+                    {month: 8, 2010: 1220, 2011: 1765, 2012: 1634},
+                    {month: 9, 2010: 1272, 2011: 1771, 2012: 1750},
+                    {month: 10, 2010: 1345, 2011: 1672, 2012: 1745},
+                    {month: 11, 2010: 1370, 2011: 1741, 2012: 1720},
+                    {month: 12, 2010: 1392, 2011: 1643, 2012: 1684}
                 ];
 
                 var sparklineFeed = $interval(function () {
@@ -882,11 +886,11 @@
 
                 $scope.selectAction = function (time) {
 
-                    $scope.selectedScale = _.find($scope.timeScales, { 'value': time.value });
+                    $scope.selectedScale = _.find($scope.timeScales, {'value': time.value});
 
                     angular.forEach($scope.installation.devices, function (device) {
                         angular.forEach(device.controls, function (control) {
-                            var controlColor = _.find($scope.chartColor, { 'control': device.id + control.id});
+                            var controlColor = _.find($scope.chartColor, {'control': device.id + control.id});
                             if (controlColor) {
                                 bobby.setTimeScale($scope.selectedScale, device.id, control.id);
                             }
@@ -897,7 +901,7 @@
                 $scope.showData = function (device, stream, type) {
 
                     var filterItem = device + stream + '-' + type,
-                        controlColor = _.find($scope.chartColor, { 'control': device + stream });
+                        controlColor = _.find($scope.chartColor, {'control': device + stream});
 
                     /*
                      $log.info('control color:' + controlColor);
@@ -927,7 +931,7 @@
 
                         $rootScope.datastreams[device + stream].color = color;
 
-                        $scope.chartColor.push({ control: device + stream, color: color});
+                        $scope.chartColor.push({control: device + stream, color: color});
 
                         ($scope.chartColorNumber < 19) ? $scope.chartColorNumber++ : $scope.chartColorNumber = 0;
 
@@ -937,21 +941,25 @@
 
                 $rootScope.$on('message:new-reading', function (evt, data) {
 
-                    if ($scope.chartSettings.dataSource.length > 0 && _.find($scope.chartColor, { 'control': data.device + data.control})) {
-                        $scope.chartSettings.dataSource.push({ 'name': data.device + data.control + '-' + data.type , 'timestamp': data.timestamp, 'value': data.value});
+                    if ($scope.chartSettings.dataSource.length > 0 && _.find($scope.chartColor, {'control': data.device + data.control})) {
+                        $scope.chartSettings.dataSource.push({
+                            'name': data.device + data.control + '-' + data.type,
+                            'timestamp': data.timestamp,
+                            'value': data.value
+                        });
                     }
                 });
 
                 $rootScope.$on('message:data', function (evt, data) {
                     if (angular.isDefined(data.data) && data.data.length > 0) {
                         if ($scope.selectedScale.value <= 86400) {
-                            $scope.chartLabel.label = { format: 'H:mm'};
+                            $scope.chartLabel.label = {format: 'H:mm'};
                         } else if ($scope.selectedScale.value <= 604800) {
-                            $scope.chartLabel.label = { format: 'ddd'};
+                            $scope.chartLabel.label = {format: 'ddd'};
                         } else if ($scope.selectedScale.value <= 2592000) {
-                            $scope.chartLabel.label = { format: 'dd-MM'};
+                            $scope.chartLabel.label = {format: 'dd-MM'};
                         } else {
-                            $scope.chartLabel.label = { format: 'MMM'};
+                            $scope.chartLabel.label = {format: 'MMM'};
                         }
 
                         $scope.chartSettings.argumentAxis = $scope.chartLabel;
@@ -962,7 +970,7 @@
                         });
 
                         _.forEach(data.data, function (obs) {
-                            seriesData.push({ 'name': stream, 'timestamp': obs.timestamp, 'value': obs.value});
+                            seriesData.push({'name': stream, 'timestamp': obs.timestamp, 'value': obs.value});
                         });
 
                         $timeout(function () {
@@ -993,7 +1001,12 @@
         .controller('MapCtrl', ['uiGmapGoogleMapApi', 'uiGmapIsReady', '$cordovaSplashscreen', '$scope', '$location', '$rootScope', '$cordovaGeolocation', 'Settings', 'icons', 'styles', 'installations', '$state', '$ionicLoading', '$ionicPopover', 'auth', 'auth0Service',
             function (GoogleMapApi, IsReady, $cordovaSplashscreen, $scope, $location, $rootScope, $cordovaGeolocation, Settings, icons, styles, installations, $state, $ionicLoading, $ionicPopover, auth, auth0Service) {
 
-                var mapStyles = {'Custom grey blue': 'GreyBlue', 'Custom grey': 'grey', 'Google map': 'default', 'Apple map': 'ios'},
+                var mapStyles = {
+                        'Custom grey blue': 'GreyBlue',
+                        'Custom grey': 'grey',
+                        'Google map': 'default',
+                        'Apple map': 'ios'
+                    },
                     markers = [];
 
                 var showSplash = true;
@@ -1022,7 +1035,7 @@
                     Settings.set('mapStyle', mapStyle);
 
                     var settings = Settings.getSettings();
-                    auth0Service.updateUser(auth.profile.user_id, { app: settings});
+                    auth0Service.updateUser(auth.profile.user_id, {app: settings});
 
                     $scope.map.options.styles = styles[mapStyle];
                     $scope.popover.hide();
@@ -1048,7 +1061,9 @@
 
 
                 $rootScope.$on('message:installation-removed', function (evt, installation) {
-                    _.remove(markers, function (marker) { return marker.id  === installation._id; });
+                    _.remove(markers, function (marker) {
+                        return marker.id === installation._id;
+                    });
                 });
 
                 $rootScope.$on('message:installation-new', function (evt, installation) {
@@ -1189,7 +1204,10 @@
 
                 $scope.$on("$destroy", function () {
                     $scope.popover.remove();
-                    $rootScope.origCenter = {latitude: $scope.map.center.latitude, longitude: $scope.map.center.longitude};
+                    $rootScope.origCenter = {
+                        latitude: $scope.map.center.latitude,
+                        longitude: $scope.map.center.longitude
+                    };
                     $rootScope.origZoom = $scope.map.control.getGMap().getZoom();
                 });
 

@@ -16,7 +16,11 @@
 
   </ion-nav-bar>
 
-  <ion-content header-shrink scroll-event-interval="5">
+  <ion-content start-y="55" class="scroll-bar-fade-out" header-shrink scroll-event-interval="5">
+    <ion-refresher
+      pulling-text="Refresh..."
+      on-refresh="doRefresh()">
+    </ion-refresher>
     <div ng-class="removed  ? 'disablingDiv' : '' " >
     <div ng-style="isWebView && {'height': '64px'} || {'height': '44px'}"></div>
     <!---- device overview -->

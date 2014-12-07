@@ -21,6 +21,10 @@ opacity: 0.9;
 }
 */
 
+input.ng-invalid {
+    color: red;
+}
+
 .disablingDiv
 {
   /* Do not display it on entry */

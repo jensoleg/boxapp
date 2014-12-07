@@ -15,12 +15,12 @@
     "angular-google-maps": "~2.0.1",
     "angularjs-google-places": "~0.1.0",
     "angular-elastic": "~2.4.0",
-    "jquery": "2.1.1",
     "ngCordova": "~0.1.4-alpha",
     "angular": "~1.2.25",
     "a0-angular-storage": "~0.0.6",
     "angular-jwt": "~0.0.4",
-    "auth0-angular": "~3.0.5"
+    "auth0-angular": "~3.0.5",
+    "jquery": "~2.1.1"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.12",

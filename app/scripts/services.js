@@ -308,7 +308,7 @@
                         interval: interval
                     };
 
-                    if (control.ctrlType === 'timer'  || control.ctrlType === 'state') {
+                    if (control.ctrlType === 'timer' || control.ctrlType === 'state') {
                         options.interval = 1;
                     }
 

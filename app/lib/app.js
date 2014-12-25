@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('BobbyApp', ['angular-storage', 'angular-jwt', 'auth0', 'ngCookies', 'ngCordova', 'monospaced.elastic', 'uiGmapgoogle-maps', 'dx', 'ionic', 'config', 'angular-loading-bar', 'ngAnimate', 'BobbyApp.controllers', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives'])
-        .config(['authProvider', 'jwtInterceptorProvider', '$stateProvider', '$urlRouterProvider', '$httpProvider', 'ENV', 'cfpLoadingBarProvider', 'uiGmapGoogleMapApiProvider',
-            function (authProvider, jwtInterceptorProvider, $stateProvider, $urlRouterProvider, $httpProvider, ENV, cfpLoadingBarProvider, GoogleMapApi) {
+        .config(['authProvider', 'jwtInterceptorProvider', '$stateProvider', '$urlRouterProvider', '$httpProvider', '$ionicConfigProvider', 'ENV', 'cfpLoadingBarProvider', 'uiGmapGoogleMapApiProvider',
+            function (authProvider, jwtInterceptorProvider, $stateProvider, $urlRouterProvider, $httpProvider, $ionicConfigProvider, ENV, cfpLoadingBarProvider, GoogleMapApi) {
 
                 $stateProvider
                     .state('login', {
@@ -96,6 +96,8 @@
                 }];
 
                 $httpProvider.interceptors.push('jwtInterceptor');
+
+                $ionicConfigProvider.views.maxCache(0);
 
                 $urlRouterProvider.otherwise('/app/map');
             }])

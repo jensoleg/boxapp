@@ -1,8 +1,8 @@
 <ion-list>
     <ion-item ng-repeat="device in installation.devices"
               ui-sref="app.device({ id: installation._id, deviceid: device._id })">
-        <h3>{{device.name}} {{device.placement}}</h3>
-        <h4>{{device.id}}</h4>
+        <h3>{{::device.name}} {{::device.placement}}</h3>
+        <h4>{{::device.id}}</h4>
         <span class="badge badge-balanced">0</span>
         <ion-option-button class="button-calm" ng-click="activate(device)">Activate
         </ion-option-button>

@@ -251,10 +251,11 @@
                                     if ($rootScope.datastreams[device.id + stream.id]) {
                                         newStreams[device.id + stream.id] = $rootScope.datastreams[device.id + stream.id]
                                         client.unsubscribe('/' + $rootScope.domain + '/' + device.id + "/" + stream.id);
+                                    } else {
+                                        newStreams[device.id + stream.id] = stream;
+                                        newStreams[device.id + stream.id].id = stream.id;
+                                        newStreams[device.id + stream.id].deviceid = device.id;
                                     }
-                                    newStreams[device.id + stream.id] = stream;
-                                    newStreams[device.id + stream.id].id = stream.id;
-                                    newStreams[device.id + stream.id].deviceid = device.id;
                                     client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id, {qos: 0});
                                     //console.log('MQTT subscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
 
@@ -283,17 +284,15 @@
                         interval = 1,
                         timeScale = Settings.get('timeScale'),
                         device = _.find(currentInstallation.devices, { 'id': deviceId }),
-                        control = _.find(device.controls, { 'id': streamId }),
-                        minute = moment().minute();
+                        control = _.find(device.controls, { 'id': streamId });
 
                     if (angular.isDefined(device.interval) && device.interval !== null) {
                         pushInterval = device.interval;
                     }
 
-                    var fromTime = moment(moment()).utc().subtract(timeScale.value, 's'),
-                        from = fromTime.minutes(interval * Math.floor(minute * 60 / pushInterval) / 60),
-                        toTime = moment(moment()).utc(),
-                        to = toTime.minutes(interval * Math.floor(minute * 60 / pushInterval) / 60);
+                    var duration = moment.duration({'seconds': timeScale.value}),
+                        fromTime = moment().utc().subtract(duration),
+                        toTime = moment().utc();
 
                     if (pushInterval >= 60 && timeScale.interval < 60) {
                         interval = 60
@@ -303,8 +302,8 @@
 
                     var options = {
                         limit: 1500,
-                        from: from.startOf('minute').toJSON(),
-                        to: to.startOf('minute').toJSON(),
+                        from: fromTime.startOf('minute').toJSON(),
+                        to: toTime.startOf('minute').toJSON(),
                         interval: interval
                     };
 

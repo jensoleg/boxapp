@@ -20,6 +20,18 @@ body {
 opacity: 0.9;
 }
 */
+#rangeSelectorContainer .slider {
+    position: relative;
+    visibility: visible;
+    overflow: hidden;
+}
+
+
+.item{
+    left: 0;
+    right: 0;
+    box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.3);
+}
 
 input.ng-invalid {
     color: red;

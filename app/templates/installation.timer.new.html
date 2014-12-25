@@ -15,8 +15,12 @@
                 </label>
                 <label class="item item-input">
                     <span class="input-label">Time</span>
-                    <timer-time timer="newTimer"></timer-time>
+                    <input type="time" ng-model="newTimer.timerTime" min="00:00:00" max="23:59:00">
                 </label>
+                <!--label class="item item-input">
+                    <span class="input-label">Time</span>
+                    <timer-time timer="newTimer"></timer-time>
+                </label-->
                 <label class="item item-input">
                     <span class="input-label">Duration</span>
                     <input type="number" ng-model="newTimer.duration">

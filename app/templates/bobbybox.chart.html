@@ -1,108 +1,109 @@
 <ion-list>
 
-  <div ng-repeat="device in installation.devices">
-    <ion-item class="reading item-icon-right"
-              style="border-width: 0px;"
-              ng-click="toggleDevice(device.id)">
-      <label>
-        <i class="icon-item ion-cube"
-           style="vertical-align: middle;font-size: 140%;"
-           ng-style="device.id == activeStream.deviceid && {'color': 'rgb(129, 207, 98)' } || {'color': 'rgb(82, 154, 233)'} ">
-        </i>
-        {{device.name}} {{device.placement}}
-      </label>
-      <i class="icon ion-wifi"
-         style="font-size: 24px; right: 32px;"
-         ng-click="showData(device.id, 'online', 'state'); $event.stopPropagation()"
-         ng-style="datastreams[device.id + 'online'].id == 'online' && datastreams[device.id + 'online'].current_value == '0' && {'color': 'rgb(253, 57, 80)'} || {'color': 'rgb(129, 207, 98)'}">
-      </i>
-      <!--ion-option-button class="button-calm" ng-click="activateDevice(device.id)">Update
-      </ion-option-button-->
-      <ion-option-button class="button-assertive" ng-click="aRemoveDevice(device.id)">Remove</ion-option-button>
-      <!--ion-option-button class="button-balanced" ng-click="aCopyDevice(device.id)">Copy</ion-option-button-->
-      <ion-option-button class="button-positive" ng-click="aEditDevice(device.id)">Edit</ion-option-button>
-      <ion-option-button class="button-stable" ng-click="aNewControl(device.id)">Add</ion-option-button>
-    </ion-item>
+    <div ng-repeat="device in installation.devices" style="padding-bottom: 20px;">
+        <ion-item class="reading item-icon-right"
+                  style="border-width: 0px;"
+                  ng-click="toggleDevice(device.id)">
+            <label>
+                <i class="icon-item ion-cube"
+                   style="vertical-align: middle;font-size: 140%;"
+                   ng-style="device.id == activeStream.deviceid && {'color': 'rgb(129, 207, 98)' } || {'color': 'rgb(82, 154, 233)'} ">
+                </i>
+                {{::device.name}} {{::device.placement}}
+            </label>
+            <i class="icon ion-wifi"
+               style="font-size: 24px; right: 32px;"
+               ng-click="showData(device.id, 'online', 'state'); $event.stopPropagation()"
+               ng-style="datastreams[device.id + 'online'].id == 'online' && datastreams[device.id + 'online'].current_value == '0' && {'color': 'rgb(253, 57, 80)'} || {'color': 'rgb(129, 207, 98)'}">
+            </i>
+            <!--ion-option-button class="button-calm" ng-click="activateDevice(device.id)">Update
+            </ion-option-button-->
+            <ion-option-button class="button-assertive" ng-click="aRemoveDevice(device.id)">Remove</ion-option-button>
+            <!--ion-option-button class="button-balanced" ng-click="aCopyDevice(device.id)">Copy</ion-option-button-->
+            <ion-option-button class="button-positive" ng-click="aEditDevice(device.id)">Edit</ion-option-button>
+            <ion-option-button class="button-stable" ng-click="aNewControl(device.id)">Add</ion-option-button>
+        </ion-item>
 
-    <!--      ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }| orderObjectBy:'name':'reverse'" -->
+        <!--      ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }| orderObjectBy:'name':'reverse'" -->
 
-    <div ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }">
-      <ion-item class="reading item-icon-right"
-                style="padding-left: 14px; border-width: 0px;"
-                ng-click="showData(readings.deviceid, readings.id, readings.ctrlType)"
-                ng-show="readings.ctrlType == 'data' && (isDeviceShown(device.id) || readings.color)">
-        <label>
-          <i ng-class="readings.color ? 'icon-item ion-ios7-speedometer' : 'icon-item ion-speedometer'"
-             style="vertical-align: middle;font-size: 140%;"
-             ng-style="readings.color  && {'color': readings.color, 'opacity': 0.8}">
-          </i>
-          {{readings.name}}
-        </label>
+        <div ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }">
+            <ion-item class="reading item-icon-right"
+                      style="padding-left: 14px; border-width: 0px;"
+                      ng-click="showData(readings.deviceid, readings.id, readings.ctrlType)"
+                      ng-if="readings.ctrlType == 'data' && (isDeviceShown(device.id) || readings.color)">
+                <label>
+                    <i ng-class="readings.color ? 'icon-item ion-ios7-speedometer' : 'icon-item ion-speedometer'"
+                       style="vertical-align: middle;font-size: 140%;"
+                       ng-style="readings.color  && {'color': readings.color, 'opacity': 0.8}">
+                    </i>
+                    {{::readings.name}}
+                </label>
                 <span class="badge">
-                     {{readings.current_value}} {{readings.unit.symbol}}{{readings.unit.units}}
+                     {{readings.current_value}} {{::readings.unit.symbol}}{{::readings.unit.units}}
                  </span>
 
-        <ion-option-button class="button-assertive" ng-click="aRemoveControl(device.id, readings.id)">
-          Remove
-        </ion-option-button>
-        <!--ion-option-button class="button-balanced" ng-click="aCopyControl(device.id, readings.id)">
-            Copy
-        </ion-option-button-->
-        <ion-option-button class="button-positive" ng-click="aEditControl(device.id, readings.id)">
-          Edit
-        </ion-option-button>
-      </ion-item>
+                <ion-option-button class="button-assertive" ng-click="aRemoveControl(device.id, readings.id)">
+                    Remove
+                </ion-option-button>
+                <!--ion-option-button class="button-balanced" ng-click="aCopyControl(device.id, readings.id)">
+                    Copy
+                </ion-option-button-->
+                <ion-option-button class="button-positive" ng-click="aEditControl(device.id, readings.id)">
+                    Edit
+                </ion-option-button>
+            </ion-item>
 
-      <ion-item class="reading item-icon-right"
-                ng-click="showData(readings.deviceid, readings.id, readings.ctrlType)"
-                style="padding-left: 14px; border-width: 0px;"
-                ng-show="readings.ctrlType == 'timer' && (isDeviceShown(device.id) || readings.color)">
-        <label>
-          <i ng-class="readings.color ? 'icon-item ion-ios7-stopwatch' : 'icon-item ion-ios7-stopwatch-outline'"
-             style="vertical-align: middle; font-size: 140%;"
-             ng-style="readings.color  && {'color': readings.color, 'opacity': 0.8}">
-          </i>
-          {{readings.name}}
-        </label>
-        <i style="color: rgb(82, 154, 233); right: 32px; font-size: 105%;"
-           ng-show="readings.current_value == 1"
-           class="icon fa fa-circle-o-notch fa-spin">
-        </i>
+            <ion-item class="reading item-icon-right"
+                      ng-click="showData(readings.deviceid, readings.id, readings.ctrlType)"
+                      style="padding-left: 14px; border-width: 0px;"
+                      ng-if="readings.ctrlType == 'timer' && (isDeviceShown(device.id) || readings.color)">
+                <label>
+                    <i ng-class="readings.color ? 'icon-item ion-ios7-stopwatch' : 'icon-item ion-ios7-stopwatch-outline'"
+                       style="vertical-align: middle; font-size: 140%;"
+                       ng-style="readings.color  && {'color': readings.color, 'opacity': 0.8}">
+                    </i>
+                    {{::readings.name}}
+                </label>
+                <i style="color: rgb(82, 154, 233); right: 32px; font-size: 105%;"
+                   ng-if="readings.current_value == 1"
+                   class="icon fa fa-circle-o-notch fa-spin">
+                </i>
 
-        <div>
-          <ion-option-button class="button-calm" ng-show="readings.current_value == 0"
-                             ng-click="startTimer($event, device.id, readings.id)">
-            Control
-          </ion-option-button>
-          <ion-option-button class="button-assertive" ng-click="aRemoveControl(device.id, readings.id)">
-            Remove
-          </ion-option-button>
-          <ion-option-button class="button-positive" ng-click="aEditControl(device.id, readings.id)">
-            Edit
-          </ion-option-button>
+                <div>
+                    <ion-option-button class="button-calm" ng-if="readings.current_value == 0"
+                                       ng-click="startTimer($event, device.id, readings.id)">
+                        Control
+                    </ion-option-button>
+                    <ion-option-button class="button-assertive" ng-click="aRemoveControl(device.id, readings.id)">
+                        Remove
+                    </ion-option-button>
+                    <ion-option-button class="button-positive" ng-click="aEditControl(device.id, readings.id)">
+                        Edit
+                    </ion-option-button>
+
+                </div>
+            </ion-item>
 
         </div>
-      </ion-item>
-
     </div>
-  </div>
 
-  <ion-item ng-show="showChart"
-            style="border-width: 0px; padding: 10px; background-color:#EEEEEE;">
 
-    <span style="position: absolute; left: 54px; font-weight: normal; font-size: 14px; line-height: 1.52857;">{{selectedScale.text}}</span>
+    <ion-item ng-if="showChart"
+              style="border-width: 0px; padding: 10px;> <!-- background-color:#EEEEEE;"-->
 
-    <i style="padding-left: 22px;"
-       class="icon ion-ios7-clock-outline">
-      <select style="background:none;opacity:0"
-              ng-options="t.text group by t.type for t in timeScales"
-              ng-model="selectedScale"
-              ng-change="selectAction(selectedScale)">
-      </select>
-    </i>
+        <span style="position: absolute; left: 54px; font-weight: normal; font-size: 14px; line-height: 1.52857;">{{selectedScale.text}}</span>
 
-    <div id="chartContainer" style="height: 300px"
-         dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
+        <i style="padding-left: 22px;"
+           class="icon ion-ios7-clock-outline">
+            <select style="background:none;opacity:0"
+                    ng-options="t.text group by t.type for t in timeScales"
+                    ng-model="selectedScale"
+                    ng-change="selectAction(selectedScale)">
+            </select>
+        </i>
+
+        <div id="chartContainer" style="height: 300px"
+             dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
                               argumentAxis: 'chartSettings.argumentAxis',
                               seriesTemplate: 'chartSettings.seriesTemplate'},
                                valueAxis: chartSettings.valueAxis,
@@ -112,10 +113,26 @@
                                crosshair: chartSettings.crosshair,
                                palette: chartSettings.palette,
                                commonAxisSettings: chartSettings.commonAxisSettings,
-                               commonPaneSettings: chartSettings.commonPaneSettings,
                                animation: chartSettings.animation
               }">
-    </div>
-  </ion-item>
+        </div>
+
+        <div id="rangeSelectorContainer"
+             dx-range-selector="{ bindingOptions: { dataSource: 'rangeSettings.dataSource',
+                                                    scale: 'rangeSettings.scale',
+                                                    sliderMarker: 'rangeSettings.sliderMarker',
+                                   dataSourceField: 'rangeSettings.dataSourceField',
+                                   chart: 'rangeSettings.chart',
+                                   behavior: 'rangeSettings.behavior',
+                                   selectedRangeChanged: 'rangeSettings.selectedRangeChanged',
+                                   margin: 'rangeSettings.margin'}
+
+                                    }">
+
+        </div>
+
+    </ion-item>
+    <div style="padding-bottom: 20px;"></div>
 
 </ion-list>
+

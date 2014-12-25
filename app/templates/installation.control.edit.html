@@ -30,7 +30,7 @@
                 </label>
             </div>
         </div>
-        <ion-list ng-show="control.ctrlType =='timer'">
+        <ion-list ng-if="control.ctrlType =='timer'">
             <div class="item item-icon-right item-divider">
                 Timers
                 <i class="icon ion-ios7-plus-empty" ng-click="addTimer()"></i>
@@ -40,7 +40,7 @@
                       style="padding-right: 0px; padding-left: 2px;"
                       ng-repeat="timer in control.timers">
 
-                {{timer.name}}
+                {{::timer.name}}
 
                 <label class="checkbox checkbox-balanced">
                     <input type="checkbox" ng-model="timer.enabled">

@@ -5,18 +5,18 @@
     "lodash": "~2.4.0",
     "momentjs": "~2.8.1",
     "globalize": "0.1.1",
-    "angular-animate": "~1.2.25",
-    "angular-sanitize": "~1.2.25",
+    "angular-animate": "~1.3.6",
+    "angular-sanitize": "~1.3.6",
     "angular-ui-router": "~0.2.10",
-    "angular-cookies": "~1.2.25",
-    "angular-resource": "~1.2.25",
+    "angular-cookies": "~1.3.6",
+    "angular-resource": "~1.3.6",
     "collide": "~0.0.4",
     "ionic": "~0.9.27",
-    "angular-google-maps": "~2.0.1",
+    "angular-google-maps": "~2.0.12",
     "angularjs-google-places": "~0.1.0",
     "angular-elastic": "~2.4.0",
     "ngCordova": "~0.1.4-alpha",
-    "angular": "~1.2.25",
+    "angular": "~1.3.6",
     "a0-angular-storage": "~0.0.6",
     "angular-jwt": "~0.0.4",
     "auth0-angular": "~3.0.5",
@@ -25,6 +25,6 @@
   "devDependencies": {
     "angular-mocks": "~1.2.12",
     "angular-scenario": "~1.2.12",
-    "ionic": "driftyco/ionic-bower#1.0.0-beta.13"
+    "ionic": "driftyco/ionic-bower#1.0.0-beta.14"
   }
 }

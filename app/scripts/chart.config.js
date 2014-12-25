@@ -10,13 +10,17 @@
                 commonSeriesSettings: {
                     argumentField: 'timestamp',
                     valueField: 'value',
-                    point: { visible: false },
                     opacity: 0.2,
-                    label: { visible: false },
+                    label: {visible: false},
                     border: {
-                        width: 3,
+                        width: 2,
                         visible: true,
                         dashStyle: 'solid'
+                    },
+                    point: {
+                        visible: false,
+                        hoverMode: 'allArgumentPoints',
+                        selectionMode: 'allArgumentPoints'
                     }
                 },
                 seriesTemplate: {
@@ -25,8 +29,9 @@
                 commonAxisSettings: {
                     valueMarginsEnabled: false,
                     grid: {
-                        color: 'white',
-                        visible: true
+                        color: '#7f7f7f',
+                        visible: true,
+                        opacity: 0.1
                     },
                     label: {
                         font: {
@@ -44,6 +49,7 @@
                 },
                 dataSource: [],
                 valueAxis: {
+                    min: 0,
                     showZero: false,
                     type: 'continuous',
                     valueType: 'numeric'
@@ -51,25 +57,40 @@
                 legend: {
                     visible: false
                 },
-                commonPaneSettings: {
-                    border: {
-                        visible: false,
-                        color: '#e9e9e9',
-                        opacity: 0.5
-                    }
-                },
+                /*
+                 commonPaneSettings: {
+                 border: {
+                 visible: false,
+                 color: '#e9e9e9',
+                 opacity: 0.5
+                 }
+                 },
+                 */
                 tooltip: {
-                    enabled: true
+                    enabled: false,
+                    shared: false,
+                    argumentFormat: 'd/M H.mm',
+                    customizeTooltip: function () {
+                        return {
+                            text: this.valueText + ' on ' + this.argumentText
+                        };
+                    }
+
                 },
                 crosshair: {
                     enabled: true,
-                    horizontalLine: {
-                        dashStyle: 'longDash'
-                    },
-                    verticalLine: {
-                        dashStyle: 'longDash'
+                    dashStyle: 'longDash',
+                    label: {
+                        visible: true,
+                        backgroundColor: "#949494",
+                        font: {
+                            color: "#fff",
+                            size: 12
+                        }
                     }
-                }
+                },
+                scrollingMode: 'all',
+                zoomingMode: 'all'
             },
             timeScales: [
                 {value: 300, interval: 60, text: '5 minutes', type: 'Raw datapoints'},

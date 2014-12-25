@@ -537,6 +537,9 @@
                 $scope.editTimer = function (t) {
                     $scope.timer = t;
 
+                    var tStr = $scope.timer.time.split(":");
+                    $scope.timer.timerTime = new Date(1970, 0, 1, tStr[0], tStr[1], 0);
+
                     var hours = Math.floor($scope.timer.duration / 3600),
                         minutes = Math.floor(($scope.timer.duration - (hours * 3600)) / 60),
                         seconds = $scope.timer.duration - (hours * 3600) - (minutes * 60);
@@ -547,7 +550,18 @@
 
                 $scope.doneEditTimer = function () {
                     $scope.editTimerModal.hide();
+
+                    $scope.timer.time = moment($scope.timer.timerTime).format('HH:mm');
+
+                    var now = new Date(),
+                        timeStr = $scope.timer.time.split(":"),
+                        hour = timeStr[0],
+                        min = timeStr[1],
+                        time = moment.utc([now.getFullYear(), now.getMonth(), now.getDate(), parseInt(hour), parseInt(min)]);
+
+                    $scope.timer.timestamp = time.format('X');
                     delete $scope.timer.timeDuration;
+
                     $ionicListDelegate.closeOptionButtons();
                 };
 
@@ -555,9 +569,9 @@
                     $scope.newTimer = {};
                     $scope.newTimer.enabled = false;
                     $scope.newTimer.days = [false, false, false, false, false, false, false];
-
-                    $scope.newTimer.time = '00:00';
+                    $scope.newTimer.time = '00:00:00';
                     $scope.newTimer.timeDuration = "00:00:00";
+                    $scope.newTimer.timerTime = new Date(1970, 0, 1, 0, 0, 0);
 
                     $scope.newTimerModal.show();
                 };
@@ -568,6 +582,16 @@
 
                 $scope.doneNewTimer = function () {
                     $scope.newTimerModal.hide();
+
+                    $scope.newTimer.time = moment($scope.newTimer.timerTime).format('HH:mm');
+
+                    var now = new Date(),
+                        timeStr = $scope.newTimer.time.split(":"),
+                        hour = timeStr[0],
+                        min = timeStr[1],
+                        time = moment.utc([now.getFullYear(), now.getMonth(), now.getDate(), parseInt(hour), parseInt(min)]);
+
+                    $scope.newTimer.timestamp = time.format('X');
                     delete $scope.newTimer.timeDuration;
                     $scope.control.timers.push($scope.newTimer);
                 };
@@ -636,31 +660,96 @@
                 $scope.installation = installation;
 
                 $scope.doRefresh = function () {
-                    $rootScope.$broadcast('message:resume');
+                    bobby.refreshInstallation($scope.installation);
                 };
 
-                if ($state.params.id && box.installation && box.installation._id === $state.params.id) {
-                    $scope.shownDevice = box.shownDevice;
-                    $scope.chartColorNumber = box.chartColorNumber;
-                    $scope.chartColor = box.chartColor;
-                    $scope.showChart = box.showChart;
+                $scope.rangeSettings = {
+                    theme: 'ios',
+                    sliderMarker: {
+                        format: "H:mm",
+                        visible: true
+                    },
+                    sliderHandle: {
+                        visible: true,
+                        width: 3,
+                        opacity: 1
+                    },
+                    dataSource: [],
+                    dataSourceField: 'timestamp',
+                    chart: {
+                        commonSeriesSettings: {
+                            argumentField: 'timestamp',
+                            valueField: 'value'
+                        },
+                        seriesTemplate: {
+                            nameField: "name",
+                            customizeSeries: function (seriesStream) {
+                                var idStr = seriesStream.split("-"),
+                                    stream = idStr[0],
+                                    type = idStr[1];
 
-                    if (box.selectedScale) {
-                        $scope.selectedScale = box.selectedScale;
+                                if (type === 'data') {
+                                    return {type: 'area', opacity: 0.75, color: $rootScope.datastreams[stream].color};
+                                }
+                                return {type: 'stepArea', color: $rootScope.datastreams[stream].color};
+                            }
+                        }
+                    },
+                    scale: {
+                        valueType: 'datetime',
+                        label: {
+                            format: 'H:mm'
+                        }
+                    },
+                    selectedRangeChanged: function (e) {
+                        var chart = $("#chartContainer").dxChart("instance");
+                        chart.zoomArgument(e.startValue, e.endValue);
+                    },
+                    behavior: {
+                        snapToTicks: false,
+                        callSelectedRangeChanged: "onMoving"
+                    },
+                    margin: {
+                        left: 0,
+                        right: -15
                     }
-                    seriesData = $scope.chartSettings.dataSource;
+                };
 
-                } else {
-                    chart.chartSettings.dataSource = [];
-                    $rootScope.datastreams = {};
-                }
+                /*
+                 $scope.$on('$ionicView.enter', function () {
+                 console.log('view loaded', $state.params.id);
+                 if ($state.params.id && box.installation && box.installation._id === $state.params.id) {
+                 console.log('instid', box.installation._id);
+                 $scope.shownDevice = box.shownDevice;
+                 $scope.chartColorNumber = box.chartColorNumber;
+                 $scope.chartColor = box.chartColor;
+                 $scope.showChart = box.showChart;
 
+                 if (box.selectedScale) {
+                 $scope.selectedScale = box.selectedScale;
+                 }
+                 seriesData = $scope.chartSettings.dataSource;
+                 } else {
+                 console.log('reset', box.installation);
+                 chart.chartSettings.dataSource = [];
+                 // $rootScope.datastreams = {};
+                 box.chartColorNumber = null;
+                 box.chartColor = [];
+                 box.shownDevice = [];
+                 box.selectedScale = null;
+                 box.installation = null;
+                 }
+                 });
+                 */
                 $scope.chartSettings.seriesTemplate = {
                     nameField: "name",
                     customizeSeries: function (seriesStream) {
                         var idStr = seriesStream.split("-"),
                             stream = idStr[0],
                             type = idStr[1];
+
+                        if ($rootScope.datastreams[stream] == null)
+                            return;
 
                         if (type === 'data') {
                             return {type: 'area', color: $rootScope.datastreams[stream].color};
@@ -673,16 +762,17 @@
                     $scope.removed = true;
                 });
 
-                $scope.$on('$destroy', function () {
+                $scope.$on('$ionicView.beforeLeave', function () {
                     // Make sure that the interval is destroyed too
                     sparklineFeed = undefined;
-                    box.installation = $scope.installation;
-                    box.shownDevice = $scope.shownDevice;
-                    box.chartColorNumber = $scope.chartColorNumber;
-                    box.chartColor = $scope.chartColor;
-                    box.selectedScale = $scope.selectedScale;
-                    box.showChart = $scope.showChart;
-
+                    /*
+                     box.installation = $scope.installation;
+                     box.shownDevice = $scope.shownDevice;
+                     box.chartColorNumber = $scope.chartColorNumber;
+                     box.chartColor = $scope.chartColor;
+                     box.selectedScale = $scope.selectedScale;
+                     box.showChart = $scope.showChart;
+                     */
                     bobby.disableSubscriptions();
                     if ($scope.popover) {
                         $scope.popover.remove();
@@ -769,14 +859,7 @@
                         popover.show($event);
                     });
                 };
-                /*
-                 var updateTime = function () {
-                 $scope.date.raw = new Date();
-                 $timeout(updateTime, 1000);
-                 };
 
-                 updateTime();
-                 */
                 // Execute action on hide popover
                 $scope.$on('popover.hidden', function () {
                     $ionicListDelegate.closeOptionButtons();
@@ -903,10 +986,6 @@
                     var filterItem = device + stream + '-' + type,
                         controlColor = _.find($scope.chartColor, {'control': device + stream});
 
-                    /*
-                     $log.info('control color:' + controlColor);
-                     $log.info('filter item:' + filterItem);
-                     */
                     if (controlColor) {
 
                         $scope.chartColor = _.without($scope.chartColor, controlColor);
@@ -922,6 +1001,7 @@
                         });
 
                         $scope.chartSettings.dataSource = seriesData;
+                        $scope.rangeSettings.dataSource = seriesData;
 
                     } else {
 
@@ -944,7 +1024,7 @@
                     if ($scope.chartSettings.dataSource.length > 0 && _.find($scope.chartColor, {'control': data.device + data.control})) {
                         $scope.chartSettings.dataSource.push({
                             'name': data.device + data.control + '-' + data.type,
-                            'timestamp': data.timestamp,
+                            'timestamp': new Date(data.timestamp),
                             'value': data.value
                         });
                     }
@@ -954,12 +1034,16 @@
                     if (angular.isDefined(data.data) && data.data.length > 0) {
                         if ($scope.selectedScale.value <= 86400) {
                             $scope.chartLabel.label = {format: 'H:mm'};
+                            $scope.rangeSettings.scale.label.format = 'H:mm';
                         } else if ($scope.selectedScale.value <= 604800) {
                             $scope.chartLabel.label = {format: 'ddd'};
+                            $scope.rangeSettings.scale.label.format = 'H:mm';
                         } else if ($scope.selectedScale.value <= 2592000) {
-                            $scope.chartLabel.label = {format: 'dd-MM'};
+                            $scope.chartLabel.label = {format: 'd-MM'};
+                            $scope.rangeSettings.scale.label.format = 'dd';
                         } else {
                             $scope.chartLabel.label = {format: 'MMM'};
+                            $scope.rangeSettings.scale.label.format = 'dd';
                         }
 
                         $scope.chartSettings.argumentAxis = $scope.chartLabel;
@@ -970,15 +1054,23 @@
                         });
 
                         _.forEach(data.data, function (obs) {
-                            seriesData.push({'name': stream, 'timestamp': obs.timestamp, 'value': obs.value});
+                            //seriesData.push({'name': stream, 'timestamp': obs.timestamp, 'value': obs.value});
+                            seriesData.push({
+                                'name': stream,
+                                'timestamp': new Date(obs.timestamp),
+                                'value': obs.value
+                            });
+
                         });
 
                         $timeout(function () {
                             $scope.chartSettings.dataSource = seriesData;
+                            $scope.rangeSettings.dataSource = seriesData;
                         }, 25);
 
                     } else {
                         $scope.chartSettings.dataSource = [];
+                        $scope.rangeSettings.dataSource = [];
                     }
 
                 }, true);
@@ -989,16 +1081,17 @@
 
                 if ($scope.shownDevice.length === 0) {
                     angular.forEach($scope.installation.devices, function (item) {
-                        $scope.shownDevice[item.id] = true;
+                        $scope.shownDevice[item.id] = false;
                     });
                 }
 
-                bobby.setInstallation($scope.installation);
+                bobby.refreshInstallation($scope.installation);
 
             }
         ])
 
-        .controller('MapCtrl', ['uiGmapGoogleMapApi', 'uiGmapIsReady', '$cordovaSplashscreen', '$scope', '$location', '$rootScope', '$cordovaGeolocation', 'Settings', 'icons', 'styles', 'installations', '$state', '$ionicLoading', '$ionicPopover', 'auth', 'auth0Service',
+        .
+        controller('MapCtrl', ['uiGmapGoogleMapApi', 'uiGmapIsReady', '$cordovaSplashscreen', '$scope', '$location', '$rootScope', '$cordovaGeolocation', 'Settings', 'icons', 'styles', 'installations', '$state', '$ionicLoading', '$ionicPopover', 'auth', 'auth0Service',
             function (GoogleMapApi, IsReady, $cordovaSplashscreen, $scope, $location, $rootScope, $cordovaGeolocation, Settings, icons, styles, installations, $state, $ionicLoading, $ionicPopover, auth, auth0Service) {
 
                 var mapStyles = {

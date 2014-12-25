@@ -4,8 +4,8 @@
             <div class="item item-input item-button-right">
                 <span class="input-label">Duration</span>
                  <!--timer-duration timer="startTimer"></timer-duration-->
-                <input type="number" min="0" max="300" ng-model="controlTimer.duration" name="duration">
-                <button class="button button-positive" ng-show="controlTimer.duration >=0 && controlTimer.duration<= 300" ng-click="setTimer(controlTimer)">
+                <input type="number" min="0" max="180" ng-model="controlTimer.duration" name="duration">
+                <button class="button button-positive" ng-if="controlTimer.duration >=0 && controlTimer.duration<= 180" ng-click="setTimer(controlTimer)">
                     <i class="icon ion-play"></i>
                 </button>
             </div>

@@ -48,15 +48,17 @@
                 });
             };
         })
+
         .directive('headerShrink', function ($document, $timeout) {
             var fadeAmt;
 
-            var shrink = function (header, content, amt, max) {
+            var shrink = function (header, buttons, content, amt, max) {
                 amt = Math.min(44, amt);
                 fadeAmt = 1 - amt / 44;
 
                 ionic.requestAnimationFrame(function () {
                     header.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
+                    buttons.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
                     for (var i = 0, j = header.children.length; i < j; i++) {
                         header.children[i].style.opacity = fadeAmt;
                     }
@@ -65,20 +67,19 @@
             return {
                 restrict: 'A',
                 link: function ($scope, $element, $attr) {
-                    $timeout(function () {
+                  $timeout(function () {
                         var starty = $scope.$eval($attr.headerShrink) || 0;
                         var shrinkAmt;
 
-                        var header = $document[0].body.querySelector('.bar-shrink');
-                        var headerHeight = header.offsetHeight;
-
+                        var header = $document[0].body.querySelectorAll('.bar-header');
+                        var headerHeight = header[0].offsetHeight;
                         $element.bind('scroll', function (e) {
                             if (e.originalEvent && e.originalEvent.detail && e.originalEvent.detail.scrollTop && e.originalEvent.detail.scrollTop > starty) {
                                 // Start shrinking
                                 shrinkAmt = headerHeight - Math.max(0, (starty + headerHeight) - e.originalEvent.detail.scrollTop);
-                                shrink(header, $element[0], shrinkAmt, headerHeight);
+                                shrink(header[0], header[1], $element[0], shrinkAmt, headerHeight);
                             } else {
-                                shrink(header, $element[0], 0, headerHeight);
+                                shrink(header[0], header[1], $element[0], 0, headerHeight);
                             }
                         });
                     }, 1500);
@@ -181,9 +182,10 @@
             return {
                 restrict: 'E',
                 scope: {
-                    timer: '='
+                    timer: '=',
+                    timerTime: '='
                 },
-                template: '<input type="time" ng-model="timer.time">',
+                template: '<input type="time" ng-model="timerTime" min="00:00:00" max="23:59:00">',
                 replace: 'true',
                 link: function (scope, elem, attr) {
 

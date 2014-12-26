@@ -1,7 +1,7 @@
 <ion-list>
 
     <div ng-repeat="device in installation.devices" style="padding-bottom: 20px;">
-        <ion-item class="reading item-icon-right"
+        <ion-item class="boxit reading item-icon-right"
                   style="border-width: 0px;"
                   ng-click="toggleDevice(device.id)">
             <label>
@@ -27,7 +27,7 @@
         <!--      ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }| orderObjectBy:'name':'reverse'" -->
 
         <div ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }">
-            <ion-item class="reading item-icon-right"
+            <ion-item class="boxit reading item-icon-right"
                       style="padding-left: 14px; border-width: 0px;"
                       ng-click="showData(readings.deviceid, readings.id, readings.ctrlType)"
                       ng-if="readings.ctrlType == 'data' && (isDeviceShown(device.id) || readings.color)">
@@ -53,7 +53,7 @@
                 </ion-option-button>
             </ion-item>
 
-            <ion-item class="reading item-icon-right"
+            <ion-item class="boxit reading item-icon-right"
                       ng-click="showData(readings.deviceid, readings.id, readings.ctrlType)"
                       style="padding-left: 14px; border-width: 0px;"
                       ng-if="readings.ctrlType == 'timer' && (isDeviceShown(device.id) || readings.color)">
@@ -88,8 +88,9 @@
     </div>
 
 
-    <ion-item ng-if="showChart"
-              style="border-width: 0px; padding: 10px;> <!-- background-color:#EEEEEE;"-->
+    <ion-item class="boxit"
+              ng-if="showChart"
+              style="border-width: 0px; padding: 10px;">
 
         <span style="position: absolute; left: 54px; font-weight: normal; font-size: 14px; line-height: 1.52857;">{{selectedScale.text}}</span>
 

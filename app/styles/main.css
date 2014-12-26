@@ -26,8 +26,16 @@ opacity: 0.9;
     overflow: hidden;
 }
 
+@media only screen
+and (max-width : 568px) {
+    .item.boxmedia{
+        left: 0;
+        right: 0;
+        box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.3);
+    }
+}
 
-.item{
+.item.boxit{
     left: 0;
     right: 0;
     box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.3);

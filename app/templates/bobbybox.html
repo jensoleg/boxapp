@@ -54,7 +54,8 @@
                                 {{::installation.contact.phone}}
                             </a>
                         </ion-item>
-                        <ion-item style="border-style:none;  padding: 6px;margin: 0px;"
+                        <ion-item class="boxmedia"
+                                  style="border-style:none;  padding: 6px;margin: 0px;"
                                   ng-click="emailTo('{{installation.contact.email}}')">
                             <a style="font-size: 85%;" class="item-icon-left">
                                 <i style="font-size: 16px;" class="icon ion-android-mail"></i>
@@ -68,7 +69,7 @@
             <ion-list>
                 <div ng-style="showTimeline && {'padding-bottom': '0px'} || {'padding-bottom': '10px'}">
                     <!--div style="padding-bottom: 10px;"-->
-                    <ion-item class="reading item-icon-right"
+                    <ion-item class="boxit reading item-icon-right"
                               ng-click="toggleTimeline()"
                               style="border-width: 0px;padding-top: 8px;">
                         <label>
@@ -83,7 +84,7 @@
             </ion-list>
 
             <!-----   soicail IOT ----->
-            <ion-item style="padding: 0px;border-bottom-style: none;border-width: 0px;">
+            <ion-item class="boxit" style="padding: 0px;border-bottom-style: none;border-width: 0px;">
             <div ng-if="showTimeline" class="reveal-animation">
                 <bobby-social></bobby-social>
             </div>

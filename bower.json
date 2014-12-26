@@ -11,7 +11,7 @@
     "angular-cookies": "~1.3.6",
     "angular-resource": "~1.3.6",
     "collide": "~0.0.4",
-    "ionic": "~0.9.27",
+    "ionic": "driftyco/ionic-bower#1.0.0-beta.14",
     "angular-google-maps": "~2.0.12",
     "angularjs-google-places": "~0.1.0",
     "angular-elastic": "~2.4.0",

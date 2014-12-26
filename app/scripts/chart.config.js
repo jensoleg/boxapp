@@ -11,7 +11,6 @@
                     argumentField: 'timestamp',
                     valueField: 'value',
                     opacity: 0.2,
-                    label: {visible: false},
                     border: {
                         width: 2,
                         visible: true,
@@ -21,8 +20,13 @@
                         visible: false,
                         hoverMode: 'allArgumentPoints',
                         selectionMode: 'allArgumentPoints'
-                    }
-                },
+                    },
+                    label: {
+                        visible: true,
+                        connector: { visible: true }
+                    },
+                    maxLabelCount: 15
+            },
                 seriesTemplate: {
                     nameField: "name"
                 },
@@ -89,6 +93,7 @@
                         }
                     }
                 },
+                seriesSelectionMode: 'multiple',
                 scrollingMode: 'all',
                 zoomingMode: 'all'
             },

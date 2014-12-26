@@ -288,16 +288,21 @@
                     });
                     confirmPopup.then(function (res) {
                         if (res) {
-                            installationService.removeDevice($scope.$parent.installation._id, device._id)
-                                .then(function (response) {
-                                    $rootScope.$broadcast('message:installation-changed', response);
+                            installationService.deactivateDevice(device.id)
+                                .then(function () {
+                                    installationService.removeDevice($scope.$parent.installation._id, device._id)
+                                        .then(function (response) {
+                                            $rootScope.$broadcast('message:installation-changed', response);
+                                        }, function (response) {
+                                            console.log('error', response);
+                                        });
                                 }, function (response) {
                                     console.log('error', response);
                                 });
+
                         }
                         $ionicListDelegate.closeOptionButtons();
                     });
-
                 };
 
                 /* new device */
@@ -467,9 +472,14 @@
                     });
                     confirmPopup.then(function (res) {
                         if (res) {
-                            installationService.removeControl($scope.$parent.$parent.installation._id, deviceId, control._id)
-                                .then(function (response) {
-                                    $rootScope.$broadcast('message:installation-changed', response);
+                            installationService.removeDeviceControl(curDevice.id, control)
+                                .then(function () {
+                                    installationService.removeControl($scope.$parent.$parent.installation._id, deviceId, control._id)
+                                        .then(function (response) {
+                                            $rootScope.$broadcast('message:installation-changed', response);
+                                        }, function (response) {
+                                            console.log('error', response);
+                                        });
                                 }, function (response) {
                                     console.log('error', response);
                                 });
@@ -505,7 +515,24 @@
                 $scope.saveNewControl = function () {
                     installationService.newControl($scope.$parent.$parent.installation._id, deviceId, $scope.newControl)
                         .then(function (response) {
-                            $rootScope.$broadcast('message:installation-changed', response);
+                            var device = _.find(response.devices, {'_id': deviceId}),
+                                control = _.find(device.controls, {'id': $scope.newControl.id});
+
+                            installationService.updateDeviceControl(curDevice.id, control)
+                                .then(function (deviceControl) {
+                                    control.ctrlType = "data";
+                                    control.symbol = deviceControl.symbol;
+                                    control.unit.units = deviceControl.units;
+                                    installationService.updateControl($scope.$parent.$parent.installation._id, deviceId, curDevice.id, control)
+                                        .then(function (response) {
+                                            $rootScope.$broadcast('message:installation-changed', response);
+                                        }, function (response) {
+                                            console.log('error', response);
+                                        });
+
+                                }, function (response) {
+                                    console.log('error', response);
+                                });
                         }, function (response) {
                             console.log('error', response);
                         });
@@ -701,10 +728,6 @@
                             format: 'H:mm'
                         }
                     },
-                    selectedRangeChanged: function (e) {
-                        var chart = $("#chartContainer").dxChart("instance");
-                        chart.zoomArgument(e.startValue, e.endValue);
-                    },
                     behavior: {
                         snapToTicks: false,
                         callSelectedRangeChanged: "onMoving"
@@ -712,6 +735,22 @@
                     margin: {
                         left: 0,
                         right: -15
+                    },
+                    selectedRangeChanged: function (e) {
+                        var start = moment(e.endValue),
+                            end = moment(e.startValue),
+                            days = start.diff(end, 'day');
+
+                        if (days <= 1) {
+                            $scope.chartLabel.label = {format: 'H:mm'};
+                        } else if (days <= 30) {
+                            $scope.chartLabel.label = {format: 'dd'};
+                        } else {
+                            $scope.chartLabel.label = {format: 'd-MM'};
+                        }
+
+                        var chart = $("#chartContainer").dxChart("instance");
+                        chart.zoomArgument(e.startValue, e.endValue);
                     }
                 };
 

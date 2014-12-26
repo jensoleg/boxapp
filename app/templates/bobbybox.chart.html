@@ -113,20 +113,21 @@
                                crosshair: chartSettings.crosshair,
                                palette: chartSettings.palette,
                                commonAxisSettings: chartSettings.commonAxisSettings,
-                               animation: chartSettings.animation
+                               animation: chartSettings.animation,
+                               seriesSelectionMode: chartSettings.seriesSelectionMode,
+                               maxLabelCount: chartSettings.maxLabelCount
               }">
         </div>
 
         <div id="rangeSelectorContainer"
              dx-range-selector="{ bindingOptions: { dataSource: 'rangeSettings.dataSource',
                                                     scale: 'rangeSettings.scale',
-                                                    sliderMarker: 'rangeSettings.sliderMarker',
-                                   dataSourceField: 'rangeSettings.dataSourceField',
-                                   chart: 'rangeSettings.chart',
-                                   behavior: 'rangeSettings.behavior',
-                                   selectedRangeChanged: 'rangeSettings.selectedRangeChanged',
-                                   margin: 'rangeSettings.margin'}
-
+                                                    sliderMarker: 'rangeSettings.sliderMarker'},
+                                   dataSourceField: rangeSettings.dataSourceField,
+                                   chart: rangeSettings.chart,
+                                   behavior: rangeSettings.behavior,
+                                   margin: rangeSettings.margin,
+                                   selectedRangeChanged: rangeSettings.selectedRangeChanged
                                     }">
 
         </div>

@@ -460,6 +460,18 @@
                         return q.promise;
                     },
 
+                    deactivateDevice: function (deviceId) {
+                        var q = $q.defer();
+
+                        $http.delete(apiEndpoint + 'agent/' + deviceId + '?config').
+                            success(function (response) {
+                                q.resolve(response);
+                            }, function () {
+                                q.resolve(null);
+                            });
+                        return q.promise;
+                    },
+
                     activateDevice: function (installationId, device) {
                         var q = $q.defer(),
                             options;
@@ -506,6 +518,19 @@
                         return q.promise;
                     },
 
+
+                    removeDeviceControl: function (deivceId, control) {
+                        var q = $q.defer();
+
+                        $http.delete(apiEndpoint + 'agent/' + deivceId + '?control=' + control.id)
+                            .success(function (response) {
+                                q.resolve(response);
+                            }, function () {
+                                q.resolve(null);
+                            });
+                        return q.promise;
+                    },
+
                     removeControl: function (id, deviceid, controlid) {
                         var q = $q.defer();
 
@@ -529,7 +554,6 @@
                             });
                         return q.promise;
                     },
-
 
                     updateControl: function (id, deviceid, deivceIdent, control) {
                         var q = $q.defer();

@@ -109,7 +109,10 @@
 
                 $rootScope.datastreams = {};
 
-                client = mqtt.createClient(8080, ENV.MQTTServer, {username: 'JWT/' + $rootScope.domain, "password": auth.idToken});
+                client = mqtt.createClient(8080, ENV.MQTTServer, {
+                    username: 'JWT/' + $rootScope.domain,
+                    "password": auth.idToken
+                });
 
                 client.on('connect', function () {
                     console.log('MQTT connected');
@@ -131,8 +134,8 @@
                                 gte: '>=',
                                 eq: '=='
                             },
-                            theDevice = _.find(currentInstallation.devices, { 'id': device }),
-                            control = _.find(theDevice.controls, { 'id': stream });
+                            theDevice = _.find(currentInstallation.devices, {'id': device}),
+                            control = _.find(theDevice.controls, {'id': stream});
 
                         /* check state stream on device.streamid  and set scope variable installation.device.state.value.
                          UI will listen to state: installation.device.state.value and calculated
@@ -159,7 +162,13 @@
                         $rootScope.datastreams[device + stream].current_value = message;
 
                         now = Date.now();
-                        $rootScope.$broadcast('message:new-reading', {device: device, control: stream, type: control.ctrlType, timestamp: moment(moment()).utc().toJSON(), value: parseFloat(message) });
+                        $rootScope.$broadcast('message:new-reading', {
+                            device: device,
+                            control: stream,
+                            type: control.ctrlType,
+                            timestamp: moment(moment()).utc().toJSON(),
+                            value: parseFloat(message)
+                        });
 
 
                     }
@@ -283,8 +292,8 @@
                     var pushInterval = 1,
                         interval = 1,
                         timeScale = Settings.get('timeScale'),
-                        device = _.find(currentInstallation.devices, { 'id': deviceId }),
-                        control = _.find(device.controls, { 'id': streamId });
+                        device = _.find(currentInstallation.devices, {'id': deviceId}),
+                        control = _.find(device.controls, {'id': streamId});
 
                     if (angular.isDefined(device.interval) && device.interval !== null) {
                         pushInterval = device.interval;
@@ -315,7 +324,12 @@
                         params: options,
                         cache: true
                     }).success(function (data) {
-                        $rootScope.$broadcast('message:data', {device: deviceId, control: streamId, type: control.ctrlType, data: data.data});
+                        $rootScope.$broadcast('message:data', {
+                            device: deviceId,
+                            control: streamId,
+                            type: control.ctrlType,
+                            data: data.data
+                        });
 
                     });
                 };
@@ -348,7 +362,7 @@
                     all: function () {
                         var q = $q.defer();
 
-                        $http.get(apiEndpoint + 'installations', { cache: true }).success(function (data) {
+                        $http.get(apiEndpoint + 'installations', {cache: true}).success(function (data) {
                             q.resolve(data);
                         }, function () {
                             q.resolve(null);
@@ -360,7 +374,7 @@
 
                         var q = $q.defer();
 
-                        $http.get(apiEndpoint + 'installations/' + id, { cache: true }).success(function (response) {
+                        $http.get(apiEndpoint + 'installations/' + id, {cache: true}).success(function (response) {
                             q.resolve(response);
                         }, function () {
                             q.resolve(null);
@@ -417,7 +431,7 @@
 
                         var q = $q.defer();
 
-                        $http.get(apiEndpoint + 'installations/' + id + '/devices/' + deviceid, { cache: true }).success(function (response) {
+                        $http.get(apiEndpoint + 'installations/' + id + '/devices/' + deviceid, {cache: true}).success(function (response) {
                             q.resolve(response);
                         }, function () {
                             q.resolve(null);
@@ -499,7 +513,7 @@
                     getControl: function (id, deviceid, controlid) {
                         var q = $q.defer();
 
-                        $http.get(apiEndpoint + 'installations/' + id + '/devices/' + deviceid + '/controls/' + controlid, { cache: true }).success(function (response) {
+                        $http.get(apiEndpoint + 'installations/' + id + '/devices/' + deviceid + '/controls/' + controlid, {cache: true}).success(function (response) {
                             q.resolve(response);
                         }, function () {
                             q.resolve(null);
@@ -572,7 +586,7 @@
                     getTrigger: function (id, deviceid, triggerid) {
                         var q = $q.defer();
 
-                        $http.get(apiEndpoint + 'installations/' + id + '/devices/' + deviceid + '/triggers/' + triggerid, { cache: true }).success(function (response) {
+                        $http.get(apiEndpoint + 'installations/' + id + '/devices/' + deviceid + '/triggers/' + triggerid, {cache: true}).success(function (response) {
                             q.resolve(response);
                         }, function () {
                             q.resolve(null);
@@ -615,7 +629,7 @@
                     getRequest: function (id, deviceid, triggerid, requestid) {
                         var q = $q.defer();
 
-                        $http.get(apiEndpoint + 'installations/' + id + '/devices/' + deviceid + '/triggers/' + triggerid + '/requests/' + requestid, { cache: true }).success(function (response) {
+                        $http.get(apiEndpoint + 'installations/' + id + '/devices/' + deviceid + '/triggers/' + triggerid + '/requests/' + requestid, {cache: true}).success(function (response) {
                             q.resolve(response);
                         }, function () {
                             q.resolve(null);

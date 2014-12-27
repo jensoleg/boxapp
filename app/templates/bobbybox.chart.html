@@ -16,10 +16,7 @@
                ng-click="showData(device.id, 'online', 'state'); $event.stopPropagation()"
                ng-style="datastreams[device.id + 'online'].id == 'online' && datastreams[device.id + 'online'].current_value == '0' && {'color': 'rgb(253, 57, 80)'} || {'color': 'rgb(129, 207, 98)'}">
             </i>
-            <!--ion-option-button class="button-calm" ng-click="activateDevice(device.id)">Update
-            </ion-option-button-->
             <ion-option-button class="button-assertive" ng-click="aRemoveDevice(device.id)">Remove</ion-option-button>
-            <!--ion-option-button class="button-balanced" ng-click="aCopyDevice(device.id)">Copy</ion-option-button-->
             <ion-option-button class="button-positive" ng-click="aEditDevice(device.id)">Edit</ion-option-button>
             <ion-option-button class="button-stable" ng-click="aNewControl(device.id)">Add</ion-option-button>
         </ion-item>
@@ -112,26 +109,25 @@
                                palette: chartSettings.palette,
                                commonAxisSettings: chartSettings.commonAxisSettings,
                                animation: chartSettings.animation,
-                               seriesSelectionMode: chartSettings.seriesSelectionMode,
-                               maxLabelCount: chartSettings.maxLabelCount
+                               seriesSelectionMode: chartSettings.seriesSelectionMode
               }">
         </div>
 
         <div id="rangeSelectorContainer"
              dx-range-selector="{ bindingOptions: { dataSource: 'rangeSettings.dataSource',
-                                                    scale: 'rangeSettings.scale',
-                                                    sliderMarker: 'rangeSettings.sliderMarker'},
+                                                    scale: 'rangeSettings.scale'},
                                    dataSourceField: rangeSettings.dataSourceField,
                                    chart: rangeSettings.chart,
                                    behavior: rangeSettings.behavior,
                                    margin: rangeSettings.margin,
+                                   sliderMarker: rangeSettings.sliderMarker,
                                    selectedRangeChanged: rangeSettings.selectedRangeChanged
                                     }">
 
         </div>
 
     </ion-item>
-    <div style="padding-bottom: 20px;"></div>
+    <div style="padding-bottom: 20px"></div>
 
 </ion-list>
 

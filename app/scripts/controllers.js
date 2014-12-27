@@ -691,15 +691,14 @@
                 };
 
                 $scope.rangeSettings = {
-                    theme: 'ios',
                     sliderMarker: {
                         format: "H:mm",
                         visible: true
                     },
                     sliderHandle: {
                         visible: true,
-                        width: 3,
-                        opacity: 1
+                        width: 1,
+                        opacity: 0.75
                     },
                     dataSource: [],
                     dataSourceField: 'timestamp',
@@ -838,6 +837,7 @@
                         control = _.find(device.controls, {'id': controlId});
                     $scope.$broadcast('message:remove-control', device, control);
                 };
+
                 $scope.aCopyControl = function (deviceId, controlId) {
                     var device = _.find($scope.installation.devices, {'id': deviceId}),
                         control = _.find(device.controls, {'id': controlId});

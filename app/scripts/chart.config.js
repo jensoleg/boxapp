@@ -22,11 +22,10 @@
                         selectionMode: 'allArgumentPoints'
                     },
                     label: {
-                        visible: true,
-                        connector: { visible: true }
-                    },
-                    maxLabelCount: 15
-            },
+                        visible: false,
+                        connector: {visible: false}
+                    }
+                },
                 seriesTemplate: {
                     nameField: "name"
                 },
@@ -61,15 +60,6 @@
                 legend: {
                     visible: false
                 },
-                /*
-                 commonPaneSettings: {
-                 border: {
-                 visible: false,
-                 color: '#e9e9e9',
-                 opacity: 0.5
-                 }
-                 },
-                 */
                 tooltip: {
                     enabled: false,
                     shared: false,
@@ -98,10 +88,12 @@
                 zoomingMode: 'all'
             },
             timeScales: [
-                {value: 300, interval: 60, text: '5 minutes', type: 'Raw datapoints'},
-                {value: 1800, interval: 60, text: '30 minutes', type: 'Raw datapoints'},
-                {value: 3600, interval: 60, text: '1 hours', type: 'Raw datapoints'},
-                {value: 21600, interval: 60, text: '6 hours', type: 'Raw datapoints'},
+                /*
+                 {value: 300, interval: 60, text: '5 minutes', type: 'Raw datapoints'},
+                 {value: 1800, interval: 60, text: '30 minutes', type: 'Raw datapoints'},
+                 {value: 3600, interval: 60, text: '1 hours', type: 'Raw datapoints'},
+                 {value: 21600, interval: 60, text: '6 hours', type: 'Raw datapoints'},
+                 */
                 {value: 86400, interval: 60, text: '1 day', type: 'Raw datapoints'},
                 {value: 604800, interval: 3600, text: '7 days', type: 'Averaged datapoints'},
                 {value: 2592000, interval: 3600, text: '1 month', type: 'Averaged datapoints'},

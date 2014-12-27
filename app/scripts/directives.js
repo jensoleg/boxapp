@@ -3,7 +3,6 @@
     angular.module('BobbyApp.directives', [])
 
         .directive('noScroll', function ($document) {
-
             return {
                 restrict: 'A',
                 link: function ($scope, $element, $attr) {
@@ -35,6 +34,7 @@
                 }
             };
         })
+
         .directive('ngEnter', function () {
             return function (scope, element, attrs) {
                 element.bind("keydown keypress", function (event) {
@@ -86,6 +86,7 @@
                 }
             }
         })
+
         /*
          .directive('input', function ($timeout) {
          return {
@@ -125,6 +126,7 @@
          }
          })
          */
+
         .directive('googlePlaces', function () {
             return {
                 restrict: 'E',
@@ -150,6 +152,7 @@
                 }
             };
         })
+
         .directive('bobbyDevice', function () {
             return {
                 restrict: 'E',
@@ -159,6 +162,7 @@
                 }
             }
         })
+
         .directive('bobbySocial', function () {
             return {
                 restrict: 'E',
@@ -168,6 +172,7 @@
                 }
             }
         })
+
         .directive('bobbySetup', function () {
             return {
                 restrict: 'E',
@@ -192,8 +197,6 @@
                     elem.bind('blur', function () {
                         if (elem.data('old-value') != elem.val()) {
                             scope.$apply(function () {
-
-                                // console.log('time:', scope.timer.time);
 
                                 var now = new Date(),
                                     timeStr = scope.timer.time.split(":"),

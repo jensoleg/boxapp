@@ -52,20 +52,20 @@
                       style="padding-left: 14px; border-width: 0px;"
                       ng-if="readings.ctrlType == 'timer' && (isDeviceShown(device.id) || readings.color)">
                 <label>
+
                     <i ng-class="readings.color ? 'icon-item ion-ios7-stopwatch' : 'icon-item ion-ios7-stopwatch-outline'"
                        style="vertical-align: middle; font-size: 140%;"
                        ng-style="readings.color  && {'color': readings.color, 'opacity': 0.8}">
                     </i>
                     {{::readings.name}}
                 </label>
+
                 <i style="color: rgb(82, 154, 233); right: 32px; font-size: 105%;"
                    ng-if="readings.current_value == 1"
                    class="icon fa fa-circle-o-notch fa-spin">
                 </i>
-
                 <div>
-                    <ion-option-button class="button-calm" ng-if="readings.current_value == 0"
-                                       ng-click="startTimer($event, device.id, readings.id)">
+                    <ion-option-button class="button-calm" ng-if="readings.current_value == 0" ng-click="startTimer($event, device.id, readings.id); $event.stopPropagation()">
                         Control
                     </ion-option-button>
                     <ion-option-button class="button-assertive" ng-click="aRemoveControl(device.id, readings.id)">
@@ -100,8 +100,8 @@
         <div id="chartContainer" style="height: 300px"
              dx-chart="{bindingOptions: {dataSource: 'chartSettings.dataSource',
                               argumentAxis: 'chartSettings.argumentAxis',
-                              seriesTemplate: 'chartSettings.seriesTemplate'},
-                               valueAxis: chartSettings.valueAxis,
+                              seriesTemplate: 'chartSettings.seriesTemplate',
+                              valueAxis: 'chartSettings.valueAxis'},
                                commonSeriesSettings: chartSettings.commonSeriesSettings,
                                legend: chartSettings.legend,
                                tooltip: chartSettings.tooltip,
@@ -109,7 +109,10 @@
                                palette: chartSettings.palette,
                                commonAxisSettings: chartSettings.commonAxisSettings,
                                animation: chartSettings.animation,
-                               seriesSelectionMode: chartSettings.seriesSelectionMode
+                               seriesSelectionMode: chartSettings.seriesSelectionMode,
+                               scrollingMode: chartSettings.scrollingMode,
+                               zoomingMode: chartSettings.zoomingMode,
+                               adjustOnZoom: chartSettings.adjustOnZoom
               }">
         </div>
 

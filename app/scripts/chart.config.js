@@ -16,11 +16,6 @@
                         visible: true,
                         dashStyle: 'solid'
                     },
-                    point: {
-                        visible: false,
-                        hoverMode: 'allArgumentPoints',
-                        selectionMode: 'allArgumentPoints'
-                    },
                     label: {
                         visible: false,
                         connector: {visible: false}
@@ -36,6 +31,11 @@
                         visible: true,
                         opacity: 0.1
                     },
+                    point: {
+                        visible: false,
+                        hoverMode: 'allArgumentPoints',
+                        selectionMode: 'allArgumentPoints'
+                    },
                     label: {
                         font: {
                             color: '#7f7f7f'
@@ -43,6 +43,10 @@
                     },
                     tick: {
                         visible: false
+                    },
+                    constantLineStyle: {
+                        color: 'powderblue',
+                        dashStyle: 'dotlongDash'
                     }
                 },
                 animation: {
@@ -54,8 +58,7 @@
                 valueAxis: {
                     min: 0,
                     showZero: false,
-                    type: 'continuous',
-                    valueType: 'numeric'
+                    constantLines: []
                 },
                 legend: {
                     visible: false
@@ -85,7 +88,8 @@
                 },
                 seriesSelectionMode: 'multiple',
                 scrollingMode: 'all',
-                zoomingMode: 'all'
+                zoomingMode: 'all',
+                adjustOnZoom: false
             },
             timeScales: [
                 /*

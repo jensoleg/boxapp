@@ -143,6 +143,22 @@
                     });
                     confirmPopup.then(function (res) {
                         if (res) {
+
+                            angular.forEach(installation.devices, function (device) {
+
+                                installationService.deactivateDevice(device.id)
+                                    .then(function () {
+                                        installationService.removeDevice(installation._id, device._id)
+                                            .then(function (response) {
+
+                                            }, function (response) {
+                                                console.log('error', response);
+                                            });
+                                    }, function (response) {
+                                        console.log('error', response);
+                                    });
+                            });
+
                             installationService.removeInstallation(installation._id);
                             _.pull($scope.installations, installation);
                             $rootScope.$broadcast('message:installation-removed', installation);
@@ -1020,6 +1036,7 @@
                     });
                 };
 
+
                 $scope.showData = function (device, stream, type) {
 
                     var filterItem = device + stream + '-' + type,
@@ -1052,9 +1069,21 @@
 
                         $scope.chartColor.push({control: device + stream, color: color});
 
-                        ($scope.chartColorNumber < 19) ? $scope.chartColorNumber++ : $scope.chartColorNumber = 0;
+                        ($scope.chartColorNumber < 19) ? $scope.chartColorNumber++ : $scope.chartColorNumber = 0
 
                         bobby.getStream(device, stream);
+                    }
+
+                    $scope.chartSettings.valueAxis.constantLines = [];
+                    if ($scope.chartColor.length == 1) {
+                        var control = $scope.chartColor[0].control
+                        if ($rootScope.datastreams[control].maxCritical) {
+                            $scope.chartSettings.valueAxis.constantLines.push({value: $rootScope.datastreams[control].maxCritical});
+                        }
+
+                        if ($rootScope.datastreams[control].minCritical) {
+                            $scope.chartSettings.valueAxis.constantLines.push({value: $rootScope.datastreams[control].minCritical});
+                        }
                     }
                 };
 
@@ -1093,7 +1122,6 @@
                         });
 
                         _.forEach(data.data, function (obs) {
-                            //seriesData.push({'name': stream, 'timestamp': obs.timestamp, 'value': obs.value});
                             seriesData.push({
                                 'name': stream,
                                 'timestamp': new Date(obs.timestamp),

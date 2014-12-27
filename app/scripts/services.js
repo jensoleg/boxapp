@@ -121,58 +121,76 @@
                 // recieve message on current device subscription
                 client.on('message', function (topic, message) {
 
-                    if (currentInstallation) {
-                        var now,
-                            topics = topic.split('/'),
-                            device = topics[2],
-                            stream = topics[3],
-                            streamTriggers = [],
-                            operators = {
-                                lt: '<',
-                                lte: '<=',
-                                gt: '>',
-                                gte: '>=',
-                                eq: '=='
-                            },
-                            theDevice = _.find(currentInstallation.devices, {'id': device}),
-                            control = _.find(theDevice.controls, {'id': stream});
+                        if (currentInstallation) {
+                            var now,
+                                topics = topic.split('/'),
+                                device = topics[2],
+                                stream = topics[3],
+                                streamTriggers = [],
+                                operators = {
+                                    lt: '<',
+                                    lte: '<=',
+                                    gt: '>',
+                                    gte: '>=',
+                                    eq: '=='
+                                },
+                                theDevice = _.find(currentInstallation.devices, {'id': device}),
+                                control = _.find(theDevice.controls, {'id': stream});
 
-                        /* check state stream on device.streamid  and set scope variable installation.device.state.value.
-                         UI will listen to state: installation.device.state.value and calculated
-                         installation.state.value: 0,1,2
-                         */
+                            /* check state stream on device.streamid  and set scope variable installation.device.state.value.
+                             UI will listen to state: installation.device.state.value and calculated
+                             installation.state.value: 0,1,2
+                             */
 
-                        /* streamTriggers should be set when installation is changed !!!!!!!!! */
-                        /*
-                         angular.forEach(currentInstallation.devices, function (d) {
-                         if (d.triggers.length > 0 && d.id === device) {
-                         streamTriggers.push(_.filter(d.triggers, { 'stream_id': stream }));
-                         }
-                         });
+                            /* streamTriggers should be set when installation is changed !!!!!!!!! */
+                            /*
+                             angular.forEach(currentInstallation.devices, function (d) {
+                             if (d.triggers.length > 0 && d.id === device) {
+                             streamTriggers.push(_.filter(d.triggers, { 'stream_id': stream }));
+                             }
+                             });
 
-                         angular.forEach(streamTriggers, function (triggers) {
-                         angular.forEach(triggers, function (trigger) {
-                         if (trigger) {
-                         $rootScope.datastreams[device + stream].triggered = eval(message + operators[trigger.trigger_type] + trigger.threshold_value);
-                         }
-                         });
-                         });
-                         */
+                             angular.forEach(streamTriggers, function (triggers) {
+                             angular.forEach(triggers, function (trigger) {
+                             if (trigger) {
+                             $rootScope.datastreams[device + stream].triggered = eval(message + operators[trigger.trigger_type] + trigger.threshold_value);
+                             }
+                             });
+                             });
+                             */
 
-                        $rootScope.datastreams[device + stream].current_value = message;
+                            $rootScope.datastreams[device + stream].current_value = message;
 
-                        now = Date.now();
-                        $rootScope.$broadcast('message:new-reading', {
-                            device: device,
-                            control: stream,
-                            type: control.ctrlType,
-                            timestamp: moment(moment()).utc().toJSON(),
-                            value: parseFloat(message)
-                        });
+                            /*
+                            if (control.ctrlType == 'timer' && parseInt(message) == 0) {
 
+                                $http.get(apiEndpoint + 'datastreams/' + device + '/' + stream, {
+                                    params: {
+                                        limit: 2,
+                                        from: moment().subtract(1, 'days').toJSON(),
+                                        to: moment().toJSON(),
+                                        interval: 1
+                                    },
+                                    cache: false
+                                }).success(function (data) {
+                                    console.log('got data', data)
+                                }, function (error) {
+                                    console.log('error', error)
+                                });
+                            }
+                            */
 
+                            now = Date.now();
+                            $rootScope.$broadcast('message:new-reading', {
+                                device: device,
+                                control: stream,
+                                type: control.ctrlType,
+                                timestamp: moment(moment()).utc().toJSON(),
+                                value: parseFloat(message)
+                            });
+                        }
                     }
-                });
+                );
 
                 bobby.objectIdDel = function (copiedObjectWithId) {
                     if (copiedObjectWithId !== null && typeof copiedObjectWithId !== 'string' &&

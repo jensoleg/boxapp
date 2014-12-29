@@ -9,6 +9,7 @@
     </author>
     <content src="index.html"/>
     <access origin="*"/>
+    <access origin="https://api.electricimp.com" />
     <preference name="FadeSplashScreen" value="true" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="webviewbounce" value="false"/>

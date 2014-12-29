@@ -94,6 +94,18 @@
                 return obj;
             }])
 
+        .factory('$blinkup', [function () {
+
+            return {
+                start: function(success, fail) {
+                    blinkup.start(
+                        function (result) { success(result); },
+                        function (error) { fail(error); }
+                    );
+                }
+            };
+        }])
+
         .factory('bobby', ['$rootScope', '$http', 'auth', 'Settings', 'ENV', 'installationService',
             function ($rootScope, $http, auth, Settings, ENV, installationService) {
 
@@ -162,23 +174,23 @@
                             $rootScope.datastreams[device + stream].current_value = message;
 
                             /*
-                            if (control.ctrlType == 'timer' && parseInt(message) == 0) {
+                             if (control.ctrlType == 'timer' && parseInt(message) == 0) {
 
-                                $http.get(apiEndpoint + 'datastreams/' + device + '/' + stream, {
-                                    params: {
-                                        limit: 2,
-                                        from: moment().subtract(1, 'days').toJSON(),
-                                        to: moment().toJSON(),
-                                        interval: 1
-                                    },
-                                    cache: false
-                                }).success(function (data) {
-                                    console.log('got data', data)
-                                }, function (error) {
-                                    console.log('error', error)
-                                });
-                            }
-                            */
+                             $http.get(apiEndpoint + 'datastreams/' + device + '/' + stream, {
+                             params: {
+                             limit: 2,
+                             from: moment().subtract(1, 'days').toJSON(),
+                             to: moment().toJSON(),
+                             interval: 1
+                             },
+                             cache: false
+                             }).success(function (data) {
+                             console.log('got data', data)
+                             }, function (error) {
+                             console.log('error', error)
+                             });
+                             }
+                             */
 
                             now = Date.now();
                             $rootScope.$broadcast('message:new-reading', {

@@ -228,8 +228,10 @@
                 };
             }])
 
-        .controller('InstallationCtrl', ['bobby', '$scope', '$rootScope', '$ionicLoading', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate',
-            function (bobby, $scope, $rootScope, $ionicLoading, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
+        .controller('InstallationCtrl', ['bobby', '$blinkup', '$scope', '$rootScope', '$ionicLoading', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate',
+            function (bobby, $blinkup, $scope, $rootScope, $ionicLoading, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
+
+                $scope.isIOS = ionic.Platform.isIOS();
 
                 $scope.newDevice = {};
 
@@ -343,6 +345,17 @@
                 $scope.addDevice = function () {
                     $scope.newDevice = {};
                     $scope.newModal.show();
+                };
+
+                $scope.blinkup = function (device) {
+                    $blinkup.start(function (result) {
+                            $scope.newDevice.id = result.split("/")[3];
+                            $ionicLoading.show({ template: 'BlinkUp succeeded', noBackdrop: true, duration: 1500 });
+                        },
+                        function (error) {
+                            $ionicLoading.show({ template: error, noBackdrop: true, duration: 1500 });
+                        }
+                    );
                 };
 
                 $scope.saveNewDevice = function () {

@@ -64,6 +64,7 @@
                    ng-if="readings.current_value == 1"
                    class="icon fa fa-circle-o-notch fa-spin">
                 </i>
+
                 <div>
                     <ion-option-button class="button-calm" ng-if="readings.current_value == 0" ng-click="startTimer($event, device.id, readings.id); $event.stopPropagation()">
                         Control

@@ -687,8 +687,8 @@
             }])
 
 
-        .controller('BoxCtrl', ['installation', 'installationService', '$ionicLoading', '$ionicPopover', '$cordovaKeyboard', '$ionicSideMenuDelegate', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', '$timeout', '$ionicListDelegate', '$cacheFactory',
-            function (installation, installationService, $ionicLoading, $ionicPopover, $cordovaKeyboard, $ionicSideMenuDelegate, $scope, $state, $rootScope, $window, bobby, chart, box, $interval, $timeout, $ionicListDelegate, $cacheFactory) {
+        .controller('BoxCtrl', ['installation', 'installationService', '$location', '$ionicLoading', '$ionicPopover', '$cordovaKeyboard', '$ionicSideMenuDelegate', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', '$timeout', '$ionicListDelegate', '$cacheFactory',
+            function (installation, installationService, $location, $ionicLoading, $ionicPopover, $cordovaKeyboard, $ionicSideMenuDelegate, $scope, $state, $rootScope, $window, bobby, chart, box, $interval, $timeout, $ionicListDelegate, $cacheFactory) {
 
                 $ionicSideMenuDelegate.toggleLeft(false);
 
@@ -714,6 +714,11 @@
                 $scope.chartLabel = chart.chartLabel;
                 $scope.chartSettings = chart.chartSettings;
                 $scope.installation = installation;
+
+
+                $scope.navMap = function () {
+                    $location.path('/app/map');
+                };
 
                 $scope.doRefresh = function () {
                     bobby.refreshInstallation($scope.installation);
@@ -1338,7 +1343,11 @@
 
                 var onMarkerClicked = function (marker) {
 
-                    marker.icon = icons.gear;
+                    /*
+                       Dynamic change of marker icon causes crashes - check on new google maps version
+                     */
+
+                    //marker.icon = icons.gear;
 
                     $location.path('/app/main/' + marker.id);
                     /*

@@ -8,7 +8,7 @@
             <button menu-toggle="left" ng-hide="$exposeAside.active"
                     class="button button-icon button-clear button-dark ion-navicon">
             </button>
-            <button ui-sref="app.map()" class="button  button-icon button-clear button-dark ion-android-earth">
+            <button ng-click="navMap()" class="button  button-icon button-clear button-dark ion-android-earth">
             </button>
         </ion-nav-buttons>
         <ion-nav-buttons side="right">
@@ -17,7 +17,7 @@
         </ion-nav-buttons>
     </ion-nav-bar>
 
-    <ion-content class="scroll-bar-fade-out" header-shrink scroll-event-interval="5">
+    <ion-content has-bouncing="false" class="scroll-bar-fade-out" header-shrink scroll-event-interval="5">
         <ion-refresher
             pulling-text="Refresh..."
             on-refresh="doRefresh()">

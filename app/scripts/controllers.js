@@ -347,13 +347,18 @@
                     $scope.newModal.show();
                 };
 
-                $scope.blinkup = function (device) {
+                $scope.blinkup = function () {
+                    $ionicLoading.show({
+                        template: 'BlinkUp ...'
+                    });
                     $blinkup.start(function (result) {
+                            $ionicLoading.hide();
                             $scope.newDevice.id = result.split("/")[3];
-                            $ionicLoading.show({ template: 'BlinkUp succeeded', noBackdrop: true, duration: 1500 });
+                            $ionicLoading.show({template: 'BlinkUp succeeded', noBackdrop: true, duration: 1500});
                         },
                         function (error) {
-                            $ionicLoading.show({ template: error, noBackdrop: true, duration: 1500 });
+                            $ionicLoading.hide();
+                            $ionicLoading.show({template: error, noBackdrop: true, duration: 1500});
                         }
                     );
                 };
@@ -1344,7 +1349,7 @@
                 var onMarkerClicked = function (marker) {
 
                     /*
-                       Dynamic change of marker icon causes crashes - check on new google maps version
+                     Dynamic change of marker icon causes crashes - check on new google maps version
                      */
 
                     //marker.icon = icons.gear;

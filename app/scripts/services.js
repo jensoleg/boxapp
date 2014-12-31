@@ -98,7 +98,13 @@
 
             return {
                 start: function(success, fail) {
-                    blinkup.start(
+                    blinkup.start("",
+                        function (result) { success(result); },
+                        function (error) { fail(error); }
+                    );
+                },
+                wifi: function(planId, success, fail) {
+                    blinkup.start(planId,
                         function (result) { success(result); },
                         function (error) { fail(error); }
                     );

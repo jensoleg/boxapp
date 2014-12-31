@@ -22,10 +22,14 @@
                 <span class="input-label">Id</span>
                 <input type="text" placeholder="Id" ng-model="device.id" disabled>
             </label>
+            <label class="item item-input">
+                <span class="input-label">PlanId</span>
+                <input type="text" placeholder="Id" ng-model="device.planId" disabled>
+            </label>
             <div ng-if="isIOS"
                  class="item item-button-right">
                 BlinkUp new WiFi
-                <button class="button button-positive" ng-click="blinkup(newDevice)">
+                <button class="button button-positive" ng-click="blinkUpWiFi()">
                     <i class="icon ion-wifi"></i>
                 </button>
             </div>

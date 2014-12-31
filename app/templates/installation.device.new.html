@@ -29,6 +29,10 @@
                 <span class="input-label">Id</span>
                 <input type="text" placeholder="Id" ng-model="newDevice.id" disabled>
             </label>
+            <label ng-if="newDevice.planId" class="item item-input">
+                <span class="input-label">Plan Id</span>
+                <input type="text" placeholder="Plan" ng-model="newDevice.planId" disabled>
+            </label>
             <label ng-if="!isIOS" class="item item-input">
                 <span class="input-label">Id</span>
                 <input type="text" placeholder="Id" ng-model="newDevice.id">
@@ -37,3 +41,5 @@
         </div>
     </ion-content>
 </div>
+
+newDevice.planId

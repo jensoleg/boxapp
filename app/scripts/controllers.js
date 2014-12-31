@@ -354,7 +354,25 @@
                     $blinkup.start(function (result) {
                             $ionicLoading.hide();
                             $scope.newDevice.id = result.split("/")[3];
+                            $scope.newDevice.planId = result.split("/")[4];
                             $ionicLoading.show({template: 'BlinkUp succeeded', noBackdrop: true, duration: 1500});
+                        },
+                        function (error) {
+                            $ionicLoading.hide();
+                            $ionicLoading.show({template: error, noBackdrop: true, duration: 1500});
+                        }
+                    );
+                };
+
+                $scope.blinkUpWiFi = function () {
+
+                    $ionicLoading.show({
+                        template: 'Wifi BlinkUp ...'
+                    });
+
+                    $blinkup.wifi($scope.device.planId, function () {
+                            $ionicLoading.hide();
+                            $ionicLoading.show({template: 'Wifi BlinkUp succeeded', noBackdrop: true, duration: 1500});
                         },
                         function (error) {
                             $ionicLoading.hide();

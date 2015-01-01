@@ -97,16 +97,24 @@
         .factory('$blinkup', [function () {
 
             return {
-                start: function(success, fail) {
+                start: function (success, fail) {
                     blinkup.start("",
-                        function (result) { success(result); },
-                        function (error) { fail(error); }
+                        function (result) {
+                            success(result);
+                        },
+                        function (error) {
+                            fail(error);
+                        }
                     );
                 },
-                wifi: function(planId, success, fail) {
+                wifi: function (planId, success, fail) {
                     blinkup.start(planId,
-                        function (result) { success(result); },
-                        function (error) { fail(error); }
+                        function (result) {
+                            success(result);
+                        },
+                        function (error) {
+                            fail(error);
+                        }
                     );
                 }
             };
@@ -730,5 +738,33 @@
                         return $http.put(apiEndpoint + 'auth/users/' + user_id + '/metadata', metadata);
                     }
                 };
-            }]);
+            }])
+
+        .service('toastMessage', ['$cordovaToast', '$ionicLoading',
+            function ($cordovaToast, $ionicLoading) {
+
+                this.toast = function (msg, duration, position) {
+                    if (!duration)
+                        duration = 'short';
+                    if (!position)
+                        position = 'bottom';
+
+                    // PhoneGap? Use native:
+                    if ($cordovaToast) {
+                        $cordovaToast.show(msg, duration, position)
+                            .then(function (success) {
+                                // success
+                            }, function (error) {
+                                // error
+                            });
+                    }
+
+                    // … fallback / customized $ionicLoading:
+                    $ionicLoading.show({
+                        template: msg,
+                        noBackdrop: true,
+                        duration: (duration == 'short' ? 700 : 1500)
+                    });
+                }
+            }])
 }());

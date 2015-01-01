@@ -52,8 +52,8 @@
             };
         })
 
-        .controller('InstallationsCtrl', ['bobby', '$location', '$rootScope', '$scope', '$timeout', 'Settings', '$state', 'installations', 'installationService', '$ionicListDelegate', '$ionicModal', '$ionicPopup', 'auth', 'store', 'auth0Service', '$ionicSideMenuDelegate', '$cacheFactory',
-            function (bobby, $location, $rootScope, $scope, $timeout, Settings, $state, installations, installationService, $ionicListDelegate, $ionicModal, $ionicPopup, auth, store, auth0Service, $ionicSideMenuDelegate, $cacheFactory) {
+        .controller('InstallationsCtrl', ['bobby', 'toastMessage','$location', '$rootScope', '$scope', '$timeout', 'Settings', '$state', 'installations', 'installationService', '$ionicListDelegate', '$ionicModal', '$ionicPopup', 'auth', 'store', 'auth0Service', '$ionicSideMenuDelegate', '$cacheFactory',
+            function (bobby, toastMessage, $location, $rootScope, $scope, $timeout, Settings, $state, installations, installationService, $ionicListDelegate, $ionicModal, $ionicPopup, auth, store, auth0Service, $ionicSideMenuDelegate, $cacheFactory) {
 
                 $scope.installations = installations;
                 $scope.newInst = {location: {'lat': null, 'lng': null}};
@@ -128,6 +128,10 @@
                     $scope.editModal.show();
                 };
 
+                $scope.instValid = function () {
+                    return $scope.installation && $scope.installation.name && $scope.installation.placement && $scope.installation.address;
+                };
+
                 $scope.update = function () {
                     installationService.updateInstallation($scope.installation);
                 };
@@ -150,11 +154,13 @@
                                     .then(function () {
                                         installationService.removeDevice(installation._id, device._id)
                                             .then(function (response) {
-
+                                                toastMessage.toast("Installation removed");
                                             }, function (response) {
+                                                toastMessage.toast("remove failed");
                                                 console.log('error', response);
                                             });
                                     }, function (response) {
+                                        toastMessage.toast("remove failed");
                                         console.log('error', response);
                                     });
                             });
@@ -196,13 +202,19 @@
                     $scope.newModal.show();
                 };
 
+                $scope.newInstValid = function () {
+                    return $scope.newInst && $scope.newInst.name && $scope.newInst.placement && $scope.newInst.address;
+                };
+
                 $scope.saveNew = function () {
                     installationService.newInstallation($scope.newInst)
                         .then(function (response) {
+                            toastMessage.toast("Installation saved");
                             $scope.installations.push(response);
                             $rootScope.$broadcast('message:installation-new', response);
                             $location.path('/app/main/' + response._id);
                         }, function (response) {
+                            toastMessage.toast("Save failed");
                             console.log('error', response);
                         });
                 };
@@ -228,8 +240,8 @@
                 };
             }])
 
-        .controller('InstallationCtrl', ['bobby', '$blinkup', '$scope', '$rootScope', '$ionicLoading', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate',
-            function (bobby, $blinkup, $scope, $rootScope, $ionicLoading, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
+        .controller('InstallationCtrl', ['bobby', '$blinkup', 'toastMessage', '$scope', '$rootScope', '$ionicLoading', 'installationService', '$ionicModal', '$ionicPopup', '$ionicListDelegate',
+            function (bobby, $blinkup, toastMessage, $scope, $rootScope, $ionicLoading, installationService, $ionicModal, $ionicPopup, $ionicListDelegate) {
 
                 $scope.isIOS = ionic.Platform.isIOS();
 
@@ -271,6 +283,14 @@
                     $scope.editModal.show();
                 };
 
+                $scope.deviceValid = function () {
+                    return $scope.device && $scope.device.name &&
+                        $scope.device.placement &&
+                        $scope.device.interval &&
+                        $scope.device.id;
+//                        $scope.device.planId;
+                };
+
                 $scope.updateDevice = function () {
 
                     installationService.updateDevice($scope.$parent.installation._id, $scope.device)
@@ -284,13 +304,16 @@
                                 installationService.activateDevice(null, $scope.device)
                                     .then(function (impResponse) {
                                         $ionicLoading.hide();
+                                        toastMessage.toast("Device updated");
                                         $rootScope.$broadcast('message:installation-changed', response);
                                     });
                             } else {
+                                toastMessage.toast("Device updated");
                                 $rootScope.$broadcast('message:installation-changed', response);
                             }
 
                         }, function (response) {
+                            toastMessage.toast("Device update failed");
                             console.log('error', response);
                         });
                 };
@@ -311,13 +334,14 @@
                                     installationService.removeDevice($scope.$parent.installation._id, device._id)
                                         .then(function (response) {
                                             $rootScope.$broadcast('message:installation-changed', response);
+                                            toastMessage.toast("Device removed");
                                         }, function (response) {
                                             console.log('error', response);
                                         });
                                 }, function (response) {
                                     console.log('error', response);
+                                    toastMessage.toast("Remove of device failed");
                                 });
-
                         }
                         $ionicListDelegate.closeOptionButtons();
                     });
@@ -347,15 +371,24 @@
                     $scope.newModal.show();
                 };
 
+                $scope.newDeviceValid = function () {
+                    return $scope.newDevice && $scope.newDevice.name &&
+                        $scope.newDevice.placement &&
+                        $scope.newDevice.interval &&
+                        $scope.newDevice.id;
+//                        $scope.newDevice.planId;
+                };
+
                 $scope.blinkup = function () {
                     $ionicLoading.show({
-                        template: 'BlinkUp ...'
+                        template: 'BlinkUp running ...'
                     });
                     $blinkup.start(function (result) {
                             $ionicLoading.hide();
                             $scope.newDevice.id = result.split("/")[3];
                             $scope.newDevice.planId = result.split("/")[4];
-                            $ionicLoading.show({template: 'BlinkUp succeeded', noBackdrop: true, duration: 1500});
+                            //$ionicLoading.show({template: 'BlinkUp succeeded', noBackdrop: true, duration: 1500});
+                            toastMessage.toast("BlinkUp succeeded");
                         },
                         function (error) {
                             $ionicLoading.hide();
@@ -373,6 +406,7 @@
                     $blinkup.wifi($scope.device.planId, function () {
                             $ionicLoading.hide();
                             $ionicLoading.show({template: 'Wifi BlinkUp succeeded', noBackdrop: true, duration: 1500});
+                            toastMessage.toast("Device Wifi updated");
                         },
                         function (error) {
                             $ionicLoading.hide();
@@ -398,6 +432,7 @@
                                         var newInstallation = angular.fromJson(JSON.parse(impResponse));
                                         $rootScope.$broadcast('message:installation-changed', newInstallation);
                                         $ionicLoading.hide();
+                                        toastMessage.toast("New device was activated");
                                     }, function (impResponse) {
                                         console.log('Device activation failed');
                                         $ionicLoading.hide();
@@ -432,8 +467,8 @@
             }
         ])
 
-        .controller('SensorCtrl', ['bobby', '$scope', '$rootScope', '$ionicModal', '$ionicPopup', 'installationService', '$ionicListDelegate',
-            function (bobby, $scope, $rootScope, $ionicModal, $ionicPopup, installationService, $ionicListDelegate) {
+        .controller('SensorCtrl', ['bobby', 'toastMessage', '$scope', '$rootScope', '$ionicModal', '$ionicPopup', 'installationService', '$ionicListDelegate',
+            function (bobby, toastMessage, $scope, $rootScope, $ionicModal, $ionicPopup, installationService, $ionicListDelegate) {
 
                 var deviceId,
                     curDevice;
@@ -503,6 +538,7 @@
                             installationService.updateControl($scope.$parent.$parent.installation._id, deviceId, curDevice.id, $scope.control)
                                 .then(function (response) {
                                     $rootScope.$broadcast('message:installation-changed', response);
+                                    toastMessage.toast("Control updated succesfully");
                                 }, function (response) {
                                     console.log('error', response);
                                 });
@@ -528,11 +564,14 @@
                                 .then(function () {
                                     installationService.removeControl($scope.$parent.$parent.installation._id, deviceId, control._id)
                                         .then(function (response) {
+                                            toastMessage.toast("Control removed");
                                             $rootScope.$broadcast('message:installation-changed', response);
                                         }, function (response) {
+                                            toastMessage.toast("Remove control failed");
                                             console.log('error', response);
                                         });
                                 }, function (response) {
+                                    toastMessage.toast("Remove control failed");
                                     console.log('error', response);
                                 });
                             $ionicListDelegate.closeOptionButtons();
@@ -577,12 +616,15 @@
                                     control.unit.units = deviceControl.units;
                                     installationService.updateControl($scope.$parent.$parent.installation._id, deviceId, curDevice.id, control)
                                         .then(function (response) {
+                                            toastMessage.toast("Control saved");
                                             $rootScope.$broadcast('message:installation-changed', response);
                                         }, function (response) {
+                                            toastMessage.toast("Save control failed");
                                             console.log('error', response);
                                         });
 
                                 }, function (response) {
+                                    toastMessage.toast("Save control failed");
                                     console.log('error', response);
                                 });
                         }, function (response) {

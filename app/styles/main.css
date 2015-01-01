@@ -27,15 +27,15 @@ opacity: 0.9;
 }
 
 @media only screen
-and (max-width : 568px) {
-    .item.boxmedia{
+and (max-width: 568px) {
+    .item.boxmedia {
         left: 0;
         right: 0;
         box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.3);
     }
 }
 
-.item.boxit{
+.item.boxit {
     left: 0;
     right: 0;
     box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.3);
@@ -45,55 +45,64 @@ input.ng-invalid {
     color: red;
 }
 
-.disablingDiv
-{
-  /* Do not display it on entry */
-  display: block;
+.loading-container {
+    -webkit-align-items: flex-start;
+    -moz-align-items: flex-start;
+    align-items: flex-start;
+    padding-top: 54px;
+}
+.loading {
+    border-radius: 30px;
+}
 
-  /* Display it on the layer with index 1001.
-     Make sure this is the highest z-index value
-     used by layers on that page */
-  z-index:1001;
+.disablingDiv {
+    /* Do not display it on entry */
+    display: block;
 
-  /* make it cover the whole screen */
-  position: absolute;
-  top: 0%;
-  left: 0%;
-  width: 100%;
-  height: 100%;
+    /* Display it on the layer with index 1001.
+       Make sure this is the highest z-index value
+       used by layers on that page */
+    z-index: 1001;
 
-  /* make it white but fully transparent */
-  /*background-color: white;*/
-  opacity:.30;
-  filter: alpha(opacity=00);
+    /* make it cover the whole screen */
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+
+    /* make it white but fully transparent */
+    /*background-color: white;*/
+    opacity: .30;
+    filter: alpha(opacity=00);
 }
 
 .reveal-animation.ng-enter, .reveal-animation.ng-leave {
-  -webkit-transition:0.3s linear all;
-  transition:0.3s linear all;
+    -webkit-transition: 0.3s linear all;
+    transition: 0.3s linear all;
 }
 
 .reveal-animation.ng-enter {
-  opacity: 0;
+    opacity: 0;
 }
 
 .reveal-animation.ng-enter.ng-enter-active {
-  opacity: 1;
+    opacity: 1;
 }
 
 .reveal-animation.ng-leave {
-  opacity: 1;
+    opacity: 1;
 }
 
 .reveal-animation.ng-leave.ng-leave-active {
-  opacity: 0;
+    opacity: 0;
 }
-
 
 /* Shrinking header */
-[header-shrink].scroll-content{
-    top:0 !important
+[header-shrink].scroll-content {
+    top: 0 !important
 }
+
 /* end shrinking header */
 
 .popover {
@@ -104,6 +113,7 @@ input.ng-invalid {
 .pac-container {
     pointer-events: auto;
 }
+
 /*
 .videowrapper {
     float: none;
@@ -125,9 +135,9 @@ input.ng-invalid {
 /* */
 
 #container {
-/*
-    background: #f0f0f0;
-*/
+    /*
+        background: #f0f0f0;
+    */
     font-family: Georgia, Cambria, Times, serif;
     font-size: 100%;
     color: #535353;
@@ -136,21 +146,60 @@ input.ng-invalid {
     overflow: hidden;
 }
 
-#container strong { font-weight: bold; color: #333; }
-#container em { font-style: italic; }
-#containerblockquote p { font-size: 1em; }
-#container cite { font-style: normal; }
+#container strong {
+    font-weight: bold;
+    color: #333;
+}
 
-div.embed-video-small {max-width:332px;}
-div.embed-video {max-width:420px;}
-div.embed-video-big {max-width:520px;}
+#container em {
+    font-style: italic;
+}
+
+#containerblockquote p {
+    font-size: 1em;
+}
+
+#container cite {
+    font-style: normal;
+}
+
+div.embed-video-small {
+    max-width: 332px;
+}
+
+div.embed-video {
+    max-width: 420px;
+}
+
+div.embed-video-big {
+    max-width: 520px;
+}
+
 /* */
-.videoWrapper {position:relative; padding-bottom:56.25%;/* */ height:0;}
-.videoWrapper iframe {position:absolute; top:0; left:0; width:100%; height:100%;}
+.videoWrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* */
+    height: 0;
+}
+
+.videoWrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
 /* */
-div.embed-video-small *, div.embed-video *, div.embed-video-big * {display:none;}
+div.embed-video-small *, div.embed-video *, div.embed-video-big * {
+    display: none;
+}
+
 /* */
-div.embed-video-small iframe, div.embed-video iframe, div.embed-video-big iframe, div.embed-video-small .videoWrapper, div.embed-video .videoWrapper, div.embed-video-big .videoWrapper, div.embed-video-small p, div.embed-video p, div.embed-video-big p {display: block;}
+div.embed-video-small iframe, div.embed-video iframe, div.embed-video-big iframe, div.embed-video-small .videoWrapper, div.embed-video .videoWrapper, div.embed-video-big .videoWrapper, div.embed-video-small p, div.embed-video p, div.embed-video-big p {
+    display: block;
+}
+
 /* */
 
 /* bobby box */
@@ -445,42 +494,51 @@ ion-side-menu .item.activated {
     border: 1px solid #eee;
     margin-bottom: 30px;
 }
+
 .blog-list-content {
     padding: 20px;
 }
+
 .blog-list-content > h2 {
     font-size: 2em;
     font-weight: 300;
     margin: 0 0 20px;
 }
+
 .list-inline a {
     color: #0DB8DF;
 }
+
 .list-inline a:hover {
     color: #60B8D1;
 }
+
 .blog-list-content > p {
     margin-bottom: 20px;
     line-height: 1.6em;
 }
+
 .vendor blockquote {
     border-left: 5px solid #0DB8DF;
     font-size: 17.5px;
     margin: 30px 0;
     padding: 10px 20px;
 }
+
 .blog-side-nest {
     background: #fff;
     border: 1px solid #eee;
     margin-bottom: 30px;
     padding: 0 20px;
 }
+
 .list-inline > li {
-    display: inline-block!important;
-    padding-right: 5px!important;
-    padding-left: 0!important;
-    padding-top: 8px!important;
+    display: inline-block !important;
+    padding-right: 5px !important;
+    padding-left: 0 !important;
+    padding-top: 8px !important;
 }
+
 .comment-nest {
     background: #fff;
     border-top: 1px solid #ededed;
@@ -488,7 +546,7 @@ ion-side-menu .item.activated {
     padding-top: 25px;
 }
 
-.comment-nest  a {
+.comment-nest a {
     text-decoration: none;
 }
 
@@ -496,18 +554,22 @@ ion-side-menu .item.activated {
     margin: 10px 0 0 20px;
     line-height: 1.6em;
 }
+
 .link-comment {
-    color: #0DB8DF!important;
+    color: #0DB8DF !important;
 }
+
 .link-comment i {
-    font-style: normal!important;
+    font-style: normal !important;
 }
+
 .comment-nest h1 {
     font-weight: 300;
     font-size: 18px;
     margin: 0 0 20px;
     text-transform: uppercase;
 }
+
 .blog-profile {
     margin: 0 auto;
     padding: 0;
@@ -516,30 +578,34 @@ ion-side-menu .item.activated {
     border: 4px solid #fff;
 }
 
-.blog-profile-bg {} .social-blog-profile {
-                        margin: -20px auto 5px;
-                        text-align: center;
-                        font-size: 2em;
-                    }
-.recentpost-link {
-    margin: -20px 0 10px;
-    color: #0DB8DF!important;
+.blog-profile-bg {
 }
 
-.media,.media-body {
+.social-blog-profile {
+    margin: -20px auto 5px;
+    text-align: center;
+    font-size: 2em;
+}
+
+.recentpost-link {
+    margin: -20px 0 10px;
+    color: #0DB8DF !important;
+}
+
+.media, .media-body {
     overflow: hidden;
     zoom: 1;
     font-family: 'Open Sans', sans-serif;
     -webkit-font-smoothing: antialiased;
 
     min-height: 100%;
-/*    background: #E5E9EC; */
+    /*    background: #E5E9EC; */
 
     font-size: 13px;
-    color: #888!important;
+    color: #888 !important;
 }
 
-.media,.media .media {
+.media, .media .media {
     margin-top: 15px
 }
 
@@ -555,11 +621,11 @@ ion-side-menu .item.activated {
     margin: 0 0 5px
 }
 
-.media>.pull-left {
+.media > .pull-left {
     margin-right: 10px
 }
 
-.media>.pull-right {
+.media > .pull-right {
     margin-left: 10px
 }
 
@@ -567,6 +633,7 @@ ion-side-menu .item.activated {
     padding-left: 0;
     list-style: none
 }
+
 .social-profile > h3 {
     font-size: 15px;
     position: relative;
@@ -590,17 +657,19 @@ ion-side-menu .item.activated {
     font-weight: 300;
     font-size: 12px;
 }
+
 .social-profile > h3 > span > i {
     font-style: normal;
     margin: 0 0 0 8px;
 }
+
 .social-profile > p {
     margin-top: 5px;
     position: relative;
     right: -20px;
 }
 
-.social-profile > span > p  {
+.social-profile > span > p {
     margin-top: 5px;
     position: relative;
     right: -20px;
@@ -616,8 +685,9 @@ ion-side-menu .item.activated {
 }
 
 .text-green {
-    color: #37A8AF!important;
+    color: #37A8AF !important;
 }
+
 .media a {
     color: #37A8AF;
 }
@@ -625,17 +695,17 @@ ion-side-menu .item.activated {
 hr.thin {
     height: 1px;
     border: 0;
- /*   color: #333; */
+    /*   color: #333; */
     background-color: #E6E0E0;
     width: 100%;
     margin-left: 50px;
 }
 
-.titlebox{
-    float:right;
-    padding:0 25px;
+.titlebox {
+    float: right;
+    padding: 0 25px;
     margin: 20px 20 0 30px;
-    background:#fff;
+    background: #fff;
 }
 
 .sparkline {

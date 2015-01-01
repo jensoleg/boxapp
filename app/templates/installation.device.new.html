@@ -2,7 +2,9 @@
     <ion-header-bar class="bar bar-header bar-positive">
         <button class="button button-clear button-clear" ng-click="closeNewDevice()">Cancel</button>
         <h1 class="title">New device</h1>
-        <button class="button button-clear button-clear" ng-click="doneNewDevice(newDevice)">Save</button>
+        <button class="button button-clear button-clear"
+                ng-disabled="!newDeviceValid()"
+                ng-click="doneNewDevice(newDevice)">Save</button>
     </ion-header-bar>
     <ion-content>
         <div class="list">
@@ -25,11 +27,11 @@
                     <i class="icon fa fa-barcode"></i>
                 </button>
             </div>
-            <label ng-if="newDevice.id" class="item item-input">
+            <label ng-if="newDevice.id && isIOS" class="item item-input">
                 <span class="input-label">Id</span>
                 <input type="text" placeholder="Id" ng-model="newDevice.id" disabled>
             </label>
-            <label ng-if="newDevice.planId" class="item item-input">
+            <label ng-if="newDevice.planId && isIOS" class="item item-input">
                 <span class="input-label">Plan Id</span>
                 <input type="text" placeholder="Plan" ng-model="newDevice.planId" disabled>
             </label>
@@ -42,4 +44,3 @@
     </ion-content>
 </div>
 
-newDevice.planId

@@ -67,7 +67,7 @@
             return {
                 restrict: 'A',
                 link: function ($scope, $element, $attr) {
-                  $timeout(function () {
+                    $timeout(function () {
                         var starty = $scope.$eval($attr.headerShrink) || 0;
                         var shrinkAmt;
 
@@ -127,7 +127,7 @@
          })
          */
 
-        .directive('googlePlaces', function () {
+        .directive('googlePlaces', function ($timeout) {
             return {
                 restrict: 'E',
                 replace: true,
@@ -138,10 +138,28 @@
                 template: '<input type="text" placeholder="Address" ng-model="address"/>',
                 link: function ($scope, elm, attrs) {
                     var options = {
-                        componentRestrictions: { country: 'dk' },
+                        componentRestrictions: {country: 'dk'},
                         types: ['geocode']
                     };
+
                     var autocomplete = new google.maps.places.Autocomplete(elm[0], options);
+
+                    $timeout(function () {
+                        var container = document.getElementsByClassName('pac-container');
+                        // disable ionic data tap
+                        angular.element(container).attr('data-tap-disabled', 'true');
+                        // leave input field if google-address-entry is selected
+                        container.onclick = function() {
+                            document.getElementById('autocomplete').blur();
+
+                            if (cordova && cordova.plugins) {
+                                if (cordova.plugins.Keyboard) {
+                                    cordova.plugins.Keyboard.close();
+                                }
+                            }
+                        };
+                    }, 500);
+
                     google.maps.event.addListener(autocomplete, 'place_changed', function () {
                         var place = autocomplete.getPlace();
                         $scope.address = place.formatted_address;

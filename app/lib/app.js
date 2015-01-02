@@ -159,7 +159,7 @@
                     gravatar: true,
                     closable: false,
                     standalone: true,
-                    rememberLastLogin: true,
+                    rememberLastLogin: false,
                     dict: {signin: {title: ' '}},
                     icon: logo,
                     authParams: {

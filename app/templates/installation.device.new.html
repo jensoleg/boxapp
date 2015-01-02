@@ -22,18 +22,22 @@
             </label>
             <div ng-if="isIOS"
                 class="item item-button-right">
-                BlinkUp
+                BlinkUp - blessed device only !
                 <button class="button button-positive" ng-click="blinkup()">
                     <i class="icon fa fa-barcode"></i>
                 </button>
             </div>
-            <label ng-if="newDevice.id && isIOS" class="item item-input">
+            <!--label ng-if="newDevice.id && isIOS" class="item item-input">
                 <span class="input-label">Id</span>
                 <input type="text" placeholder="Id" ng-model="newDevice.id" disabled>
-            </label>
+            </label-->
             <label ng-if="newDevice.planId && isIOS" class="item item-input">
                 <span class="input-label">Plan Id</span>
                 <input type="text" placeholder="Plan" ng-model="newDevice.planId" disabled>
+            </label>
+            <label ng-if="isIOS" class="item item-input">
+                <span class="input-label">Id</span>
+                <input type="text" placeholder="Or enter Id manuallly here" ng-model="newDevice.id">
             </label>
             <label ng-if="!isIOS" class="item item-input">
                 <span class="input-label">Id</span>

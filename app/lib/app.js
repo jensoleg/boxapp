@@ -64,7 +64,7 @@
                 /* loading bar */
 
                 cfpLoadingBarProvider.latencyThreshold = 100;
-                cfpLoadingBarProvider.includeSpinner = false;
+                cfpLoadingBarProvider.includeSpinner = true;
 
                 GoogleMapApi.configure({
                     key: 'AIzaSyDYMiqXnyqG-OH4Hp3Cy8pUYqPzZb5ysqM',
@@ -97,7 +97,7 @@
 
                 $httpProvider.interceptors.push('jwtInterceptor');
 
-                $ionicConfigProvider.views.maxCache(0);
+                //$ionicConfigProvider.views.maxCache(0);
 
                 $urlRouterProvider.otherwise('/app/map');
             }])

@@ -1,9 +1,6 @@
-<ion-view hide-back-button="true" view-title="{{installation.name}} {{installation.placement}}">
+<ion-view cache-view="false" hide-back-button="true" view-title="{{installation.name}} {{installation.placement}}">
 
     <ion-nav-bar class="bar-shrink bar-stable">
-        <ion-nav-back-button>
-            Back
-        </ion-nav-back-button>
         <ion-nav-buttons side="left">
             <button menu-toggle="left" ng-hide="$exposeAside.active"
                     class="button button-icon button-clear button-dark ion-navicon">
@@ -76,19 +73,28 @@
                             <i class="item-icon ion-chatbox-working"
                                style="color: rgb(82, 154, 233); vertical-align: middle;font-size: 140%;">
                             </i>
-                            Activities
+                            Notes
                         </label>
-                        <span class="badge badge-balanced" style="right: 36px;">2</span>
+                        <!--span class="badge badge-balanced" style="right: 36px;">2</span-->
                     </ion-item>
                 </div>
             </ion-list>
 
             <!-----   soicail IOT ----->
-            <ion-item class="boxit" style="padding: 0px;border-bottom-style: none;border-width: 0px;">
-            <div ng-if="showTimeline" class="reveal-animation">
-                <bobby-social></bobby-social>
+            <div ng-if="showTimeline">
+                <ion-item class="boxit" style="border-width: 0px;">
+                        <textarea placeholder="Notes"
+                                  id="txtnotes"
+                                  ng-keyup="expandText()"
+                                  ng-keydown="expandText()"
+                                  ng-change="change()"
+                                  ng-model="installation.metadata" rows="15"
+                                  ui-Blur="UpdateNote()"></textarea>
+                </ion-item>
+                <div style="padding-bottom: 20px;"></div>
+                <!--bobby-social></bobby-social-->
             </div>
-            </ion-item>
+
             <!---- device overview -->
             <bobby-device></bobby-device>
 

@@ -8,7 +8,7 @@
     </ion-side-menu-content>
 
     <ion-side-menu expose-aside-when="(min-width:769px)">
-        <ion-header-bar hide-back-button="true" class="bar-positive">
+        <ion-header-bar class="bar-positive">
             <button ng-click="signout()" class="button button-clear button-small button-clear ion-power">
             </button>
             <h1 class="title">{{::userName}}</h1>
@@ -19,8 +19,8 @@
 
         <ion-content start-y="55" class="scroll-bar-fade-out">
             <ion-refresher
-                    pulling-text="Refresh..."
-                    on-refresh="doRefresh()">
+                pulling-text="Refresh..."
+                on-refresh="doRefresh()">
             </ion-refresher>
             <div class="item-input-inset">
                 <div class="item-input-wrapper">
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <ion-list>
-                <ion-item ng-repeat="i in installations | filter: data.searchQuery"
+                <ion-item nav-clear menu-close ng-repeat="i in installations | filter: data.searchQuery"
                           ui-sref="app.main({ id: i._id })">
                     <h3>{{::i.name}}</h3>
                     <h4>{{::i.placement}}</h4>

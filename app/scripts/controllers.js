@@ -752,8 +752,8 @@
             }])
 
 
-        .controller('BoxCtrl', ['installation', 'installationService', '$location', '$ionicLoading', '$ionicPopover', '$cordovaKeyboard', '$ionicSideMenuDelegate', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', '$timeout', '$ionicListDelegate', '$cacheFactory',
-            function (installation, installationService, $location, $ionicLoading, $ionicPopover, $cordovaKeyboard, $ionicSideMenuDelegate, $scope, $state, $rootScope, $window, bobby, chart, box, $interval, $timeout, $ionicListDelegate, $cacheFactory) {
+        .controller('BoxCtrl', ['installation', 'installationService', 'toastMessage', '$location', '$ionicLoading', '$ionicPopover', '$cordovaKeyboard', '$ionicSideMenuDelegate', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', '$timeout', '$ionicListDelegate', '$cacheFactory',
+            function (installation, installationService, toastMessage, $location, $ionicLoading, $ionicPopover, $cordovaKeyboard, $ionicSideMenuDelegate, $scope, $state, $rootScope, $window, bobby, chart, box, $interval, $timeout, $ionicListDelegate, $cacheFactory) {
 
                 $ionicSideMenuDelegate.toggleLeft(false);
 
@@ -918,6 +918,9 @@
 
                 $scope.toggleTimeline = function () {
                     $scope.showTimeline = !$scope.showTimeline;
+                    if (!$scope.showTimeline) {
+                        $scope.UpdateNote()
+                    }
                 };
 
                 $scope.aNewControl = function (deviceId) {
@@ -1031,6 +1034,29 @@
                     $ionicListDelegate.closeOptionButtons();
 
                 };
+
+                /* handling notes */
+
+                $scope.noteCounter = 0;
+                $scope.UpdateNote = function(){
+                    if ($scope.noteCounter > 0) {
+                        $scope.noteCounter = 0;
+                        installationService.updateInstallation($scope.installation)
+                            .then(function () {
+                                toastMessage.toast("Note saved");
+                                $cacheFactory.get('$http').removeAll();
+                            });
+                    }
+                };
+
+                $scope.change = function() {
+                    $scope.noteCounter++;
+                };
+
+                $scope.expandText = function(){
+                    var element = document.getElementById("txtnotes");
+                    element.style.height =  element.scrollHeight + "px";
+                }
 
 //****** protoyping ********************
 

@@ -740,8 +740,8 @@
                 };
             }])
 
-        .service('toastMessage', ['$cordovaToast', '$ionicLoading',
-            function ($cordovaToast, $ionicLoading) {
+        .service('toastMessage', ['$cordovaToast', '$ionicLoading', '$window',
+            function ($cordovaToast, $ionicLoading, $window) {
 
                 this.toast = function (msg, duration, position) {
                     if (!duration)
@@ -750,21 +750,22 @@
                         position = 'bottom';
 
                     // PhoneGap? Use native:
-                    if ($cordovaToast) {
+                    if ($window.plugins && $window.plugins.toast) {
                         $cordovaToast.show(msg, duration, position)
                             .then(function (success) {
                                 // success
                             }, function (error) {
                                 // error
                             });
+                    } else {
+                        // … fallback / customized $ionicLoading:
+                        $ionicLoading.show({
+                            template: msg,
+                            noBackdrop: true,
+                            duration: (duration == 'short' ? 700 : 1500)
+                        });
                     }
 
-                    // … fallback / customized $ionicLoading:
-                    $ionicLoading.show({
-                        template: msg,
-                        noBackdrop: true,
-                        duration: (duration == 'short' ? 700 : 1500)
-                    });
                 }
             }])
 }());

@@ -10,7 +10,6 @@
         </ion-nav-buttons>
 
         <ion-nav-buttons side="right">
-
             <a ng-style="map.showWeather && {'color': 'rgb(97, 132, 243)'} || {'color': '#404040'}"
                ng-click="map.showWeather = !map.showWeather"
                class="button button-icon ion-ios7-cloud"></a>
@@ -28,27 +27,27 @@
     <ion-content scroll="false" class="map">
         <div>
             <ui-gmap-google-map class="fullmap"
-                        center="map.center"
-                        zoom="map.zoom"
-                        draggable="true"
-                        dragging="map.dragging"
-                        bounds="map.bounds"
-                        events="map.events"
-                        options="map.options"
-                        pan="true"
-                        control="map.control">
+                                center="map.center"
+                                zoom="map.zoom"
+                                draggable="true"
+                                dragging="map.dragging"
+                                bounds="map.bounds"
+                                events="map.events"
+                                options="map.options"
+                                pan="true"
+                                control="map.control">
 
                 <ui-gmap-layer namespace="weather" type="WeatherLayer" show="map.showWeather"></ui-gmap-layer>
 
                 <ui-gmap-markers
-                        models="map.markers"
-                        coords="'self'"
-                        doCluster="true"
-                        icon="'icon'"
-                        click="'onClicked'"
-                        options="'options'"
-                        isLabel='true'
-                        clusterOptions="map.clusterOptions">
+                    models="map.markers"
+                    coords="'self'"
+                    doCluster="true"
+                    icon="'icon'"
+                    click="'onClicked'"
+                    options="'options'"
+                    isLabel='true'
+                    clusterOptions="map.clusterOptions">
                 </ui-gmap-markers>
 
             </ui-gmap-google-map>

@@ -201,6 +201,14 @@
             }
         })
 
+        .directive('uiBlur', function() {
+            return function( scope, elem, attrs ) {
+                elem.bind('blur', function() {
+                    scope.$apply(attrs.uiBlur);
+                });
+            };
+        })
+
         .directive('timerTime', function ($compile) {
             return {
                 restrict: 'E',

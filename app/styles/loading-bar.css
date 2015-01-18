@@ -66,12 +66,22 @@
     position: fixed;
     z-index: 10002;
     top: 50%;
-    left: 50%;
+    left: 40%;
+
+    height:40px;
+    width:100px;
+    /*
+    filter: alpha(opacity=10);
+    opacity: 0.1;
+    */
+    background: rgba(0, 0, 0, 0.16);
 }
 
 #loading-bar-spinner .spinner-icon {
-    width: 14px;
-    height: 14px;
+    width: 24px;
+    height: 24px;
+    margin-left: 35px;
+    margin-top: 10px;
 
     border:  solid 2px transparent;
     border-top-color:  #29d;

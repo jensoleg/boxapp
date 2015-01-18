@@ -5,20 +5,22 @@
             <button menu-toggle="left" ng-hide="$exposeAside.active"
                     class="button button-icon button-clear button-dark ion-navicon">
             </button>
-            <button ng-click="navMap()" class="button  button-icon button-clear button-dark ion-android-earth">
+            <button ng-click="navMap()" class="button button-icon button-clear button-dark ion-android-earth">
             </button>
         </ion-nav-buttons>
         <ion-nav-buttons side="right">
+            <button ng-click="doRefresh()"
+                    class="button button-custom button-icon button-clear button-dark ion-ios7-refresh-empty"></button>
             <button ng-click="aNewDevice()"
                     class="button button-icon button-clear button-dark ion-ios7-plus-empty"></button>
         </ion-nav-buttons>
     </ion-nav-bar>
 
     <ion-content has-bouncing="false" class="scroll-bar-fade-out" header-shrink scroll-event-interval="5">
-        <ion-refresher
+        <!--ion-refresher
             pulling-text="Refresh..."
             on-refresh="doRefresh()">
-        </ion-refresher>
+        </ion-refresher-->
         <div ng-class="removed  ? 'disablingDiv' : '' ">
             <div ng-style="isWebView && {'height': '64px'} || {'height': '44px'}"></div>
             <!---- device overview -->
@@ -64,7 +66,7 @@
             </div>
 
             <ion-list>
-                <div ng-style="showTimeline && {'padding-bottom': '0px'} || {'padding-bottom': '10px'}">
+                <div ng-style="showTimeline && {'padding-bottom': '0px'} || {'padding-bottom': '8px'}">
                     <!--div style="padding-bottom: 10px;"-->
                     <ion-item class="boxit reading item-icon-right"
                               ng-click="toggleTimeline()"
@@ -91,7 +93,7 @@
                                   ng-model="installation.metadata" rows="15"
                                   ui-Blur="UpdateNote()"></textarea>
                 </ion-item>
-                <div style="padding-bottom: 20px;"></div>
+                <div style="padding-bottom: 8px;"></div>
                 <!--bobby-social></bobby-social-->
             </div>
 

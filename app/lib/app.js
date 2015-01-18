@@ -65,7 +65,11 @@
 
                 cfpLoadingBarProvider.latencyThreshold = 100;
                 cfpLoadingBarProvider.includeSpinner = true;
-
+                /*
+                cfpLoadingBarProvider.parentSelector = '.container-input';
+                cfpLoadingBarProvider.spinnerOnlyClass = 'spinner-icon';
+                cfpLoadingBarProvider.spinnerSelector = '#loading-input';
+                */
                 GoogleMapApi.configure({
                     key: 'AIzaSyDYMiqXnyqG-OH4Hp3Cy8pUYqPzZb5ysqM',
                     v: '3.17',

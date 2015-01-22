@@ -66,10 +66,10 @@
                 cfpLoadingBarProvider.latencyThreshold = 100;
                 cfpLoadingBarProvider.includeSpinner = true;
                 /*
-                cfpLoadingBarProvider.parentSelector = '.container-input';
-                cfpLoadingBarProvider.spinnerOnlyClass = 'spinner-icon';
-                cfpLoadingBarProvider.spinnerSelector = '#loading-input';
-                */
+                 cfpLoadingBarProvider.parentSelector = '.container-input';
+                 cfpLoadingBarProvider.spinnerOnlyClass = 'spinner-icon';
+                 cfpLoadingBarProvider.spinnerSelector = '#loading-input';
+                 */
                 GoogleMapApi.configure({
                     key: 'AIzaSyDYMiqXnyqG-OH4Hp3Cy8pUYqPzZb5ysqM',
                     v: '3.17',
@@ -101,7 +101,8 @@
 
                 $httpProvider.interceptors.push('jwtInterceptor');
 
-                //$ionicConfigProvider.views.maxCache(0);
+                $ionicConfigProvider.views.maxCache(0);
+                $ionicConfigProvider.backButton.text('');
 
                 $urlRouterProvider.otherwise('/app/map');
             }])

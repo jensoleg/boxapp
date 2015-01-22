@@ -752,8 +752,8 @@
             }])
 
 
-        .controller('BoxCtrl', ['installation', 'installationService', 'toastMessage', '$location', '$ionicLoading', '$ionicPopover', '$cordovaKeyboard', '$ionicSideMenuDelegate', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', '$timeout', '$ionicListDelegate', '$cacheFactory',
-            function (installation, installationService, toastMessage, $location, $ionicLoading, $ionicPopover, $cordovaKeyboard, $ionicSideMenuDelegate, $scope, $state, $rootScope, $window, bobby, chart, box, $interval, $timeout, $ionicListDelegate, $cacheFactory) {
+        .controller('BoxCtrl', ['$ionicHistory',  'installation', 'installationService', 'toastMessage', '$location', '$ionicLoading', '$ionicPopover', '$cordovaKeyboard', '$ionicSideMenuDelegate', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', 'box', '$interval', '$timeout', '$ionicListDelegate', '$cacheFactory',
+            function ($ionicHistory, installation, installationService, toastMessage, $location, $ionicLoading, $ionicPopover, $cordovaKeyboard, $ionicSideMenuDelegate, $scope, $state, $rootScope, $window, bobby, chart, box, $interval, $timeout, $ionicListDelegate, $cacheFactory) {
 
                 $ionicSideMenuDelegate.toggleLeft(false);
 
@@ -761,6 +761,8 @@
 
                 var seriesData = [],
                     colorScheme = bobby.getColorScheme();
+
+                $rootScope.datastreams = [];
 
                 $scope.shownDevice = [];
                 $scope.chartColorNumber = 0;
@@ -782,10 +784,14 @@
 
 
                 $scope.navMap = function () {
-                    $location.path('/app/map');
+//                    $location.path('/app/map');
+                    $ionicHistory.nextViewOptions({disableBack: true});
+                    $state.go('app.map');
                 };
 
                 $scope.doRefresh = function () {
+                    var $httpDefaultCache = $cacheFactory.get('$http');
+                    $httpDefaultCache.removeAll();
                     bobby.refreshInstallation($scope.installation);
                 };
 
@@ -1261,14 +1267,14 @@
                     });
                 }
 
-                bobby.refreshInstallation($scope.installation);
+                bobby.setInstallation($scope.installation);
 
             }
         ])
 
         .
-        controller('MapCtrl', ['uiGmapGoogleMapApi', 'uiGmapIsReady', '$cordovaSplashscreen', '$scope', '$location', '$rootScope', '$cordovaGeolocation', 'Settings', 'icons', 'styles', 'installations', '$state', '$ionicLoading', '$ionicPopover', 'auth', 'auth0Service',
-            function (GoogleMapApi, IsReady, $cordovaSplashscreen, $scope, $location, $rootScope, $cordovaGeolocation, Settings, icons, styles, installations, $state, $ionicLoading, $ionicPopover, auth, auth0Service) {
+        controller('MapCtrl', ['$ionicHistory', 'uiGmapGoogleMapApi', 'uiGmapIsReady', '$cordovaSplashscreen', '$scope', '$location', '$rootScope', '$cordovaGeolocation', 'Settings', 'icons', 'styles', 'installations', '$state', '$ionicLoading', '$ionicPopover', 'auth', 'auth0Service',
+            function ($ionicHistory, GoogleMapApi, IsReady, $cordovaSplashscreen, $scope, $location, $rootScope, $cordovaGeolocation, Settings, icons, styles, installations, $state, $ionicLoading, $ionicPopover, auth, auth0Service) {
 
                 var mapStyles = {
                         'Custom grey blue': 'GreyBlue',
@@ -1440,7 +1446,10 @@
 
                     //marker.icon = icons.gear;
 
-                    $location.path('/app/main/' + marker.id);
+                    //$location.path('/app/main/' + marker.id);
+                    $ionicHistory.nextViewOptions({disableBack: true});
+                    $state.go('app.main', {id: marker.id})
+
                     /*
                      var request = {
                      placeId: 'ChIJmaSKgPYySUYRKLlyaho0O6Y'

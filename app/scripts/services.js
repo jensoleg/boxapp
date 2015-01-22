@@ -250,9 +250,11 @@
                 /* set current installation */
                 bobby.setInstallation = function (newInstallation) {
 
+                    /*
                     if (!refreshing && newInstallation && currentInstallation && currentInstallation._id === newInstallation._id) {
                         return;
                     }
+                    */
 
                     // remove current subscriptions
                     if (!refreshing && currentInstallation) {
@@ -271,16 +273,18 @@
 
                         currentInstallation = newInstallation;
 
+                        var newStreams = {};
+
                         // set controls
                         angular.forEach(currentInstallation.devices, function (device) {
                             angular.forEach(device.controls, function (stream) {
                                 if (_.contains(controlTypes, stream.ctrlType)) {
-                                    var ui_stream = angular.copy(stream);
-                                    $rootScope.datastreams[device.id + stream.id] = ui_stream;
-                                    $rootScope.datastreams[device.id + stream.id].id = stream.id;
-                                    $rootScope.datastreams[device.id + stream.id].deviceid = device.id;
+                                    //var ui_stream = angular.copy(stream);
+                                    newStreams[device.id + stream.id] = stream;
+                                    newStreams[device.id + stream.id].id = stream.id;
+                                    newStreams[device.id + stream.id].deviceid = device.id;
                                     /* maybe trigger should be evaluated initially */
-                                    $rootScope.datastreams[device.id + stream.id].triggered = false;
+                                    //newStreams[device.id + stream.id].triggered = false;
 
                                     client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id, {qos: 0});
                                     //console.log('MQTT subscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
@@ -288,6 +292,8 @@
                                 }
                             });
                         });
+
+                        $rootScope.datastreams = newStreams;
                     }
 
 

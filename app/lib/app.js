@@ -63,7 +63,7 @@
 
                 /* loading bar */
 
-                cfpLoadingBarProvider.latencyThreshold = 100;
+                cfpLoadingBarProvider.latencyThreshold = 300;
                 cfpLoadingBarProvider.includeSpinner = true;
                 /*
                  cfpLoadingBarProvider.parentSelector = '.container-input';
@@ -77,8 +77,8 @@
                 });
 
                 authProvider.init({
-                    clientID: ENV.auth.clientID,
                     domain: ENV.auth.domain,
+                    clientID: ENV.auth.clientID,
                     loginState: 'login'
                 });
 
@@ -118,6 +118,10 @@
 
                 $rootScope.$on('$locationChangeStart', function () {
 
+                    console.log("location change");
+
+                    var refreshingToken = null;
+
                     if (!auth.isAuthenticated) {
                         var token = store.get('token');
                         var refreshToken = store.get('refreshToken');
@@ -126,10 +130,15 @@
                                 auth.authenticate(store.get('profile'), token);
                             } else {
                                 if (refreshToken) {
-                                    return auth.refreshIdToken(refreshToken).then(function (idToken) {
-                                        store.set('token', idToken);
-                                        auth.authenticate(store.get('profile'), idToken);
-                                    });
+                                    if (refreshingToken === null) {
+                                        refreshingToken =  auth.refreshIdToken(refreshToken).then(function(idToken) {
+                                            store.set('token', idToken);
+                                            auth.authenticate(store.get('profile'), idToken);
+                                        }).finally(function() {
+                                            refreshingToken = null;
+                                        });
+                                    }
+                                    return refreshingToken;
                                 } else {
                                     $location.path('/login');
                                 }

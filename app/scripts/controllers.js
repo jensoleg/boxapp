@@ -66,7 +66,6 @@
                     installationService.all()
                         .then(function (newInstallations) {
                             $scope.installations = newInstallations;
-                            $scope.$broadcast('scroll.refreshComplete');
                         });
                 };
 
@@ -85,18 +84,17 @@
                     auth0Service.updateUser(auth.profile.user_id, {app: settings});
                     bobby.setInstallation(null);
 
-                    if (!ionic.Platform.isWebView()) {
-                        store.remove('profile');
-                        store.remove('token');
-                        store.remove('refreshToken');
-                    }
-
                     // bobby.close();
                     $ionicSideMenuDelegate.toggleLeft();
                     $timeout(function () {
+                        if (!ionic.Platform.isWebView()) {
+                            store.remove('profile');
+                            store.remove('token');
+                            store.remove('refreshToken');
+                        }
                         auth.signout();
                         $state.go('login');
-                    }, 300);
+                    }, 500);
                 };
                 /* Edit installation */
 
@@ -784,7 +782,6 @@
 
 
                 $scope.navMap = function () {
-//                    $location.path('/app/map');
                     $ionicHistory.nextViewOptions({disableBack: true});
                     $state.go('app.map');
                 };

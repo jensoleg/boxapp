@@ -128,7 +128,6 @@
                     controlTypes = ['data', 'timer', 'state'],
                     currentInstallation = null,
                     refreshing = false,
-                    _this = this,
                     apiEndpoint;
 
                 apiEndpoint = ENV.domainPrefix ? 'http://' + $rootScope.domain + '.' + ENV.apiEndpoint : 'http://' + ENV.apiEndpoint;
@@ -250,12 +249,6 @@
                 /* set current installation */
                 bobby.setInstallation = function (newInstallation) {
 
-                    /*
-                    if (!refreshing && newInstallation && currentInstallation && currentInstallation._id === newInstallation._id) {
-                        return;
-                    }
-                    */
-
                     // remove current subscriptions
                     if (!refreshing && currentInstallation) {
                         angular.forEach(currentInstallation.devices, function (device) {
@@ -325,7 +318,6 @@
                         $rootScope.datastreams = newStreams;
 
                         refreshing = false;
-                        $rootScope.$broadcast('scroll.refreshComplete');
                     }
                 };
 

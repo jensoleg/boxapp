@@ -62,38 +62,36 @@
 }
 
 #loading-bar-spinner {
-    display: block;
-    position: fixed;
     z-index: 10002;
-    top: 50%;
-    left: 37%;
-
     height:40px;
-    width:100px;
-    /*
-    filter: alpha(opacity=10);
-    opacity: 0.1;
-    */
-    background: rgba(0, 0, 0, 0.30);
+    width:40px;
+
+/*
+    -moz-border-radius: 35px;
+    border-radius: 35px;
+*/
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+
+    /*background: rgba(0, 0, 0, 0.60);*/
 }
 
 #loading-bar-spinner .spinner-icon {
-    width: 24px;
-    height: 24px;
-    margin-left: 35px;
-    margin-right: 35px;
+    margin-left: 8px;
     margin-top: 8px;
 
-    border:  solid 2px transparent;
-    border-top-color:  #29d;
-    border-left-color: #29d;
-    border-radius: 10px;
+    border-top-color: rgba(98, 98, 98, 0.50);
+    border-left-color: rgba(98, 98, 98, 0.50);
 
-    -webkit-animation: loading-bar-spinner 400ms linear infinite;
-    -moz-animation:    loading-bar-spinner 400ms linear infinite;
-    -ms-animation:     loading-bar-spinner 400ms linear infinite;
-    -o-animation:      loading-bar-spinner 400ms linear infinite;
-    animation:         loading-bar-spinner 400ms linear infinite;
+    height: 32px;
+    width: 32px;
+    position: relative;
+    border-width: 5px;
+    border-style: solid;
+    border-radius: 100%;
+    -webkit-animation: loading-bar-spinner .6s linear infinite;
+    animation: loading-bar-spinner .6s linear infinite;
 }
 
 @-webkit-keyframes loading-bar-spinner {

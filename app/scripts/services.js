@@ -766,4 +766,63 @@
 
                 }
             }])
+        .service('disqus', ['$rootScope',
+            function ($rootScope) {
+
+                var DISQUS_SECRET = "zT1s0KtL6WaeCD6gwoaAq25lL2xOFup8qK1IuZEcm9ukIug89zEBMLR3XAQp0bTW",
+                    DISQUS_PUBLIC = "LYKdTaWgeXunBcckOygsjl7wVGEJbKBaogEPnEU57mda1ycw69OBx1Vw0qaBe1hR";
+
+                this.signon = function (profile) {
+
+                    var disqusData = {
+                        id: profile.user_id,
+                        username: profile.name,
+                        email: profile.email
+                    };
+
+                    var disqusStr = JSON.stringify(disqusData),
+                        timestamp = Math.round(+new Date() / 1000);
+
+                    /*
+                     * Note that `Buffer` is part of node.js
+                     * For pure Javascript or client-side methods of
+                     * converting to base64, refer to this link:
+                     * http://stackoverflow.com/questions/246801/how-can-you-encode-a-string-to-base64-in-javascript
+                     */
+                    //var message = new Buffer(disqusStr).toString('base64');
+
+                    var message = window.btoa(disqusStr);
+
+                    /*
+                     * CryptoJS is required for hashing (included in dir)
+                     * https://code.google.com/p/crypto-js/
+                     */
+
+                    var result = window.CryptoJS.HmacSHA1(message + " " + timestamp, DISQUS_SECRET);
+                    var hexsig = window.CryptoJS.enc.Hex.stringify(result);
+
+                    $rootScope.sso = {
+                        pubKey: DISQUS_PUBLIC,
+                        auth: message + " " + hexsig + " " + timestamp
+                    };
+                };
+
+                this.reset = function () {
+
+                    var disqusData = {},
+                        disqusStr = JSON.stringify(disqusData),
+                        timestamp = Math.round(+new Date() / 1000),
+                        message = window.btoa(disqusStr);
+
+                    /*
+                     * CryptoJS is required for hashing (included in dir)
+                     * https://code.google.com/p/crypto-js/
+                     */
+
+                    var result = window.CryptoJS.HmacSHA1(message + " " + timestamp, DISQUS_SECRET);
+                    var hexsig = window.CryptoJS.enc.Hex.stringify(result);
+
+                    return message + " " + hexsig + " " + timestamp;
+                }
+            }])
 }());

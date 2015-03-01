@@ -1,13 +1,14 @@
-<div class="modal">
+<ion-modal-view>
     <ion-header-bar class="bar bar-header bar-positive">
-        <button class="button button-clear button-clear" ng-click="closeEditDevice()">Cancel</button>
+        <button class="button button-clear" ng-click="closeEditDevice()">Cancel</button>
         <h1 class="title">Edit device</h1>
-        <button class="button button-clear button-clear"
+        <button class="button button-clear"
                 ng-disabled="!deviceValid()"
-                ng-click="doneEditDevice(device)">Save</button>
+                ng-click="doneEditDevice(device)">Save
+        </button>
     </ion-header-bar>
-    <ion-content>
-        <div class="list">
+    <ion-content class="bgc-grey-800">
+        <!--div class="list">
             <label class="item item-input">
                 <span class="input-label">Name</span>
                 <input type="text" placeholder="Name" ng-model="device.name">
@@ -28,6 +29,7 @@
                 <span class="input-label">PlanId</span>
                 <input type="text" placeholder="Id" ng-model="device.planId" disabled>
             </label>
+
             <div ng-if="isIOS"
                  class="item item-button-right">
                 BlinkUp new WiFi - blessed device only
@@ -36,6 +38,23 @@
                 </button>
             </div>
 
-        </div>
+        </div -->
+        <form class="pl+ pr+">
+            <lx-text-field label="Name" theme="dark">
+                <input type="text" ng-model="device.name">
+            </lx-text-field>
+            <lx-text-field label="Placement" theme="dark">
+                <input type="text" ng-model="device.placement">
+            </lx-text-field>
+            <lx-text-field label="Push Interval" theme="dark">
+                <input type="text" ng-model="device.interval">
+            </lx-text-field>
+            <lx-text-field label="Id" disabled="true" theme="dark">
+                <input type="text" ng-model="device.id" ng-disabled="true" class="bgc-grey-800">
+            </lx-text-field>
+            <lx-text-field label="Plan Id" disabled="true" theme="dark">
+                <input type="text" ng-model="device.planId" ng-disabled="true" class="bgc-grey-800">
+            </lx-text-field>
+        </form>
     </ion-content>
-</div>
+</ion-modal-view>

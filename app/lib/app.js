@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('BobbyApp', ['angular-storage', 'angular-jwt', 'auth0', 'ngCookies', 'ngCordova', 'monospaced.elastic', 'uiGmapgoogle-maps', 'dx', 'ionic', 'config', 'angular-loading-bar', 'ngAnimate', 'BobbyApp.controllers', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives'])
-        .config(['authProvider', 'jwtInterceptorProvider', '$stateProvider', '$urlRouterProvider', '$httpProvider', '$ionicConfigProvider', 'ENV', 'cfpLoadingBarProvider', 'uiGmapGoogleMapApiProvider',
-            function (authProvider, jwtInterceptorProvider, $stateProvider, $urlRouterProvider, $httpProvider, $ionicConfigProvider, ENV, cfpLoadingBarProvider, GoogleMapApi) {
+        .config(['$locationProvider', '$compileProvider', 'authProvider', 'jwtInterceptorProvider', '$stateProvider', '$urlRouterProvider', '$httpProvider', '$ionicConfigProvider', 'ENV', 'cfpLoadingBarProvider', 'uiGmapGoogleMapApiProvider',
+            function ($locationProvider, $compileProvider, authProvider, jwtInterceptorProvider, $stateProvider, $urlRouterProvider, $httpProvider, $ionicConfigProvider, ENV, cfpLoadingBarProvider, GoogleMapApi) {
 
                 $stateProvider
                     .state('login', {
@@ -11,11 +11,24 @@
                         templateUrl: 'templates/login.html',
                         controller: 'LoginCtrl'
                     })
-                    .state('app', {
-                        url: '/app',
-                        abstract: true,
-                        templateUrl: 'templates/menu.html',
-                        controller: 'InstallationsCtrl',
+                    .state('box', {
+                        url: '/main/:id',
+
+                        templateUrl: 'templates/bobbybox.html',
+                        controller: 'BoxCtrl',
+                        resolve: {
+                            installation: ['$stateParams', 'installationService', function ($stateParams, installationService) {
+                                return installationService.get($stateParams.id);
+                            }]
+                        },
+                        data: {
+                            requiresLogin: true
+                        }
+                    })
+                    .state('map', {
+                        url: '/map',
+                        templateUrl: 'templates/installations.map.html',
+                        controller: 'MapCtrl',
                         resolve: {
                             installations: ['installationService', function (installationService) {
                                 return installationService.all();
@@ -25,54 +38,28 @@
                             requiresLogin: true
                         }
                     })
-                    .state('app.main', {
-                        url: '/main/:id',
-                        views: {
-                            'menuContent': {
-                                templateUrl: 'templates/bobbybox.html',
-                                controller: 'BoxCtrl',
-                                resolve: {
-                                    installation: ['$stateParams', 'installationService', function ($stateParams, installationService) {
-                                        return installationService.get($stateParams.id);
-                                    }]
-                                },
-                                data: {
-                                    requiresLogin: true
-                                }
-                            }
-                        }
-                    })
-                    .state('app.map', {
-                        url: '/map',
-                        views: {
-                            'menuContent': {
-                                templateUrl: 'templates/installations.map.html',
-                                controller: 'MapCtrl',
-                                resolve: {
-                                    installations: ['installationService', function (installationService) {
-                                        return installationService.all();
-                                    }]
-                                },
-                                data: {
-                                    requiresLogin: true
-                                }
-                            }
+                    .state('disqus', {
+                        url: '/disqus/:id',
+                        templateUrl: 'templates/installation.note.html',
+                        controller: 'DisqusCtrl',
+                        data: {
+                            requiresLogin: true
                         }
                     });
 
+                $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|mailto|maps|tel|geo):/);
+
+                $locationProvider.html5Mode(true);
+                $locationProvider.hashPrefix('!');
 
                 /* loading bar */
 
                 cfpLoadingBarProvider.latencyThreshold = 300;
                 cfpLoadingBarProvider.includeSpinner = true;
-                /*
-                 cfpLoadingBarProvider.parentSelector = '.container-input';
-                 cfpLoadingBarProvider.spinnerOnlyClass = 'spinner-icon';
-                 cfpLoadingBarProvider.spinnerSelector = '#loading-input';
-                 */
+
                 GoogleMapApi.configure({
                     key: 'AIzaSyDYMiqXnyqG-OH4Hp3Cy8pUYqPzZb5ysqM',
-                    v: '3.17',
+                    v: '3.18',
                     libraries: 'places,weather'
                 });
 
@@ -101,14 +88,15 @@
 
                 $httpProvider.interceptors.push('jwtInterceptor');
 
-                $ionicConfigProvider.views.maxCache(0);
-                $ionicConfigProvider.backButton.text('');
+                //$ionicConfigProvider.backButton.text('Back');
 
-                $urlRouterProvider.otherwise('/app/map');
+                $urlRouterProvider.otherwise('/map');
+
             }])
 
-        .run(['auth', 'store', '$rootScope', 'ENV', 'jwtHelper', '$location', '$document',
-            function (auth, store, $rootScope, ENV, jwtHelper, $location, $document) {
+        .run(['disqus', 'auth', 'store', '$rootScope', 'ENV', 'jwtHelper', '$location', '$document',
+            function (disqus, auth, store, $rootScope, ENV, jwtHelper, $location, $document) {
+                var profile;
 
                 if (ENV.domainPrefix) {
                     $rootScope.domain = ENV.auth.domain.split('.')[0];
@@ -117,8 +105,6 @@
                 }
 
                 $rootScope.$on('$locationChangeStart', function () {
-
-                    console.log("location change");
 
                     var refreshingToken = null;
 
@@ -131,10 +117,10 @@
                             } else {
                                 if (refreshToken) {
                                     if (refreshingToken === null) {
-                                        refreshingToken =  auth.refreshIdToken(refreshToken).then(function(idToken) {
+                                        refreshingToken = auth.refreshIdToken(refreshToken).then(function (idToken) {
                                             store.set('token', idToken);
                                             auth.authenticate(store.get('profile'), idToken);
-                                        }).finally(function() {
+                                        }).finally(function () {
                                             refreshingToken = null;
                                         });
                                     }
@@ -155,10 +141,15 @@
                 // This hooks al auth events to check everything as soon as the app starts
                 auth.hookEvents();
 
+                profile = store.get('profile');
+                if (profile !== null) {
+                    disqus.signon(profile);
+                }
+
             }])
 
-        .controller('LoginCtrl', ['$log', '$location', 'auth', 'store', '$rootScope', 'ENV',
-            function ($log, $location, auth, store, $rootScope, ENV) {
+        .controller('LoginCtrl', ["$window", 'disqus', 'auth', 'store', '$rootScope', 'ENV', '$state',
+            function ($window, disqus, auth, store, $rootScope, ENV, $state) {
 
                 var logo = './images/' + $rootScope.domain + '.png';
 
@@ -181,15 +172,12 @@
                         device: 'Mobile device'
                     }
                 }, function (profile, id_token, access_token, state, refresh_token) {
-
-                    $log.info('login ok ' + profile.name);
-
                     store.set('profile', profile);
                     store.set('token', id_token);
                     store.set('refreshToken', refresh_token);
+                    disqus.signon(profile);
 
-                    $location.path('/app/installations');
-
+                    $state.go('map');
                 }, function (error) {
                     console.log("There was an error logging in", error);
                 });

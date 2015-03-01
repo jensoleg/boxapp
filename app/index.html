@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <base href="/" />
 
     <title>Bobbytech</title>
 
@@ -10,6 +11,8 @@
     <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/ionic/css/ionic.css" />
+    <link rel="stylesheet" href="bower_components/mdi/css/materialdesignicons.css" />
+    <link rel="stylesheet" href="bower_components/lumx/dist/lumx.css" />
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -21,8 +24,10 @@
     <link rel="stylesheet" href="styles/auth0-lock.css">
     <!-- endbuild -->
 
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+
     <link rel="shortcut icon" href="images/favicon.ico">
-    <!--link rel="icon" href="images/favicon.ico" type="image/png"-->
+    <link rel="icon" href="images/favicon.ico" type="image/png">
 
 </head>
 
@@ -30,7 +35,7 @@
 
 <ion-nav-view></ion-nav-view>
 
-<script src="https://maps.googleapis.com/maps/api/js?v=3.17&libraries=places,weather&sensor=false&key=AIzaSyDYMiqXnyqG-OH4Hp3Cy8pUYqPzZb5ysqM"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.18&libraries=places,weather&sensor=false&key=AIzaSyDYMiqXnyqG-OH4Hp3Cy8pUYqPzZb5ysqM"></script>
 
 <!-- build:js scripts/vendor.js -->
 <!-- bower:js -->
@@ -56,12 +61,23 @@
 <script src="bower_components/auth0.js/build/auth0.js"></script>
 <script src="bower_components/auth0-lock/build/auth0-lock.js"></script>
 <script src="bower_components/auth0-angular/build/auth0-angular.js"></script>
+<script src="bower_components/ngFx/dist/ngFx.js"></script>
+<script src="bower_components/velocity/velocity.js"></script>
+<script src="bower_components/velocity/velocity.ui.js"></script>
+<script src="bower_components/moment/moment.js"></script>
+<script src="bower_components/lumx/dist/lumx.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
 <script src="lib/app.js"></script>
 <script src="lib/dx.chartjs.js"></script>
 <script src="lib/auth0-lock.min.js"></script>
+<script src="lib/ngFx.min.js"></script>
+<script src="lib/velocity.min.js"></script>
+<script src="lib/velocity.ui.min.js"></script>
+<script src="lib/lumx.min.js"></script>
+<script src="lib/dirDisqus.js"></script>
+<script src="lib/CryptoJS.js"></script>
 
 <script src="cordova.js"></script>
 
@@ -69,7 +85,6 @@
 <script src="scripts/services.js"></script>
 <script src="scripts/controllers.js"></script>
 <script src="scripts/mqtt.js"></script>
-<script src="scripts/box.state.js"></script>
 <script src="scripts/map.style.js"></script>
 <script src="scripts/chart.config.js"></script>
 <script src="scripts/map.icons.js"></script>

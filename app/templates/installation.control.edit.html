@@ -1,8 +1,8 @@
-<div class="modal">
+<ion-modal-view>
     <ion-header-bar class="bar bar-header bar-positive">
-        <button class="button button-clear button-clear" ng-click="closeEditControl()">Cancel</button>
+        <button class="button button-clear" ng-click="closeEditControl()">Cancel</button>
         <h1 class="title">Edit control</h1>
-        <button class="button button-clear button-clear" ng-click="doneEditControl(control)">Save</button>
+        <button class="button button-clear" ng-click="doneEditControl(control)">Save</button>
     </ion-header-bar>
     <ion-content>
         <div class="list"
@@ -46,11 +46,13 @@
                     <input type="checkbox" ng-model="timer.enabled">
                 </label>
                 <ion-option-button class="button-assertive"
-                                   ng-click="removeTimer(timer)">Delete</ion-option-button>
+                                   ng-click="removeTimer(timer)">Delete
+                </ion-option-button>
                 <ion-option-button class="button-positive"
-                                   ng-click="editTimer(timer)">edit</ion-option-button>
+                                   ng-click="editTimer(timer)">edit
+                </ion-option-button>
 
             </ion-item>
         </ion-list>
     </ion-content>
-</div>
+</ion-modal-view>

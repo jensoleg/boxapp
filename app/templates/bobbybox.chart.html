@@ -1,91 +1,144 @@
 <ion-list>
 
-    <div ng-repeat="device in installation.devices" style="padding-bottom: 10px;">
-        <ion-item class="boxit reading item-icon-right"
-                  style="border-width: 0px;"
-                  ng-click="toggleDevice(device.id)">
-            <label>
-                <i class="icon-item ion-cube"
-                   style="vertical-align: middle;font-size: 140%;"
-                   ng-style="device.id == activeStream.deviceid && {'color': 'rgb(129, 207, 98)' } || {'color': 'rgb(82, 154, 233)'} ">
-                </i>
-                {{::device.name}} {{::device.placement}}
-            </label>
-            <i class="icon ion-wifi"
-               style="font-size: 24px; right: 32px;"
-               ng-click="showData(device.id, 'online', 'state'); $event.stopPropagation()"
-               ng-style="datastreams[device.id + 'online'].id == 'online' && datastreams[device.id + 'online'].current_value == '0' && {'color': 'rgb(253, 57, 80)'} || {'color': 'rgb(129, 207, 98)'}">
-            </i>
-            <ion-option-button class="button-assertive" ng-click="aRemoveDevice(device.id)">Remove</ion-option-button>
-            <ion-option-button class="button-positive" ng-click="aEditDevice(device.id)">Edit</ion-option-button>
-            <ion-option-button class="button-stable" ng-click="aNewControl(device.id)">Add</ion-option-button>
-        </ion-item>
+    <div flex-container="row" flex-gutter="0" class="mt+">
 
-        <!--      ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }| orderObjectBy:'name':'reverse'" -->
+        <div ng-repeat="device in installation.devices">
 
-        <div ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }">
-            <ion-item class="boxit reading item-icon-right"
-                      style="padding-left: 14px; border-width: 0px;"
-                      ng-click="showData(readings.deviceid, readings.id, readings.ctrlType)"
-                      ng-if="readings.ctrlType == 'data' && (isDeviceShown(device.id) || readings.color)">
-                <label>
-                    <i ng-class="readings.color ? 'icon-item ion-ios7-speedometer' : 'icon-item ion-speedometer'"
-                       style="vertical-align: middle;font-size: 140%;"
-                       ng-style="readings.color  && {'color': readings.color, 'opacity': 0.8}">
-                    </i>
-                    {{::readings.name}}
-                </label>
-                <span class="badge">
-                     {{readings.current_value}} {{::readings.unit.symbol}}{{::readings.unit.units}}
-                 </span>
+            <div flex-item>
+                <ul class="list">
 
-                <ion-option-button class="button-assertive" ng-click="aRemoveControl(device.id, readings.id)">
-                    Remove
-                </ion-option-button>
-                <ion-option-button class="button-positive" ng-click="aEditControl(device.id, readings.id)">
-                    Edit
-                </ion-option-button>
-            </ion-item>
+                    <li class="m0 list-row list-row--is-clickable list-content-tile--one-line list-row--has-primary list-row--has-secondary list-row--has-separator"
+                        ng-click="toggleDevice(device.id)">
+                        <div class="list-primary-tile">
+                            <lx-dropdown position="left" from-top="true">
+                                <button class="btn btn--m btn--blue btn--icon" lx-ripple lx-dropdown-toggle
+                                        lx-tooltip="Device setup" tooltip-position="bottom">
+                                    <i class="mdi ion-cube"
+                                       ng-style="device.id == activeStream.deviceid && {'color': 'rgb(129, 207, 98)' } || {'color': 'rgb(82, 154, 233)'} "></i>
+                                </button>
+                                <lx-dropdown-menu class="mt++">
+                                    <ul>
+                                        <li><a class="dropdown-link" ng-click="aRemoveDevice(device.id)">Remove
+                                            device</a>
+                                        </li>
+                                        <li><a class="dropdown-link" ng-click="aEditDevice(device.id)">Edit
+                                            device</a>
+                                        </li>
+                                        <li><a class="dropdown-link" ng-click="aNewControl(device.id)">Add
+                                            control</a>
+                                        </li>
+                                    </ul>
+                                </lx-dropdown-menu>
+                            </lx-dropdown>
+                        </div>
 
-            <ion-item class="boxit reading item-icon-right"
-                      ng-click="showData(readings.deviceid, readings.id, readings.ctrlType)"
-                      style="padding-left: 14px; border-width: 0px;"
-                      ng-if="readings.ctrlType == 'timer' && (isDeviceShown(device.id) || readings.color)">
-                <label>
+                        <div class="list-content-tile">
+                            <span>{{::device.name}} {{::device.placement}}</span>
+                        </div>
 
-                    <i ng-class="readings.color ? 'icon-item ion-ios7-stopwatch' : 'icon-item ion-ios7-stopwatch-outline'"
-                       style="vertical-align: middle; font-size: 140%;"
-                       ng-style="readings.color  && {'color': readings.color, 'opacity': 0.8}">
-                    </i>
-                    {{::readings.name}}
-                </label>
+                        <div class="list-secondary-tile" style="width: 64px;">
 
-                <i style="color: rgb(82, 154, 233); right: 32px; font-size: 105%;"
-                   ng-if="readings.current_value == 1"
-                   class="icon fa fa-circle-o-notch fa-spin">
-                </i>
+                            <button ng-click="showData(device.id, 'online', 'state'); $event.stopPropagation()"
+                                    class="btn btn--l btn--black btn--icon" lx-ripple
+                                    lx-tooltip="Connection status" tooltip-position="left">
+                                <i class="mdi mdi-wifi"
+                                   style="right: 32px;"
+                                   ng-style="datastreams[device.id + 'online'].id == 'online' && datastreams[device.id + 'online'].current_value == '0' && {'color': 'rgb(253, 57, 80)'} || {'color': 'rgb(129, 207, 98)'}"></i>
+                            </button>
 
-                <div>
-                    <ion-option-button class="button-calm" ng-if="readings.current_value == 0" ng-click="startTimer($event, device.id, readings.id); $event.stopPropagation()">
-                        Control
-                    </ion-option-button>
-                    <ion-option-button class="button-assertive" ng-click="aRemoveControl(device.id, readings.id)">
-                        Remove
-                    </ion-option-button>
-                    <ion-option-button class="button-positive" ng-click="aEditControl(device.id, readings.id)">
-                        Edit
-                    </ion-option-button>
+                        </div>
+                    </li>
 
-                </div>
-            </ion-item>
+                    <li class="m0 fx-zoom-normal fx-speed-500 list-row list-content-tile--one-line list-row--is-clickable list-row--has-primary list-row--has-secondary list-row--has-separator"
+                        ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }"
+                        ng-click="showData(readings.deviceid, readings.id, readings.ctrlType)"
+                        ng-if="readings.ctrlType == 'data' && (isDeviceShown(device.id) || readings.color)">
+                        <div class="list-row__primary" style="padding-left: 50px">
 
+                            <lx-dropdown position="left" from-top="true">
+                                <button class="btn btn--m btn--black btn--icon" lx-ripple lx-dropdown-toggle
+                                        lx-tooltip="Control setup" tooltip-position="bottom">
+                                    <i class="mdi icon icon--l mdi-history"
+                                       ng-style="readings.color  && {'color': readings.color, 'opacity': 0.9}">
+                                    </i>
+                                </button>
+                                <lx-dropdown-menu class="mt++">
+                                    <ul>
+                                        <li><a class="dropdown-link"
+                                               ng-click="aRemoveControl(device.id, readings.id)">Remove</a>
+                                        </li>
+                                        <li><a class="dropdown-link"
+                                               ng-click="aEditControl(device.id, readings.id)">Edit</a>
+                                        </li>
+                                    </ul>
+                                </lx-dropdown-menu>
+                            </lx-dropdown>
+                        </div>
+
+                        <div class="list-row__content" style="padding-left: 30px">
+                            <span>{{::readings.name}}</span>
+                        </div>
+
+                        <div class="list-row__secondary" style="width: 64px;">
+                            <span>{{readings.current_value}}
+                                {{::readings.unit.symbol}}{{::readings.unit.units}}</span>
+                        </div>
+                    </li>
+
+                    <li class="m0 fx-zoom-normal fx-speed-500 list-row list-row--is-clickable list-content-tile--one-line list-row--has-primary list-row--has-secondary list-row--has-separator"
+                        ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }"
+                        ng-click="showData(readings.deviceid, readings.id, readings.ctrlType)"
+                        ng-if="readings.ctrlType == 'timer' && (isDeviceShown(device.id) || readings.color)">
+                        <div class="list-row__primary" style="padding-left: 50px">
+
+                            <lx-dropdown position="left" from-top="true">
+                                <button class="btn btn--m btn--black btn--icon" lx-ripple lx-dropdown-toggle
+                                        lx-tooltip="Control setup" tooltip-position="bottom">
+                                    <i class="mdi icon icon--l mdi-camera-timer"
+                                       ng-style="readings.color  && {'color': readings.color, 'opacity': 0.9}">
+                                    </i>
+                                </button>
+                                <lx-dropdown-menu class="mt++">
+                                    <ul>
+                                        <li><a class="dropdown-link"
+                                               ng-click="startTimer($event, device.id, readings.id)">Control</a>
+                                        </li>
+                                        <li><a class="dropdown-link"
+                                               ng-click="aRemoveControl(device.id, readings.id)">Remove</a>
+                                        </li>
+                                        <li><a class="dropdown-link"
+                                               ng-click="aEditControl(device.id, readings.id)">Edit</a>
+                                        </li>
+                                    </ul>
+                                </lx-dropdown-menu>
+                            </lx-dropdown>
+                        </div>
+
+                        <div class="list-row__content" style="padding-left: 30px">
+                            <span>{{::readings.name}}</span>
+                            <!--div layout>
+                                <md-slider flex ng-model="color.blue" min="0" max="255" aria-label="blue"
+                                           id="blue-slider" class="md-primary">
+                                </md-slider>
+                            </div-->
+                        </div>
+
+                        <div class="list-row__secondary" style="width: 64px;">
+                            <i style="color: rgb(82, 154, 233); right: 32px; font-size: 105%;"
+                               ng-if="readings.current_value == 1"
+                               class="icon fa fa-circle-o-notch fa-spin">
+                            </i>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
         </div>
     </div>
 
-
-    <ion-item class="boxit"
+    <ion-item class="boxit fx-zoom-down fx-speed-800"
               ng-if="showChart"
-              style="border-width: 0px; padding: 10px;">
+              style="border-width: 0px; padding: 10px">
 
         <span style="position: absolute; left: 54px; font-weight: normal; font-size: 14px; line-height: 1.52857;">{{selectedScale.text}}</span>
 
@@ -129,9 +182,6 @@
                                     }">
 
         </div>
-
-    </ion-item>
-    <div style="padding-bottom: 20px"></div>
 
 </ion-list>
 

@@ -1,13 +1,14 @@
-<div class="modal">
+<ion-modal-view>
     <ion-header-bar class="bar bar-header bar-positive">
-        <button class="button button-clear button-clear" ng-click="closeNew()">Cancel</button>
+        <button class="button button-clear" ng-click="closeNew()">Cancel</button>
         <h1 class="title">New installation</h1>
-        <button class="button button-clear button-clear"
+        <button class="button button-clear"
                 ng-disabled="!newInstValid()"
-                ng-click="doneNew(newInst)">Save</button>
+                ng-click="doneNew(newInst)">Save
+        </button>
     </ion-header-bar>
-    <ion-content>
-        <div class="list">
+    <ion-content class="bgc-grey-800">
+        <!--div class="list">
             <label class="item item-input">
                 <span class="input-label">Name</span>
                 <input type="text" placeholder="Name" ng-model="newInst.name">
@@ -36,6 +37,29 @@
                 <span class="input-label">Contact phone</span>
                 <input type="text" placeholder="Contact phone" ng-model="newInst.contact.phone">
             </label>
-        </div>
+        </div-->
+        <form class="pl+ pr+">
+            <lx-text-field label="Name" theme="dark">
+                <input type="text" ng-model="newInst.name">
+            </lx-text-field>
+            <lx-text-field label="Placement" theme="dark">
+                <input type="text" ng-model="newInst.placement">
+            </lx-text-field>
+            <lx-text-field label="Address" theme="dark">
+                <google-places location="newInst.location" address="newInst.address"></google-places>
+            </lx-text-field>
+            <!--lx-text-field label="GPS Location" disabled="true">
+                <input type="text" ng-model="newInst.locationt" ng-disabled="true">
+            </lx-text-field-->
+            <lx-text-field label="Contact Name" fixed-label="true" icon="account" theme="dark">
+                <input type="text" ng-model="newInst.contact.name">
+            </lx-text-field>
+            <lx-text-field label="Contact Email" fixed-label="true" icon="email" theme="dark">
+                <input type="email" ng-model="newInst.contact.email">
+            </lx-text-field>
+            <lx-text-field label="Contact Phone" fixed-label="true"  icon="phone" theme="dark">
+                <input type="text" ng-model="newInst.contact.phone">
+            </lx-text-field>
+        </form>
     </ion-content>
-</div>
+</ion-modal-view>

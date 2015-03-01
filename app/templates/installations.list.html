@@ -1,36 +1,34 @@
-<ion-view title="Installations">
-
-    <ion-nav-bar class="nav-title-slide-ios7 bar-stable">
-        <ion-nav-buttons side="left">
-            <button menu-toggle="left" class="button icon button-clear ion-navicon"></button>
-        </ion-nav-buttons>
-
-        <ion-nav-buttons side="right">
-            <button ng-click="newInstallation()"
-                    class="button icon ion-ios7-plus-empty button-clear button-dark"></button>
-            <button ng-click="$state.go('app.map')"
-                    class="button icon ion-location button-clear button-assertive"></button>
-        </ion-nav-buttons>
-
-    </ion-nav-bar>
-
-    <ion-content start-y="55" class="scroll-bar-fade-out">
-        <div class="item-input-inset">
-            <div class="item-input-wrapper">
-                <i class="icon ion-ios7-search placeholder-icon"></i>
-                <input type="search" placeholder="Search" ng-model="data.searchQuery">
-                <i class="clear-search icon ion-ios7-close-empty" ng-click="clearSearch()"></i>
+<div ng-controller="InstallationsCtrl">
+    <ul class="list" style="background-color:white; position: relative; top: -75px;">
+        <li class="list-row"
+            ng-repeat="i in installations | orderBy:'name' | filter: searchFilter">
+            <div class="list-row__primary">
+                <button ng-click="selectInst(i._id)" class="btn btn--xl btn--blue btn--icon" lx-ripple
+                        lx-tooltip="Installation details" tooltip-position="bottom">
+                    <i class="mdi ion-cube"></i>
+                </button>
             </div>
-        </div>
-        <ion-list>
-            <ion-item nav-clear ng-repeat="i in installations | filter: data.searchQuery" ui-sref="app.main({ id: i._id })">
-                <h3>{{i.name}}</h3>
-                <h4>{{i.placement}}</h4>
-                <span class="badge badge-balanced">0</span>
-                <ion-option-button class="button-assertive" ng-click="remove(i)">Remove</ion-option-button>
-                <ion-option-button class="button-balanced" ng-click="copyInstallation(i)">copy</ion-option-button>
-                <ion-option-button class="button-positive" ng-click="editInstallation(i)">Edit</ion-option-button>
-            </ion-item>
-        </ion-list>
-    </ion-content>
-</ion-view>
+
+            <div class="list-row__content">
+                <span class="display-block">{{::i.name}}</span>
+                <span class="display-block fs-body-1 tc-black-2">{{::i.placement}}</span>
+            </div>
+
+            <div class="list-row__secondary">
+                <lx-dropdown position="right" from-top>
+                    <button class="btn btn--l btn--black btn--icon" lx-ripple lx-dropdown-toggle
+                            lx-tooltip="Installation setup" tooltip-position="left">
+                        <i class="mdi mdi-dots-vertical"></i>
+                    </button>
+
+                    <lx-dropdown-menu class="mt++">
+                        <ul>
+                            <li><a class="dropdown-link" ng-click="remove(i)">Remove</a></li>
+                            <li><a class="dropdown-link" ng-click="editInstallation(i)">Edit</a></li>
+                        </ul>
+                    </lx-dropdown-menu>
+                </lx-dropdown>
+            </div>
+        </li>
+    </ul>
+</div>

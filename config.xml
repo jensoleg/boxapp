@@ -10,6 +10,10 @@
     <content src="index.html"/>
     <access origin="*"/>
     <access origin="https://api.electricimp.com" />
+    <access origin="mailto:*" launch-external="yes" />
+    <access origin="tel:*" launch-external="yes" />
+    <access origin="geo:*" launch-external="yes" />
+    <access origin="maps:*" launch-external="yes" />
     <preference name="FadeSplashScreen" value="true" />
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="webviewbounce" value="false"/>

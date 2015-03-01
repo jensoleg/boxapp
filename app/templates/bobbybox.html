@@ -1,107 +1,102 @@
-<ion-view cache-view="false" hide-back-button="false" view-title="{{installation.name}} {{installation.placement}}">
+<ion-view cache-view="false" view-title="{{installation.name}} {{installation.placement}}">
 
-    <ion-nav-bar class="bar-shrink bar-stable">
-        <ion-nav-back-button></ion-nav-back-button>
-        <ion-nav-buttons side="left">
-            <button menu-toggle="left" ng-hide="$exposeAside.active"
-                    class="button button-icon button-clear button-dark ion-navicon">
-            </button>
-            <button ng-click="navMap()" class="button button-icon button-clear button-dark ion-android-earth">
-            </button>
-        </ion-nav-buttons>
-        <ion-nav-buttons side="right">
-            <button ng-click="doRefresh()"
-                    class="button button-custom button-icon button-clear button-dark ion-ios7-refresh-empty"></button>
-            <button ng-click="aNewDevice()"
-                    class="button button-icon button-clear button-dark ion-ios7-plus-empty"></button>
-        </ion-nav-buttons>
+    <ion-nav-bar class="bar-dark">
+        <ion-nav-back-button>Back</ion-nav-back-button>
     </ion-nav-bar>
 
-    <ion-content has-bouncing="false" class="scroll-bar-fade-out" header-shrink scroll-event-interval="5">
-        <!--ion-refresher
-            pulling-text="Refresh..."
-            on-refresh="doRefresh()">
-        </ion-refresher-->
+    <ion-content>
+
         <div ng-class="removed  ? 'disablingDiv' : '' ">
-            <div ng-style="isWebView && {'height': '64px'} || {'height': '44px'}"></div>
-            <!---- device overview -->
-            <div class="row responsive-sm" style="padding: 0px;border-bottom: 1px;border-style: ridge;">
-                <div class="col-50" style="padding: 0px; background-position-x: 50%; background-position-y: 50%;
-            background-image: url('http://maps.googleapis.com/maps/api/staticmap?center={{installation.location.lat}},{{installation.location.lng}}&zoom=10&size=840x205&maptype=roadmap&format=png32&markers=color:red%7C{{installation.location.lat}},{{installation.location.lng}}')">
-                    <img style="max-width: 100%; opacity: 0;"
-                         ng-src='http://maps.googleapis.com/maps/api/staticmap?center={{installation.location.lat}},{{installation.location.lng}}&zoom=10&size=840x205&maptype=roadmap&format=png32&markers=color:red%7C{{installation.location.lat}},{{installation.location.lng}}'/>
-                </div>
+            <div class="contact">
+                <div class="row responsive-md" style="padding: 0px;border-bottom: 1px;border-style: ridge;">
+                    <div class="col-50" style="max-width: 640px;">
+                        <div
+                            style="padding: 0px; background-position-x: 50%; background-position-y: 50%;background-image: url('http://maps.googleapis.com/maps/api/staticmap?center={{installation.location.lat}},{{installation.location.lng}}&zoom=10&size=640x205&maptype=roadmap&format=png32&markers=color:red%7C{{installation.location.lat}},{{installation.location.lng}}')">
+                            <img style="max-width: 640px; height:100%; opacity: 0;"
+                                 ng-src='http://maps.googleapis.com/maps/api/staticmap?center={{installation.location.lat}},{{installation.location.lng}}&zoom=10&size=640x205&maptype=roadmap&format=png32&markers=color:red%7C{{installation.location.lat}},{{installation.location.lng}}'/>
 
-                <div class="col-50" style="padding: 0px;margin-bottom: 8px;">
-                    <ion-list style="padding-bottom: 10px;">
-                        <ion-item style="border-style:none; padding: 6px;margin: 0px;">
-                            <a style="font-size: 85%;" class="item-icon-left">
-                                <i class="icon ion-ios7-person"></i>
-                                {{::installation.contact.name}}
-                            </a>
-                        </ion-item>
-                        <ion-item style="border-style:none;  padding: 6px;margin: 0px;"
-                                  ng-click="navigateTo( '{{installation.location.lat}}' , '{{ installation.location.lng}}' )">
-                            <a style="font-size: 85%;" class="item-icon-left">
-                                <i style="font-size: 24px;" class="icon ion-location"></i>
-                                {{::installation.address}}
-                            </a>
-                        </ion-item>
-                        <ion-item style="border-style:none;  padding: 6px;margin: 0px;"
-                                  ng-click="phoneTo('{{installation.contact.phone}}')">
-                            <a style="font-size: 85%;" class="item-icon-left">
-                                <i style="font-size: 24px;" class="icon ion-iphone"></i>
-                                {{::installation.contact.phone}}
-                            </a>
-                        </ion-item>
-                        <ion-item class="boxmedia"
-                                  style="border-style:none;  padding: 6px;margin: 0px;"
-                                  ng-click="emailTo('{{installation.contact.email}}')">
-                            <a style="font-size: 85%;" class="item-icon-left">
-                                <i style="font-size: 16px;" class="icon ion-android-mail"></i>
-                                {{::installation.contact.email}}
-                            </a>
-                        </ion-item>
-                    </ion-list>
-                </div>
-            </div>
+                            <div class="fab float-btn">
+                                <button class="fab__primary btn btn--raised btn--xl btn--indigo btn--fab" lx-ripple>
+                                    <i class="mdi mdi-apps"></i>
+                                    <i class="mdi mdi-plus"></i>
+                                </button>
 
-            <ion-list>
-                <div ng-style="showTimeline && {'padding-bottom': '0px'} || {'padding-bottom': '8px'}">
-                    <!--div style="padding-bottom: 10px;"-->
-                    <ion-item class="boxit reading item-icon-right"
-                              ng-click="toggleTimeline()"
-                              style="border-width: 0px;padding-top: 8px;padding-bottom: 8px;">
-                        <label>
-                            <i class="item-icon ion-chatbox-working"
-                               style="color: rgb(82, 154, 233); vertical-align: middle;font-size: 140%;">
-                            </i>
-                            Notes
-                        </label>
-                        <!--span class="badge badge-balanced" style="right: 36px;">2</span-->
-                    </ion-item>
-                </div>
-            </ion-list>
+                                <div class="fab__actions fab__actions--left">
 
-            <!-----   soicail IOT ----->
-            <div ng-if="showTimeline">
-                <ion-item class="boxit" style="border-width: 0px;">
-                        <textarea id="txtnotes"
-                                  ng-keyup="expandText()"
-                                  ng-keydown="expandText()"
-                                  ng-change="change()"
-                                  ng-model="installation.metadata" rows="15"
-                                  ui-Blur="UpdateNote()"></textarea>
-                </ion-item>
-                <div style="padding-bottom: 8px;"></div>
-                <!--bobby-social></bobby-social-->
+                                    <button class="btn btn--l btn--raised btn--white btn--fab" lx-ripple
+                                            lx-tooltip="Refresh"
+                                            tooltip-position="bottom"
+                                            ng-click="doRefresh()"><i class="mdi ion-refresh"></i>
+                                    </button>
+
+                                    <button class="btn btn--l btn--raised btn--blue btn--fab" lx-ripple
+                                            lx-tooltip="New device"
+                                            tooltip-position="bottom"
+                                            ng-click="aNewDevice()">
+                                        <i class="mdi ion-cube"></i>
+                                    </button>
+                                    <button class="btn btn--l btn--raised btn--orange btn--fab" lx-ripple
+                                            lx-tooltip="Comments"
+                                            tooltip-position="bottom"
+                                            ng-click="editNote()">
+                                        <i class="mdi ion-chatboxes"></i>
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-50" style="padding: 0px;margin-bottom: 8px;">
+                        <ion-list style="padding-bottom: 10px;">
+                            <ion-item style="border-style:none; padding: 6px;margin: 0px;">
+                                <a style="font-size: 85%;" class="item-icon-left">
+                                    <i class="icon ion-ios7-person"></i>
+                                    {{::installation.contact.name}}
+                                </a>
+                            </ion-item>
+                            <!-- Browser http://maps.apple.com/?q={{::installation.location.lat}},{{::installation.location.lng}} -->
+                            <!-- IOS maps:q={{::installation.location.lat}},{{::installation.location.lng}} -->
+
+                            <ion-item style="border-style:none;  padding: 6px;margin: 0px;">
+                                <a style="font-size: 85%;" class="item-icon-left"
+                                   target="_blank"
+                                   href="maps:q={{::installation.location.lat}},{{::installation.location.lng}}">
+                                    <i style="font-size: 24px;" class="icon ion-location"></i>
+                                    {{::installation.address}}
+                                </a>
+                            </ion-item>
+                            <ion-item style="border-style:none;  padding: 6px;margin: 0px;">
+                                <a style="font-size: 85%;" class="item-icon-left"
+                                   target="_blank"
+                                   href="tel:{{::installation.contact.phone}}">
+                                    <i style="font-size: 24px;" class="icon ion-iphone"></i>
+                                    {{::installation.contact.phone}}
+                                </a>
+                            </ion-item>
+                            <ion-item style="border-style:none;  padding: 6px;margin: 0px;">
+                                <a style="font-size: 85%;" class="item-icon-left"
+                                   target="_blank"
+                                   href="mailto:{{::installation.contact.email}}">
+                                    <i style="font-size: 16px;" class="icon ion-android-mail"></i>
+                                    {{::installation.contact.email}}
+                                </a>
+                            </ion-item>
+                        </ion-list>
+
+                    </div>
+                </div>
             </div>
 
             <!---- device overview -->
             <bobby-device></bobby-device>
 
+
             <!---- device setup ontrollers -->
             <bobby-setup></bobby-setup>
+
+
+
         </div>
     </ion-content>
 </ion-view>

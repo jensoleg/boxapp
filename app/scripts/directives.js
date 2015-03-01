@@ -1,92 +1,107 @@
 (function () {
     'use strict';
     angular.module('BobbyApp.directives', [])
+        /*
+         .directive('ngEnter', function () {
+         return function (scope, element, attrs) {
+         element.bind("keydown keypress", function (event) {
+         if (event.which === 13) {
+         scope.$apply(function () {
+         scope.$eval(attrs.ngEnter);
+         });
 
-        .directive('noScroll', function ($document) {
-            return {
-                restrict: 'A',
-                link: function ($scope, $element, $attr) {
+         event.preventDefault();
+         }
+         });
+         };
+         })
+         */
+        /*
+         .directive('headerShrink', function ($document, $timeout) {
+         var fadeAmt;
 
-                    $document.on('touchmove', function (e) {
-                        e.preventDefault();
-                    });
-                }
-            };
-        })
+         var shrink = function (header, buttons, content, amt, max) {
+         amt = Math.min(44, amt);
+         fadeAmt = 1 - amt / 44;
 
-        .directive('fadeBar', function ($timeout, $ionicSideMenuDelegate) {
-            return {
-                restrict: 'E',
-                template: '<div class="fade-bar"></div>',
-                replace: true,
-                link: function ($scope, $element) {
-                    // Run in the next scope digest
-                    if (ionic.Platform.isIOS() || ionic.Platform.isIPad()) {
-                        $timeout(function () {
-                            // Watch for changes to the openRatio which is a value between 0 and 1 that says how "open" the side menu is
-                            $scope.$watch(function () {
-                                return $ionicSideMenuDelegate.getOpenRatio();
-                            }, function (ratio) {
-                                $element[0].style.opacity = Math.abs(ratio);
-                            });
-                        });
-                    }
-                }
-            };
-        })
+         ionic.requestAnimationFrame(function () {
+         header.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
+         buttons.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
+         for (var i = 0, j = header.children.length; i < j; i++) {
+         header.children[i].style.opacity = fadeAmt;
+         }
+         for (var i = 0, j = buttons.children.length; i < j; i++) {
+         buttons.children[i].style.opacity = fadeAmt;
+         }
+         });
+         };
+         return {
+         restrict: 'A',
+         link: function ($scope, $element, $attr) {
+         $timeout(function () {
+         var starty = $scope.$eval($attr.headerShrink) || 0;
+         var shrinkAmt;
 
-        .directive('ngEnter', function () {
-            return function (scope, element, attrs) {
-                element.bind("keydown keypress", function (event) {
-                    if (event.which === 13) {
-                        scope.$apply(function () {
-                            scope.$eval(attrs.ngEnter);
-                        });
+         var header = $document[0].body.querySelectorAll('.bar-shrink');
+         var headerHeight = header[0].offsetHeight;
 
-                        event.preventDefault();
-                    }
-                });
-            };
-        })
+         $element.bind('scroll', function (e) {
+         if (e.originalEvent && e.originalEvent.detail && e.originalEvent.detail.scrollTop && e.originalEvent.detail.scrollTop > starty) {
+         // Start shrinking
+         shrinkAmt = headerHeight - Math.max(0, (starty + headerHeight) - e.originalEvent.detail.scrollTop);
+         shrink(header[0], header[0], $element[0], shrinkAmt, headerHeight);
+         } else {
+         shrink(header[0], header[0], $element[0], 0, headerHeight);
+         }
+         });
+         }, 1500);
+         }
+         }
+         })
+         */
+        /*
+         .directive('headerShrinkDetail', function ($document, $timeout) {
+         var fadeAmt;
 
-        .directive('headerShrink', function ($document, $timeout) {
-            var fadeAmt;
+         var shrink = function (header, buttons, content, amt, max) {
+         amt = Math.min(44, amt);
+         fadeAmt = 1 - amt / 44;
 
-            var shrink = function (header, buttons, content, amt, max) {
-                amt = Math.min(44, amt);
-                fadeAmt = 1 - amt / 44;
+         ionic.requestAnimationFrame(function () {
+         header.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
+         buttons.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
+         for (var i = 0, j = header.children.length; i < j; i++) {
+         header.children[i].style.opacity = fadeAmt;
+         }
+         for (var i = 0, j = buttons.children.length; i < j; i++) {
+         buttons.children[i].style.opacity = fadeAmt;
+         }
+         });
+         };
+         return {
+         restrict: 'A',
+         link: function ($scope, $element, $attr) {
+         $timeout(function () {
+         var starty = $scope.$eval($attr.headerShrink) || 0;
+         var shrinkAmt;
 
-                ionic.requestAnimationFrame(function () {
-                    header.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
-                    buttons.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
-                    for (var i = 0, j = header.children.length; i < j; i++) {
-                        header.children[i].style.opacity = fadeAmt;
-                    }
-                });
-            };
-            return {
-                restrict: 'A',
-                link: function ($scope, $element, $attr) {
-                    $timeout(function () {
-                        var starty = $scope.$eval($attr.headerShrink) || 0;
-                        var shrinkAmt;
+         var header = $document[0].body.querySelectorAll('.bar-shrink');
+         var headerHeight = header[4].offsetHeight;
 
-                        var header = $document[0].body.querySelectorAll('.bar-header');
-                        var headerHeight = header[0].offsetHeight;
-                        $element.bind('scroll', function (e) {
-                            if (e.originalEvent && e.originalEvent.detail && e.originalEvent.detail.scrollTop && e.originalEvent.detail.scrollTop > starty) {
-                                // Start shrinking
-                                shrinkAmt = headerHeight - Math.max(0, (starty + headerHeight) - e.originalEvent.detail.scrollTop);
-                                shrink(header[0], header[1], $element[0], shrinkAmt, headerHeight);
-                            } else {
-                                shrink(header[0], header[1], $element[0], 0, headerHeight);
-                            }
-                        });
-                    }, 1500);
-                }
-            }
-        })
-
+         $element.bind('scroll', function (e) {
+         if (e.originalEvent && e.originalEvent.detail && e.originalEvent.detail.scrollTop && e.originalEvent.detail.scrollTop > starty) {
+         // Start shrinking
+         shrinkAmt = headerHeight - Math.max(0, (starty + headerHeight) - e.originalEvent.detail.scrollTop);
+         shrink(header[4], header[5], $element[0], shrinkAmt, headerHeight);
+         } else {
+         shrink(header[4], header[5], $element[0], 0, headerHeight);
+         }
+         });
+         }, 1500);
+         }
+         }
+         })
+         */
         /*
          .directive('input', function ($timeout) {
          return {
@@ -149,7 +164,7 @@
                         // disable ionic data tap
                         angular.element(container).attr('data-tap-disabled', 'true');
                         // leave input field if google-address-entry is selected
-                        container.onclick = function() {
+                        container.onclick = function () {
                             document.getElementById('autocomplete').blur();
 
                             if (cordova && cordova.plugins) {
@@ -178,17 +193,7 @@
                 templateUrl: 'templates/bobbybox.chart.html',
                 link: function ($scope, $element, $attr) {
                 }
-            }
-        })
-
-        .directive('bobbySocial', function () {
-            return {
-                restrict: 'E',
-                replace: true,
-                templateUrl: 'templates/bobbybox.social.html',
-                link: function ($scope, $element, $attr) {
-                }
-            }
+            };
         })
 
         .directive('bobbySetup', function () {
@@ -198,17 +203,27 @@
                 templateUrl: 'templates/bobbybox.setup.html',
                 link: function ($scope, $element, $attr) {
                 }
-            }
-        })
-
-        .directive('uiBlur', function() {
-            return function( scope, elem, attrs ) {
-                elem.bind('blur', function() {
-                    scope.$apply(attrs.uiBlur);
-                });
             };
         })
 
+        .directive('installationList', function () {
+            return {
+                restrict: 'E',
+                replace: true,
+                templateUrl: 'templates/installations.list.html',
+                link: function ($scope, $element, $attr) {
+                }
+            };
+        })
+        /*
+         .directive('uiBlur', function () {
+         return function (scope, elem, attrs) {
+         elem.bind('blur', function () {
+         scope.$apply(attrs.uiBlur);
+         });
+         };
+         })
+         */
         .directive('timerTime', function ($compile) {
             return {
                 restrict: 'E',
@@ -238,34 +253,47 @@
                 }
             };
         })
+        /*
+         .directive('contactShrink', function ($document) {
 
-        .directive('timerDuration', function ($compile) {
+         return {
+         restrict: 'A',
+         link: function ($scope, $element, $attr) {
+         var resizeFactor, scrollFactor, blurFactor;
+         var header = $document[0].body.querySelector('.contact');
+
+         $element.bind('scroll', function (e) {
+         if (e.originalEvent.detail.scrollTop >= 0) {
+         scrollFactor = e.originalEvent.detail.scrollTop / 2;
+         header.style[ionic.CSS.TRANSFORM] = 'translate3d(0, +' + scrollFactor + 'px, 0)';
+         } else {
+         // shrink(header, $element[0], 0, headerHeight);
+         resizeFactor = -e.originalEvent.detail.scrollTop / 100 + 0.99;
+         blurFactor = -e.originalEvent.detail.scrollTop / 10;
+         header.style[ionic.CSS.TRANSFORM] = 'scale(' + resizeFactor + ',' + resizeFactor + ')';
+         header.style.webkitFilter = 'blur(' + blurFactor + 'px)';
+         }
+         });
+         }
+         }
+         })
+         */
+        .directive('mapShrink', function ($document) {
             return {
-                restrict: 'E',
-                scope: {
-                    timer: '='
-                },
-                template: '<input type="time" step="1"  ng-model="timer.timeDuration">',
-                replace: 'true',
-                link: function (scope, elem, attr) {
+                restrict: 'A',
+                link: function ($scope, $element, $attr) {
+                    var resizeFactor, scrollFactor, blurFactor;
+                    var header = $document[0].body.querySelector('.uimap');
 
-                    elem.bind('blur', function () {
-                        if (elem.data('old-value') != elem.val()) {
-
-                            scope.$apply(function () {
-
-                                var durationTimeStr = scope.timer.timeDuration.split(":"),
-                                    dHour = durationTimeStr[0],
-                                    dMin = durationTimeStr[1],
-                                    dSec = durationTimeStr[2];
-
-                                if (!angular.isDefined(dSec)) {
-                                    dSec = '00';
-                                }
-
-                                scope.timer.duration = parseInt(dHour, 10) * 60 * 60 + parseInt(dMin, 10) * 60 + parseInt(dSec, 10);
-
-                            });
+                    $element.bind('scroll', function (e) {
+                        if (e.originalEvent.detail.scrollTop >= 0) {
+                            scrollFactor = e.originalEvent.detail.scrollTop / 2;
+                            header.style[ionic.CSS.TRANSFORM] = 'translate3d(0, +' + scrollFactor + 'px, 0)';
+                        } else {
+                            resizeFactor = -e.originalEvent.detail.scrollTop / 100 + 0.99;
+                            blurFactor = -e.originalEvent.detail.scrollTop / 10;
+                            header.style[ionic.CSS.TRANSFORM] = 'scale(' + resizeFactor + ',' + resizeFactor + ')';
+                            header.style.webkitFilter = 'blur(' + blurFactor + 'px)';
                         }
                     });
                 }

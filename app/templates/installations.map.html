@@ -1,33 +1,20 @@
-<ion-view cache-view="false" hide-back-button="false">
-    <ion-nav-bar class="bar-clear">
+<ion-view cache-view="true">
+    <!--div class="bar bar-header bar-clear bar-shrink">
+        <div flex-container="row">
+            <div flex-item>
+                <div class="card" style="border-radius: 46px;margin-top: 10px">
+                    <div class="toolbar__right">
+                        <lx-search-filter model="searchFilter" placeholder="Search" position="left" closed>
+                        </lx-search-filter>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div-->
 
-        <ion-nav-back-button></ion-nav-back-button>
+    <ion-content class="map" style="background: transparent" has-bouncing="true" map-shrink>
 
-        <ion-nav-buttons side="left">
-            <button ng-hide="$exposeAside.active"
-                    menu-toggle="left"
-                    style="color: #404040;"
-                    class="button icon  ion-navicon button-clear">
-            </button>
-        </ion-nav-buttons>
-
-        <ion-nav-buttons side="right">
-            <a ng-style="map.showWeather && {'color': 'rgb(97, 132, 243)'} || {'color': '#404040'}"
-               ng-click="map.showWeather = !map.showWeather"
-               class="button button-icon ion-ios7-cloud"></a>
-            <a ng-click="myPosition()"
-               style="color: #404040"
-               class="button button-icon ion-android-locate"></a>
-
-            <a ng-click="popover.show($event)"
-               style="color: #404040"
-               class="button button-icon ion-more"></a>
-        </ion-nav-buttons>
-
-    </ion-nav-bar>
-
-    <ion-content scroll="false" class="map">
-        <div>
+        <div class="uimap">
             <ui-gmap-google-map class="fullmap"
                                 center="map.center"
                                 zoom="map.zoom"
@@ -37,8 +24,9 @@
                                 events="map.events"
                                 options="map.options"
                                 pan="true"
-                                control="map.control">
-
+                                control="map.control"
+                                data-tap-disabled="true"
+                                ng-cloack>
                 <ui-gmap-layer namespace="weather" type="WeatherLayer" show="map.showWeather"></ui-gmap-layer>
 
                 <ui-gmap-markers
@@ -53,75 +41,64 @@
                 </ui-gmap-markers>
 
             </ui-gmap-google-map>
+
         </div>
-        <!--swipe-cards bg-positive>
-            <swipe-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)">
-                <div ng-controller="CardCtrl">
-                    <div class="title">
-                        {{card.name}} {{card.placement}}
-                    </div>
-                    <div class="image">
-                        <img ng-src="{{card.image}}">
-                    </div>
-                    <div class="info">
-                        <div class="col" style="padding: 0;">
-                            <ion-list>
-                                <ion-item style="border-style:none border-top:1px; padding: 7px;font-size: 12px;">
-                                    <a class="item-icon-left"
-                                       style="padding-left: 35px;">
-                                        <i class="icon ion-location"
-                                           style="font-size: 24px;"
-                                           ng-click="navigateTo( '{{card.location.lat}}' , '{{ card.location.lng}}' )">
-                                        </i>
-                                        {{card.address}}
-                                    </a>
-                                </ion-item>
-                                <ion-item style="border-style:none; padding: 7px;font-size: 12px;">
-                                    <a class=" item-icon-left"
-                                       style="padding-left: 35px;">
-                                        <i class="icon ion-iphone"
-                                           style="font-size: 24px;"
-                                           ng-click="phoneTo('{{card.contact.phone}}')">
-                                        </i>
-                                        {{card.contact.phone}}
-                                    </a>
-                                </ion-item>
-                                <ion-item style="border-top-width: 0px;padding: 7px;font-size: 12px;">
-                                    <a class="item-icon-left"
-                                       style="padding-left: 35px;">
-                                        <i style="font-size: 16px;" class="icon ion-android-mail"
-                                           ng-click="emailTo('{{card.contact.email}}')">
-                                        </i>
-                                        {{card.contact.email}}
-                                    </a>
-                                </ion-item>
-                            </ion-list>
-                        </div>
-                        <div class="button-bar">
-                            <button class="button button-clear button-positive"
-                                    style="border-right-width: 2px;border-bottom-width: 0px; font-size: 14px;"
-                                    ng-click="status()">Conditions
-                            </button>
-                            <button class="button button-clear button-positive"
-                                    style="font-size: 14px;"
-                                    ng-click="setup()">Feed
-                            </button>
-                        </div>
+
+        <div class="toolbar" style="position: relative; top: -85px;">
+
+            <div class="toolbar__left">
+                <div class="card bgc-indigo-500" style="border-radius: 46px;margin: 0px 0px;padding-top: 0px;
+    padding-bottom: 0px;">
+                    <lx-search-filter model="searchFilter" placeholder="Search" theme="dark" position="left" closed>
+                    </lx-search-filter>
+                </div>
+            </div>
+
+
+            <span class="toolbar__label fs-title"></span>
+
+            <div class="toolbar__right">
+                <div class="fab">
+                    <button class="fab__primary btn btn--xl btn--indigo btn--fab" lx-ripple>
+                        <i class="mdi mdi-apps"></i>
+                        <i class="mdi mdi-plus"></i>
+                    </button>
+
+                    <div class="fab__actions fab__actions--up">
+
+                        <button class="btn btn--l btn--red btn--fab" lx-ripple lx-tooltip="Sign out"
+                                tooltip-position="bottom"
+                                ng-click="signout()">
+                            <i class="mdi ion-power"></i>
+                        </button>
+                        <button class="btn btn--l btn--grey btn--fab" lx-ripple lx-tooltip="Weather"
+                                tooltip-position="bottom"
+                                ng-class="map.showWeather ? 'btn--green' : 'btn--grey'"
+                                ng-click="toggleWeather()">
+                            <i class="mdi ion-cloud"></i>
+                        </button>
+                        <button class="btn btn--l btn--black btn--fab" lx-ripple lx-tooltip="My location"
+                                tooltip-position="bottom"
+                                ng-click="myPosition()"><i class="mdi ion-android-locate"></i>
+                        </button>
+                        <button class="btn btn--l btn--blue btn--fab" lx-ripple lx-tooltip="New Installation"
+                                tooltip-position="bottom"
+                                ng-click="newInstallation()">
+                            <i class="mdi mdi-plus"></i>
+                        </button>
+                        <button class="btn btn--l btn--white btn--fab" lx-ripple lx-tooltip="Refresh"
+                                tooltip-position="bottom"
+                                ng-click="refresh()">
+                            <i class="mdi ion-refresh"></i>
+                        </button>
+
                     </div>
                 </div>
-            </swipe-card>
-        </swipe-cards-->
+            </div>
+        </div>
+
+        <installation-list>
+        </installation-list>
+
     </ion-content>
-    <!--ion-footer-bar class="bar-clear">
-
-        <a ng-click="myPosition()"
-           style="color: #404040"
-           class="button button-icon ion-android-locate"></a>
-        <a ng-style="map.showWeather && {'color': 'rgb(97, 132, 243)'} || {'color': '#404040'}"
-           ng-click="map.showWeather = !map.showWeather"
-           class="button button-icon ion-ios7-cloud"></a>
-        <a class="button button-clear button-large"></a>
-
-    </ion-footer-bar-->
-
 </ion-view>

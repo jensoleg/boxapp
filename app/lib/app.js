@@ -45,12 +45,17 @@
                         data: {
                             requiresLogin: true
                         }
+                    })
+                    .state('fest', {
+                        url: '/fest',
+                        templateUrl: 'templates/fest.html',
+                        controller: 'DisqusCtrl'
                     });
 
-                $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|mailto|maps|tel|geo):/);
+               //$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|mailto|maps|tel|geo):/);
 
-                $locationProvider.html5Mode(true);
-                $locationProvider.hashPrefix('!');
+                //$locationProvider.html5Mode(true);
+                //$locationProvider.hashPrefix('!');
 
                 /* loading bar */
 

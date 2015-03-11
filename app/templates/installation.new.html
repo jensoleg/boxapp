@@ -48,10 +48,11 @@
             <lx-text-field label="Address" theme="dark">
                 <google-places location="newInst.location" address="newInst.address"></google-places>
             </lx-text-field>
-            <!--lx-text-field label="GPS Location" disabled="true">
-                <input type="text" ng-model="newInst.locationt" ng-disabled="true">
+            <!--lx-text-field label="GPS Location {{newInst.location.lat}}" theme="dark" disabled="true">
+                <input type="text" ng-disabled="true">
             </lx-text-field-->
-            <lx-text-field label="Contact Name" fixed-label="true" icon="account" theme="dark">
+            <!--span class="fs-subhead display-block tc-white mt+">{{newInst.location.lat}} {{newInst.location.lng}}</span-->
+            <lx-text-field class="mt++" label="Contact Name" fixed-label="true" icon="account" theme="dark">
                 <input type="text" ng-model="newInst.contact.name">
             </lx-text-field>
             <lx-text-field label="Contact Email" fixed-label="true" icon="email" theme="dark">

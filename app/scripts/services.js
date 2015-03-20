@@ -98,6 +98,7 @@
 
             return {
                 start: function (success, fail) {
+                    console.log("Blinkup", BlinkUp);
                     blinkup.start("",
                         function (result) {
                             success(result);

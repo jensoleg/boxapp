@@ -1,71 +1,83 @@
 <div class="modal">
-    <ion-header-bar class="bar bar-header bar-positive">
+    <!--ion-header-bar class="bar bar-header bar-positive">
         <button class="button icon-left ion-ios7-arrow-back button-clear" ng-click="closeEditTimer()">Cancel</button>
         <h1 class="title">Edit timer</h1>
         <button class="button button-clear" ng-click="doneEditTimer(timer)">Save</button>
+    </ion-header-bar-->
+
+    <ion-header-bar class="bar bar-header bar-positive  bgc-indigo-500">
+
+        <div class="buttons">
+            <button class="btn btn--l btn--icon" ng-click="closeEditTimer()">
+                <i class="mdi mdi-keyboard-backspace"></i>
+            </button>
+        </div>
+
+        <h1 class="title">Edit control</h1>
+
+        <div class="buttons">
+            <button class="btn btn--m btn--icon"
+                    ng-click="doneEditTimer(timer)">
+                <i class="mdi mdi-check"></i>
+            </button>
+        </div>
+
     </ion-header-bar>
-    <ion-content>
-        <div class="list">
-            <div class="list">
-                <label class="item item-input">
-                    <span class="input-label">Name</span>
-                    <input type="text" placeholder="Name" ng-model="timer.name" required>
-                </label>
-                <label class="item item-input">
-                    <span class="input-label">Time</span>
-                    <input type="time" ng-model="timer.timerTime" min="00:00:00" max="23:59:00">
-                </label>
-                <!--label class="item item-input">
-                    <span class="input-label">Time</span>
-                    <timer-time timer="timer" timerTime="timerTime"></timer-time>
-                </label-->
-                <label class="item item-input">
-                    <span class="input-label">Duration</span>
-                    <input type="number" ng-model="timer.duration">
-                    <!--timer-duration timer="timer"></timer-duration-->
-                </label>
-                <li class="item item-checkbox">
-                    <label class="checkbox">
-                        <input type="checkbox" ng-model="timer.days[0]">
-                    </label>
-                    Monday
+    <ion-content class="bgc-grey-800">
+        <form class="pl+ pr+">
+            <lx-text-field label="Name" theme="dark">
+                <input type="text" ng-model="timer.name">
+            </lx-text-field>
+            <lx-text-field label="Time" theme="dark">
+                <input type="time" ng-model="timer.timerTime" min="00:00:00" max="23:59:00">
+            </lx-text-field>
+
+            <lx-text-field label="Duration" theme="dark">
+                <input type="number" ng-model="timer.duration">
+            </lx-text-field>
+
+            <ul>
+                <li class="list-row pr0 pl0" theme="dark">
+                    <div class="list-row__content tc-grey-200">
+                        <div class="checkbox pl0">
+                            <input type="checkbox" id="timer0" class="checkbox__input"
+                                   ng-model="timer.days[0]">
+                            <label for="timer0" class="checkbox__label"> Monday </label>
+                        </div>
+                        <div class="checkbox pl0">
+                            <input type="checkbox" id="timer1" class="checkbox__input"
+                                   ng-model="timer.days[1]">
+                            <label for="timer1" class="checkbox__label"> Tuesday </label>
+                        </div>
+                        <div class="checkbox pl0">
+                            <input type="checkbox" id="timer2" class="checkbox__input"
+                                   ng-model="timer.days[2]">
+                            <label for="timer2" class="checkbox__label"> Wdensday </label>
+                        </div>
+                        <div class="checkbox pl0">
+                            <input type="checkbox" id="timer3" class="checkbox__input"
+                                   ng-model="timer.days[3]">
+                            <label for="timer3" class="checkbox__label"> Thursday </label>
+                        </div>
+                        <div class="checkbox pl0">
+                            <input type="checkbox" id="timer4" class="checkbox__input"
+                                   ng-model="timer.days[4]">
+                            <label for="timer4" class="checkbox__label"> Friday </label>
+                        </div>
+                        <div class="checkbox pl0">
+                            <input type="checkbox" id="timer5" class="checkbox__input"
+                                   ng-model="timer.days[5]">
+                            <label for="timer5" class="checkbox__label"> Saturday </label>
+                        </div>
+                        <div class="checkbox pl0">
+                            <input type="checkbox" id="timer6" class="checkbox__input"
+                                   ng-model="timer.days[6]">
+                            <label for="timer6" class="checkbox__label"> Sundsy </label>
+                        </div>
+                    </div>
                 </li>
-                <li class="item item-checkbox">
-                    <label class="checkbox">
-                        <input type="checkbox" ng-model="timer.days[1]">
-                    </label>
-                    Tuesday
-                </li>
-                <li class="item item-checkbox">
-                    <label class="checkbox">
-                        <input type="checkbox" ng-model="timer.days[2]">
-                    </label>
-                    Wedensday
-                </li>
-                <li class="item item-checkbox">
-                    <label class="checkbox">
-                        <input type="checkbox" ng-model="timer.days[3]">
-                    </label>
-                    Thursday
-                </li>
-                <li class="item item-checkbox">
-                    <label class="checkbox">
-                        <input type="checkbox" ng-model="timer.days[4]">
-                    </label>
-                    Friday
-                </li>
-                <li class="item item-checkbox">
-                    <label class="checkbox">
-                        <input type="checkbox" ng-model="timer.days[5]">
-                    </label>
-                    Saturday
-                </li>
-                <li class="item item-checkbox">
-                    <label class="checkbox">
-                        <input type="checkbox" ng-model="timer.days[6]">
-                    </label>
-                    Sunday
-                </li>
-            </div>
+            </ul>
+        </form>
+
     </ion-content>
 </div>

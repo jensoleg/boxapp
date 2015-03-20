@@ -1,10 +1,12 @@
-<ion-view cache-view="false" view-title="{{installation.name}} {{installation.placement}}">
-
-    <ion-nav-bar class="bar-dark">
-        <ion-nav-back-button>Back</ion-nav-back-button>
+<!--ion-view cache-view="false" view-title="{{installation.name}} {{installation.placement}}"-->
+<ion-view cache-view="true">
+    <ion-nav-bar class="bar-clear">
+        <ion-nav-back-button class="btn btn--l btn--icon" style="color:black">
+            <i class="mdi mdi-keyboard-backspace"></i>
+        </ion-nav-back-button>
     </ion-nav-bar>
 
-    <ion-content>
+    <ion-content style="top: 0px">
 
         <div ng-class="removed  ? 'disablingDiv' : '' ">
             <div class="contact">
@@ -51,7 +53,7 @@
                         <ion-list style="padding-bottom: 10px;">
                             <ion-item style="border-style:none; padding: 6px;margin: 0px;">
                                 <a style="font-size: 85%;" class="item-icon-left">
-                                    <i class="icon ion-ios7-person"></i>
+                                    <i class="icon ion-ios-person"></i>
                                     {{::installation.contact.name}}
                                 </a>
                             </ion-item>
@@ -94,7 +96,6 @@
 
             <!---- device setup ontrollers -->
             <bobby-setup></bobby-setup>
-
 
 
         </div>

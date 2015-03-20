@@ -2,6 +2,16 @@ body {
     cursor: url('http://ionicframework.com/img/finger.png'), auto;
 }
 
+/*
+.bar.bar-light {
+    background-color: rgba(255,255,255,.66) !important;
+}
+.scroll-content {
+    overflow: visible !important;
+}
+*/
+
+
 #disqus_thread {
     position: relative;
 }
@@ -211,15 +221,17 @@ input.ng-invalid {
 }
 
 .uimap {
-    display: inline-block;
+   /* display: inline-block;*/
     position: relative;
     width: 100%;
     height: 75%;
 }
 
+
 .map > .scroll {
     height: 100%;
 }
+
 
 .map.scroll-content {
     z-index: 1;

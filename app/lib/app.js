@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('BobbyApp', ['angular-storage', 'angular-jwt', 'auth0', 'ngCookies', 'ngCordova', 'monospaced.elastic', 'uiGmapgoogle-maps', 'dx', 'ionic', 'config', 'angular-loading-bar', 'ngAnimate', 'BobbyApp.controllers', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives'])
+    angular.module('BobbyApp', ['ngCordova', 'angular-storage', 'angular-jwt', 'auth0', 'ngCookies', 'monospaced.elastic', 'uiGmapgoogle-maps', 'dx', 'ionic', 'config', 'angular-loading-bar', 'ngAnimate', 'BobbyApp.controllers', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives'])
         .config(['$locationProvider', '$compileProvider', 'authProvider', 'jwtInterceptorProvider', '$stateProvider', '$urlRouterProvider', '$httpProvider', '$ionicConfigProvider', 'ENV', 'cfpLoadingBarProvider', 'uiGmapGoogleMapApiProvider',
             function ($locationProvider, $compileProvider, authProvider, jwtInterceptorProvider, $stateProvider, $urlRouterProvider, $httpProvider, $ionicConfigProvider, ENV, cfpLoadingBarProvider, GoogleMapApi) {
 
@@ -45,19 +45,15 @@
                         data: {
                             requiresLogin: true
                         }
-                    })
-                    .state('fest', {
-                        url: '/fest',
-                        templateUrl: 'templates/fest.html',
-                        controller: 'DisqusCtrl'
                     });
 
-               //$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|mailto|maps|tel|geo):/);
+                //$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|mailto|maps|tel|geo):/);
 
                 //$locationProvider.html5Mode(true);
                 //$locationProvider.hashPrefix('!');
 
                 /* loading bar */
+
 
                 cfpLoadingBarProvider.latencyThreshold = 300;
                 cfpLoadingBarProvider.includeSpinner = true;
@@ -93,7 +89,9 @@
 
                 $httpProvider.interceptors.push('jwtInterceptor');
 
-                //$ionicConfigProvider.backButton.text('Back');
+                $ionicConfigProvider.views.swipeBackEnabled(true);
+
+                $ionicConfigProvider.backButton.text('');
 
                 $urlRouterProvider.otherwise('/map');
 
@@ -153,8 +151,8 @@
 
             }])
 
-        .controller('LoginCtrl', ["$window", 'disqus', 'auth', 'store', '$rootScope', 'ENV', '$state',
-            function ($window, disqus, auth, store, $rootScope, ENV, $state) {
+        .controller('LoginCtrl', ['disqus', 'auth', 'store', '$rootScope', 'ENV', '$state',
+            function (disqus, auth, store, $rootScope, ENV, $state) {
 
                 var logo = './images/' + $rootScope.domain + '.png';
 

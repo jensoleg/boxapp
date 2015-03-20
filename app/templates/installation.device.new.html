@@ -1,51 +1,30 @@
 <ion-modal-view>
-    <ion-header-bar class="bar bar-header bar-positive">
-        <button class="button button-clear" ng-click="closeNewDevice()">Cancel</button>
+    <ion-header-bar class="bar bar-header bar-positive bgc-indigo-500">
+
+        <div class="buttons">
+            <button class="button button-clear" ng-click="closeNewDevice()">
+                <i class="icon ion-ios-close-empty"></i>
+            </button>
+        </div>
+
         <h1 class="title">New device</h1>
-        <button class="button button-clear"
-                ng-disabled="!newDeviceValid()"
-                ng-click="doneNewDevice(newDevice)">Save</button>
+
+        <div class="buttons">
+            <button class="btn btn--l btn--icon"
+                    ng-disabled="!newDeviceValid()"
+                    ng-click="doneNewDevice(newDevice)">
+                <i class="mdi mdi-plus" ng-click="addTimer()"></i>
+            </button>
+
+            <button ng-if="isIOS" class="button button-small button-clear"
+                    ng-click="blinkup()">
+                <i class="icon fa fa-barcode"></i>
+            </button>
+        </div>
+
     </ion-header-bar>
-    <ion-content  class="bgc-grey-800">
-        <!--div class="list">
-            <label class="item item-input">
-                <span class="input-label">Name</span>
-                <input type="text" placeholder="Name" ng-model="newDevice.name">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Placement</span>
-                <input type="text" placeholder="Placement" ng-model="newDevice.placement">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Interval</span>
-                <input type="number" placeholder="Interval" ng-model="newDevice.interval">
-            </label>
-            <div ng-if="isIOS"
-                class="item item-button-right">
-                BlinkUp - blessed device only !
-                <button class="button button-positive" ng-click="blinkup()">
-                    <i class="icon fa fa-barcode"></i>
-                </button>
-            </div-->
-            <!--label ng-if="newDevice.id && isIOS" class="item item-input">
-                <span class="input-label">Id</span>
-                <input type="text" placeholder="Id" ng-model="newDevice.id" disabled>
-            </label-->
-            <!--label ng-if="newDevice.planId && isIOS" class="item item-input">
-                <span class="input-label">Plan Id</span>
-                <input type="text" placeholder="Plan" ng-model="newDevice.planId" disabled>
-            </label>
-            <label ng-if="isIOS" class="item item-input">
-                <span class="input-label">Id</span>
-                <input type="text" placeholder="Or enter Id manuallly here" ng-model="newDevice.id">
-            </label>
-            <label ng-if="!isIOS" class="item item-input">
-                <span class="input-label">Id</span>
-                <input type="text" placeholder="Id" ng-model="newDevice.id">
-            </label>
 
-        </div-->
-
+    <ion-content class="bgc-grey-800">
         <form class="pl+ pr+">
             <lx-text-field label="Name" theme="dark">
                 <input type="text" ng-model="newDevice.name">
@@ -54,29 +33,23 @@
                 <input type="text" ng-model="newDevice.placement">
             </lx-text-field>
             <lx-text-field label="Push Interval" theme="dark">
-                <input type="text" ng-model="newDevice.interval">
+                <input type="number" ng-model="newDevice.interval">
             </lx-text-field>
 
-
-            <!--div ng-if="isIOS"
-                 class="item item-button-right">
-                BlinkUp - blessed device only !
-                <button class="button button-positive" ng-click="blinkup()">
-                    <i class="icon fa fa-barcode"></i>
-                </button>
-            </div-->
-
-            <lx-text-field ng-if="newDevice.planId && isIOS" label="Plan" disabled="true" theme="dark">
-                <input type="text" ng-model="newDevice.planId" ng-disabled="true">
+            <lx-text-field label="Plan" disabled="true" theme="dark">
+                <input type="text" ng-model="newDevice.planId" ng-disabled="true" class="bgc-grey-800">
             </lx-text-field>
             <lx-text-field ng-if="newDevice.planId && isIOS" label="Plan" disabled="true" theme="dark">
-                <input type="text" ng-model="newDevice.planId" ng-disabled="true">
+                <input type="text" ng-model="newDevice.planId" ng-disabled="true" class="bgc-grey-800">
             </lx-text-field>
-            <lx-text-field ng-if="isIOS" label="Id" theme="dark">
-                <input type="text" ng-model="newDevice.id">
+            <lx-text-field ng-if="newDevice.planId && isIOS" label="Plan" disabled="true" theme="dark">
+                <input type="text" ng-model="newDevice.planId" ng-disabled="true" class="bgc-grey-800">
             </lx-text-field>
-            <lx-text-field ng-if="!isIOS" label="Id" theme="dark">
-                <input type="text" ng-model="newDevice.id">
+            <lx-text-field ng-if="isIOS" label="Id" theme="dark" disabled="true" theme="dark">
+                <input type="text" ng-model="newDevice.id" ng-disabled="true" class="bgc-grey-800">
+            </lx-text-field>
+            <lx-text-field ng-if="!isIOS" label="Id" disabled="true" theme="dark">
+                <input type="text" ng-model="newDevice.id" ng-disabled="true" class="bgc-grey-800">
             </lx-text-field>
         </form>
     </ion-content>

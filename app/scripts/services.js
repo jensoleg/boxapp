@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('BobbyApp.services', ['config'])
+    angular.module('BobbyApp.services', ['config', 'ngCordova'])
 
         .constant('DEFAULT_SETTINGS', {
             'startAt': 'List',
@@ -738,8 +738,8 @@
                 };
             }])
 
-        .service('toastMessage', ['$cordovaToast', '$ionicLoading', '$window',
-            function ($cordovaToast, $ionicLoading, $window) {
+        .service('toastMessage', ['$cordovaToast', '$ionicLoading',
+            function ($cordovaToast, $ionicLoading) {
 
                 this.toast = function (msg, duration, position) {
                     if (!duration)
@@ -748,7 +748,8 @@
                         position = 'bottom';
 
                     // PhoneGap? Use native:
-                    if ($window.plugins && $window.plugins.toast) {
+
+                    if (ionic.Platform.isWebView()) {
                         $cordovaToast.show(msg, duration, position)
                             .then(function (success) {
                                 // success
@@ -757,6 +758,9 @@
                             });
                     } else {
                         // … fallback / customized $ionicLoading:
+                        console.log("no toast found");
+                        console.log(window.plugins);
+
                         $ionicLoading.show({
                             template: msg,
                             noBackdrop: true,

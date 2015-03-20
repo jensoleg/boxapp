@@ -167,11 +167,13 @@
                         container.onclick = function () {
                             document.getElementById('autocomplete').blur();
 
+                            /*
                             if (cordova && cordova.plugins) {
                                 if (cordova.plugins.Keyboard) {
                                     cordova.plugins.Keyboard.close();
                                 }
                             }
+                            */
                         };
                     }, 500);
 
@@ -287,7 +289,7 @@
 
                     $element.bind('scroll', function (e) {
                         if (e.originalEvent.detail.scrollTop >= 0) {
-                            scrollFactor = e.originalEvent.detail.scrollTop / 2;
+                            scrollFactor = e.originalEvent.detail.scrollTop / 3;
                             header.style[ionic.CSS.TRANSFORM] = 'translate3d(0, +' + scrollFactor + 'px, 0)';
                         } else {
                             resizeFactor = -e.originalEvent.detail.scrollTop / 100 + 0.99;

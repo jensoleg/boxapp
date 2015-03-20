@@ -1,65 +1,60 @@
 <ion-modal-view>
-    <ion-header-bar class="bar bar-header bar-positive">
-        <button class="button button-clear button-clear" ng-click="closeNewControl()">Cancel</button>
-        <h1 class="title">New control</h1>
-        <button class="button button-clear button-clear" ng-click="doneNewControl(newControl)">Save</button>
-    </ion-header-bar>
-    <ion-content>
-        <div class="list">
-            <label class="item item-input">
-                <span class="input-label">Name</span>
-                <input type="text" placeholder="Name" ng-model="newControl.name">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Id</span>
-                <input type="text" placeholder="Id" ng-model="newControl.id">
-            </label>
-            <!--label class="item item-input item-select">
-                <div class="input-label">
-                    Type
-                </div>
-                <select ng-init="newControl.ctrlType=types[0]" ng-model="newControl.ctrlType" ng-options="t as t for t in types">
-                </select>
-            </label-->
-            <label class="item item-input item-select">
-                <div class="input-label">
-                    Sensor type
-                </div>
-                <select ng-model="newControl.unit.name" ng-options="t as t for t in sensorTypes">
-                </select>
-            </label>
-            <!--label class="item item-input">
-                <span class="input-label">Interval</span>
-                <input type="time" placeholder="Interval" ng-model="newControl.interval">
-            </label-->
-            <!--label class="item item-input">
-                <span class="input-label">Min Value</span>
-                <input type="number" placeholder="Min Value" ng-model="newControl.minValue">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Max Value</span>
-                <input type="number" placeholder="Max value" ng-model="newControl.maxValue">
-            </label-->
-            <label class="item item-input">
-                <span class="input-label">Min critical</span>
-                <input type="number" placeholder="Min critical" ng-model="newControl.minCritical">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Max Critical</span>
-                <input type="number" placeholder="Max critical" ng-model="newControl.maxCritical">
-            </label>
-            <!--label class="item item-input">
-                <span class="input-label">Unit symbol</span>
-                <input type="text" placeholder="Unit symbol" ng-model="newControl.unit.symbol">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Units</span>
-                <input type="text" placeholder="Units" ng-model="newControl.unit.units">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Precision</span>
-                <input type="number" placeholder="Precision" ng-model="newControl.unit.precision">
-            </label-->
+    <ion-header-bar class="bar bar-header bar-positive  bgc-indigo-500">
+
+        <div class="buttons">
+
+            <button class="button button-clear" ng-click="closeNewControl()">
+                <i class="icon ion-ios-close-empty"></i>
+            </button>
         </div>
+
+        <h1 class="title">New control</h1>
+
+        <div class="buttons">
+            <button class="btn btn--l btn--icon"
+                    ng-click="doneNewControl(newControl)">
+                <i class="mdi mdi-plus"></i>
+            </button>
+        </div>
+
+    </ion-header-bar>
+
+    <ion-content class="bgc-grey-800">
+
+        <form class="pl+ pr+">
+            <lx-text-field label="Name" theme="dark">
+            <input type="text" ng-model="newControl.name">
+        </lx-text-field>
+            <lx-text-field label="Id" theme="dark">
+                <input type="text" ng-model="newControl.id">
+            </lx-text-field>
+
+
+            <div class="mt+++" flex-container="row">
+                <div flex-item>
+                    <div class="radio-group tc-grey-600">
+                        <div class="radio-button">
+                            <input type="radio" id="radio1" name="radio1" value="moisture" class="radio-button__input"
+                                   ng-model="newControl.unit.name">
+                            <label for="radio1" class="radio-button__label">Moisture</label>
+                        </div>
+
+                        <div class="radio-button" theme="dark">
+                            <input type="radio" id="radio2" name="radio1" value="raw" class="radio-button__input"
+                                   ng-model="newControl.unit.name">
+                            <label for="radio2" class="radio-button__label">Raw</label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <lx-text-field label="Minimum critical value" theme="dark">
+                <input type="text" ng-model="newControl.minCritical">
+            </lx-text-field>
+            <lx-text-field label="Max critical value" theme="dark">
+                <input type="text" ng-model="newControl.maxCritical">
+            </lx-text-field>
+        </form>
     </ion-content>
 </ion-modal-view>

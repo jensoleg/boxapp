@@ -52,8 +52,8 @@
             };
         })
 
-        .controller('InstallationsCtrl', ['bobby', 'toastMessage', '$location', '$rootScope', '$scope', '$timeout', 'Settings', '$state', 'installationService', '$ionicModal', '$ionicPopup', 'auth', 'store', 'auth0Service', '$cacheFactory',
-            function (bobby, toastMessage, $location, $rootScope, $scope, $timeout, Settings, $state, installationService, $ionicModal, $ionicPopup, auth, store, auth0Service, $cacheFactory) {
+        .controller('InstallationsCtrl', ['bobby', 'toastMessage', '$ionicHistory', '$location', '$rootScope', '$scope', '$timeout', 'Settings', '$state', 'installationService', '$ionicModal', '$ionicPopup', 'auth', 'store', 'auth0Service', '$cacheFactory',
+            function (bobby, toastMessage, $ionicHistory, $location, $rootScope, $scope, $timeout, Settings, $state, installationService, $ionicModal, $ionicPopup, auth, store, auth0Service, $cacheFactory) {
 
                 installationService.all()
                     .then(function (newInstallations) {
@@ -62,6 +62,7 @@
 
 
                 $scope.selectInst = function (instId) {
+                    $ionicHistory.clearCache();
                     $state.go('box', {id: instId});
                 };
 
@@ -472,7 +473,6 @@
 
                 $scope.newControl = {};
                 $scope.types = ['data', 'status'];
-                $scope.sensorTypes = ['moisture', 'raw'];
                 $scope.sensorTypeEnabled = false;
 
                 $scope.$on('message:new-control', function (evt, device) {
@@ -591,7 +591,7 @@
                 };
 
                 $scope.addControl = function () {
-                    $scope.newControl = {};
+                    $scope.newControl = {unit: {name: undefined}};
                     $scope.newSensorModal.show();
                 };
 
@@ -1171,6 +1171,7 @@
 
         .controller('MapCtrl', ['uiGmapGoogleMapApi', 'uiGmapIsReady', '$cordovaSplashscreen', '$scope', '$location', '$rootScope', '$cordovaGeolocation', 'Settings', 'icons', 'styles', 'installations', '$state', '$ionicLoading',
             function (GoogleMapApi, IsReady, $cordovaSplashscreen, $scope, $location, $rootScope, $cordovaGeolocation, Settings, icons, styles, installations, $state, $ionicLoading) {
+
 
                 $rootScope.searchFilter = "";
 

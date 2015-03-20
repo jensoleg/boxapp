@@ -1,34 +1,42 @@
 <div ng-controller="InstallationsCtrl">
-    <ul class="list" style="background-color:white; position: relative; top: -75px;">
-        <li class="list-row"
-            ng-repeat="i in installations | orderBy:'name' | filter: searchFilter">
-            <div class="list-row__primary">
-                <button ng-click="selectInst(i._id)" class="btn btn--xl btn--blue btn--icon" lx-ripple
-                        lx-tooltip="Installation details" tooltip-position="bottom">
-                    <i class="mdi ion-cube"></i>
-                </button>
-            </div>
 
-            <div class="list-row__content">
-                <span class="display-block">{{::i.name}}</span>
-                <span class="display-block fs-body-1 tc-black-2">{{::i.placement}}</span>
-            </div>
+    <div class="data-table-container" style="background-color:white; position: absolute;">
 
-            <div class="list-row__secondary">
-                <lx-dropdown position="right" from-top>
-                    <button class="btn btn--l btn--black btn--icon" lx-ripple lx-dropdown-toggle
-                            lx-tooltip="Installation setup" tooltip-position="left">
-                        <i class="mdi mdi-dots-vertical"></i>
+        <table class="data-table data-table--has-primary data-table--has-secondary">
+
+            <tbody>
+            <tr class="data-table__clickable-row"
+                ng-click="selectInst(i._id)"
+                ng-repeat="i in installations | orderBy:'name' | filter: searchFilter">
+                <td style="padding-left: 18px; width: 70px;padding-right: 18px;">
+                    <button class="btn btn--m btn--blue btn--icon" lx-ripple>
+                        <i class="mdi ion-cube"></i>
                     </button>
+                </td>
+                <td>
+                    <span class="display-block">{{::i.name}}</span>
+                    <span class="display-block fs-body-1 tc-black-2">{{::i.placement}}</span>
 
-                    <lx-dropdown-menu class="mt++">
-                        <ul>
-                            <li><a class="dropdown-link" ng-click="remove(i)">Remove</a></li>
-                            <li><a class="dropdown-link" ng-click="editInstallation(i)">Edit</a></li>
-                        </ul>
-                    </lx-dropdown-menu>
-                </lx-dropdown>
-            </div>
-        </li>
-    </ul>
+                </td>
+                <td></td>
+                <td></td>
+                <td>
+                    <lx-dropdown position="right" from-top>
+                        <button class="btn btn--l btn--black btn--icon" lx-ripple lx-dropdown-toggle
+                                lx-tooltip="Installation setup" tooltip-position="left">
+                            <i class="mdi mdi-dots-vertical"></i>
+                        </button>
+
+                        <lx-dropdown-menu>
+                            <ul>
+                                <li><a class="dropdown-link" ng-click="remove(i)">Remove</a></li>
+                                <li><a class="dropdown-link" ng-click="editInstallation(i)">Edit</a></li>
+                            </ul>
+                        </lx-dropdown-menu>
+                    </lx-dropdown>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

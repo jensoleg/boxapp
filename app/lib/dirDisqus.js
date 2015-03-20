@@ -64,10 +64,10 @@
                         // get the remote Disqus script and insert it into the DOM, but only if it not already loaded (as that will cause warnings)
                         if (!$window.DISQUS) {
                             var scriptTag = document.createElement("script"),
-                                source =  "var disqus_config = function () {" +
-                                          "    this.page.remote_auth_s3 = '" + scope.$root.sso.auth +  "';" +
-                                          "    this.page.api_key ='" +  scope.$root.sso.pubKey + "';" +
-                                          "};";
+                                source = "var disqus_config = function () {" +
+                                    "    this.page.remote_auth_s3 = '" + scope.$root.sso.auth + "';" +
+                                    "    this.page.api_key ='" + scope.$root.sso.pubKey + "';" +
+                                    "};";
 
                             scriptTag.innerHTML = source;
                             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(scriptTag);

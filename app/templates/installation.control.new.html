@@ -22,15 +22,17 @@
     <ion-content class="bgc-grey-800">
 
         <form class="pl+ pr+">
+
             <lx-text-field label="Name" theme="dark">
-            <input type="text" ng-model="newControl.name">
-        </lx-text-field>
+                <input type="text" ng-model="newControl.name">
+            </lx-text-field>
+
             <lx-text-field label="Id" theme="dark">
                 <input type="text" ng-model="newControl.id">
             </lx-text-field>
 
 
-            <div class="mt+++" flex-container="row">
+            <div class="mt+++">
                 <div flex-item>
                     <div class="radio-group tc-grey-600">
                         <div class="radio-button">
@@ -52,9 +54,11 @@
             <lx-text-field label="Minimum critical value" theme="dark">
                 <input type="text" ng-model="newControl.minCritical">
             </lx-text-field>
+
             <lx-text-field label="Max critical value" theme="dark">
                 <input type="text" ng-model="newControl.maxCritical">
             </lx-text-field>
+
         </form>
     </ion-content>
 </ion-modal-view>

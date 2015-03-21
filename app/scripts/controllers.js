@@ -127,7 +127,7 @@
                     $scope.update();
                 };
 
-                $scope.$on('$ionicView.beforeLeave', function () {
+                $scope.$on('$destroy', function () {
                     $scope.editModal.remove();
                     $scope.newModal.remove();
                 });
@@ -456,7 +456,7 @@
                     $scope.saveNewDevice();
                 };
 
-                $scope.$on('$ionicView.beforeLeave', function () {
+                $scope.$on('$destroy', function () {
                     $scope.editModal.remove();
                     $scope.newModal.remove();
 
@@ -731,7 +731,7 @@
                     $scope.newTimerModal = modal;
                 });
 
-                $scope.$on('$ionicView.beforeLeave', function () {
+                $scope.$on('$destroy', function () {
                     $scope.editSensorModal.remove();
                     $scope.newSensorModal.remove();
                     $scope.editTimerModal.remove();
@@ -868,7 +868,7 @@
                     $scope.removed = true;
                 });
 
-                $scope.$on('$ionicView.beforeLeave', function () {
+                $scope.$on('$destroy', function () {
                     bobby.disableSubscriptions();
                     if ($scope.popover) {
                         $scope.popover.remove();

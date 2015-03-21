@@ -27,21 +27,20 @@
             </lx-text-field>
 
             <div ng-hide="control.ctrlType =='timer'">
-                <div class="mt+++" flex-container="row">
+                <div class="mt+++">
                     <div flex-item>
                         <div class="radio-group tc-grey-600">
                             <div class="radio-button">
-                                <input type="radio" id="radio1" name="radio1" value="moisture"
-                                       class="radio-button__input" ng-model="control.unit.name">
-                                <label for="radio1" class="radio-button__label">Moisture</label>
-                            </div>
-
-                            <div class="radio-button" theme="dark">
-                                <input type="radio" id="radio2" name="radio1" value="raw" class="radio-button__input"
+                                <input type="radio" id="radioA" name="radioX" value="moisture"
+                                       class="radio-button__input"
                                        ng-model="control.unit.name">
-                                <label for="radio2" class="radio-button__label">Raw</label>
+                                <label for="radioA" class="radio-button__label">Moisture</label>
                             </div>
-
+                            <div class="radio-button" theme="dark">
+                                <input type="radio" id="radioB" name="radioX" value="raw" class="radio-button__input"
+                                       ng-model="control.unit.name">
+                                <label for="radioB" class="radio-button__label">Raw</label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -52,7 +51,6 @@
                 <lx-text-field label="Max critical value" theme="dark">
                     <input type="text" ng-model="control.maxCritical">
                 </lx-text-field>
-            </div>
             </div>
             <div ng-if="control.ctrlType =='timer'">
 

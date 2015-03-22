@@ -944,7 +944,19 @@
                 $scope.startTimer = function ($event, deviceId, controlId) {
                     $scope.currentControlId = controlId;
                     $scope.currentDeviceId = deviceId;
+                    $scope.showTimerCtrl = true;
+                    $scope.controlTimer = {
+                        name: 'StartTimer',
+                        enabled: true,
+                        time: '',
+                        timestamp: 0,
+                        //timeDuration: "00:00:00",
+                        duration: 0,
+                        days: []
+                    };
 
+
+                    /*
                     $ionicPopover.fromTemplateUrl('templates/setTimer.html', {
                         scope: $scope
                     }).then(function (popover) {
@@ -960,10 +972,42 @@
                         };
                         popover.show($event);
                     });
+                    */
+                };
+
+
+                $scope.setTimer = function (timer) {
+
+                    var device = _.find($scope.installation.devices, {'id': $scope.currentDeviceId}),
+                        control = _.find(device.controls, {'id': $scope.currentControlId}),
+                        aControl = angular.copy(control);
+
+                    aControl.timers = [];
+                    //delete timer.timeDuration;
+                    aControl.timers.push(timer);
+                    delete aControl.$$hashKey;
+
+                    installationService.updateDeviceControl($scope.currentDeviceId, aControl)
+                        .then(function (control) {
+                            console.log('done:', control);
+                        });
+
+                    $scope.currentControlId = '';
+                    $scope.currentDeviceId = '';
+                    $scope.showTimerCtrl = false;
+
+                    // $scope.popover.hide();
+                };
+
+                $scope.cancelTimer = function () {
+                    $scope.currentControlId = '';
+                    $scope.currentDeviceId = '';
+                    $scope.showTimerCtrl = false;
                 };
 
                 /* handling notes */
 
+                /*
                 $scope.UpdateNote = function () {
                     $scope.installation.metadata = $scope.notes;
                     installationService.updateInstallation($scope.installation)
@@ -972,7 +1016,7 @@
                             $cacheFactory.get('$http').removeAll();
                         });
                 };
-                /*
+
                  $ionicModal.fromTemplateUrl('templates/installation.note.html', {
                  scope: $scope,
                  animation: 'slide-in-up'
@@ -995,27 +1039,7 @@
                  $scope.UpdateNote();
                  };
                  */
-                $scope.setTimer = function (timer) {
 
-                    var device = _.find($scope.installation.devices, {'id': $scope.currentDeviceId}),
-                        control = _.find(device.controls, {'id': $scope.currentControlId}),
-                        aControl = angular.copy(control);
-
-                    aControl.timers = [];
-                    //delete timer.timeDuration;
-                    aControl.timers.push(timer);
-                    delete aControl.$$hashKey;
-
-                    installationService.updateDeviceControl($scope.currentDeviceId, aControl)
-                        .then(function (control) {
-                            console.log('done:', control);
-                        });
-
-                    $scope.currentControlId = '';
-                    $scope.currentDeviceId = '';
-
-                    $scope.popover.hide();
-                };
 
                 $scope.toggleDevice = function (device) {
                     $scope.shownDevice[device] = !$scope.isDeviceShown(device);

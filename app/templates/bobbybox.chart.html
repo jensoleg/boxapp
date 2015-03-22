@@ -91,7 +91,9 @@
                         ng-click="showData(readings.deviceid, readings.id, readings.ctrlType)"
                         ng-if="readings.ctrlType == 'timer' && (isDeviceShown(device.id) || readings.color)">
 
-                        <div class="list-row__primary" style="padding-left: 50px">
+
+                        <div ng-hide="showTimerCtrl && readings.id == currentControlId" class="list-row__primary"
+                             style="padding-left: 50px">
                             <button ng-if="readings.current_value == 0" class="btn btn--m btn--black btn--icon"
                                     lx-ripple>
                                 <i class="mdi icon icon--l mdi-camera-timer"
@@ -109,16 +111,13 @@
 
                         </div>
 
-                        <div class="list-row__content" style="padding-left: 30px">
+                        <div ng-hide="showTimerCtrl && readings.id == currentControlId" class="list-row__content"
+                             style="padding-left: 30px">
                             <span>{{::readings.name}}</span>
-                            <!--div layout>
-                                <md-slider flex ng-model="color.blue" min="0" max="255" aria-label="blue"
-                                           id="blue-slider" class="md-primary">
-                                </md-slider>
-                            </div-->
                         </div>
 
-                        <div class="list-row__secondary" style="width: 64px;">
+                        <div ng-hide="showTimerCtrl && readings.id == currentControlId" class="list-row__secondary"
+                             style="width: 64px;">
                             <lx-dropdown position="right" from-top="true">
                                 <button class="btn btn--m btn--black btn--icon" lx-ripple lx-dropdown-toggle
                                         lx-tooltip="Control setup" tooltip-position="left">
@@ -139,6 +138,35 @@
                                     </ul>
                                 </lx-dropdown-menu>
                             </lx-dropdown>
+                        </div>
+
+                        <div ng-show="showTimerCtrl && readings.id == currentControlId" class="list-row__primary">
+                        </div>
+
+                        <div ng-show="showTimerCtrl && readings.id == currentControlId" class="list-row__content"
+                             style="padding-top: 0px;padding-bottom: 0px;">
+                            <div class="range range-positive" style="padding-right: 0px;padding-left:0px">
+                                <span class="display-block fs-body-1 tc-black-2">{{controlTimer.duration}}</span>
+                                <input style="margin-top: 0px;margin-bottom: 0px;margin-right: 0px;"
+                                       type="range"
+                                       name="volume"
+                                       min="0" max="180"
+                                       ng-model="controlTimer.duration">
+                                <button class="btn btn--l btn--black btn--icon" lx-ripple
+                                        ng-click="cancelTimer(); $event.preventDefault(); $event.stopPropagation();">
+                                    <i class="mdi icon icon--l ion-ios-close-empty">
+                                    </i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div ng-show="showTimerCtrl && readings.id == currentControlId" class="list-row__secondary"
+                             style="width: 64px;">
+                            <button class="btn btn--m btn--black btn--icon" lx-ripple
+                                    ng-click="setTimer(controlTimer); $event.preventDefault(); $event.stopPropagation();">
+                                <i class="mdi icon icon--m mdi-check">
+                                </i>
+                            </button>
                         </div>
                     </li>
 

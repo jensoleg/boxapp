@@ -1,8 +1,8 @@
 <ion-modal-view>
+
     <ion-header-bar class="bar bar-header bar-positive  bgc-indigo-500">
 
         <div class="buttons">
-
             <button class="button button-clear" ng-click="closeNewControl()">
                 <i class="icon ion-ios-close-empty"></i>
             </button>
@@ -52,13 +52,15 @@
             </div>
 
             <lx-text-field label="Minimum critical value" theme="dark">
-                <input type="text" ng-model="newControl.minCritical">
+                <input type="number" ng-model="newControl.minCritical">
             </lx-text-field>
 
             <lx-text-field label="Max critical value" theme="dark">
-                <input type="text" ng-model="newControl.maxCritical">
+                <input type="number" ng-model="newControl.maxCritical">
             </lx-text-field>
 
         </form>
+
     </ion-content>
+
 </ion-modal-view>

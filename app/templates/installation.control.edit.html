@@ -8,7 +8,7 @@
             </button>
         </div>
 
-        <h1 class="title">New control</h1>
+        <h1 class="title">Edit control</h1>
 
         <div class="buttons">
             <button class="button button-clear"
@@ -26,7 +26,7 @@
                 <input type="text" ng-model="control.name">
             </lx-text-field>
 
-            <div ng-hide="control.ctrlType =='timer'">
+            <div ng-if="control.ctrlType !='timer'">
                 <div class="mt+++">
                     <div flex-item>
                         <div class="radio-group tc-grey-600">
@@ -46,16 +46,16 @@
                 </div>
 
                 <lx-text-field label="Minimum critical value" theme="dark">
-                    <input type="text" ng-model="control.minCritical">
+                    <input type="number" ng-model="control.minCritical">
                 </lx-text-field>
                 <lx-text-field label="Max critical value" theme="dark">
-                    <input type="text" ng-model="control.maxCritical">
+                    <input type="number" ng-model="control.maxCritical">
                 </lx-text-field>
             </div>
-            <div ng-if="control.ctrlType =='timer'">
 
+            <div ng-if="control.ctrlType =='timer'">
                 <ul>
-                    <li class="list-row pr0 pl0" theme="dark">
+                    <li class="list-row pr0 pl0">
                         <div class="list-row__content tc-grey-200">
                             <span class="display-block">Timers</span>
                         </div>
@@ -71,7 +71,7 @@
                         <div class="divider divider--light"></div>
                     </li>
 
-                    <li class="list-row pr0 pl0" theme="dark" ng-repeat="timer in control.timers">
+                    <li class="list-row pr0 pl0" ng-repeat="timer in control.timers">
 
                         <div class="list-row__content tc-grey-200">
                             <div class="checkbox pl0">
@@ -82,11 +82,11 @@
                         </div>
 
                         <div class="list-row__secondary tc-grey-200">
+
                             <lx-dropdown position="right" from-top>
                                 <button class="btn btn--l btn--icon" lx-ripple lx-dropdown-toggle>
                                     <i class="mdi mdi-dots-vertical"></i>
                                 </button>
-
                                 <lx-dropdown-menu>
                                     <ul>
                                         <li><a class="dropdown-link" ng-click="removeTimer(timer)">Remove</a></li>
@@ -99,5 +99,7 @@
                 </ul>
             </div>
         </form>
+
     </ion-content>
+
 </ion-modal-view>

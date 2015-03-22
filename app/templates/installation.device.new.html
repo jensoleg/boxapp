@@ -1,4 +1,5 @@
 <ion-modal-view>
+
     <ion-header-bar class="bar bar-header bar-positive bgc-indigo-500">
 
         <div class="buttons">
@@ -16,7 +17,7 @@
                 <i class="mdi mdi-plus" ng-click="addTimer()"></i>
             </button>
 
-            <button  class="button button-small button-clear"
+            <button class="button button-small button-clear"
                     ng-click="blinkup()">
                 <i class="icon fa fa-barcode"></i>
             </button>
@@ -25,6 +26,7 @@
     </ion-header-bar>
 
     <ion-content class="bgc-grey-800">
+
         <form class="pl+ pr+">
             <lx-text-field label="Name" theme="dark">
                 <input type="text" ng-model="newDevice.name">
@@ -35,7 +37,6 @@
             <lx-text-field label="Push Interval" theme="dark">
                 <input type="number" ng-model="newDevice.interval">
             </lx-text-field>
-
             <lx-text-field label="Plan" disabled="true" theme="dark">
                 <input type="text" ng-model="newDevice.planId" ng-disabled="true" class="bgc-grey-800">
             </lx-text-field>
@@ -52,6 +53,8 @@
                 <input type="text" ng-model="newDevice.id" ng-disabled="true" class="bgc-grey-800">
             </lx-text-field>
         </form>
+
     </ion-content>
+
 </ion-modal-view>
 

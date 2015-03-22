@@ -1,4 +1,4 @@
-<div class="modal">
+<ion-modal-view>
     <ion-header-bar class="bar bar-header bar-positive  bgc-indigo-500">
 
         <div class="buttons">
@@ -19,7 +19,9 @@
     </ion-header-bar>
 
     <ion-content class="bgc-grey-800">
+
         <form class="pl+ pr+">
+
             <lx-text-field label="Name" theme="dark">
                 <input type="text" ng-model="newTimer.name">
             </lx-text-field>
@@ -30,7 +32,6 @@
             <lx-text-field label="Duration" theme="dark">
                 <input type="number" ng-model="newTimer.duration">
             </lx-text-field>
-
             <ul>
                 <li class="list-row pr0 pl0" theme="dark">
                     <div class="list-row__content tc-grey-200">
@@ -72,7 +73,9 @@
                     </div>
                 </li>
             </ul>
+
         </form>
 
     </ion-content>
-</div>
+
+</ion-modal-view>

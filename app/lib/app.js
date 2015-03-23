@@ -47,7 +47,7 @@
                         }
                     });
 
-                //$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|mailto|maps|tel|geo):/);
+                $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|mailto|maps|tel|geo):/);
 
                 //$locationProvider.html5Mode(true);
                 //$locationProvider.hashPrefix('!');

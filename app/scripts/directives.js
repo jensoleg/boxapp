@@ -16,92 +16,92 @@
          };
          })
          */
-        /*
-         .directive('headerShrink', function ($document, $timeout) {
-         var fadeAmt;
 
-         var shrink = function (header, buttons, content, amt, max) {
-         amt = Math.min(44, amt);
-         fadeAmt = 1 - amt / 44;
+        .directive('headerShrink', function ($document, $timeout) {
+            var fadeAmt;
 
-         ionic.requestAnimationFrame(function () {
-         header.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
-         buttons.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
-         for (var i = 0, j = header.children.length; i < j; i++) {
-         header.children[i].style.opacity = fadeAmt;
-         }
-         for (var i = 0, j = buttons.children.length; i < j; i++) {
-         buttons.children[i].style.opacity = fadeAmt;
-         }
-         });
-         };
-         return {
-         restrict: 'A',
-         link: function ($scope, $element, $attr) {
-         $timeout(function () {
-         var starty = $scope.$eval($attr.headerShrink) || 0;
-         var shrinkAmt;
+            var shrink = function (header, buttons, content, amt, max) {
+                amt = Math.min(44, amt);
+                fadeAmt = 1 - amt / 44;
 
-         var header = $document[0].body.querySelectorAll('.bar-shrink');
-         var headerHeight = header[0].offsetHeight;
+                ionic.requestAnimationFrame(function () {
+                    header.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
+                    buttons.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
+                    for (var i = 0, j = header.children.length; i < j; i++) {
+                        header.children[i].style.opacity = fadeAmt;
+                    }
+                    for (var i = 0, j = buttons.children.length; i < j; i++) {
+                        buttons.children[i].style.opacity = fadeAmt;
+                    }
+                });
+            };
+            return {
+                restrict: 'A',
+                link: function ($scope, $element, $attr) {
+                    $timeout(function () {
+                        var starty = $scope.$eval($attr.headerShrink) || 0;
+                        var shrinkAmt;
 
-         $element.bind('scroll', function (e) {
-         if (e.originalEvent && e.originalEvent.detail && e.originalEvent.detail.scrollTop && e.originalEvent.detail.scrollTop > starty) {
-         // Start shrinking
-         shrinkAmt = headerHeight - Math.max(0, (starty + headerHeight) - e.originalEvent.detail.scrollTop);
-         shrink(header[0], header[0], $element[0], shrinkAmt, headerHeight);
-         } else {
-         shrink(header[0], header[0], $element[0], 0, headerHeight);
-         }
-         });
-         }, 1500);
-         }
-         }
-         })
-         */
-        /*
-         .directive('headerShrinkDetail', function ($document, $timeout) {
-         var fadeAmt;
+                        var header = $document[0].body.querySelectorAll('.bar-shrink');
+                        var headerHeight = header[1].offsetHeight;
 
-         var shrink = function (header, buttons, content, amt, max) {
-         amt = Math.min(44, amt);
-         fadeAmt = 1 - amt / 44;
+                        $element.bind('scroll', function (e) {
+                            if (e.originalEvent && e.originalEvent.detail && e.originalEvent.detail.scrollTop && e.originalEvent.detail.scrollTop > starty) {
+                                // Start shrinking
+                                shrinkAmt = headerHeight - Math.max(0, (starty + headerHeight) - e.originalEvent.detail.scrollTop);
+                                shrink(header[1], header[2], $element[0], shrinkAmt, headerHeight);
+                            } else {
+                                shrink(header[1], header[2], $element[0], 0, headerHeight);
+                            }
+                        });
+                    }, 1500);
+                }
+            }
+        })
 
-         ionic.requestAnimationFrame(function () {
-         header.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
-         buttons.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
-         for (var i = 0, j = header.children.length; i < j; i++) {
-         header.children[i].style.opacity = fadeAmt;
-         }
-         for (var i = 0, j = buttons.children.length; i < j; i++) {
-         buttons.children[i].style.opacity = fadeAmt;
-         }
-         });
-         };
-         return {
-         restrict: 'A',
-         link: function ($scope, $element, $attr) {
-         $timeout(function () {
-         var starty = $scope.$eval($attr.headerShrink) || 0;
-         var shrinkAmt;
+/*
+        .directive('headerShrinkDetail', function ($document, $timeout) {
+            var fadeAmt;
 
-         var header = $document[0].body.querySelectorAll('.bar-shrink');
-         var headerHeight = header[4].offsetHeight;
+            var shrink = function (header, buttons, content, amt, max) {
+                amt = Math.min(44, amt);
+                fadeAmt = 1 - amt / 44;
 
-         $element.bind('scroll', function (e) {
-         if (e.originalEvent && e.originalEvent.detail && e.originalEvent.detail.scrollTop && e.originalEvent.detail.scrollTop > starty) {
-         // Start shrinking
-         shrinkAmt = headerHeight - Math.max(0, (starty + headerHeight) - e.originalEvent.detail.scrollTop);
-         shrink(header[4], header[5], $element[0], shrinkAmt, headerHeight);
-         } else {
-         shrink(header[4], header[5], $element[0], 0, headerHeight);
-         }
-         });
-         }, 1500);
-         }
-         }
-         })
-         */
+                ionic.requestAnimationFrame(function () {
+                    header.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
+                    buttons.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
+                    for (var i = 0, j = header.children.length; i < j; i++) {
+                        header.children[i].style.opacity = fadeAmt;
+                    }
+                    for (var i = 0, j = buttons.children.length; i < j; i++) {
+                        buttons.children[i].style.opacity = fadeAmt;
+                    }
+                });
+            };
+            return {
+                restrict: 'A',
+                link: function ($scope, $element, $attr) {
+                    $timeout(function () {
+                        var starty = $scope.$eval($attr.headerShrink) || 0;
+                        var shrinkAmt;
+
+                        var header = $document[0].body.querySelectorAll('.bar-shrink');
+                        var headerHeight = header[4].offsetHeight;
+
+                        $element.bind('scroll', function (e) {
+                            if (e.originalEvent && e.originalEvent.detail && e.originalEvent.detail.scrollTop && e.originalEvent.detail.scrollTop > starty) {
+                                // Start shrinking
+                                shrinkAmt = headerHeight - Math.max(0, (starty + headerHeight) - e.originalEvent.detail.scrollTop);
+                                shrink(header[4], header[5], $element[0], shrinkAmt, headerHeight);
+                            } else {
+                                shrink(header[4], header[5], $element[0], 0, headerHeight);
+                            }
+                        });
+                    }, 1500);
+                }
+            }
+        })
+*/
         /*
          .directive('input', function ($timeout) {
          return {
@@ -168,12 +168,12 @@
                             document.getElementById('autocomplete').blur();
 
                             /*
-                            if (cordova && cordova.plugins) {
-                                if (cordova.plugins.Keyboard) {
-                                    cordova.plugins.Keyboard.close();
-                                }
-                            }
-                            */
+                             if (cordova && cordova.plugins) {
+                             if (cordova.plugins.Keyboard) {
+                             cordova.plugins.Keyboard.close();
+                             }
+                             }
+                             */
                         };
                     }, 500);
 

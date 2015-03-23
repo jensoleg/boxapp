@@ -31,60 +31,6 @@
             </ui-gmap-google-map>
         </div>
 
-        <div class="toolbar" style="position: relative; z-index:10; margin-top: -30px">
-
-            <div class="toolbar__left">
-                <div class="card bgc-indigo-500"
-                     style="border-radius: 46px;margin: 0px 0px;padding-top: 0px; padding-bottom: 0px;">
-                    <lx-search-filter model="searchFilter" placeholder="Search" theme="dark" position="left" closed>
-                    </lx-search-filter>
-                </div>
-            </div>
-
-
-            <span class="toolbar__label fs-title"></span>
-
-            <div class="toolbar__right">
-                <div class="fab">
-                    <button class="fab__primary btn btn--xl btn--indigo btn--fab" lx-ripple>
-                        <i class="mdi mdi-apps"></i>
-                        <i class="mdi mdi-plus"></i>
-                    </button>
-
-                    <div class="fab__actions fab__actions--up">
-
-                        <button class="btn btn--l btn--red btn--fab" lx-ripple lx-tooltip="Sign out"
-                                tooltip-position="left"
-                                ng-click="signout()">
-                            <i class="mdi ion-power"></i>
-                        </button>
-                        <button class="btn btn--l btn--grey btn--fab" lx-ripple lx-tooltip="Weather"
-                                tooltip-position="left"
-                                ng-class="map.showWeather ? 'btn--green' : 'btn--grey'"
-                                ng-click="toggleWeather()">
-                            <i class="mdi ion-cloud"></i>
-                        </button>
-                        <button class="btn btn--l btn--black btn--fab" lx-ripple lx-tooltip="My location"
-                                tooltip-position="left"
-                                ng-click="myPosition()"><i class="mdi ion-android-locate"></i>
-                        </button>
-                        <button class="btn btn--l btn--blue btn--fab" lx-ripple lx-tooltip="New Installation"
-                                tooltip-position="left"
-                                ng-click="newInstallation()">
-                            <i class="mdi mdi-plus"></i>
-                        </button>
-                        <button class="btn btn--l btn--white btn--fab" lx-ripple lx-tooltip="Refresh"
-                                tooltip-position="left"
-                                ng-click="refresh()">
-                            <i class="mdi ion-refresh"></i>
-                        </button>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
         <installation-list>
         </installation-list>
 

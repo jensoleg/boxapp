@@ -289,7 +289,7 @@
 
                     $element.bind('scroll', function (e) {
                         if (e.originalEvent.detail.scrollTop >= 0) {
-                            scrollFactor = e.originalEvent.detail.scrollTop / 3;
+                            scrollFactor = e.originalEvent.detail.scrollTop / 2;
                             header.style[ionic.CSS.TRANSFORM] = 'translate3d(0, +' + scrollFactor + 'px, 0)';
                         } else {
                             resizeFactor = -e.originalEvent.detail.scrollTop / 100 + 0.99;

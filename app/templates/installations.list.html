@@ -1,9 +1,7 @@
 <div ng-controller="InstallationsCtrl">
 
     <div class="data-table-container" style="background-color:white; position: absolute;">
-
         <table class="data-table data-table--has-primary data-table--has-secondary">
-
             <tbody>
             <tr class="data-table__clickable-row"
                 ng-repeat="i in installations | orderBy:'name' | filter: searchFilter"

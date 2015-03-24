@@ -94,12 +94,11 @@
                 return obj;
             }])
 
-        .factory('$blinkup', [function () {
+        .factory('$blinkup', ['$window', function ($window) {
 
             return {
                 start: function (success, fail) {
-                    console.log("Blinkup", BlinkUp);
-                    blinkup.start("",
+                    $window.plugins.blinkup.start("",
                         function (result) {
                             success(result);
                         },
@@ -109,7 +108,7 @@
                     );
                 },
                 wifi: function (planId, success, fail) {
-                    blinkup.start(planId,
+                    $window.plugins.blinkup.start(planId,
                         function (result) {
                             success(result);
                         },

@@ -379,37 +379,23 @@
                 };
 
                 $scope.blinkup = function () {
-                    $ionicLoading.show({
-                        template: 'BlinkUp running ...'
-                    });
                     $blinkup.start(function (result) {
-                            $ionicLoading.hide();
                             $scope.newDevice.id = result.split("/")[3];
                             $scope.newDevice.planId = result.split("/")[4];
-                            //$ionicLoading.show({template: 'BlinkUp succeeded', noBackdrop: true, duration: 1500});
                             toastMessage.toast("BlinkUp succeeded");
                         },
                         function (error) {
-                            $ionicLoading.hide();
-                            $ionicLoading.show({template: error, noBackdrop: true, duration: 1500});
+                            toastMessage.toast(error);
                         }
                     );
                 };
 
                 $scope.blinkUpWiFi = function () {
-
-                    $ionicLoading.show({
-                        template: 'Wifi BlinkUp ...'
-                    });
-
                     $blinkup.wifi($scope.device.planId, function () {
-                            $ionicLoading.hide();
-                            $ionicLoading.show({template: 'Wifi BlinkUp succeeded', noBackdrop: true, duration: 1500});
                             toastMessage.toast("Device Wifi updated");
                         },
                         function (error) {
-                            $ionicLoading.hide();
-                            $ionicLoading.show({template: error, noBackdrop: true, duration: 1500});
+                            toastMessage.toast(error);
                         }
                     );
                 };
@@ -957,22 +943,22 @@
 
 
                     /*
-                    $ionicPopover.fromTemplateUrl('templates/setTimer.html', {
-                        scope: $scope
-                    }).then(function (popover) {
-                        $scope.popover = popover;
-                        $scope.controlTimer = {
-                            name: 'StartTimer',
-                            enabled: true,
-                            time: '',
-                            timestamp: 0,
-                            //timeDuration: "00:00:00",
-                            duration: 0,
-                            days: []
-                        };
-                        popover.show($event);
-                    });
-                    */
+                     $ionicPopover.fromTemplateUrl('templates/setTimer.html', {
+                     scope: $scope
+                     }).then(function (popover) {
+                     $scope.popover = popover;
+                     $scope.controlTimer = {
+                     name: 'StartTimer',
+                     enabled: true,
+                     time: '',
+                     timestamp: 0,
+                     //timeDuration: "00:00:00",
+                     duration: 0,
+                     days: []
+                     };
+                     popover.show($event);
+                     });
+                     */
                 };
 
 
@@ -1008,14 +994,14 @@
                 /* handling notes */
 
                 /*
-                $scope.UpdateNote = function () {
-                    $scope.installation.metadata = $scope.notes;
-                    installationService.updateInstallation($scope.installation)
-                        .then(function () {
-                            toastMessage.toast("Note saved");
-                            $cacheFactory.get('$http').removeAll();
-                        });
-                };
+                 $scope.UpdateNote = function () {
+                 $scope.installation.metadata = $scope.notes;
+                 installationService.updateInstallation($scope.installation)
+                 .then(function () {
+                 toastMessage.toast("Note saved");
+                 $cacheFactory.get('$http').removeAll();
+                 });
+                 };
 
                  $ionicModal.fromTemplateUrl('templates/installation.note.html', {
                  scope: $scope,

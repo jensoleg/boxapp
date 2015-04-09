@@ -13,13 +13,13 @@
 
         <div class="buttons">
             <button class="btn btn--m btn--icon"
-                    ng-disabled="!newDeviceValid()"
-                    ng-click="doneNewDevice(newDevice)">
+                    ng-disabled="!deviceValid()"
+                    ng-click="doneEditDevice(device)">
                 <i class="mdi mdi-check"></i>
             </button>
             <button ng-if="isIOS"
                     class="button button-small button-clear"
-                    ng-click="blinkup()">
+                    ng-click="blinkUpWiFi()">
                 <i class="icon fa fa-barcode"></i>
             </button>
         </div>

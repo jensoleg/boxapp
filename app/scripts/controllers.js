@@ -392,7 +392,7 @@
 
                 $scope.blinkUpWiFi = function () {
                     $blinkup.wifi($scope.device.planId, function () {
-                            toastMessage.toast("Device Wifi updated");
+                            toastMessage.toast("Device wifi updated");
                         },
                         function (error) {
                             toastMessage.toast(error);

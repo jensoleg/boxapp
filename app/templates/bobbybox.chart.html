@@ -48,7 +48,7 @@
                         </div>
                     </li>
 
-                    <li class="m0 fx-zoom-normal fx-speed-500 list-row list-row--is-clickable list-row--has-separator"
+                    <li class="m0 fx-fade-left fx-speed-500 list-row list-row--is-clickable list-row--has-separator"
                         ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }"
                         ng-click="showData(readings.deviceid, readings.id, readings.ctrlType)"
                         ng-if="readings.ctrlType == 'data' && (isDeviceShown(device.id) || readings.color)">
@@ -86,7 +86,7 @@
                         </div>
                     </li>
 
-                    <li class="m0 fx-zoom-normal fx-speed-500 list-row list-row--is-clickable list-row--has-separator"
+                    <li class="m0 fx-fade-left fx-speed-500 list-row list-row--is-clickable list-row--has-separator"
                         ng-repeat="readings in datastreams | datastreamFilter:device.id | filter:{ id: '!online' }"
                         ng-click="showData(readings.deviceid, readings.id, readings.ctrlType)"
                         ng-if="readings.ctrlType == 'timer' && (isDeviceShown(device.id) || readings.color)">

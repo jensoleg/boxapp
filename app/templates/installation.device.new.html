@@ -37,20 +37,11 @@
             <lx-text-field label="Push Interval" theme="dark">
                 <input type="number" ng-model="newDevice.interval">
             </lx-text-field>
+            <lx-text-field label="Id" disabled="true" theme="dark">
+                <input type="text" ng-model="newDevice.id" ng-disabled="true" class="bgc-grey-800">
+            </lx-text-field>
             <lx-text-field label="Plan" disabled="true" theme="dark">
                 <input type="text" ng-model="newDevice.planId" ng-disabled="true" class="bgc-grey-800">
-            </lx-text-field>
-            <lx-text-field ng-if="newDevice.planId && isIOS" label="Plan" disabled="true" theme="dark">
-                <input type="text" ng-model="newDevice.planId" ng-disabled="true" class="bgc-grey-800">
-            </lx-text-field>
-            <lx-text-field ng-if="newDevice.planId && isIOS" label="Plan" disabled="true" theme="dark">
-                <input type="text" ng-model="newDevice.planId" ng-disabled="true" class="bgc-grey-800">
-            </lx-text-field>
-            <lx-text-field ng-if="isIOS" label="Id" theme="dark" disabled="true" theme="dark">
-                <input type="text" ng-model="newDevice.id" ng-disabled="true" class="bgc-grey-800">
-            </lx-text-field>
-            <lx-text-field ng-if="!isIOS" label="Id" disabled="true" theme="dark">
-                <input type="text" ng-model="newDevice.id" ng-disabled="true" class="bgc-grey-800">
             </lx-text-field>
         </form>
 

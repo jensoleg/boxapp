@@ -59,49 +59,49 @@
             }
         })
 
-/*
-        .directive('headerShrinkDetail', function ($document, $timeout) {
-            var fadeAmt;
+        /*
+         .directive('headerShrinkDetail', function ($document, $timeout) {
+         var fadeAmt;
 
-            var shrink = function (header, buttons, content, amt, max) {
-                amt = Math.min(44, amt);
-                fadeAmt = 1 - amt / 44;
+         var shrink = function (header, buttons, content, amt, max) {
+         amt = Math.min(44, amt);
+         fadeAmt = 1 - amt / 44;
 
-                ionic.requestAnimationFrame(function () {
-                    header.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
-                    buttons.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
-                    for (var i = 0, j = header.children.length; i < j; i++) {
-                        header.children[i].style.opacity = fadeAmt;
-                    }
-                    for (var i = 0, j = buttons.children.length; i < j; i++) {
-                        buttons.children[i].style.opacity = fadeAmt;
-                    }
-                });
-            };
-            return {
-                restrict: 'A',
-                link: function ($scope, $element, $attr) {
-                    $timeout(function () {
-                        var starty = $scope.$eval($attr.headerShrink) || 0;
-                        var shrinkAmt;
+         ionic.requestAnimationFrame(function () {
+         header.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
+         buttons.style[ionic.CSS.TRANSFORM] = 'translate3d(0, -' + amt + 'px, 0)';
+         for (var i = 0, j = header.children.length; i < j; i++) {
+         header.children[i].style.opacity = fadeAmt;
+         }
+         for (var i = 0, j = buttons.children.length; i < j; i++) {
+         buttons.children[i].style.opacity = fadeAmt;
+         }
+         });
+         };
+         return {
+         restrict: 'A',
+         link: function ($scope, $element, $attr) {
+         $timeout(function () {
+         var starty = $scope.$eval($attr.headerShrink) || 0;
+         var shrinkAmt;
 
-                        var header = $document[0].body.querySelectorAll('.bar-shrink');
-                        var headerHeight = header[4].offsetHeight;
+         var header = $document[0].body.querySelectorAll('.bar-shrink');
+         var headerHeight = header[4].offsetHeight;
 
-                        $element.bind('scroll', function (e) {
-                            if (e.originalEvent && e.originalEvent.detail && e.originalEvent.detail.scrollTop && e.originalEvent.detail.scrollTop > starty) {
-                                // Start shrinking
-                                shrinkAmt = headerHeight - Math.max(0, (starty + headerHeight) - e.originalEvent.detail.scrollTop);
-                                shrink(header[4], header[5], $element[0], shrinkAmt, headerHeight);
-                            } else {
-                                shrink(header[4], header[5], $element[0], 0, headerHeight);
-                            }
-                        });
-                    }, 1500);
-                }
-            }
-        })
-*/
+         $element.bind('scroll', function (e) {
+         if (e.originalEvent && e.originalEvent.detail && e.originalEvent.detail.scrollTop && e.originalEvent.detail.scrollTop > starty) {
+         // Start shrinking
+         shrinkAmt = headerHeight - Math.max(0, (starty + headerHeight) - e.originalEvent.detail.scrollTop);
+         shrink(header[4], header[5], $element[0], shrinkAmt, headerHeight);
+         } else {
+         shrink(header[4], header[5], $element[0], 0, headerHeight);
+         }
+         });
+         }, 1500);
+         }
+         }
+         })
+         */
         /*
          .directive('input', function ($timeout) {
          return {
@@ -256,30 +256,31 @@
             };
         })
         /*
-         .directive('contactShrink', function ($document) {
+        .directive('contactShrink', function ($document) {
 
-         return {
-         restrict: 'A',
-         link: function ($scope, $element, $attr) {
-         var resizeFactor, scrollFactor, blurFactor;
-         var header = $document[0].body.querySelector('.contact');
+            return {
+                restrict: 'A',
+                link: function ($scope, $element, $attr) {
+                    var resizeFactor, scrollFactor, blurFactor;
+                    var header = $document[0].body.querySelector('.contactmap');
 
-         $element.bind('scroll', function (e) {
-         if (e.originalEvent.detail.scrollTop >= 0) {
-         scrollFactor = e.originalEvent.detail.scrollTop / 2;
-         header.style[ionic.CSS.TRANSFORM] = 'translate3d(0, +' + scrollFactor + 'px, 0)';
-         } else {
-         // shrink(header, $element[0], 0, headerHeight);
-         resizeFactor = -e.originalEvent.detail.scrollTop / 100 + 0.99;
-         blurFactor = -e.originalEvent.detail.scrollTop / 10;
-         header.style[ionic.CSS.TRANSFORM] = 'scale(' + resizeFactor + ',' + resizeFactor + ')';
-         header.style.webkitFilter = 'blur(' + blurFactor + 'px)';
-         }
-         });
-         }
-         }
-         })
-         */
+                    $element.bind('scroll', function (e) {
+                        if (e.originalEvent.detail.scrollTop >= 0) {
+                            scrollFactor = e.originalEvent.detail.scrollTop / 2;
+                            console.log(scrollFactor);
+                            header.style[ionic.CSS.TRANSFORM] = 'scale(' + 1 - scrollFactor + ')';
+                        } else {
+                            // shrink(header, $element[0], 0, headerHeight);
+                            resizeFactor = -e.originalEvent.detail.scrollTop / 100 + 0.99;
+                            blurFactor = -e.originalEvent.detail.scrollTop / 10;
+                            header.style[ionic.CSS.TRANSFORM] = 'scale(' + resizeFactor + ',' + resizeFactor + ')';
+                            header.style.webkitFilter = 'blur(' + blurFactor + 'px)';
+                        }
+                    });
+                }
+            }
+        })
+        */
         .directive('mapShrink', function ($document) {
             return {
                 restrict: 'A',
@@ -301,5 +302,4 @@
                 }
             };
         });
-
 }());

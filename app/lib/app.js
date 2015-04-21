@@ -60,7 +60,7 @@
 
                 GoogleMapApi.configure({
                     key: 'AIzaSyDYMiqXnyqG-OH4Hp3Cy8pUYqPzZb5ysqM',
-                    v: '3.18',
+                    v: '3.17',
                     libraries: 'places,weather'
                 });
 
@@ -151,8 +151,8 @@
 
             }])
 
-        .controller('LoginCtrl', ['disqus', 'auth', 'store', '$rootScope', 'ENV', '$state',
-            function (disqus, auth, store, $rootScope, ENV, $state) {
+        .controller('LoginCtrl', ['disqus', 'auth', 'store', '$rootScope', 'ENV', '$location', '$state',
+            function (disqus, auth, store, $rootScope, ENV, $location, $state) {
 
                 var logo = './images/' + $rootScope.domain + '.png';
 
@@ -170,6 +170,8 @@
                     rememberLastLogin: false,
                     dict: {signin: {title: ' '}},
                     icon: logo,
+                    connection: ['Username-Password-Authentication'],
+                    sso: false,
                     authParams: {
                         scope: 'openid offline_access',
                         device: 'Mobile device'

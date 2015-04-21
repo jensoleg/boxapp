@@ -35,7 +35,7 @@ module.exports = function (grunt) {
                 space: '  ',
                 wrap: '"use strict";\n\n {%= __ngModule %}',
                 name: 'config',
-                dest: '<%= yeoman.app %>/scripts/config.js'
+                dest: '<%= yeoman.app %>/lib/config.js'
             },
             local: {
                 constants: {
@@ -46,8 +46,9 @@ module.exports = function (grunt) {
                             clientID: 'kpWrEQ5gJclwuAljKpHgNcJA3NwNZ0FL'
                         },
                         domainPrefix: false,
-                        apiEndpoint: 'localhost:8081/api/',
-                        MQTTServer: 'localhost'
+                        apiEndpoint: '192.168.59.103:8081/api/',
+                        MQTTServer: '192.168.59.103',
+                        socketServer: 8082
                     }
                 }
             },
@@ -62,7 +63,8 @@ module.exports = function (grunt) {
                         ,
                         domainPrefix: true,
                         apiEndpoint: 'bobbytech.dk/api/',
-                        MQTTServer: 'mqtt.development.bobbytech.dk'
+                        MQTTServer: 'mqtt.development.bobbytech.dk',
+                        socketServer: 8080
                     }
                 }
             },
@@ -76,7 +78,8 @@ module.exports = function (grunt) {
                         },
                         domainPrefix: true,
                         apiEndpoint: 'bobbytech.dk/api/',
-                        MQTTServer: 'mqtt.bobbytech.dk'
+                        MQTTServer: 'mqtt.bobbytech.dk',
+                        socketServer: 8080
                     }
                 }
             }

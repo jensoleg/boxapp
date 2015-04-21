@@ -134,7 +134,7 @@
 
                 $rootScope.datastreams = {};
 
-                client = mqtt.createClient(8080, ENV.MQTTServer, {
+                client = mqtt.createClient(ENV.socketServer, ENV.MQTTServer, {
                     username: 'JWT/' + $rootScope.domain,
                     "password": auth.idToken
                 });
@@ -758,9 +758,6 @@
                             });
                     } else {
                         // … fallback / customized $ionicLoading:
-                        console.log("no toast found");
-                        console.log(window.plugins);
-
                         $ionicLoading.show({
                             template: msg,
                             noBackdrop: true,

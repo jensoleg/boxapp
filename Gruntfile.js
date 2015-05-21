@@ -52,6 +52,21 @@ module.exports = function (grunt) {
                     }
                 }
             },
+            docker: {
+                constants: {
+                    ENV: {
+                        name: 'local',
+                        auth: {
+                            domain: 'development.auth0.com',
+                            clientID: 'kpWrEQ5gJclwuAljKpHgNcJA3NwNZ0FL'
+                        },
+                        domainPrefix: false,
+                        apiEndpoint: 'ecs.api.bobbytech.dk/api/',
+                        MQTTServer: 'ecs.bobbytech.dk',
+                        socketServer: 8082
+                    }
+                }
+            },
             development: {
                 constants: {
                     ENV: {

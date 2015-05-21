@@ -49,8 +49,8 @@
 
                 $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|mailto|maps|tel|geo):/);
 
-                //$locationProvider.html5Mode(true);
-                //$locationProvider.hashPrefix('!');
+                $locationProvider.html5Mode(true);
+                $locationProvider.hashPrefix('!');
 
                 /* loading bar */
 
@@ -107,35 +107,36 @@
                     $rootScope.domain = ENV.name;
                 }
 
-                $rootScope.$on('$locationChangeStart', function () {
-
-                    var refreshingToken = null;
-
-                    if (!auth.isAuthenticated) {
-                        var token = store.get('token');
-                        var refreshToken = store.get('refreshToken');
-                        if (token) {
-                            if (!jwtHelper.isTokenExpired(token)) {
+                // This events gets triggered on refresh or URL change
+                var refreshingToken = null;
+                $rootScope.$on('$locationChangeStart', function() {
+                    var token = store.get('token');
+                    var refreshToken = store.get('refreshToken');
+                    if (token) {
+                        if (!jwtHelper.isTokenExpired(token)) {
+                            if (!auth.isAuthenticated) {
                                 auth.authenticate(store.get('profile'), token);
-                            } else {
-                                if (refreshToken) {
-                                    if (refreshingToken === null) {
-                                        refreshingToken = auth.refreshIdToken(refreshToken).then(function (idToken) {
-                                            store.set('token', idToken);
-                                            auth.authenticate(store.get('profile'), idToken);
-                                        }).finally(function () {
-                                            refreshingToken = null;
-                                        });
-                                    }
-                                    return refreshingToken;
-                                } else {
-                                    $location.path('/login');
+                            }
+                        } else {
+                            if (refreshToken) {
+                                if (refreshingToken === null) {
+                                    refreshingToken =  auth.refreshIdToken(refreshToken).then(function(idToken) {
+                                        store.set('token', idToken);
+                                        auth.authenticate(store.get('profile'), idToken);
+                                    }).finally(function() {
+                                        refreshingToken = null;
+                                    });
                                 }
+                                return refreshingToken;
+                            } else {
+                                $location.path('/login');
                             }
                         }
+                    } else {
+                        $location.path('/login');
                     }
-                });
 
+                });
 
                 $document.on("resume", function (event) {
                     $rootScope.$broadcast('message:resume');

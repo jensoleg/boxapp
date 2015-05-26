@@ -178,6 +178,7 @@
                         device: 'Mobile device'
                     }
                 }, function (profile, id_token, access_token, state, refresh_token) {
+                    console.log('token', id_token);
                     store.set('profile', profile);
                     store.set('token', id_token);
                     store.set('refreshToken', refresh_token);

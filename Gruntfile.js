@@ -52,17 +52,17 @@ module.exports = function (grunt) {
                     }
                 }
             },
-            docker: {
+            senodio: {
                 constants: {
                     ENV: {
-                        name: 'local',
+                        name: 'senodio',
                         auth: {
-                            domain: 'development.auth0.com',
-                            clientID: 'kpWrEQ5gJclwuAljKpHgNcJA3NwNZ0FL'
+                            domain: 'senodio.eu.auth0.com',
+                            clientID: 'RAoAYmpefM2KZ4KFERmTxt2mam09ke6p'
                         },
                         domainPrefix: false,
-                        apiEndpoint: 'ecs.api.bobbytech.dk/api/',
-                        MQTTServer: 'ecs.bobbytech.dk',
+                        apiEndpoint: 'api.senodio.com/api/',
+                        MQTTServer: 'mqtt.senodio.com',
                         socketServer: 8082
                     }
                 }

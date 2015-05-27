@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="dk.bobbytech.decoplant" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Decoplant</name>
+<widget id="com.senodio.app" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Senodio</name>
     <description>
-        A Bobby Tech plant system controller and monitor.
+        Senodio IOT platform reference app.
     </description>
-    <author email="contact@bobbytechonlogies.dk" href="http://bobbytechnologies.dk/">
-        Bobby tech core app Team
+    <author email="contact@senodio.com" href="http://senodio.com/">
+        Senodio app Team
     </author>
     <content src="index.html"/>
     <access origin="*"/>

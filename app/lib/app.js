@@ -92,7 +92,6 @@
                 $ionicConfigProvider.views.swipeBackEnabled(true);
 
                 $ionicConfigProvider.backButton.text('');
-
                 $urlRouterProvider.otherwise('/map');
 
             }])
@@ -110,8 +109,8 @@
                 // This events gets triggered on refresh or URL change
                 var refreshingToken = null;
                 $rootScope.$on('$locationChangeStart', function() {
-                    var token = store.get('token');
-                    var refreshToken = store.get('refreshToken');
+                    var token = store.get('token'),
+                        refreshToken = store.get('refreshToken');
                     if (token) {
                         if (!jwtHelper.isTokenExpired(token)) {
                             if (!auth.isAuthenticated) {
@@ -137,7 +136,6 @@
                     }
 
                 });
-
                 $document.on("resume", function (event) {
                     $rootScope.$broadcast('message:resume');
                 });
@@ -160,7 +158,6 @@
                 if (!ENV.domainPrefix) {
                     logo = './images/development.png';
                 }
-
                 auth.signin({
                     popup: true,
                     disableSignupAction: true,
@@ -178,7 +175,6 @@
                         device: 'Mobile device'
                     }
                 }, function (profile, id_token, access_token, state, refresh_token) {
-                    console.log('token', id_token);
                     store.set('profile', profile);
                     store.set('token', id_token);
                     store.set('refreshToken', refresh_token);

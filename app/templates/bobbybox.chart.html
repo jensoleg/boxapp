@@ -94,21 +94,16 @@
 
                         <div ng-hide="showTimerCtrl && readings.id == currentControlId" class="list-row__primary"
                              style="padding-left: 50px">
-                            <button ng-if="readings.current_value == 0" class="btn btn--m btn--black btn--icon"
-                                    lx-ripple>
+                            <button ng-if="readings.current_value == 0" class="btn btn--m btn--black btn--icon" lx-ripple>
                                 <i class="mdi icon icon--l mdi-camera-timer"
                                    ng-style="readings.color  && {'color': readings.color, 'opacity': 0.9}">
                                 </i>
                             </button>
 
-                            <button ng-if="readings.current_value == 1" class="btn btn--m btn--black btn--icon"
-                                    lx-ripple>
-                                <i style="color: rgb(129, 207, 98); font-size: 75%;"
-                                   class="mdi icon fa fa-circle-o-notch fa-spin">
+                            <button ng-if="readings.current_value == 1" class="btn btn--m btn--black btn--icon" lx-ripple>
+                                <i style="color: rgb(129, 207, 98); font-size: 90%;" class="fa fa-circle-o-notch fa-spin">
                                 </i>
-
                             </button>
-
                         </div>
 
                         <div ng-hide="showTimerCtrl && readings.id == currentControlId" class="list-row__content"

@@ -32,41 +32,45 @@
             </lx-text-field>
 
 
-            <ul class="list" class="bgc-grey-800">
-                <!--div class="item-select">
-                    <div class="input-label">
-                        Sensor
-                    </div>
-                    <select ng-model="trigger.stream_id" ng-options="c.id as c.name for c in device.controls">
-                    </select>
-                </div-->
+            <ul class="list bgc-grey-800">
 
-                <li class="item item-select">
-                    <div class="input-label">
+                <li class="item item-select"
+                    style="background-color: transparent; border-width: 0px;padding-left: 0px;">
+                    <div class="input-label" style="color: white;">
                         Evaluator
                     </div>
-                    <select ng-model="trigger.trigger_type" ng-options="o as o for o in operators">
+                    <select ng-model="trigger.trigger_type" ng-options="o as o for o in operators"
+                            style="background-color: transparent;color: white;">
                     </select>
                 </li>
 
-                <li class="item item-select">
-                    <div class="input-label">
+                <li>
+                    <div class="divider divider--light"></div>
+                </li>
+
+                <li class="item item-select"
+                    style="background-color: transparent; border-width: 0px;padding-left: 0px;">
+                    <div class="input-label" style="color: white;">
                         Resolution
                     </div>
-                    <select ng-model="trigger.resolution">
+                    <select ng-model="trigger.resolution" style="background-color: transparent;color: white;">
                         <option>min</option>
                         <option>hour</option>
                         <option>day</option>
                     </select>
                 </li>
 
-                <li class="list-row pr0 pl0">
+                <li>
+                    <div class="divider divider--light"></div>
+                </li>
+
+                <li class="list-row pr0 pl0 mt+">
                     <div class="list-row__content tc-grey-200">
-                        <span class="display-block">Alarm Api</span>
+                        <span class="display-block">Alarm Http Requests</span>
                     </div>
 
-                    <div class="list-row__secondary tc-grey-100">
-                        <button class="btn btn--l btn--icon">
+                    <div class="list-row__secondary tc-grey-100" style="padding-right: 10px;">
+                        <button class="btn btn--xs btn--blue btn--fab" lx-ripple>
                             <i class="mdi mdi-plus" ng-click="addRequest()"></i>
                         </button>
                     </div>
@@ -76,9 +80,13 @@
                     <div class="divider divider--light"></div>
                 </li>
 
+                <li>
+                    <div class="divider divider--light"></div>
+                </li>
+
                 <li class="list-row pr0 pl0" ng-repeat="request in trigger.requests">
 
-                    <div class="list-row__content tc-grey-200">
+                    <div class="list-row__content tc-teal-200">
                         <span class="display-block">{{::request.name}}</span>
                     </div>
 
@@ -98,6 +106,11 @@
                         </lx-dropdown>
                     </div>
                 </li>
+
+                <li>
+                    <div class="divider divider--light"></div>
+                </li>
+
             </ul>
         </form>
 

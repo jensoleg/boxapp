@@ -8,7 +8,7 @@
             </button>
         </div>
 
-        <h1 class="title">Edit Alarm {{::trigger.name}}</h1>
+        <h1 class="title">Edit Request {{::request.name}}</h1>
 
         <div class="buttons">
             <button class="btn btn--m btn--icon"
@@ -28,7 +28,8 @@
             </lx-text-field>
 
             <label class="item item-input" style="  border-width: 0px; background-color: transparent; color: white;">
-                <textarea style="background-color: transparent" placeholder="Request" rows="15" ng-model="request.request_options"></textarea>
+                <textarea style="background-color: transparent" placeholder="Request" rows="15"
+                          ng-model="request.request_options"></textarea>
             </label>
 
             <!--a class="padding" ng-href="https://github.com/mikeal/request#requestoptions-callback">Please see request

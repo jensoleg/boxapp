@@ -24,8 +24,11 @@
                         <span class="display-block">Alarms</span>
                     </div>
 
-                    <div class="list-row__secondary tc-grey-100">
-                        <button class="btn btn--l btn--icon">
+                    <div class="list-row__secondary tc-grey-100" style="padding-right: 10px;">
+                        <!--button class="btn btn--l btn--icon">
+                            <i class="mdi mdi-plus" ng-click="addTrigger(device.id, control.id)"></i>
+                        </button-->
+                        <button class="btn btn--xs btn--blue btn--fab" lx-ripple>
                             <i class="mdi mdi-plus" ng-click="addTrigger(device.id, control.id)"></i>
                         </button>
                     </div>
@@ -52,9 +55,9 @@
                             </button>
                             <lx-dropdown-menu>
                                 <ul>
-                                    <li><a class="dropdown-link" ng-click="removeTrigger(trigger)">xRemove</a>
+                                    <li><a class="dropdown-link" ng-click="removeTrigger(trigger)">Remove</a>
                                     </li>
-                                    <li><a class="dropdown-link" ng-click="editTrigger(trigger)">xEdit</a>
+                                    <li><a class="dropdown-link" ng-click="editTrigger(trigger)">Edit</a>
                                     </li>
                                 </ul>
                             </lx-dropdown-menu>

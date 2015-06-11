@@ -80,6 +80,9 @@
                                         <li><a class="dropdown-link"
                                                ng-click="aEditControl(device.id, readings.id)">Edit</a>
                                         </li>
+                                        <li><a class="dropdown-link"
+                                               ng-click="aEditAlarms(device.id, readings.id)">Alarms</a>
+                                        </li>
                                     </ul>
                                 </lx-dropdown-menu>
                             </lx-dropdown>
@@ -101,13 +104,12 @@
                             </button>
 
                             <button ng-if="readings.current_value == 1" class="btn btn--m btn--black btn--icon" lx-ripple>
-                                <i style="color: rgb(129, 207, 98); font-size: 90%;" class="fa fa-circle-o-notch fa-spin">
+                                <i style="color: rgb(129, 207, 98)" class="fa fa-circle-o-notch fa-spin">
                                 </i>
                             </button>
                         </div>
 
-                        <div ng-hide="showTimerCtrl && readings.id == currentControlId" class="list-row__content"
-                             style="padding-left: 30px">
+                        <div ng-hide="showTimerCtrl && readings.id == currentControlId" class="list-row__content" style="padding-left: 30px">
                             <span>{{::readings.name}}</span>
                         </div>
 

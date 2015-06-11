@@ -469,7 +469,7 @@
                 $scope.$on('message:edit-control', function (evt, device, control) {
                     deviceId = device._id;
                     curDevice = device;
-                    $scope.editControl(control);
+                    $scope.editControl(device, control);
                 });
                 $scope.$on('message:remove-control', function (evt, device, control) {
                     deviceId = device._id;
@@ -502,7 +502,8 @@
                     $scope.updateControl();
                 };
 
-                $scope.editControl = function (c) {
+                $scope.editControl = function (d, c) {
+                    $scope.device = d;
                     $scope.control = c;
                     $scope.sensorTypeEnabled = $scope.control && (!angular.isDefined($scope.control.unit) || $scope.control.unit.name === '' || _.contains($scope.sensorTypes, $scope.control.unit.name));
                     $scope.editSensorModal.show();
@@ -880,6 +881,12 @@
                     var device = _.find($scope.installation.devices, {'id': deviceId}),
                         control = _.find(device.controls, {'id': controlId});
                     $scope.$broadcast('message:edit-control', device, control);
+                };
+
+                $scope.aEditAlarms = function (deviceId, controlId) {
+                    var device = _.find($scope.installation.devices, {'id': deviceId}),
+                        control = _.find(device.controls, {'id': controlId});
+                    $scope.$broadcast('message:edit-alarms', device, control);
                 };
 
                 $scope.aRemoveControl = function (deviceId, controlId) {

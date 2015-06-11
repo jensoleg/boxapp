@@ -1,44 +1,106 @@
-<div class="modal">
-    <ion-header-bar class="bar bar-header bar-positive">
-        <button class="button button-clear button-clear" ng-click="closeEdit()">Cancel</button>
-        <h1 class="title">Edit trigger</h1>
-        <button class="button button-clear button-clear" ng-click="doneEdit(trigger)">Save</button>
-    </ion-header-bar>
-    <ion-content>
-        <div class="list">
-            <label class="item item-input">
-                <span class="input-label">Name</span>
-                <input type="text" placeholder="Name" ng-model="trigger.name">
-            </label>
-            <label class="item item-input item-select">
-                <div class="input-label">
-                    Sensor
-                </div>
-                <select ng-model="trigger.stream_id" ng-options="c.id as c.name for c in device.controls">
-                </select>
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Threshold</span>
-                <input type="text" placeholder="Threshold" ng-model="trigger.threshold_value">
-            </label>
-            <label class="item item-input item-select">
-                <div class="input-label">
-                    Evaluation
-                </div>
-                <select ng-model="trigger.trigger_type" ng-options="o as o for o in operators">
-                </select>
-            </label>
-            <label class="item item-input item-select">
-                <div class="input-label">
-                    Resolution
-                </div>
-                <select ng-model="trigger.resolution">
-                    <option>min</option>
-                    <option>hour</option>
-                    <option>day</option>
-                </select>
-            </label>
+<ion-modal-view>
 
+    <ion-header-bar class="bar bar-header bar-positive  bgc-indigo-500">
+
+        <div class="buttons">
+            <button class="btn btn--l btn--icon" ng-click="closeEdit()">
+                <i class="mdi mdi-keyboard-backspace"></i>
+            </button>
         </div>
+
+        <h1 class="title">Edit Alarm {{::trigger.name}}</h1>
+
+        <div class="buttons">
+            <button class="btn btn--m btn--icon"
+                    ng-click="doneEdit(trigger)">
+                <i class="mdi mdi-check"></i>
+            </button>
+        </div>
+
+    </ion-header-bar>
+
+    <ion-content class="bgc-grey-800">
+
+        <form class="pl+ pr+">
+
+            <lx-text-field label="Name" theme="dark">
+                <input type="text" ng-model="trigger.name">
+            </lx-text-field>
+
+            <lx-text-field label="Threshold" theme="dark">
+                <input type="text" ng-model="trigger.threshold_value">
+            </lx-text-field>
+
+
+            <ul class="list" class="bgc-grey-800">
+                <!--div class="item-select">
+                    <div class="input-label">
+                        Sensor
+                    </div>
+                    <select ng-model="trigger.stream_id" ng-options="c.id as c.name for c in device.controls">
+                    </select>
+                </div-->
+
+                <li class="item item-select">
+                    <div class="input-label">
+                        Evaluator
+                    </div>
+                    <select ng-model="trigger.trigger_type" ng-options="o as o for o in operators">
+                    </select>
+                </li>
+
+                <li class="item item-select">
+                    <div class="input-label">
+                        Resolution
+                    </div>
+                    <select ng-model="trigger.resolution">
+                        <option>min</option>
+                        <option>hour</option>
+                        <option>day</option>
+                    </select>
+                </li>
+
+                <li class="list-row pr0 pl0">
+                    <div class="list-row__content tc-grey-200">
+                        <span class="display-block">Alarm Api</span>
+                    </div>
+
+                    <div class="list-row__secondary tc-grey-100">
+                        <button class="btn btn--l btn--icon">
+                            <i class="mdi mdi-plus" ng-click="addRequest()"></i>
+                        </button>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="divider divider--light"></div>
+                </li>
+
+                <li class="list-row pr0 pl0" ng-repeat="request in trigger.requests">
+
+                    <div class="list-row__content tc-grey-200">
+                        <span class="display-block">{{::request.name}}</span>
+                    </div>
+
+                    <div class="list-row__secondary tc-grey-200">
+                        <lx-dropdown position="right" from-top>
+                            <button class="btn btn--l btn--icon" lx-ripple lx-dropdown-toggle>
+                                <i class="mdi mdi-dots-vertical"></i>
+                            </button>
+                            <lx-dropdown-menu>
+                                <ul>
+                                    <li><a class="dropdown-link" ng-click="removeRequest(request)">Remove</a>
+                                    </li>
+                                    <li><a class="dropdown-link" ng-click="editRequest(request)">Edit</a>
+                                    </li>
+                                </ul>
+                            </lx-dropdown-menu>
+                        </lx-dropdown>
+                    </div>
+                </li>
+            </ul>
+        </form>
+
     </ion-content>
-</div>
+
+</ion-modal-view>

@@ -1,35 +1,52 @@
-<div class="modal">
-    <ion-header-bar class="bar bar-header bar-positive">
-        <button class="button button-clear button-clear" ng-click="closeNew()">Cancel</button>
-        <h1 class="title">New trigger request</h1>
-        <button class="button button-clear button-clear" ng-click="doneNew(newRequest)">Save</button>
+<ion-modal-view>
+
+    <ion-header-bar class="bar bar-header bar-positive  bgc-indigo-500">
+
+        <div class="buttons">
+            <button class="btn btn--l btn--icon" ng-click="closeNew()">
+                <i class="mdi mdi-keyboard-backspace"></i>
+            </button>
+        </div>
+
+        <h1 class="title">New Request</h1>
+
+        <div class="buttons">
+            <button class="btn btn--m btn--icon"
+                    ng-click="doneNew()">
+                <i class="mdi mdi-plus"></i>
+            </button>
+        </div>
+
     </ion-header-bar>
-    <ion-content>
 
-        <label class="item item-input">
-            <span class="input-label">Name</span>
-            <input type="text" placeholder="Name" ng-model="newRequest.name">
-        </label>
+    <ion-content class="bgc-grey-800">
 
-        <div class="item" style="padding-bottom: 0;">
-            <a class="button icon-left ion-android-drawer button-clear button-positive"
-               ng-click="formatRequest(newRequest.request_options)">Format</a>
-            <a class="button icon-left ion-ios7-play button-clear" ng-style="{'color': getColor()}"
-               ng-click="sendRequest(newRequest.request_options)">Test</a>
-        </div>
+        <form class="pl+ pr+">
 
-        <div class="item-input-inset" ng-show="requestResponse">
-            <div class="item-input-wrapper">
-                <input type="search" ng-model="requestResponse">
-                <i class="clear-search icon ion-ios7-close-empty" ng-click="clearResponse()"></i>
-            </div>
-        </div>
+            <lx-text-field label="Name" theme="dark">
+                <input type="text" ng-model="newRequest.name">
+            </lx-text-field>
 
-        <label class="item item-input">
-            <textarea placeholder="Request" rows="15" ng-model="newRequest.request_options"></textarea>
-        </label>
-        <a class="padding" ng-href="https://github.com/mikeal/request#requestoptions-callback">Please see request
-            options here</a>
+            <label class="item item-input pl0" style="border-width: 0px; background-color: transparent; color: white;">
+                <textarea style="background-color: rgb(92, 102, 111)" placeholder="Request" rows="15"
+                          ng-model="newRequest.request_options"></textarea>
+            </label>
+
+            <!--a class="padding" ng-href="https://github.com/mikeal/request#requestoptions-callback">Please see request
+                options here</a-->
+
+            <lx-text-field icon="account" theme="dark" style="color: #FFF;">
+                <input type="text" ng-model="requestResponse" ng-click="clearResponse()">
+            </lx-text-field>
+
+            <button class="btn btn--m btn--blue btn--raised" lx-ripple
+                    ng-click="formatRequest(newRequest.request_options)">Format
+            </button>
+            <button class="btn btn--m btn--blue btn--raised" lx-ripple
+                    ng-click="sendRequest(newRequest.request_options)">Test
+            </button>
+
+        </form>
 
     </ion-content>
-</div>
+</ion-modal-view>

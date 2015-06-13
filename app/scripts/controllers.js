@@ -886,7 +886,7 @@
                 $scope.aEditAlarms = function (deviceId, controlId) {
                     var device = _.find($scope.installation.devices, {'id': deviceId}),
                         control = _.find(device.controls, {'id': controlId});
-                    $scope.$broadcast('message:edit-alarms', device, control);
+                    $scope.$broadcast('message:edit-alarms', $scope.installation, device, control);
                 };
 
                 $scope.aRemoveControl = function (deviceId, controlId) {

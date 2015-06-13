@@ -36,7 +36,7 @@
 
                 <li class="item item-select"
                     style="background-color: transparent; border-width: 0px;padding-left: 0px;">
-                    <div class="input-label" style="color: white;">
+                    <div class="input-label" style="font-size: 14px;color: white;">
                         Evaluator
                     </div>
                     <select ng-model="trigger.trigger_type" ng-options="o as o for o in operators"
@@ -50,7 +50,7 @@
 
                 <li class="item item-select"
                     style="background-color: transparent; border-width: 0px;padding-left: 0px;">
-                    <div class="input-label" style="color: white;">
+                    <div class="input-label display-block" style="font-size: 14px; color: white;">
                         Resolution
                     </div>
                     <select ng-model="trigger.resolution" style="background-color: transparent;color: white;">
@@ -64,14 +64,15 @@
                     <div class="divider divider--light"></div>
                 </li>
 
-                <li class="list-row pr0 pl0 mt+">
+                <li class="list-row pr0 pl0 mt+ mb+">
+
                     <div class="list-row__content tc-grey-200">
                         <span class="display-block">Alarm Http Requests</span>
                     </div>
 
                     <div class="list-row__secondary tc-grey-100" style="padding-right: 10px;">
                         <button class="btn btn--xs btn--blue btn--fab" lx-ripple>
-                            <i class="mdi mdi-plus" ng-click="addRequest()"></i>
+                            <i class="mdi mdi-plus" ng-click="addRequest(trigger)"></i>
                         </button>
                     </div>
                 </li>
@@ -84,10 +85,15 @@
                     <div class="divider divider--light"></div>
                 </li>
 
-                <li class="list-row pr0 pl0" ng-repeat="request in trigger.requests">
+                <li class="list-row pr0 pl0" ng-repeat="r in trigger.requests">
 
-                    <div class="list-row__content tc-teal-200">
-                        <span class="display-block">{{::request.name}}</span>
+
+                    <div class="list-row__primary">
+                        <i class="icon icon--s icon--teal icon--flat mdi mdi-bell"></i>
+                    </div>
+
+                    <div class="list-row__content  tc-grey-200">
+                        <span class="display-block">{{r.name}}</span>
                     </div>
 
                     <div class="list-row__secondary tc-grey-200">
@@ -97,9 +103,9 @@
                             </button>
                             <lx-dropdown-menu>
                                 <ul>
-                                    <li><a class="dropdown-link" ng-click="removeRequest(request)">Remove</a>
+                                    <li><a class="dropdown-link" ng-click="removeRequest(r)">Remove</a>
                                     </li>
-                                    <li><a class="dropdown-link" ng-click="editRequest(request)">Edit</a>
+                                    <li><a class="dropdown-link" ng-click="editRequest(trigger, r)">Edit</a>
                                     </li>
                                 </ul>
                             </lx-dropdown-menu>

@@ -14,12 +14,12 @@
 
         <form class="pl+ pr+">
             <lx-text-field label="Name" theme="dark">
-                <input type="text" ng-model="control.name">
+                <input type="text" ng-model="control.name" disabled style="background-color: transparent;">
             </lx-text-field>
 
-            <ul class="list">
+            <ul>
 
-                <li class="list-row pr0 pl0">
+                <li class="list-row pr0 pl0 mb+ mt+">
                     <div class="list-row__content tc-grey-200">
                         <span class="display-block">Alarms</span>
                     </div>
@@ -44,7 +44,7 @@
                         <div class="checkbox pl0">
                             <input type="checkbox" id="{{trigger.name}}" class="checkbox__input"
                                    ng-model="trigger.enabled">
-                            <label for="{{trigger.name}}" class="checkbox__label"> {{::trigger.name}} </label>
+                            <label for="{{trigger.name}}" class="checkbox__label"> {{trigger.name}} </label>
                         </div>
                     </div>
 
@@ -63,6 +63,7 @@
                             </lx-dropdown-menu>
                         </lx-dropdown>
                     </div>
+
                 </li>
             </ul>
         </form>

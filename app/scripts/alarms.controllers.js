@@ -75,7 +75,7 @@
                     .then(function (response) {
                         console.log('update success :', response);
                     }, function (response) {
-                        console.log('update error :', response);
+                        console.log('trigger update error :', response);
                     });
             };
 
@@ -118,8 +118,7 @@
             };
 
             $scope.addTrigger = function () {
-                //$scope.device = $scope.$parent.device;
-                $scope.newTrigger = {requests: []};
+                $scope.newTrigger = {enabled: true, stream_id:  $scope.control.id, requests: []};
                 $scope.newTriggerModal.show();
             };
 
@@ -217,20 +216,15 @@
             $scope.doneEdit = function () {
                 $scope.editRequestModal.hide();
                 $scope.request.request_options = JSON.parse($scope.request.request_options);
-//                $scope.update();
             };
 
             $scope.edit = function (r) {
                 responseColor = null;
                 $scope.requestResponse = null;
-//                $scope.request = r;
                 $scope.request.request_options = JSON.stringify($scope.request.request_options, null, '\t');
                 $scope.editRequestModal.show();
             };
 
-            $scope.update = function () {
-//                installationService.updateRequest($state.params.id, $state.params.deviceid, $state.params.triggerid, $scope.request);
-            };
             /* Remove Request */
 
             $scope.remove = function (request) {
@@ -241,18 +235,7 @@
                     okType: 'button-clear button-positive'
                 });
                 confirmPopup.then(function (res) {
-
                     _.pull($scope.device.triggers[XXXXX], request);
-                    /* remove trigger form device object
-                     if (res) {
-                     installationService.removeRequest($state.params.id, $state.params.deviceid, $state.params.triggerid, request._id)
-                     .then(function (response) {
-                     _.pull($scope.trigger.requests, request);
-                     }, function (response) {
-                     console.log('error', response);
-                     });
-                     }
-                     */
                 });
             };
 
@@ -277,7 +260,6 @@
             $scope.addRequest = function () {
                 responseColor = null;
                 $scope.newRequest = {};
-                $scope.newRequest.stream_id = $scope.control.id;
                 $scope.requestResponse = null;
                 $scope.newRequestModal.show();
             };
@@ -288,20 +270,6 @@
                 $scope.newRequest.request_options =  JSON.parse($scope.newRequest.request_options);
                 $scope.trigger.requests.push($scope.newRequest);
 
-                /*
-                 installationService.newRequest($state.params.id, $state.params.deviceid, $state.params.triggerid, $scope.newRequest)
-                 .then(function (response) {
-
-                 var triggers = util.findNested(response, 'triggers');
-
-                 $scope.trigger = _.find(triggers[0], function (d) {
-                 return d._id === $state.params.triggerid;
-                 });
-
-                 }, function (response) {
-                 console.log('error', response);
-                 });
-                 */
             };
 
             /* Copy a Request */

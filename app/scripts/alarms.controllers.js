@@ -1,10 +1,10 @@
 (function () {
     'use strict';
 
-    angular.module('BobbyApp.alarms.controllers', ['ionic', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives'])
+    angular.module('BobbyApp.alarms.controllers', ['BobbyApp.services'])
 
 
-        .controller('TriggerCtrl', ['bobby', '$scope', '$rootScope', '$state', '$ionicModal', '$ionicPopup', 'installationService', function (bobby, $scope, $rootScope, $state, $ionicModal, $ionicPopup, installationService) {
+        .controller('TriggerCtrl', ['$scope', '$rootScope', '$ionicModal', '$ionicPopup', 'installationService', function ($scope, $rootScope, $ionicModal, $ionicPopup, installationService) {
 
             $scope.newTrigger = {};
 
@@ -71,7 +71,7 @@
             };
 
             $scope.update = function () {
-                installationService.updateTrigger($scope.installation._id, $scope.device._id,  $scope.trigger)
+                installationService.updateTrigger($scope.installation._id, $scope.device._id, $scope.trigger)
                     .then(function (response) {
                         console.log('update success :', response);
                     }, function (response) {
@@ -118,7 +118,7 @@
             };
 
             $scope.addTrigger = function () {
-                $scope.newTrigger = {enabled: true, stream_id:  $scope.control.id, requests: []};
+                $scope.newTrigger = {enabled: true, stream_id: $scope.control.id, requests: []};
                 $scope.newTriggerModal.show();
             };
 
@@ -135,15 +135,18 @@
             };
 
             /* Copy a trigger */
-            $scope.copy = function (i) {
-                var copy = _.cloneDeep(i);
-                bobby.objectIdDel(copy);
-                delete copy.$$hashKey;
-                copy.name = 'Copy of ' + i.name;
 
-                $scope.newTrigger = copy;
-                $scope.saveNew();
-            };
+            /*
+             $scope.copy = function (i) {
+             var copy = _.cloneDeep(i);
+             bobby.objectIdDel(copy);
+             delete copy.$$hashKey;
+             copy.name = 'Copy of ' + i.name;
+
+             $scope.newTrigger = copy;
+             $scope.saveNew();
+             };
+             */
 
             $scope.$on('$destroy', function () {
                 $scope.newTriggerModal.remove();
@@ -153,7 +156,7 @@
 
         }])
 
-        .controller('RequestCtrl', ['bobby', '$scope', '$rootScope', '$state', 'util', '$ionicModal', '$ionicPopup', 'installationService', function (bobby, $scope, $rootScope, $state, util, $ionicModal, $ionicPopup, installationService) {
+        .controller('RequestCtrl', ['$scope', '$rootScope', '$ionicModal', '$ionicPopup', 'installationService', function ($scope, $rootScope, $ionicModal, $ionicPopup, installationService) {
 
             var responseColor;
 
@@ -235,7 +238,7 @@
                     okType: 'button-clear button-positive'
                 });
                 confirmPopup.then(function (res) {
-                    _.pull($scope.device.triggers[XXXXX], request);
+                    _.pull($scope.trigger.requests, request);
                 });
             };
 
@@ -265,30 +268,28 @@
             };
 
             $scope.saveNew = function () {
-
-                // link new request on trigger
-                $scope.newRequest.request_options =  JSON.parse($scope.newRequest.request_options);
+                $scope.newRequest.request_options = JSON.parse($scope.newRequest.request_options);
                 $scope.trigger.requests.push($scope.newRequest);
-
             };
 
             /* Copy a Request */
 
-            $scope.copy = function (i) {
-                var copy = _.cloneDeep(i);
-                bobby.objectIdDel(copy);
-                delete copy.$$hashKey;
-                copy.name = 'Copy of ' + i.name;
+            /*
+             $scope.copy = function (i) {
+             var copy = _.cloneDeep(i);
+             bobby.objectIdDel(copy);
+             delete copy.$$hashKey;
+             copy.name = 'Copy of ' + i.name;
 
-                $scope.newRequest = copy;
-                $scope.saveNew();
-            };
+             $scope.newRequest = copy;
+             $scope.saveNew();
+             };
+             */
 
             $scope.$on('$destroy', function () {
                 $scope.newRequestModal.remove();
                 $scope.editRequestModal.remove();
             });
-
 
         }])
 

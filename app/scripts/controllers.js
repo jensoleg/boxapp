@@ -109,6 +109,11 @@
 
                 });
 
+                $rootScope.$on('message:new-alarm', function (evt, data) {
+                    var installation = _.find($scope.installations, {'_id': data.installation});
+                    installation['alarm'] = data.value;
+                });
+
                 /* Edit installation */
 
                 $ionicModal.fromTemplateUrl('templates/installation.edit.html', {
@@ -1274,6 +1279,12 @@
                     markers.push(ret);
                 });
 
+
+                $rootScope.$on('message:new-alarm', function (evt, data) {
+                    var marker = _.find(markers, {'id': data.installation});
+                    marker.icon = data.value == 1 ? icons.cubered : icons.cube;
+                });
+
                 angular.extend($scope, {
                     map: {
                         control: {},
@@ -1419,11 +1430,11 @@
 
                 $scope.signout = function () {
                     $rootScope.$broadcast('message:signout');
-                }
+                };
 
                 $scope.refresh = function () {
                     $rootScope.$broadcast('message:refreshInstallation');
-                }
+                };
 
                 $scope.newInstallation = function () {
                     $rootScope.$broadcast('message:newInstallation');

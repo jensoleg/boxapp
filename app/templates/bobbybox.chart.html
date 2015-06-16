@@ -63,7 +63,10 @@
 
                         <div class="list-row__content" style="padding-left: 30px">
                             <span class="display-block">{{::readings.name}}</span>
-                            <span class="display-block fs-body-1 tc-black-2">{{readings.current_value}} {{::readings.unit.symbol}}{{::readings.unit.units}}</span>
+                            <span class="display-block fs-body-1 tc-black-2"
+                                  ng-style="readings.alert  && {'color': '#F44336'}">
+                                {{readings.current_value}} {{::readings.unit.symbol}}{{::readings.unit.units}}
+                            </span>
                         </div>
 
                         <div class="list-row__secondary" style="width: 64px;">

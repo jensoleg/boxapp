@@ -141,81 +141,65 @@
 
                 client.on('connect', function () {
                     console.log('MQTT connected');
+                    /* subscribe trigger changes */
+
+                    installationService.allTriggers()
+                        .then(function (response) {
+                            angular.forEach(response, function (result) {
+                                client.subscribe('/' + $rootScope.domain + '/alarm/' + result.installationId + '/' + result.deviceId + '/' + result.controlId, {qos: 0});
+                            });
+                        }, function (response) {
+                            console.log('all trigger error :', response);
+                        });
+
                 });
 
-                // recieve message on current device subscription
+
+                // recieve message on MQTT subscription
                 client.on('message', function (topic, message) {
 
-                        if (currentInstallation) {
-                            var now,
-                                topics = topic.split('/'),
-                                device = topics[2],
-                                stream = topics[3],
-                                streamTriggers = [],
-                                operators = {
-                                    lt: '<',
-                                    lte: '<=',
-                                    gt: '>',
-                                    gte: '>=',
-                                    eq: '=='
-                                },
-                                theDevice = _.find(currentInstallation.devices, {'id': device}),
-                                control = _.find(theDevice.controls, {'id': stream});
+                    var now,
+                        topics = topic.split('/'),
+                        inst,
+                        device,
+                        stream,
+                        streamTriggers = [];
 
-                            /* check state stream on device.streamid  and set scope variable installation.device.state.value.
-                             UI will listen to state: installation.device.state.value and calculated
-                             installation.state.value: 0,1,2
-                             */
+                    if (topics[2] == 'alarm') {
+                        inst = topics[3];
+                        device = topics[4];
+                        stream = topics[5];
 
-                            /* streamTriggers should be set when installation is changed !!!!!!!!! */
-                            /*
-                             angular.forEach(currentInstallation.devices, function (d) {
-                             if (d.triggers.length > 0 && d.id === device) {
-                             streamTriggers.push(_.filter(d.triggers, { 'stream_id': stream }));
-                             }
-                             });
-
-                             angular.forEach(streamTriggers, function (triggers) {
-                             angular.forEach(triggers, function (trigger) {
-                             if (trigger) {
-                             $rootScope.datastreams[device + stream].triggered = eval(message + operators[trigger.trigger_type] + trigger.threshold_value);
-                             }
-                             });
-                             });
-                             */
-
-                            $rootScope.datastreams[device + stream].current_value = message;
-
-                            /*
-                             if (control.ctrlType == 'timer' && parseInt(message) == 0) {
-
-                             $http.get(apiEndpoint + 'datastreams/' + device + '/' + stream, {
-                             params: {
-                             limit: 2,
-                             from: moment().subtract(1, 'days').toJSON(),
-                             to: moment().toJSON(),
-                             interval: 1
-                             },
-                             cache: false
-                             }).success(function (data) {
-                             console.log('got data', data)
-                             }, function (error) {
-                             console.log('error', error)
-                             });
-                             }
-                             */
-
-                            now = Date.now();
-                            $rootScope.$broadcast('message:new-reading', {
-                                device: device,
-                                control: stream,
-                                type: control.ctrlType,
-                                timestamp: moment(moment()).utc().toJSON(),
-                                value: parseFloat(message)
-                            });
+                        if (currentInstallation && currentInstallation._id === inst) {
+                            $rootScope.datastreams[device + stream].alert = message;
                         }
+
+                        $rootScope.$broadcast('message:new-alarm', {
+                            installation: inst,
+                            device: device,
+                            control: stream,
+                            value: message
+                        });
+
+                    } else if (currentInstallation) {
+                        device = topics[2];
+                        stream = topics[3];
+
+                        var theDevice = _.find(currentInstallation.devices, {'id': device}),
+                            control = _.find(theDevice.controls, {'id': stream});
+
+                        $rootScope.datastreams[device + stream].current_value = message;
+
+                        now = Date.now();
+                        $rootScope.$broadcast('message:new-reading', {
+                            device: device,
+                            control: stream,
+                            type: control.ctrlType,
+                            timestamp: moment(moment()).utc().toJSON(),
+                            value: parseFloat(message)
+                        });
                     }
-                );
+                });
 
                 bobby.objectIdDel = function (copiedObjectWithId) {
                     if (copiedObjectWithId !== null && typeof copiedObjectWithId !== 'string' &&
@@ -226,8 +210,7 @@
                             for (var key in copiedObjectWithId) {
                                 this.objectIdDel(copiedObjectWithId[key]); //recursive del calls on object elements
                             }
-                        }
-                        else {
+                        } else {
                             for (var i = 0; i < copiedObjectWithId.length; i++) {
                                 this.objectIdDel(copiedObjectWithId[i]);  //recursive del calls on array elements
                             }
@@ -240,7 +223,6 @@
                         angular.forEach(currentInstallation.devices, function (device) {
                             angular.forEach(device.controls, function (stream) {
                                 client.unsubscribe('/' + $rootScope.domain + '/' + device.id + "/" + stream.id);
-                                //console.log('MQTT unsubscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
                             });
                         });
                     }
@@ -254,8 +236,6 @@
                         angular.forEach(currentInstallation.devices, function (device) {
                             angular.forEach(device.controls, function (stream) {
                                 client.unsubscribe('/' + $rootScope.domain + '/' + device.id + "/" + stream.id);
-                                //console.log('MQTT unsubscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
-
                             });
                         });
 
@@ -277,10 +257,9 @@
                                     newStreams[device.id + stream.id].id = stream.id;
                                     newStreams[device.id + stream.id].deviceid = device.id;
                                     /* maybe trigger should be evaluated initially */
-                                    //newStreams[device.id + stream.id].triggered = false;
+                                    newStreams[device.id + stream.id].alert = false;
 
                                     client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id, {qos: 0});
-                                    //console.log('MQTT subscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
 
                                 }
                             });
@@ -309,7 +288,6 @@
                                         newStreams[device.id + stream.id].deviceid = device.id;
                                     }
                                     client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id, {qos: 0});
-                                    //console.log('MQTT subscribe: ', '/' + $rootScope.domain + '/' + device.id + '/' + stream.id);
 
                                 }
                             })
@@ -661,6 +639,18 @@
                         $http.put(apiEndpoint + 'installations/' + id + '/devices/' + deviceid + '/triggers/' + trigger._id, trigger).success(function (response) {
                             q.resolve(response);
                         }, function () {
+                            q.resolve(null);
+                        });
+                        return q.promise;
+                    },
+
+                    allTriggers: function () {
+                        var q = $q.defer();
+
+                        $http.get(apiEndpoint + 'installations/allTriggers').success(function (response) {
+                            q.resolve(response);
+                        }, function (response) {
+                            console.log('triggers error : ', response);
                             q.resolve(null);
                         });
                         return q.promise;

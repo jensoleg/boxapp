@@ -64,7 +64,8 @@
                 ng-repeat="i in installations | orderBy:'name' | filter: searchFilter"
                 ng-click="selectInst(i._id)">
                 <td style="padding-left: 18px; width: 70px;padding-right: 18px;">
-                    <button class="btn btn--m btn--blue btn--icon" lx-ripple>
+                    <button class="btn btn--m btn--blue btn--icon" lx-ripple
+                            ng-class="i.alarm ? 'btn--red' : 'btn--blue'">
                         <i class="mdi ion-cube"></i>
                     </button>
                 </td>

@@ -60,7 +60,6 @@
                         $scope.installations = newInstallations;
                     });
 
-
                 $scope.selectInst = function (instId) {
                     $ionicHistory.clearCache();
                     $state.go('box', {id: instId});
@@ -68,7 +67,6 @@
 
                 $scope.newInst = {location: {'lat': null, 'lng': null}};
                 $scope.$state = $state;
-
 
                 $rootScope.$on('message:refreshInstallation', function (evt, data) {
                     var $httpDefaultCache = $cacheFactory.get('$http');
@@ -84,7 +82,6 @@
                 auth.profilePromise.then(function () {
                     $scope.userName = auth.profile.name;
                 });
-
 
                 $rootScope.$on('message:signout', function (evt, data) {
 
@@ -471,16 +468,19 @@
                     curDevice = device;
                     $scope.addControl();
                 });
+
                 $scope.$on('message:edit-control', function (evt, device, control) {
                     deviceId = device._id;
                     curDevice = device;
                     $scope.editControl(device, control);
                 });
+
                 $scope.$on('message:remove-control', function (evt, device, control) {
                     deviceId = device._id;
                     curDevice = device;
                     $scope.removeControl(control);
                 });
+
                 $scope.$on('message:copy-control', function (evt, device, control) {
                     deviceId = device._id;
                     curDevice = device;
@@ -534,7 +534,6 @@
                             console.log('error', response);
                         });
                 };
-
 
                 /* Remove control */
 
@@ -629,13 +628,11 @@
                     $scope.saveNewControl();
                 };
 
-
                 /* timers */
 
                 $scope.closeEditTimer = function () {
                     $scope.editTimerModal.hide();
                 };
-
 
                 $scope.editTimer = function (t) {
                     $scope.timer = t;
@@ -731,13 +728,11 @@
                 });
             }])
 
-
         .controller('BoxCtrl', ['$ionicModal', '$ionicScrollDelegate', 'installation', 'installationService', 'toastMessage', '$location', '$ionicLoading', '$ionicPopover', '$scope', '$state', '$rootScope', '$window', 'bobby', 'chart', '$interval', '$timeout', '$cacheFactory',
             function ($ionicModal, $ionicScrollDelegate, installation, installationService, toastMessage, $location, $ionicLoading, $ionicPopover, $scope, $state, $rootScope, $window, bobby, chart, $interval, $timeout, $cacheFactory) {
 
                 $scope.domainName = $rootScope.domain.charAt(0).toUpperCase() + $rootScope.domain.slice(1);
                 $scope.notes = "";
-
 
                 $scope.color = {
                     red: Math.floor(Math.random() * 255),
@@ -973,7 +968,6 @@
                      */
                 };
 
-
                 $scope.setTimer = function (timer) {
 
                     var device = _.find($scope.installation.devices, {'id': $scope.currentDeviceId}),
@@ -1037,7 +1031,6 @@
                  $scope.UpdateNote();
                  };
                  */
-
 
                 $scope.toggleDevice = function (device) {
                     $scope.shownDevice[device] = !$scope.isDeviceShown(device);
@@ -1194,7 +1187,6 @@
         .controller('MapCtrl', ['uiGmapGoogleMapApi', 'uiGmapIsReady', '$cordovaSplashscreen', '$scope', '$location', '$rootScope', '$cordovaGeolocation', 'Settings', 'icons', 'styles', 'installations', '$state', '$ionicLoading',
             function (GoogleMapApi, IsReady, $cordovaSplashscreen, $scope, $location, $rootScope, $cordovaGeolocation, Settings, icons, styles, installations, $state, $ionicLoading) {
 
-
                 $rootScope.searchFilter = "";
 
                 var mapStyles = {
@@ -1256,7 +1248,6 @@
                     markers.push(ret);
                 });
 
-
                 $rootScope.$on('message:installation-removed', function (evt, installation) {
                     _.remove(markers, function (marker) {
                         return marker.id === installation._id;
@@ -1279,10 +1270,10 @@
                     markers.push(ret);
                 });
 
-
                 $rootScope.$on('message:new-alarm', function (evt, data) {
                     var marker = _.find(markers, {'id': data.installation});
                     marker.icon = data.value == 1 ? icons.cubered : icons.cube;
+                    marker.alarm = data.value
                 });
 
                 angular.extend($scope, {
@@ -1297,24 +1288,35 @@
                             longitude: $rootScope.origCenter ? $rootScope.origCenter.longitude : 10.46037
                         },
                         clusterOptions: {
-                            gridSize: 60,
+                            calculator: function (markers, numStyles) {
+                                var index = 1;//green
+                                _.each(markers.dict, function (marker) {
+                                    if (angular.isDefined(marker.model.alarm) && marker.model.alarm == '1') {
+                                        console.log('alarm: ', marker.model.alarm)
+                                        index = 3;
+                                    }
+                                });
+
+                                return {text: markers.length, index: index};
+                            },
+                            gridSize: 50,
                             ignoreHidden: true,
                             minimumClusterSize: 2,
                             styles: [
                                 {
-                                    height: 53,
+                                    height: 52,
                                     url: './images/m1.png',
                                     width: 53
                                 },
                                 {
                                     height: 56,
                                     url: './images/m2.png',
-                                    width: 56
+                                    width: 55
                                 },
                                 {
-                                    height: 66,
+                                    height: 53,
                                     url: './images/m3.png',
-                                    width: 66
+                                    width: 52
                                 },
                                 {
                                     height: 78,
@@ -1403,7 +1405,6 @@
                     $ionicLoading.hide();
                     console.log('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
                 }
-
 
                 $scope.myPosition = function () {
 

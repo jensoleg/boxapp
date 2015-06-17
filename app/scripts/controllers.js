@@ -855,6 +855,26 @@
                     $scope.removed = true;
                 });
 
+
+                $rootScope.$watch($rootScope.datastreams, function (val) {
+                    var alarms = bobby.alarms($scope.installation._id);
+
+                    if (alarms) {
+                        _.forEach(alarms, function (alarm) {
+                            var topics = alarm.path.split('/'),
+                                device = topics[2],
+                                control = topics[3];
+                            $rootScope.datastreams[device + control].alarm = alarm.value;
+                        });
+                    }
+                });
+
+                $rootScope.$on('message:new-alarm', function (evt, data) {
+                    if (data.installation == $scope.installation._id) {
+                        $rootScope.datastreams[data.device + data.control].alarm = data.value;
+                    }
+                });
+
                 $scope.$on('$destroy', function () {
                     bobby.disableSubscriptions();
                     if ($scope.popover) {
@@ -1094,7 +1114,7 @@
 
                     $scope.chartSettings.valueAxis.constantLines = [];
                     if ($scope.chartColor.length == 1) {
-                        var control = $scope.chartColor[0].control
+                        var control = $scope.chartColor[0].control;
                         if ($rootScope.datastreams[control].maxCritical) {
                             $scope.chartSettings.valueAxis.constantLines.push({value: $rootScope.datastreams[control].maxCritical});
                         }
@@ -1272,7 +1292,7 @@
 
                 $rootScope.$on('message:new-alarm', function (evt, data) {
                     var marker = _.find(markers, {'id': data.installation});
-                    marker.icon = data.value == 1 ? icons.cubered : icons.cube;
+                    marker.icon = data.value > 0 ? icons.cubered : icons.cube;
                     marker.alarm = data.value
                 });
 
@@ -1291,8 +1311,7 @@
                             calculator: function (markers, numStyles) {
                                 var index = 1;//green
                                 _.each(markers.dict, function (marker) {
-                                    if (angular.isDefined(marker.model.alarm) && marker.model.alarm == '1') {
-                                        console.log('alarm: ', marker.model.alarm)
+                                    if (angular.isDefined(marker.model.alarm) && marker.model.alarm > 0) {
                                         index = 3;
                                     }
                                 });

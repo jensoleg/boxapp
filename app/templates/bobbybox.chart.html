@@ -13,7 +13,7 @@
                         <div class="list-row__primary">
                             <button class="btn btn--m btn--blue btn--icon" lx-ripple>
                                 <i class="mdi ion-cube"
-                                   ng-style="datastreams[device.id + 'online'].id == 'online' && datastreams[device.id + 'online'].current_value == '0' && {'color': 'rgb(253, 57, 80)'} || {'color': 'rgb(129, 207, 98)'}">
+                                   ng-style="datastreams[device.id + 'online'].alarm >0  && {'color': 'rgb(253, 57, 80)'} || {'color': 'rgb(129, 207, 98)'}">
                                 </i>
                             </button>
                         </div>
@@ -63,8 +63,8 @@
 
                         <div class="list-row__content" style="padding-left: 30px">
                             <span class="display-block">{{::readings.name}}</span>
-                            <span class="display-block fs-body-1 tc-black-2"
-                                  ng-style="readings.alert  && {'color': '#F44336'}">
+                            <span ng-class="readings.alarm > 0 ? 'tc-red-A200' : 'tc-black-2'"
+                                  class="display-block fs-body-1">
                                 {{readings.current_value}} {{::readings.unit.symbol}}{{::readings.unit.units}}
                             </span>
                         </div>

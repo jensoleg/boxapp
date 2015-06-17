@@ -123,6 +123,9 @@
         .factory('bobby', ['$rootScope', '$http', 'auth', 'Settings', 'ENV', 'installationService',
             function ($rootScope, $http, auth, Settings, ENV, installationService) {
 
+                var alarms = [],
+                    alarm;
+
                 var bobby = {},
                     client = {},
                     controlTypes = ['data', 'timer', 'state'],
@@ -163,22 +166,38 @@
                         inst,
                         device,
                         stream,
-                        streamTriggers = [];
+                        alarmPath;
+
+                    console.log('new-alarm: ' , topic + ' ' + message);
 
                     if (topics[2] == 'alarm') {
                         inst = topics[3];
                         device = topics[4];
                         stream = topics[5];
 
-                        if (currentInstallation && currentInstallation._id === inst) {
-                            $rootScope.datastreams[device + stream].alert = message;
+                        // update alarm status
+                        alarmPath = '/' + inst + '/' + device + '/' + stream;
+                        alarm = _.find(alarms, {'path': '/' + inst + '/' + device + '/' + stream});
+
+                        if (alarm) {
+                          var value = parseInt(message);
+                          if (value > 0) {
+                              alarm.value++;
+                          } else {
+                              if (alarm.value > 0) {
+                                  alarm.value--;
+                              }
+                          }
+                        } else {
+                            alarm = {path: alarmPath, value: parseInt(message)}
+                            alarms.push(alarm)
                         }
 
                         $rootScope.$broadcast('message:new-alarm', {
                             installation: inst,
                             device: device,
                             control: stream,
-                            value: message
+                            value: alarm.value
                         });
 
                     } else if (currentInstallation) {
@@ -200,6 +219,14 @@
                         });
                     }
                 });
+
+                bobby.alarms = function (id) {
+                    return _.filter(alarms, function (item) {
+                        var s = '/' + id;
+                        return _.startsWith(item.path, '/' + id);
+                    });
+
+                };
 
                 bobby.objectIdDel = function (copiedObjectWithId) {
                     if (copiedObjectWithId !== null && typeof copiedObjectWithId !== 'string' &&
@@ -231,6 +258,8 @@
                 /* set current installation */
                 bobby.setInstallation = function (newInstallation) {
 
+                    var newStreams = {};
+
                     // remove current subscriptions
                     if (!refreshing && currentInstallation) {
                         angular.forEach(currentInstallation.devices, function (device) {
@@ -246,8 +275,6 @@
 
                         currentInstallation = newInstallation;
 
-                        var newStreams = {};
-
                         // set controls
                         angular.forEach(currentInstallation.devices, function (device) {
                             angular.forEach(device.controls, function (stream) {
@@ -257,7 +284,6 @@
                                     newStreams[device.id + stream.id].id = stream.id;
                                     newStreams[device.id + stream.id].deviceid = device.id;
                                     /* maybe trigger should be evaluated initially */
-                                    newStreams[device.id + stream.id].alert = false;
 
                                     client.subscribe('/' + $rootScope.domain + '/' + device.id + '/' + stream.id, {qos: 0});
 
@@ -272,8 +298,6 @@
                     if (refreshing && newInstallation) {
 
                         currentInstallation = newInstallation;
-
-                        var newStreams = {};
 
                         // set / remove controls
                         angular.forEach(currentInstallation.devices, function (device) {

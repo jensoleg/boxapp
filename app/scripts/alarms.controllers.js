@@ -31,6 +31,7 @@
             };
 
             $scope.editRequest = function (trigger, request) {
+                console.log('clicked edit rqst');
                 $rootScope.$broadcast('message:edit-request', $scope.trigger, request);
             };
 
@@ -44,6 +45,7 @@
             });
 
             $scope.closeEditTriggers = function () {
+                $rootScope.$broadcast('message:installation-changed', $scope.installation);
                 $scope.editTriggersModal.hide();
             };
 
@@ -56,11 +58,11 @@
                 $scope.editTriggerModal = modal;
             });
 
-            $scope.closeEdit = function () {
+            $scope.closeEditTrigger = function () {
                 $scope.editTriggerModal.hide();
             };
 
-            $scope.doneEdit = function () {
+            $scope.doneEditTrigger = function () {
                 $scope.editTriggerModal.hide();
                 $scope.update();
             };
@@ -73,6 +75,10 @@
             $scope.update = function () {
                 installationService.updateTrigger($scope.installation._id, $scope.device._id, $scope.trigger)
                     .then(function (response) {
+                        $scope.installation = response;
+                        $scope.device = _.find(response.devices, function (d) {
+                            return d._id === $scope.device._id;
+                        });
                         console.log('update success :', response);
                     }, function (response) {
                         console.log('trigger update error :', response);
@@ -92,6 +98,7 @@
                     if (res) {
                         installationService.removeTrigger($scope.installation._id, $scope.device._id, trigger._id)
                             .then(function (response) {
+                                $scope.installation = response;
                                 _.pull($scope.device.triggers, trigger);
                             }, function (response) {
                                 console.log('error', response);
@@ -99,6 +106,19 @@
                     }
                 });
             };
+
+            $scope.removeRequest = function (request) {
+                var confirmPopup = $ionicPopup.confirm({
+                    title: '',
+                    template: 'Are you sure you want to remove ' + request.name + '?',
+                    cancelType: 'button-clear button-dark',
+                    okType: 'button-clear button-positive'
+                });
+                confirmPopup.then(function (res) {
+                    _.pull($scope.trigger.requests, request);
+                });
+            };
+
 
             /* new trigger */
             $ionicModal.fromTemplateUrl('templates/installation.trigger.new.html', {
@@ -108,11 +128,11 @@
                 $scope.newTriggerModal = modal;
             });
 
-            $scope.closeNew = function () {
+            $scope.closeNewTrigger = function () {
                 $scope.newTriggerModal.hide();
             };
 
-            $scope.doneNew = function () {
+            $scope.doneNewTrigger = function () {
                 $scope.newTriggerModal.hide();
                 $scope.saveNew();
             };
@@ -125,7 +145,7 @@
             $scope.saveNew = function () {
                 installationService.newTrigger($scope.installation._id, $scope.device._id, $scope.newTrigger)
                     .then(function (response) {
-                        $scope.$parent.installation = response;
+                        $scope.installation = response;
                         $scope.device = _.find(response.devices, function (d) {
                             return d._id === $scope.device._id;
                         });
@@ -152,13 +172,16 @@
                 $scope.newTriggerModal.remove();
                 $scope.editTriggerModal.remove();
                 $scope.editTriggersModal.remove();
+
+                console.log('remove trigger modals')
+
             });
 
         }])
 
         .controller('RequestCtrl', ['$scope', '$rootScope', '$ionicModal', '$ionicPopup', 'installationService', function ($scope, $rootScope, $ionicModal, $ionicPopup, installationService) {
 
-            var responseColor;
+            $scope.responseColor = null;
 
             $scope.newRequest = {};
 
@@ -169,14 +192,12 @@
             });
 
             $rootScope.$on('message:edit-request', function (evt, trigger, request) {
+                console.log('got message rqst', evt);
+
                 $scope.trigger = trigger;
                 $scope.request = request;
-                $scope.edit();
+                $scope.editaRequest();
             });
-
-            $scope.getColor = function () {
-                return responseColor;
-            };
 
             $scope.formatRequest = function (r) {
                 $scope.request.request_options = $scope.newRequest.request_options = JSON.stringify(JSON.parse(r), null, '\t');
@@ -190,16 +211,16 @@
                 installationService.requester(JSON.stringify(JSON.parse(request), null, 3))
                     .then(function (response) {
                         $scope.requestResponse = response;
-                        responseColor = '#66cc33';
+                        $scope.responseColor = '#66cc33';
                     }, function (response) {
                         $scope.requestResponse = response;
-                        responseColor = '#ef4e3a';
+                        $scope.responseColor = '#ef4e3a';
                     });
             };
 
             $scope.clearResponse = function () {
                 $scope.requestResponse = null;
-                responseColor = null;
+                $scope.responseColor = null;
             };
 
             /* Edit Request */
@@ -208,38 +229,26 @@
                 scope: $scope,
                 animation: 'slide-in-right'
             }).then(function (modal) {
+                console.log('instantiate edit modals')
+
                 $scope.editRequestModal = modal;
             });
 
-            $scope.closeEdit = function () {
+            $scope.closeEditRequest = function () {
                 $scope.request.request_options = JSON.parse($scope.request.request_options);
                 $scope.editRequestModal.hide();
             };
 
-            $scope.doneEdit = function () {
+            $scope.doneEditRequest = function () {
                 $scope.editRequestModal.hide();
                 $scope.request.request_options = JSON.parse($scope.request.request_options);
             };
 
-            $scope.edit = function (r) {
-                responseColor = null;
+            $scope.editaRequest = function (r) {
+                $scope.responseColor = null;
                 $scope.requestResponse = null;
                 $scope.request.request_options = JSON.stringify($scope.request.request_options, null, '\t');
                 $scope.editRequestModal.show();
-            };
-
-            /* Remove Request */
-
-            $scope.remove = function (request) {
-                var confirmPopup = $ionicPopup.confirm({
-                    title: '',
-                    template: 'Are you sure you want to remove ' + request.name + '?',
-                    cancelType: 'button-clear button-dark',
-                    okType: 'button-clear button-positive'
-                });
-                confirmPopup.then(function (res) {
-                    _.pull($scope.trigger.requests, request);
-                });
             };
 
             /* new request */
@@ -248,26 +257,28 @@
                 scope: $scope,
                 animation: 'slide-in-right'
             }).then(function (modal) {
+                console.log('instantiate new modals');
+
                 $scope.newRequestModal = modal;
             });
 
-            $scope.closeNew = function () {
+            $scope.closeNewRequest = function () {
                 $scope.newRequestModal.hide();
             };
 
-            $scope.doneNew = function () {
+            $scope.doneNewRequest = function () {
                 $scope.newRequestModal.hide();
-                $scope.saveNew();
+                $scope.saveNewRequest();
             };
 
             $scope.addRequest = function () {
-                responseColor = null;
+                $scope.responseColor = null;
                 $scope.newRequest = {};
                 $scope.requestResponse = null;
                 $scope.newRequestModal.show();
             };
 
-            $scope.saveNew = function () {
+            $scope.saveNewRequest = function () {
                 $scope.newRequest.request_options = JSON.parse($scope.newRequest.request_options);
                 $scope.trigger.requests.push($scope.newRequest);
             };
@@ -289,6 +300,8 @@
             $scope.$on('$destroy', function () {
                 $scope.newRequestModal.remove();
                 $scope.editRequestModal.remove();
+
+                console.log('remove request modals')
             });
 
         }])

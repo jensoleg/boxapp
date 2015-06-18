@@ -3,7 +3,7 @@
     <ion-header-bar class="bar bar-header bar-positive  bgc-indigo-500">
 
         <div class="buttons">
-            <button class="btn btn--l btn--icon" ng-click="closeEdit()">
+            <button class="btn btn--l btn--icon" ng-click="closeEditRequest()">
                 <i class="mdi mdi-keyboard-backspace"></i>
             </button>
         </div>
@@ -12,7 +12,7 @@
 
         <div class="buttons">
             <button class="btn btn--m btn--icon"
-                    ng-click="doneEdit()">
+                    ng-click="doneEditRequest()">
                 <i class="mdi mdi-check"></i>
             </button>
         </div>
@@ -34,9 +34,8 @@
 
             <!--a class="padding" ng-href="https://github.com/mikeal/request#requestoptions-callback">Please see request
                 options here</a-->
-
-            <lx-text-field icon="account" theme="dark" style="color: #FFF;">
-                <input type="text" ng-model="requestResponse" ng-click="clearResponse()">
+            <lx-text-field ng-show="requestResponse" icon="account" theme="dark"  style="color: #FFF;">
+                <input type="text" ng-model="requestResponse" ng-click="clearResponse()" ng-style="responseColor && {'color': responseColor}">
             </lx-text-field>
 
             <button class="btn btn--m btn--blue btn--raised" lx-ripple

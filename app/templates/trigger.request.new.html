@@ -3,7 +3,7 @@
     <ion-header-bar class="bar bar-header bar-positive  bgc-indigo-500">
 
         <div class="buttons">
-            <button class="btn btn--l btn--icon" ng-click="closeNew()">
+            <button class="btn btn--l btn--icon" ng-click="closeNewRequest()">
                 <i class="mdi mdi-keyboard-backspace"></i>
             </button>
         </div>
@@ -12,7 +12,7 @@
 
         <div class="buttons">
             <button class="btn btn--m btn--icon"
-                    ng-click="doneNew()">
+                    ng-click="doneNewRequest()">
                 <i class="mdi mdi-plus"></i>
             </button>
         </div>
@@ -36,7 +36,7 @@
                 options here</a-->
 
             <lx-text-field icon="account" theme="dark" style="color: #FFF;">
-                <input type="text" ng-model="requestResponse" ng-click="clearResponse()">
+                <input type="text" ng-model="requestResponse" ng-click="clearResponse()" ng-style="responseColor && {'color': responseColor}">
             </lx-text-field>
 
             <button class="btn btn--m btn--blue btn--raised" lx-ripple

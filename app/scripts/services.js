@@ -168,8 +168,6 @@
                         stream,
                         alarmPath;
 
-                    console.log('new-alarm: ' , topic + ' ' + message);
-
                     if (topics[2] == 'alarm') {
                         inst = topics[3];
                         device = topics[4];
@@ -820,6 +818,7 @@
                         pubKey: DISQUS_PUBLIC,
                         auth: message + " " + hexsig + " " + timestamp
                     };
+
                 };
 
                 this.reset = function () {

@@ -45,6 +45,10 @@
             });
 
             $scope.closeEditTriggers = function () {
+                $scope.editTriggersModal.hide();
+            };
+
+            $scope.doneEditTriggers = function () {
                 $rootScope.$broadcast('message:installation-changed', $scope.installation);
                 $scope.editTriggersModal.hide();
             };

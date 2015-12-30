@@ -41,13 +41,17 @@ module.exports = function (grunt) {
                 constants: {
                     ENV: {
                         name: 'local',
+                        //auth: {
+                        //    domain: 'development.auth0.com',
+                        //    clientID: 'kpWrEQ5gJclwuAljKpHgNcJA3NwNZ0FL'
+                        //},
                         auth: {
-                            domain: 'development.auth0.com',
-                            clientID: 'kpWrEQ5gJclwuAljKpHgNcJA3NwNZ0FL'
+                            domain: 'senodio.eu.auth0.com',
+                            clientID: 'RAoAYmpefM2KZ4KFERmTxt2mam09ke6p'
                         },
                         domainPrefix: false,
-                        apiEndpoint: '192.168.59.103:8081/api/',
-                        MQTTServer: '192.168.59.103',
+                        apiEndpoint: 'localhost:8081/api/',
+                        MQTTServer: 'localhost',
                         socketServer: 8082
                     }
                 }
@@ -80,6 +84,21 @@ module.exports = function (grunt) {
                         apiEndpoint: 'bobbytech.dk/api/',
                         MQTTServer: 'mqtt.development.bobbytech.dk',
                         socketServer: 8080
+                    }
+                }
+            },
+            docker: {
+                constants: {
+                    ENV: {
+                        name: 'docker',
+                        auth: {
+                            domain: 'senodio.eu.auth0.com',
+                            clientID: 'RAoAYmpefM2KZ4KFERmTxt2mam09ke6p'
+                        },
+                        domainPrefix: false,
+                        apiEndpoint: '192.168.99.100:8081/api/',
+                        MQTTServer: '192.168.99.100',
+                        socketServer: 8082
                     }
                 }
             },

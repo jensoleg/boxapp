@@ -138,7 +138,7 @@
                 $rootScope.datastreams = {};
 
                 client = mqtt.createClient(ENV.socketServer, ENV.MQTTServer, {
-                    username: 'JWT/' + $rootScope.domain,
+                    username: 'JWT/' + ENV.auth.domain.split('.')[0],
                     "password": auth.idToken
                 });
 

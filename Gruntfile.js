@@ -90,7 +90,7 @@ module.exports = function (grunt) {
             docker: {
                 constants: {
                     ENV: {
-                        name: 'docker',
+                        name: 'senodio',
                         auth: {
                             domain: 'senodio.eu.auth0.com',
                             clientID: 'RAoAYmpefM2KZ4KFERmTxt2mam09ke6p'

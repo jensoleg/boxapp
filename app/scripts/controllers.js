@@ -246,8 +246,8 @@
                 };
             }])
 
-        .controller('InstallationCtrl', ['bobby', '$blinkup', 'toastMessage', '$scope', '$rootScope', '$ionicLoading', 'installationService', '$ionicModal', '$ionicPopup',
-            function (bobby, $blinkup, toastMessage, $scope, $rootScope, $ionicLoading, installationService, $ionicModal, $ionicPopup) {
+        .controller('InstallationCtrl', ['bobby',  'toastMessage', '$scope', '$rootScope', '$ionicLoading', 'installationService', '$ionicModal', '$ionicPopup',
+            function (bobby,  toastMessage, $scope, $rootScope, $ionicLoading, installationService, $ionicModal, $ionicPopup) {
 
                 $scope.isIOS = ionic.Platform.isIOS();
 
@@ -379,7 +379,7 @@
                         $scope.newDevice.id;
 //                        $scope.newDevice.planId;
                 };
-
+/*
                 $scope.blinkup = function () {
                     $blinkup.start(function (result) {
                             $scope.newDevice.id = result.split("/")[3];
@@ -401,7 +401,7 @@
                         }
                     );
                 };
-
+*/
                 $scope.saveNewDevice = function () {
 
                     var installation = $scope.$parent.installation;

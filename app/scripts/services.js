@@ -93,7 +93,7 @@
 
                 return obj;
             }])
-
+/*
         .factory('$blinkup', ['$window', function ($window) {
 
             return {
@@ -119,7 +119,7 @@
                 }
             };
         }])
-
+*/
         .factory('bobby', ['$rootScope', '$http', 'auth', 'Settings', 'ENV', 'installationService',
             function ($rootScope, $http, auth, Settings, ENV, installationService) {
 

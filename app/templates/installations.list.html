@@ -8,12 +8,13 @@
                 <div class="toolbar" style="position: relative; z-index:10; margin-top: -29px; padding-right: 10px;">
 
                     <div class="toolbar__left">
-                        <div class="card bgc-indigo-500"
-                             style="border-radius: 46px;margin: 0px 0px;padding-top: 0px; padding-bottom: 0px">
-                            <lx-search-filter model="searchFilter" placeholder="Search" theme="dark" position="left" closed>
+                        <div class="card bgc-indigo-500" style="border-radius: 46px;margin: 0px 0px;padding-top: 0px; padding-bottom: 0px">
+                            <lx-search-filter lx-closed="true" lx-color="white" position="left" >
+                                <input type="text" placeholder="Search" ng-model="searchFilter">
                             </lx-search-filter>
                         </div>
                     </div>
+
 
 
                     <span class="toolbar__label fs-title"></span>
@@ -22,7 +23,7 @@
                         <div class="fab">
                             <button class="fab__primary btn btn--xl btn--indigo btn--fab" lx-ripple>
                                 <i class="mdi mdi-apps"></i>
-                                <i class="mdi mdi-plus"></i>
+                                <i class="mdi mdi-apps"></i>
                             </button>
 
                             <div class="fab__actions fab__actions--up">
@@ -60,7 +61,7 @@
 
             </tr>
 
-            <tr class="data-table__clickable-row"
+            <!--tr class="data-table__clickable-row"
                 ng-repeat="i in installations | orderBy:'name' | filter: searchFilter"
                 ng-click="selectInst(i._id)">
                 <td style="padding-left: 18px; width: 70px;padding-right: 18px;">
@@ -91,8 +92,44 @@
                         </lx-dropdown-menu>
                     </lx-dropdown>
                 </td>
-            </tr>
+            </tr-->
             </tbody>
         </table>
+        <ul class="list">
+            <li class="list-row list-row--has-separator" ng-repeat="i in installations | orderBy:'name' | filter: searchFilter"
+                >
+                <div class="list-row__primary">
+                    <button class="btn btn--m btn--blue btn--icon" lx-ripple
+                            ng-class="i.alarm > 0 ? 'btn--red' : 'btn--blue'"
+                            ng-click="selectInst(i._id)">
+                        <i class="mdi ion-cube"></i>
+                    </button>
+                </div>
+
+                <div class="list-row__content">
+                    <span class="display-block">{{::i.name}}</span>
+                    <span class="display-block fs-body-1 tc-black-2">{{::i.placement}}</span>
+                </div>
+
+                <div class="list-row__secondary">
+                    <lx-dropdown lx-position="right"  lx-width="250">
+                        <lx-dropdown-toggle>
+                            <lx-button lx-color="black" lx-type="icon" lx-tooltip="Installation setup" tooltip-position="left" >
+                                <i class="mdi mdi-dots-vertical"></i>
+                            </lx-button>
+                        </lx-dropdown-toggle>
+
+                        <lx-dropdown-menu>
+                            <ul>
+                                <ul>
+                                    <li><a class="dropdown-link" ng-click="remove(i)">Remove</a></li>
+                                    <li><a class="dropdown-link" ng-click="editInstallation(i)">Edit</a></li>
+                                </ul>
+                            </ul>
+                        </lx-dropdown-menu>
+                    </lx-dropdown>
+                </div>
+            </li>
+        </ul>
     </div>
 </div>

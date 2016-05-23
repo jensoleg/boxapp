@@ -545,7 +545,7 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
-            'ngconstant:' + target,
+            'ngconstant:senodio',
             'wiredep',
             'concurrent:server',
             'autoprefixer',
@@ -565,7 +565,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', function (target) {
         grunt.task.run([
             'clean:dist',
-            'ngconstant:' + target,
+            'ngconstant:senodio',
             'wiredep',
             'useminPrepare',
             'concurrent:dist',

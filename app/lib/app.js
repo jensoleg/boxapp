@@ -1,10 +1,10 @@
 (function () {
     'use strict';
 
-    angular.module('BobbyApp', ['ngCordova', 'angular-storage', 'angular-jwt', 'auth0', 'ngCookies', 'monospaced.elastic', 'uiGmapgoogle-maps', 'dx', 'ionic', 'config', 'angular-loading-bar', 'ngAnimate', 'BobbyApp.controllers', 'BobbyApp.alarms.controllers', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives'])
+    angular.module('BobbyApp', ['lumx', 'ngCordova', 'angular-storage', 'angular-jwt', 'auth0', 'ngCookies', 'monospaced.elastic', 'uiGmapgoogle-maps', 'dx', 'ionic', 'config', 'angular-loading-bar', 'ngAnimate', 'BobbyApp.controllers', 'BobbyApp.alarms.controllers', 'BobbyApp.services', 'BobbyApp.filters', 'BobbyApp.directives'])
         .config(['$locationProvider', '$compileProvider', 'authProvider', 'jwtInterceptorProvider', '$stateProvider', '$urlRouterProvider', '$httpProvider', '$ionicConfigProvider', 'ENV', 'cfpLoadingBarProvider', 'uiGmapGoogleMapApiProvider',
             function ($locationProvider, $compileProvider, authProvider, jwtInterceptorProvider, $stateProvider, $urlRouterProvider, $httpProvider, $ionicConfigProvider, ENV, cfpLoadingBarProvider, GoogleMapApi) {
-
+console.log('in config')
                 $stateProvider
                     .state('login', {
                         url: '/login',
@@ -48,10 +48,10 @@
                     });
 
                 $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|mailto|maps|tel|geo):/);
-
+/*
                 $locationProvider.html5Mode(true);
                 $locationProvider.hashPrefix('!');
-
+*/
                 /* loading bar */
 
 
